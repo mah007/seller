@@ -1,15 +1,14 @@
 import urllib
 import requests
 import json
-
 import time
 import arrow
 import pytz
 import datetime
-
 from hashlib import sha256
 from hmac import HMAC
 from pytz.reference import UTC
+
 
 def getCurrentUTCTime():
 	utcnow = datetime.datetime.utcnow().isoformat()
