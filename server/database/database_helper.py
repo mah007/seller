@@ -3,7 +3,18 @@ from constants import Database
 
 
 class DatabaseHelper(object):
-	
+
+	def execute(self, query):
+		try:
+			conn = psycopg2.connect(database = Database.DATABASE, user = Database.USER, password = Database.PASSWORD, host = Database.HOST, port = Database.PORT)
+			cur = conn.cursor()
+			cur.execute(query)
+			conn.commit()
+			conn.close()
+			return True
+		except Exception as ex:
+			return False
+
 	def insert(self, query):
 		try:
 			conn = psycopg2.connect(database = Database.DATABASE, user = Database.USER, password = Database.PASSWORD, host = Database.HOST, port = Database.PORT)
