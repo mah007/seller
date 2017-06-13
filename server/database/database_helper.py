@@ -1,9 +1,10 @@
 import psycopg2
-from constants import Database
+from config import Database
 
 
-class DatabaseHelper(object):
+class DatabaseHelper:
 
+	@classmethod
 	def execute(self, query):
 		try:
 			conn = psycopg2.connect(database = Database.DATABASE, user = Database.USER, password = Database.PASSWORD, host = Database.HOST, port = Database.PORT)
@@ -13,8 +14,10 @@ class DatabaseHelper(object):
 			conn.close()
 			return True
 		except Exception as ex:
+			print ex
 			return False
 
+	@classmethod
 	def insert(self, query):
 		try:
 			conn = psycopg2.connect(database = Database.DATABASE, user = Database.USER, password = Database.PASSWORD, host = Database.HOST, port = Database.PORT)
@@ -26,6 +29,7 @@ class DatabaseHelper(object):
 		except Exception as ex:
 			return False
 
+	@classmethod
 	def select(self, query):
 		try:
 			conn = psycopg2.connect(database = Database.DATABASE, user = Database.USER, password = Database.PASSWORD, host = Database.HOST, port = Database.PORT)
@@ -39,6 +43,7 @@ class DatabaseHelper(object):
 		except Exception as ex:
 			return None
 
+	@classmethod
 	def update(self, query):
 		try:
 			conn = psycopg2.connect(database = Database.DATABASE, user = Database.USER, password = Database.PASSWORD, host = Database.HOST, port = Database.PORT)
@@ -50,6 +55,7 @@ class DatabaseHelper(object):
 		except Exception as ex:
 			return False
 
+	@classmethod
 	def delete(self, query):
 		try:
 			conn = psycopg2.connect(database = Database.DATABASE, user = Database.USER, password = Database.PASSWORD, host = Database.HOST, port = Database.PORT)
