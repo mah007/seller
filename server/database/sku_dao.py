@@ -24,17 +24,17 @@ class SkuDao(object):
     def insert(self, sku):
     	query = '''INSERT INTO sku_management (sku, name, link, min_price, max_price, 
     				subtract_price, state, repeat_time, created_at, updated_at) 
-    				VALUES ({}, {}, {}, {}, {}, {}, {}, {}, {}, {})'''.format(
+    				VALUES ('{}', '{}', '{}', {}, {}, {}, {}, {}, {}, 0)'''.format(
     				sku['sku'], sku['name'], sku['link'], sku['min_price'], sku['max_price'], 
-    				sku['subtract_price'], sku['state'], sku['repeat_time'], sku['created_at'], sku['updated_at'])
+    				sku['subtract_price'], sku['state'], sku['repeat_time'], sku['created_at'])
 
     	DatabaseHelper.execute(query)
 
     def update(self, sku):
-    	query = '''UPDATE sku_management set sku = {}, name = {}, link = {}, min_price = {}, max_price = {}, 
-    				subtract_price = {}, state = {}, repeat_time = {}, created_at = {}, updated_at = {})'''.format(
+    	query = '''UPDATE sku_management set sku = '{}', name = '{}', link = '{}', min_price = {}, max_price = {}, 
+    				subtract_price = {}, state = {}, repeat_time = {}, updated_at = {})'''.format(
     				sku['sku'], sku['name'], sku['link'], sku['min_price'], sku['max_price'], 
-    				sku['subtract_price'], sku['state'], sku['repeat_time'], sku['created_at'], sku['updated_at'])
+    				sku['subtract_price'], sku['state'], sku['repeat_time'], sku['updated_at'])
 
     	DatabaseHelper.execute(query)
 

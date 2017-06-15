@@ -1,6 +1,9 @@
 import time
 from flask_cors import CORS, cross_origin
 from flask import Blueprint, render_template, abort, request, make_response, jsonify
+from managers.sku_manager import SkuManager
+from managers.user_manager import UserManager
+from lazada_api.lazada_sku_api import LazadaSkuApi
 
 
 SkuAPI = Blueprint('sku_api', __name__, template_folder='apis')
@@ -28,16 +31,36 @@ def insert():
 		"sku": request.json['sku'],
 		"name": "null",
 		"link": "null",
-		"min_price": request.json['min_price'],
-		"max_price": request.json['max_price'],
-		"subtract_price": request.json['subtract_price'],
-		"state": request.json['state'],
-		"repeat_time": request.json['repeat_time'],
-		"created_at": int(round(time.time())),
-		"updated_at": 0
+		"min_price": int(request.json['min_price']),
+		"max_price": int(request.json['max_price']),
+		"subtract_price": int(request.json['subtract_price']),
+		"state": int(request.json['state']),
+		"repeat_time": int(request.json['repeat_time']),
+		"created_at": int(round(time.time()))
 	}
 
-	return make_response(jsonify(sku), 201)
+	userManager = UserManager()
+	temporaryUser = userManager.getUser("token");
+
+	lazadaSkuApi = LazadaSkuApi()
+	lazadaProduct = lazadaSkuApi.getSku(sku, temporaryUser)
+	
+	if (lazadaProduct):
+		sku['name'] = lazadaProduct['Attributes']['name'].encode('utf-8')
+		sku['link'] = lazadaProduct['Skus'][0]['Url'].encode('utf-8')
+		skuManager = SkuManager()
+		skuManager.insertSku(sku)
+		return make_response(jsonify(sku), 201)
+	else:
+		return make_response(jsonify({'error': 'Cant find sku from your products on lazada'}), 404)
+
+
+
+
+
+
+
+
 
 
 
