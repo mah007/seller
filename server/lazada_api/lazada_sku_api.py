@@ -30,7 +30,7 @@ class LazadaSkuApi(object):
 			if ('ErrorResponse' in response):
 				return None
 
-			date = response['SuccessResponse']['Body']
+			data = response['SuccessResponse']['Body']
 			if (data['TotalProducts'] == 1):
 				return data['Products'][0]
 			

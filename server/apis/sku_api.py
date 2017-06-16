@@ -8,6 +8,18 @@ from lazada_api.lazada_sku_api import LazadaSkuApi
 
 SkuAPI = Blueprint('sku_api', __name__, template_folder='apis')
 
+
+@SkuAPI.route('/sku/get-all', methods=['GET'])
+@cross_origin()
+def getAll():
+	print request.data
+	if not request.args:
+		return make_response(jsonify({'error': 'Missig token parameter value'}), 404)
+
+	skuManager = SkuManager()
+	return make_response(jsonify({"data": skuManager.getAll(request.args.get('token'))}))
+
+
 @SkuAPI.route('/sku/insert', methods=['POST'])
 @cross_origin()
 def insert():
@@ -52,7 +64,7 @@ def insert():
 		skuManager.insertSku(sku)
 		return make_response(jsonify(sku), 201)
 	else:
-		return make_response(jsonify({'error': 'Cant find sku from your products on lazada'}), 404)
+		return make_response(jsonify({'error': 'Seller SKU is wrong !!!'}), 404)
 
 
 

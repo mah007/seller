@@ -12,3 +12,8 @@ class SkuManager(object):
 		skudao = SkuDao()
 		skudao.insert(sku)
 
+
+	def getAll(self, token):
+		skudao = SkuDao()
+		return skudao.getAll()
+

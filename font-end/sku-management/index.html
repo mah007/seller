@@ -31,19 +31,9 @@
     <link href="./css/component/layout-md.css" rel="stylesheet" type="text/css"/>
     <link href="./css/component/custom-md.css" rel="stylesheet" type="text/css"/>
     <link href="./css/theme/light.css" rel="stylesheet" type="text/css"/>
+    <link href="./sku-management/sku-management.css" rel="stylesheet" type="text/css"/>
     <!-- END THEME STYLES -->
     <link rel="shortcut icon" href="favicon.ico"/>
-    <style>
-        .page-header.navbar .page-logo .logo-default {
-            margin-top:24px;
-        }
-        .tabbable-custom > .nav-tabs > li.active {
-            border-top-color: #5b9bd1;
-        }
-        .has-error {
-            border:1px solid #FF0000;
-        }
-    </style>
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
@@ -128,7 +118,7 @@
                                             <input type="hidden" name="id" value="" />
                                             <input type="hidden" name="txt_act" value="skucreate" />
                                             <div class="col-md-8">
-                                                <input type="text" class="form-control" maxlength="255" name="txt_sku" placeholder="Apple iPhone 7">
+                                                <input type="text" class="seller-sku form-control" maxlength="255" name="txt_sku" placeholder="Apple iPhone 7">
                                             </div>
                                         </div>
                                     </div>
@@ -168,6 +158,7 @@
                                 </form>
                             </div>
                             <div class="modal-footer">
+                                <p class="error hidden"></p>
                                 <button type="button" class="btn blue btnmodalsubmit"><i class="fa fa-check"></i> Lưu</button>
                                 <button type="button" class="btn default" data-dismiss="modal">Huỷ</button>
                             </div>
@@ -363,14 +354,14 @@
                 {{/each}}
             </script>
 
-            <script id="tab-content-template" type="text/x-handlebars-template">
+            <script id="sku-content-template" type="text/x-handlebars-template">
                 {{#each data}}
                 <tr data-id="{{id}}">
                     <td>{{sku}}</td>
                     <td><a href="{{link}}" style="color:#3598dc;" target="_blank">{{name}}</a></td>
                     <td class="text-right">Từ <b>{{min_price}}</b> VNĐ<br/>tới <b>{{max_price}}</b> VNĐ</td>
                     <td class="text-right"><b>{{subtract_price}}</b> VNĐ</td>
-                    <td class="text-right"><b>{{repeat}}</b> giây</td>
+                    <td class="text-right"><b>{{repeat_time}}</b> giây</td>
                     <td class="text-left">
                         <button type="button" class="btn btn-circle blue btnedt" style="margin: 0 2px 4px;"><i class="fa fa-edit"></i></button>
                         <button type="button" class="btn btn-circle red btndel" style="margin: 0 2px 4px;"><i class="fa fa-close"></i></button>
@@ -383,8 +374,16 @@
                 </tr>
                 {{/each}}
             </script>
-        </body>
-        </html>
+
+            <script type="text/javascript">
+                jQuery(document).ready(function() {
+                    Metronic.init(); // init metronic core components
+                    Layout.init(); // init current layout
+                    Demo.init(); // init demo features
+                });
+        </script>
+    </body>
+    </html>
 
 
 
