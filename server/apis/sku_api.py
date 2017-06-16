@@ -12,7 +12,6 @@ SkuAPI = Blueprint('sku_api', __name__, template_folder='apis')
 @SkuAPI.route('/sku/get-all', methods=['GET'])
 @cross_origin()
 def getAll():
-	print request.data
 	if not request.args:
 		return make_response(jsonify({'error': 'Missig token parameter value'}), 404)
 
@@ -23,7 +22,6 @@ def getAll():
 @SkuAPI.route('/sku/insert', methods=['POST'])
 @cross_origin()
 def insert():
-	print request.data
 	if not request.json:
 		return make_response(jsonify({'error': 'Missig json parameters value'}), 404)
 	if not 'sku' in request.json:

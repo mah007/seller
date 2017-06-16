@@ -5,13 +5,13 @@ from flask import Flask
 from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
-CORS(app)
+CORS(app)	# Should allow CORS only for our domain.
 app.register_blueprint(SkuAPI)
 
 if __name__ == "__main__":
 	skuManager = SkuManager()
-	skuManager.initialize()
 	userManager = UserManager()
+	skuManager.initialize()
 	userManager.initialize()
 
 	app.run(debug=True)

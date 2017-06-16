@@ -46,7 +46,7 @@ class SkuDao(object):
             conn.close()
             return skus
         except Exception as ex:
-            print ex
+            print(ex)
             return None
 
     

@@ -18,7 +18,7 @@ class DatabaseHelper:
 			conn.close()
 			return True
 		except Exception as ex:
-			print ex
+			print(ex)
 			return False
 
 

@@ -1,10 +1,7 @@
 import datetime
 import urllib
-import arrow
-import pytz
 from hashlib import sha256
 from hmac import HMAC
-from pytz.reference import UTC
 
 
 class LazadaApiHelper:

@@ -19,9 +19,9 @@ class UserDao(object):
 
 
     def insert(self, user):
-    	query = '''INSERT INTO t_user (user_name, password, token, lazada_user_id, lazada_api_key, created_at, updated_at) 
+        query = '''INSERT INTO t_user (user_name, password, token, lazada_user_id, lazada_api_key, created_at, updated_at) 
                     VALUES ('{}', '{}', '{}', '{}', '{}', {}, 0)'''.format(
-    				user['user_name'], user['password'], user['token'], user['lazada_user_id'], 
+                    user['user_name'], user['password'], user['token'], user['lazada_user_id'], 
                     user['lazada_api_key'], user['created_at'])
         DatabaseHelper.execute(query)
 
@@ -45,7 +45,7 @@ class UserDao(object):
 
             return user
         except Exception as ex:
-            print ex
+            print(ex)
             return None
 
 
