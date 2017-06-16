@@ -3,6 +3,7 @@ from managers.user_manager import UserManager
 from apis.sku_api import SkuAPI
 from flask import Flask
 from flask_cors import CORS, cross_origin
+from runners.price_automatically_runner import PriceAutomaticallyRunner
 
 app = Flask(__name__)
 CORS(app)	# Should allow CORS only for our domain.
@@ -14,5 +15,9 @@ if __name__ == "__main__":
 	skuManager.initialize()
 	userManager.initialize()
 
-	app.run(debug=True)
+	priceAutomatically = PriceAutomaticallyRunner()
+	priceAutomatically.run()
+	# app.run(debug=True)
+
+
 	
