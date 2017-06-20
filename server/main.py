@@ -15,9 +15,10 @@ if __name__ == "__main__":
 	skuManager.initialize()
 	userManager.initialize()
 
-	priceAutomatically = PriceAutomaticallyRunner()
-	priceAutomatically.run()
-	# app.run(debug=True)
+	# priceAutomatically = PriceAutomaticallyRunner()
+	# priceAutomatically.run()
+	
+	app.run(debug=True)
 
 
 	

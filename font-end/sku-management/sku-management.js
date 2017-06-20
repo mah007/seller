@@ -286,11 +286,9 @@ $(".btnmodalsubmit").click(function() {
             },
             error: function(error) {
                 console.log(error);
-                var exception = error.responseText;
+                var exception = JSON.parse(error.responseText);
                 var errorTag = $this.parent().find('.error');
-                errorTag.html(exception.error)
-                .removeClass('hidden')
-                .delay(3000).addClass('hidden');
+                errorTag.html(exception.error).removeClass('hidden')
             }
         });
     }
