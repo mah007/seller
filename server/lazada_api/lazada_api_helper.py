@@ -20,6 +20,19 @@ class LazadaApiHelper:
 		concatenated = urllib.urlencode(sorted(parameters.items()))
 		return HMAC(lazada_api_key, concatenated, sha256).hexdigest()
 
+	@classmethod
+	def generateUpdateProductXML(self, sku, price):
+		return '''<?xml version="1.0" encoding="UTF-8" ?>
+			<Request>
+			    <Product>
+			        <Skus>
+			            <Sku>
+			                <SellerSku>{}</SellerSku>
+			                <special_price>{}</special_price>
+			            </Sku>
+			        </Skus>
+			    </Product>
+			</Request>'''.format(sku['sku'], price)
 
 
 

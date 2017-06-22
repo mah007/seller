@@ -5,3 +5,7 @@ class Database(object):
 	PASSWORD = ""
 	HOST = "localhost"
 	PORT = "5432"
+
+
+class LazadaAPI(object):
+	ENDPOINT = "https://api.sellercenter.lazada.vn"
