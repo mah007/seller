@@ -38,40 +38,6 @@ jQuery(document).ready(function() {
         });
     }
 
-    if($('.btndel').length > 0) {
-        $('.btndel').click(function() {
-            var id = $(this).parents('tr').data('id');
-            swal({
-                title: "Are you sure?",
-                text: "You will not be able to recover this SKU!",
-                type: "warning",
-                showReloadButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Yes, delete it!",
-                closeOnConfirm: false
-            }, function () {
-                $.ajax({
-                    url: "?act=skudelete&id=" + id,
-                    method: "POST",
-                    success: function (data) {
-                        if (data) {
-                            swal({
-                                title: "Deleted!",
-                                text: "",
-                                type: "success",
-                                confirmButtonText: "OK! Redirect to list",
-                            }, function () {
-                                window.location.href = "";
-                            });
-                        } else {
-                            swal("Failure", "Something wrong with server.", "error");
-                        }
-                    }
-                });
-            });
-        });
-    }
-
     if($('.btnstt').length > 0) {
         $(".btnstt").each(function () {
             if ($(this).data("bit") == 'active') {
@@ -132,8 +98,9 @@ jQuery(document).ready(function() {
 
 
 //-------------------------------------------------------------------------------------
-// Enable Switchery
+// Reload furetures: Edit, Delete, Insert, SwitchSate
 //-------------------------------------------------------------------------------------
+
 function enableSwitchery() {
     if($('.btnstatus').length > 0) {
         var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
@@ -162,6 +129,44 @@ function enableSwitchery() {
                         swal("Record " + $(_parent).data("id"), "Cập nhật trạng thái thất bại", "error");
                     }
                 }
+            });
+        });
+    }
+
+    // Delete Sku--------------------------------------------------------------------
+    if($('.btndel').length > 0) {
+        $('.btndel').click(function() {
+            var skuId = $(this).parents('tr').data('id');
+            swal({
+                title: "Are you sure?",
+                text: "You will not be able to recover this SKU!",
+                type: "warning",
+                showReloadButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete it!",
+                closeOnConfirm: false
+            }, function () {
+                $.ajax({
+                    method:'POST',
+                    url: 'http://localhost:5000/sku/delete?token=token',
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        id: skuId
+                    }),
+                    success: function(data) {
+                        swal({
+                            title: "Deleted!",
+                            text: "",
+                            type: "success",
+                            confirmButtonText: "OK! Redirect to list",
+                        }, function () {
+                            window.location.href = "";
+                        });
+                    }, 
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
             });
         });
     }

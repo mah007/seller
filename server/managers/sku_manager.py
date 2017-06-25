@@ -13,6 +13,11 @@ class SkuManager(object):
 		skudao.insert(sku)
 
 
+	def deleteSku(self, sku):
+		skudao = SkuDao()
+		skudao.delete(sku)
+
+
 	def getAll(self, token):
 		skudao = SkuDao()
 		return skudao.getAll()

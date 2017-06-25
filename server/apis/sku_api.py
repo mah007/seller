@@ -9,6 +9,9 @@ from lazada_api.lazada_sku_api import LazadaSkuApi
 SkuAPI = Blueprint('sku_api', __name__, template_folder='apis')
 
 
+# ---------------------------------------------------------------------------------------
+# Get All KSU
+# ---------------------------------------------------------------------------------------
 @SkuAPI.route('/sku/get-all', methods=['GET'])
 @cross_origin()
 def getAll():
@@ -19,6 +22,29 @@ def getAll():
 	return make_response(jsonify({"data": skuManager.getAll(request.args.get('token'))}))
 
 
+# ---------------------------------------------------------------------------------------
+# Delete KSU
+# ---------------------------------------------------------------------------------------
+@SkuAPI.route('/sku/delete', methods=['POST'])
+@cross_origin()
+def delete():
+	if not request.json:
+		return make_response(jsonify({'error': 'Missig json parameters value'}), 404)
+	if not 'id' in request.json:
+		return make_response(jsonify({'error': 'Missig sku parameter'}), 404)
+
+	sku = {
+		"id": request.json['id']
+	}
+
+	skuManager = SkuManager()
+	skuManager.deleteSku(sku)
+	return make_response(jsonify({"success": "done"}))
+
+
+# ---------------------------------------------------------------------------------------
+# Insert KSU
+# ---------------------------------------------------------------------------------------
 @SkuAPI.route('/sku/insert', methods=['POST'])
 @cross_origin()
 def insert():

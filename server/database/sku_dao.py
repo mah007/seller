@@ -51,7 +51,18 @@ class SkuDao(object):
             print(ex)
             return None
 
+
+    # ---------------------------------------------------------------------------------------
+    # Delete KSU
+    # ---------------------------------------------------------------------------------------
+    def delete(self, sku):
+        query = '''DELETE from sku_management where id = '{}' '''.format(sku['id'])
+        DatabaseHelper.execute(query)
+
     
+    # ---------------------------------------------------------------------------------------
+    # Insert KSU
+    # ---------------------------------------------------------------------------------------
     def insert(self, sku):
     	query = '''INSERT INTO sku_management (sku, name, link, min_price, max_price, 
     				compete_price, special_price, state, repeat_time, created_at, updated_at) 
@@ -61,6 +72,9 @@ class SkuDao(object):
     	DatabaseHelper.execute(query)
 
 
+    # ---------------------------------------------------------------------------------------
+    # Update KSU
+    # ---------------------------------------------------------------------------------------
     def update(self, sku):
     	query = '''UPDATE sku_management set sku = '{}', name = '{}', link = '{}', min_price = {}, max_price = {}, 
     				compete_price = {}, special_price = {}, state = {}, repeat_time = {}, updated_at = {})'''.format(
