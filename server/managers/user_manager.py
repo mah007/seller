@@ -8,6 +8,12 @@ class UserManager(object):
 		userDao = UserDao()
 		userDao.createTable()
 
+
+	def createUser(self, user):
+		userDao = UserDao()
+		return userDao.insert(user)
+
+
 	def getUser(self, token):
 		userDao = UserDao()
 		return userDao.getUser(token)

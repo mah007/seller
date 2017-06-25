@@ -12,4 +12,4 @@ class LazadaAPI(object):
 
 
 class RunnerConfig(object):
-	TIME_INTEVAL = 10.0
+	TIME_INTEVAL = 25.0

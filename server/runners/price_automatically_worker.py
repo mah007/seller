@@ -15,13 +15,15 @@ class PriceAutomaticallyWorker(object):
 		if (skus == None):
 			return
 
+		userDao = UserDao()
+		user = userDao.getUser("token");
 		for sku in skus:
 			enemies = self.getEnemies(sku['link'])
-			newSpecialPrice = self.priceAlgorithm(enemies, sku)
+			newSpecialPrice = self.priceAlgorithm(enemies, user, sku)
 			self.doUpdatePrice(sku, newSpecialPrice)
 
 
-	def priceAlgorithm(self, enemies, sku):
+	def priceAlgorithm(self, enemies, user, sku):
 		newSpecialPrice = sku['special_price']
 		if (enemies == None):
 			return newSpecialPrice
@@ -31,6 +33,10 @@ class PriceAutomaticallyWorker(object):
 		for enemy in enemies:
 			if (enemy['price'] < lowestPriceEnemy['price']):
 				lowestPriceEnemy = enemy
+
+		# Make sure this is the enemy
+		if (user['lazada_user_name'].lower() == lowestPriceEnemy['name'].lower()):
+			return newSpecialPrice
 		
 		# Our product price will be lower then enemy compete_price unit
 		newSpecialPrice = lowestPriceEnemy['price'] - sku['compete_price']
@@ -41,7 +47,7 @@ class PriceAutomaticallyWorker(object):
 		if (newSpecialPrice > sku['max_price']):
 			newSpecialPrice = sku['max_price']
 
-		print (newSpecialPrice)
+		print ("new special price: ", newSpecialPrice)
 		return newSpecialPrice
 
 
@@ -58,12 +64,22 @@ class PriceAutomaticallyWorker(object):
 
 
 	def getEnemies(self, pageUrl):
+		enemiesJson = []
 		page = requests.get(pageUrl)
 		tree = html.fromstring(page.content)
+
+		# Top enemy, will be this user if the user is on the top
+		topEnemyPrice = tree.xpath('//*[@id="special_price_box"]/text()')
+		topEnemyName = tree.xpath('//*[@id="prod_content_wrapper"]/div[2]/div[2]/div[1]/div[1]/a/text()')
+		topEnemyJson = {
+			"name": topEnemyName[0],
+			"price": int(topEnemyPrice[0].replace('VND', '').replace('.', '').replace(',', ''))
+		}
+		enemiesJson.append(topEnemyJson)
+
+		# List others enemy
 		enemies = tree.xpath('//*[@id="multisource"]/div[2]/table/tr[2]/td[1]/div/div/a/span/text()')
 		enemyPrices = tree.xpath('//*[@id="multisource"]/div[2]/table/tr[2]/td[4]/span/text()')
-
-		enemiesJson = []
 		for index, enemy in enumerate(enemies):
 			enemiesJson.append({
 				"name": enemy,
