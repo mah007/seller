@@ -30,8 +30,8 @@ def insert():
 		return make_response(jsonify({'error': 'Missig min_price parameter'}), 404)
 	if not 'max_price' in request.json:
 		return make_response(jsonify({'error': 'Missig max_price parameter'}), 404)
-	if not 'subtract_price' in request.json:
-		return make_response(jsonify({'error': 'Missig subtract_price parameter'}), 404)
+	if not 'compete_price' in request.json:
+		return make_response(jsonify({'error': 'Missig compete_price parameter'}), 404)
 	if not 'state' in request.json:
 		return make_response(jsonify({'error': 'Missig state parameter'}), 404)
 	if not 'repeat_time' in request.json:
@@ -43,7 +43,8 @@ def insert():
 		"link": "null",
 		"min_price": int(request.json['min_price']),
 		"max_price": int(request.json['max_price']),
-		"subtract_price": int(request.json['subtract_price']),
+		"compete_price": int(request.json['compete_price']),
+		"special_price": 0,
 		"state": int(request.json['state']),
 		"repeat_time": int(request.json['repeat_time']),
 		"created_at": int(round(time.time()))
@@ -58,6 +59,7 @@ def insert():
 	if (lazadaProduct):
 		sku['name'] = lazadaProduct['Attributes']['name'].encode('utf-8')
 		sku['link'] = lazadaProduct['Skus'][0]['Url'].encode('utf-8')
+		sku['special_price'] = lazadaProduct['Skus'][0]['special_price']
 		skuManager = SkuManager()
 		skuManager.insertSku(sku)
 		return make_response(jsonify(sku), 201)

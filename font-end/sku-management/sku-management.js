@@ -275,7 +275,7 @@ $(".btnmodalsubmit").click(function() {
                 sku: $('input[name=txt_sku]').val(),
                 min_price: $('input[name=txt_min]').val(),
                 max_price: $('input[name=txt_max]').val(),
-                subtract_price: $('input[name=txt_stp]').val(),
+                compete_price: $('input[name=txt_stp]').val(),
                 repeat_time: $('input[name=txt_seq]').val(),
                 state: $('select[name=txt_stt]').val() == "active" ? 1 : 0
             }),

@@ -9,3 +9,7 @@ class Database(object):
 
 class LazadaAPI(object):
 	ENDPOINT = "https://api.sellercenter.lazada.vn"
+
+
+class RunnerConfig(object):
+	TIME_INTEVAL = 10.0

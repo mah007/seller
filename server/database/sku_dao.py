@@ -11,7 +11,8 @@ class SkuDao(object):
                     link			TEXT		NOT NULL,
                     min_price     	INTEGER		NOT NULL,
                     max_price     	INTEGER    	NOT NULL,
-                    subtract_price 	INTEGER 	NOT NULL,
+                    compete_price 	INTEGER 	NOT NULL,
+                    special_price   INTEGER     NOT NULL,
                     state			INTEGER		NOT NULL,
                     repeat_time 	INTEGER 	NOT NULL,
                     created_at 		INTEGER 	NOT NULL,
@@ -37,10 +38,11 @@ class SkuDao(object):
                     "link": row[3],
                     "min_price": row[4],
                     "max_price": row[5],
-                    "subtract_price": row[6],
-                    "state": row[7],
-                    "repeat_time": row[8],
-                    "created_at": row[9],
+                    "compete_price": row[6],
+                    "special_price": row[7],
+                    "state": row[8],
+                    "repeat_time": row[9],
+                    "created_at": row[10]
                 })
 
             conn.close()
@@ -52,18 +54,18 @@ class SkuDao(object):
     
     def insert(self, sku):
     	query = '''INSERT INTO sku_management (sku, name, link, min_price, max_price, 
-    				subtract_price, state, repeat_time, created_at, updated_at) 
-    				VALUES ('{}', '{}', '{}', {}, {}, {}, {}, {}, {}, 0)'''.format(
+    				compete_price, special_price, state, repeat_time, created_at, updated_at) 
+    				VALUES ('{}', '{}', '{}', {}, {}, {}, {}, {}, {}, {}, 0)'''.format(
     				sku['sku'], sku['name'], sku['link'], sku['min_price'], sku['max_price'], 
-    				sku['subtract_price'], sku['state'], sku['repeat_time'], sku['created_at'])
+    				sku['compete_price'], sku['special_price'], sku['state'], sku['repeat_time'], sku['created_at'])
     	DatabaseHelper.execute(query)
 
 
     def update(self, sku):
     	query = '''UPDATE sku_management set sku = '{}', name = '{}', link = '{}', min_price = {}, max_price = {}, 
-    				subtract_price = {}, state = {}, repeat_time = {}, updated_at = {})'''.format(
+    				compete_price = {}, special_price = {}, state = {}, repeat_time = {}, updated_at = {})'''.format(
     				sku['sku'], sku['name'], sku['link'], sku['min_price'], sku['max_price'], 
-    				sku['subtract_price'], sku['state'], sku['repeat_time'], sku['updated_at'])
+    				sku['compete_price'], sku['compete_price'], sku['state'], sku['repeat_time'], sku['updated_at'])
     	DatabaseHelper.execute(query)
 
 
