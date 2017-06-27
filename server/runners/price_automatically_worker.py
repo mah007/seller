@@ -1,3 +1,5 @@
+import time
+import operator
 import requests
 from time import sleep
 from lxml import html
@@ -19,27 +21,23 @@ class PriceAutomaticallyWorker(object):
 		user = userDao.getUser("token");
 		for sku in skus:
 			enemies = self.getEnemies(sku['link'])
-			newSpecialPrice = self.priceAlgorithm(enemies, user, sku)
-			self.doUpdatePrice(sku, newSpecialPrice)
+			self.priceAlgorithm(enemies, user, sku)
 
 
 	def priceAlgorithm(self, enemies, user, sku):
 		newSpecialPrice = sku['special_price']
-		if (enemies == None):
-			return newSpecialPrice
+		if (enemies == None or len(enemies) < 1):
+			return
 
 		# Get enemy have lowest price
+		enemies = self.sortEnemies(enemies)
 		lowestPriceEnemy = enemies[0]
-		for enemy in enemies:
-			if (enemy['price'] < lowestPriceEnemy['price']):
-				lowestPriceEnemy = enemy
+		lowSecondPriceEnemy = enemies[1]
 
-		# Make sure this is the enemy
-		if (user['lazada_user_name'].lower() == lowestPriceEnemy['name'].lower()):
-			return newSpecialPrice
-		
 		# Our product price will be lower then enemy compete_price unit
 		newSpecialPrice = lowestPriceEnemy['price'] - sku['compete_price']
+		if (user['lazada_user_name'].lower() == lowestPriceEnemy['name'].lower()):
+			newSpecialPrice = lowSecondPriceEnemy['price'] - sku['compete_price']
 
 		# But this is not lower then min_price and higher then max_price
 		if (newSpecialPrice < sku['min_price']):
@@ -47,14 +45,20 @@ class PriceAutomaticallyWorker(object):
 		if (newSpecialPrice > sku['max_price']):
 			newSpecialPrice = sku['max_price']
 
+		if (sku['special_price'] == newSpecialPrice):
+			return
+
 		print ("new special price: ", newSpecialPrice)
-		return newSpecialPrice
+		self.doUpdatePrice(sku, newSpecialPrice)
 
 
 	def doUpdatePrice(self, sku, newSpecialPrice):
-		if (sku == None or sku['special_price'] == newSpecialPrice):
-			return
-
+		sku['updated_at'] = int(round(time.time()))
+		sku['special_price'] = newSpecialPrice
+		# Update internal database
+		skuDao = SkuDao()
+		skuDao.update(sku)
+		# Update external database
 		userDao = UserDao()
 		temporaryUser = userDao.getUser("token");
 		lazadaSkuApi = LazadaSkuApi()
@@ -89,6 +93,9 @@ class PriceAutomaticallyWorker(object):
 		print(enemiesJson)
 		return enemiesJson
 
+
+	def sortEnemies(self, enemies):
+		return sorted(enemies, key=operator.itemgetter('price'))
 
 
 

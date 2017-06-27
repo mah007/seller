@@ -65,7 +65,6 @@ class SkuDao(object):
     # Insert KSU
     # ---------------------------------------------------------------------------------------
     def insert(self, sku):
-        print(sku)
         query = '''INSERT INTO sku_management (sku, name, link, min_price, max_price,
     				compete_price, special_price, state, repeat_time, created_at, updated_at)
     				VALUES ('{}', '{}', '{}', {}, {}, {}, {}, {}, {}, {}, 0)'''.format(
@@ -78,13 +77,13 @@ class SkuDao(object):
     # Update KSU
     # ---------------------------------------------------------------------------------------
     def update(self, sku):
-    	query = '''UPDATE sku_management set sku = '{}', name = '{}', link = '{}', min_price = {}, max_price = {},
-    				compete_price = {}, special_price = {}, state = {}, repeat_time = {}, updated_at = {})'''.format(
+        query = '''UPDATE sku_management set sku = '{}', name = '{}', link = '{}', min_price = {}, max_price = {},
+    				compete_price = {}, special_price = {}, state = {}, repeat_time = {}, updated_at = {}
+                    WHERE id = '{}' '''.format(
     				sku['sku'], sku['name'], sku['link'], sku['min_price'], sku['max_price'],
-    				sku['compete_price'], sku['compete_price'], sku['state'], sku['repeat_time'], sku['updated_at'])
-    	DatabaseHelper.execute(query)
-
-
+    				sku['compete_price'], sku['special_price'], sku['state'], sku['repeat_time'],
+                    sku['updated_at'], sku['id'])
+        DatabaseHelper.execute(query)
 
 
 

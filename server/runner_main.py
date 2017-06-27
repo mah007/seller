@@ -1,10 +1,14 @@
-from runners.price_automatically_runner import PriceAutomaticallyRunner
+import time
+from runners.price_automatically_worker import PriceAutomaticallyWorker
 from config import RunnerConfig
 
 
 if __name__ == "__main__":
-    interval = PriceAutomaticallyRunner(RunnerConfig.TIME_INTEVAL)
-    # try:
-    #   sleep(RunnerConfig.TIME_INTEVAL + 1)
-    # finally:
-    #   interval.stop()
+
+  starttime=time.time()
+  worker = PriceAutomaticallyWorker()
+
+  while True:
+    worker.execute()
+    time.sleep(60.0 - ((time.time() - starttime) % 60.0))
+
