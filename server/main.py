@@ -11,12 +11,13 @@ CORS(app)	# Should allow CORS only for our domain.
 app.register_blueprint(SkuAPI)
 
 if __name__ == "__main__":
-	skuManager = SkuManager()
-	userManager = UserManager()
-	skuManager.initialize()
-	userManager.initialize()
+  skuManager = SkuManager()
+  userManager = UserManager()
+  skuManager.initialize()
+  userManager.initialize()
 
-	app.run(debug=True)
+  app.run(debug=True)
 
 
-	
+
+

@@ -11,3 +11,6 @@ pip3 install -U flask-cors
 
 echo "Install requests"
 pip3 install requests
+
+echo "Install json"
+pip3 install simplejson

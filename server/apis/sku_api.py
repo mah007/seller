@@ -1,4 +1,5 @@
 import time
+import simplejson as json
 from flask_cors import CORS, cross_origin
 from flask import Blueprint, render_template, abort, request, make_response, jsonify
 from managers.sku_manager import SkuManager
@@ -51,7 +52,7 @@ def insert():
 	if not request.json:
 		return make_response(jsonify({'error': 'Missig json parameters value'}), 404)
 	if not 'sku' in request.json:
-		return make_response(jsonify({'error': 'Missig sku parameter'}), 404)		
+		return make_response(jsonify({'error': 'Missig sku parameter'}), 404)
 	if not 'min_price' in request.json:
 		return make_response(jsonify({'error': 'Missig min_price parameter'}), 404)
 	if not 'max_price' in request.json:
@@ -81,14 +82,14 @@ def insert():
 
 	lazadaSkuApi = LazadaSkuApi()
 	lazadaProduct = lazadaSkuApi.getSku(sku, temporaryUser)
-	
+
 	if (lazadaProduct):
 		sku['name'] = lazadaProduct['Attributes']['name'].encode('utf-8')
 		sku['link'] = lazadaProduct['Skus'][0]['Url'].encode('utf-8')
 		sku['special_price'] = lazadaProduct['Skus'][0]['special_price']
 		skuManager = SkuManager()
 		skuManager.insertSku(sku)
-		return make_response(jsonify(sku), 201)
+		return make_response(json.dumps(sku), 201)
 	else:
 		return make_response(jsonify({'error': 'Seller SKU is wrong !!!'}), 404)
 

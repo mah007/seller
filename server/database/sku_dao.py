@@ -1,4 +1,5 @@
 from database.database_helper import DatabaseHelper
+from utils.string_utils import StringUtils
 
 
 class SkuDao(object):
@@ -16,7 +17,7 @@ class SkuDao(object):
                     state			INTEGER		NOT NULL,
                     repeat_time 	INTEGER 	NOT NULL,
                     created_at 		INTEGER 	NOT NULL,
-                    updated_at		INTEGER 	
+                    updated_at		INTEGER
                     );'''
         DatabaseHelper.execute(query)
 
@@ -59,26 +60,27 @@ class SkuDao(object):
         query = '''DELETE from sku_management where id = '{}' '''.format(sku['id'])
         DatabaseHelper.execute(query)
 
-    
+
     # ---------------------------------------------------------------------------------------
     # Insert KSU
     # ---------------------------------------------------------------------------------------
     def insert(self, sku):
-    	query = '''INSERT INTO sku_management (sku, name, link, min_price, max_price, 
-    				compete_price, special_price, state, repeat_time, created_at, updated_at) 
+        print(sku)
+        query = '''INSERT INTO sku_management (sku, name, link, min_price, max_price,
+    				compete_price, special_price, state, repeat_time, created_at, updated_at)
     				VALUES ('{}', '{}', '{}', {}, {}, {}, {}, {}, {}, {}, 0)'''.format(
-    				sku['sku'], sku['name'], sku['link'], sku['min_price'], sku['max_price'], 
-    				sku['compete_price'], sku['special_price'], sku['state'], sku['repeat_time'], sku['created_at'])
-    	DatabaseHelper.execute(query)
+    				StringUtils.toString(sku['sku']), StringUtils.toString(sku['name']), StringUtils.toString(sku['link']),
+                    sku['min_price'], sku['max_price'], sku['compete_price'], sku['special_price'], sku['state'], sku['repeat_time'], sku['created_at'])
+        DatabaseHelper.execute(query)
 
 
     # ---------------------------------------------------------------------------------------
     # Update KSU
     # ---------------------------------------------------------------------------------------
     def update(self, sku):
-    	query = '''UPDATE sku_management set sku = '{}', name = '{}', link = '{}', min_price = {}, max_price = {}, 
+    	query = '''UPDATE sku_management set sku = '{}', name = '{}', link = '{}', min_price = {}, max_price = {},
     				compete_price = {}, special_price = {}, state = {}, repeat_time = {}, updated_at = {})'''.format(
-    				sku['sku'], sku['name'], sku['link'], sku['min_price'], sku['max_price'], 
+    				sku['sku'], sku['name'], sku['link'], sku['min_price'], sku['max_price'],
     				sku['compete_price'], sku['compete_price'], sku['state'], sku['repeat_time'], sku['updated_at'])
     	DatabaseHelper.execute(query)
 
