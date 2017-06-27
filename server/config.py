@@ -1,7 +1,7 @@
 
 class Database(object):
 	DATABASE = "lazada"
-	USER = "viethoa.khuat"
+	USER = "VietHoa"
 	PASSWORD = ""
 	HOST = "localhost"
 	PORT = "5432"
