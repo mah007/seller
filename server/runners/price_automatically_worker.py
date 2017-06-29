@@ -26,7 +26,7 @@ class PriceAutomaticallyWorker(object):
 
 	def priceAlgorithm(self, enemies, user, sku):
 		newSpecialPrice = sku['special_price']
-		if (enemies == None or len(enemies) < 1):
+		if (enemies == None or len(enemies) <= 1):
 			return
 
 		# Get enemy have lowest price
