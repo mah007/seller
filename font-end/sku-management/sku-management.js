@@ -102,6 +102,8 @@ jQuery(document).ready(function() {
 //-------------------------------------------------------------------------------------
 
 function enableSwitchery() {
+
+    // Update state-------------------------------------------------------------
     if($('.btnstatus').length > 0) {
         var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
         elems.forEach(function(html) {
@@ -110,33 +112,32 @@ function enableSwitchery() {
         $('.btnstatus').change(function() {
             var id = $(this).parents('tr').data('id');
             var _parent = $(this).parents("tr");
-            var status = 'deactive';
+            var status = 0; // deactive
             if($(this).is(':checked')) {
-                status = 'active';
+                status = 1; // active
             }
             $.ajax({
-                url: "?act=skustatus&id=" + id + "&s=" + status,
-                method: "POST",
+                method:'POST',
+                url: 'http://localhost:5000/sku/update-state?token=token',
+                contentType: "application/json",
+                data: JSON.stringify({
+                    id: id,
+                    state: status
+                }),
                 success: function (data) {
-                    if(data == -1) {
-                        swal("Record " + $(_parent).data("id"), "Cập nhật trạng thái thất bại.\n Bạn đã kích hoạt vượt qua số lượng SKU cho phép", "warning");
-                    } else if (data) {
-                        if(status == 'active')
-                            swal("Record " + $(_parent).data("id"), "Trạng thái đã được bật", "success");
-                        else
-                            swal("Record " + $(_parent).data("id"), "Trạng thái đã được tắt", "success");
-                    } else {
-                        swal("Record " + $(_parent).data("id"), "Cập nhật trạng thái thất bại", "error");
-                    }
+                    swal("Record " + $(_parent).data("id"), "Trạng thái đã được cập nhập", "success");
+                },
+                error: function(error) {
+                    console.log(error);
                 }
             });
         });
     }
 
-    // Delete Sku--------------------------------------------------------------------
+    // Delete Sku---------------------------------------------------------------
     if($('.btndel').length > 0) {
         $('.btndel').click(function() {
-            var skuId = $(this).parents('tr').data('id');
+            var id = $(this).parents('tr').data('id');
             swal({
                 title: "Are you sure?",
                 text: "You will not be able to recover this SKU!",
@@ -151,7 +152,7 @@ function enableSwitchery() {
                     url: 'http://localhost:5000/sku/delete?token=token',
                     contentType: "application/json",
                     data: JSON.stringify({
-                        id: skuId
+                        id: id
                     }),
                     success: function(data) {
                         swal({
@@ -162,7 +163,7 @@ function enableSwitchery() {
                         }, function () {
                             window.location.href = "";
                         });
-                    }, 
+                    },
                     error: function(error) {
                         console.log(error);
                     }
@@ -314,7 +315,7 @@ function getAndFillOutAllSku() {
             var contentHtml = Handlebars.compile(template);
             $("#tbody_sku").html(contentHtml(data));
             enableSwitchery();
-        }, 
+        },
         error: function(error) {
             console.log(error);
         }

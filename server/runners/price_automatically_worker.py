@@ -13,7 +13,7 @@ class PriceAutomaticallyWorker(object):
 	def execute(self):
 		print("*********** Price Automatically is executed ***********")
 		skudao = SkuDao()
-		skus = skudao.getAll()
+		skus = skudao.getActiveSku()
 		if (skus == None):
 			return
 

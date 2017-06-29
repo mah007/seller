@@ -233,7 +233,7 @@
                                                             <th style="vertical-align:top;width: 30%;">Tên sản phẩm</th>
                                                             <th style="vertical-align:top;" class="text-right">Khoảng giá<br>chỉnh sửa</th>
                                                             <th style="vertical-align:top;" class="text-right">Giá hiện tại<br>
-                                                            <th style="vertical-align:top;" class="text-right">Mức giá thấp hơn<br>giá đối thủ</th>
+                                                            <th style="vertical-align:top;" class="text-right">Giá thấp hơn<br>đối thủ</th>
                                                             <th style="vertical-align:top;" class="text-right">Tần suất<br>kiểm tra</th>
                                                             <th style="vertical-align:top;width:180px;" class="text-left">Quản trị</th>
                                                         </tr>
@@ -367,7 +367,7 @@
                     <td class="text-left">
                         <button type="button" class="btn btn-circle blue btnedt" style="margin: 0 2px 4px;"><i class="fa fa-edit"></i></button>
                         <button type="button" class="btn btn-circle red btndel" style="margin: 0 2px 4px;"><i class="fa fa-close"></i></button>
-                        <input type="checkbox" class="js-switch btnstatus" checked />
+                        <input type="checkbox" class="js-switch btnstatus" {{#ifEqual state 1}} checked {{else}} none {{/ifEqual}}/>
                         <div class="btn-group btn-group-solid btnstt hide" style="margin: 0 2px 4px;" data-bit="active">
                             <button type="button" class="btn bit-like" data-bit="active" style="margin: 0;">Bật</button>
                             <button type="button" class="btn bit-nope" data-bit="deactive" style="margin: 0;">Tắt</button>

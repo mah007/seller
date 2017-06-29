@@ -22,3 +22,8 @@ class SkuManager(object):
 		skudao = SkuDao()
 		return skudao.getAll()
 
+
+	def updateSkuState(self, sku):
+		skudao = SkuDao()
+		skudao.updateState(sku)
+
