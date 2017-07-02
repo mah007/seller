@@ -8,9 +8,9 @@ class SkuManager(object):
 		skudao.createTable()
 
 
-	def insertSku(self, sku):
+	def insertSku(self, sku, user):
 		skudao = SkuDao()
-		skudao.insert(sku)
+		skudao.insert(sku, user)
 
 
 	def deleteSku(self, sku):

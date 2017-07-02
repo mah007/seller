@@ -72,6 +72,8 @@ def updateSkuState():
 @SkuAPI.route('/sku/insert', methods=['POST'])
 @cross_origin()
 def insert():
+	if not request.args:
+		return make_response(jsonify({'error': 'Missig token parameter value'}), 404)
 	if not request.json:
 		return make_response(jsonify({'error': 'Missig json parameters value'}), 404)
 	if not 'sku' in request.json:
@@ -100,8 +102,9 @@ def insert():
 		"created_at": int(round(time.time()))
 	}
 
+	token = request.args.get('token')
 	userManager = UserManager()
-	temporaryUser = userManager.getUser("token");
+	temporaryUser = userManager.getUser(token)
 
 	lazadaSkuApi = LazadaSkuApi()
 	lazadaProduct = lazadaSkuApi.getSku(sku, temporaryUser)
@@ -111,7 +114,7 @@ def insert():
 		sku['link'] = lazadaProduct['Skus'][0]['Url'].encode('utf-8')
 		sku['special_price'] = lazadaProduct['Skus'][0]['special_price']
 		skuManager = SkuManager()
-		skuManager.insertSku(sku)
+		skuManager.insertSku(sku, temporaryUser)
 		return make_response(json.dumps(sku), 201)
 	else:
 		return make_response(jsonify({'error': 'Seller SKU is wrong !!!'}), 404)

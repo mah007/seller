@@ -17,7 +17,8 @@ class SkuDao(object):
                     state			INTEGER		NOT NULL,
                     repeat_time 	INTEGER 	NOT NULL,
                     created_at 		INTEGER 	NOT NULL,
-                    updated_at		INTEGER
+                    updated_at		INTEGER,
+                    user_id          INTEGER     NOT NULL
                     );'''
         DatabaseHelper.execute(query)
 
@@ -97,12 +98,13 @@ class SkuDao(object):
     # --------------------------------------------------------------------------
     # Insert KSU
     # --------------------------------------------------------------------------
-    def insert(self, sku):
+    def insert(self, sku, user):
         query = '''INSERT INTO sku_management (sku, name, link, min_price, max_price,
-    				compete_price, special_price, state, repeat_time, created_at, updated_at)
-    				VALUES ('{}', '{}', '{}', {}, {}, {}, {}, {}, {}, {}, 0)'''.format(
+    				compete_price, special_price, state, repeat_time, created_at, updated_at, user_id)
+    				VALUES ('{}', '{}', '{}', {}, {}, {}, {}, {}, {}, {}, 0, {})'''.format(
     				StringUtils.toString(sku['sku']), StringUtils.toString(sku['name']), StringUtils.toString(sku['link']),
-                    sku['min_price'], sku['max_price'], sku['compete_price'], sku['special_price'], sku['state'], sku['repeat_time'], sku['created_at'])
+                    sku['min_price'], sku['max_price'], sku['compete_price'], sku['special_price'], sku['state'], sku['repeat_time'], sku['created_at'],
+                    user['id'])
         DatabaseHelper.execute(query)
 
 

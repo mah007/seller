@@ -275,7 +275,7 @@ $(".btnmodalsubmit").click(function() {
     } else {
         $.ajax({
             method:'POST',
-            url: 'http://localhost:5000/sku/insert',
+            url: 'http://localhost:5000/sku/insert?token=token',
             contentType: "application/json",
             data: JSON.stringify({
                 sku: $('input[name=txt_sku]').val(),

@@ -14,36 +14,38 @@ class UserDao(object):
                     lazada_user_id      TEXT,
                     lazada_api_key      TEXT,
                     created_at          INTEGER 	NOT NULL,
-                    updated_at          INTEGER     
+                    updated_at          INTEGER
                     );'''
         DatabaseHelper.execute(query)
 
 
     def insert(self, user):
-        query = '''INSERT INTO t_user (user_name, password, token, lazada_user_name, lazada_user_id, lazada_api_key, created_at, updated_at) 
+        query = '''INSERT INTO t_user (user_name, password, token, lazada_user_name, lazada_user_id, lazada_api_key, created_at, updated_at)
                     VALUES ('{}', '{}', '{}', '{}', '{}', '{}', {}, 0)'''.format(
-                    user['user_name'], user['password'], user['token'], user['lazada_user_name'], user['lazada_user_id'], 
+                    user['user_name'], user['password'], user['token'], user['lazada_user_name'], user['lazada_user_id'],
                     user['lazada_api_key'], user['created_at'])
         DatabaseHelper.execute(query)
 
 
     def getUser(self, token):
         try:
-            query = '''SELECT lazada_user_name, lazada_user_id, lazada_api_key FROM t_user WHERE token={}'''.format(token)
+            query = '''SELECT id, lazada_user_name, lazada_user_id, lazada_api_key FROM t_user WHERE token={}'''.format(token)
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)
 
             user = {
+                "id": "",
                 "lazada_user_name": "",
                 "lazada_user_id": "",
                 "lazada_api_key": "",
             }
             rows = cur.fetchall()
             for row in rows:
-                user['lazada_user_name'] = row[0]
-                user['lazada_user_id'] = row[1]
-                user['lazada_api_key'] = row[2]
+                user['id'] = row[0]
+                user['lazada_user_name'] = row[1]
+                user['lazada_user_id'] = row[2]
+                user['lazada_api_key'] = row[3]
             conn.close()
 
             return user
