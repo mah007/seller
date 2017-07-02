@@ -24,7 +24,7 @@ class PriceAutomaticallyWorker(threading.Thread):
 			return
 
 		for sku in skus:
-			enemies = self.getEnemies(sku['link'])
+			enemies = self.getEnemies(user, sku)
 			self.priceAlgorithm(enemies, user, sku)
 
 
@@ -64,12 +64,12 @@ class PriceAutomaticallyWorker(threading.Thread):
 		# Update external database
 		lazadaSkuApi = LazadaSkuApi()
 		lazadaProduct = lazadaSkuApi.updateProductSpecialPrice(sku, user, newSpecialPrice)
-		print ('''{}-{}: updated price to: {}'''.format(user['lazada_user_name'], sku['sku'], newSpecialPrice))
+		print ('''{} ({}): updated price to: {}'''.format(sku['sku'], user['lazada_user_name'], newSpecialPrice))
 
 
-	def getEnemies(self, pageUrl):
+	def getEnemies(self, user, sku):
 		enemiesJson = []
-		page = requests.get(pageUrl)
+		page = requests.get(sku['link'])
 		tree = html.fromstring(page.content)
 
 		# Top enemy, will be this user if the user is on the top
@@ -90,7 +90,7 @@ class PriceAutomaticallyWorker(threading.Thread):
 				"price": int(enemyPrices[index].replace('VND', '').replace('.', ''))
 				})
 
-		print(enemiesJson)
+		print ('''{} ({}) enemies: {}'''.format(sku['sku'], user['lazada_user_name'], enemiesJson))
 		return enemiesJson
 
 
