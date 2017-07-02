@@ -1,24 +1,28 @@
 import time
 import operator
 import requests
+import threading
 from time import sleep
 from lxml import html
 from database.sku_dao import SkuDao
-from database.user_dao import UserDao
 from lazada_api.lazada_sku_api import LazadaSkuApi
 
 
-class PriceAutomaticallyWorker(object):
+class PriceAutomaticallyWorker(threading.Thread):
 
-	def execute(self):
-		print("*********** Price Automatically is executed ***********")
+	def __init__(self, kwargs):
+		threading.Thread.__init__(self)
+		self.kwargs = kwargs
+
+
+	def run(self):
+		user = self.kwargs['user']
+		print('''*********** {}: is running ***********'''.format(user['lazada_user_name']))
 		skudao = SkuDao()
-		skus = skudao.getActiveSku()
+		skus = skudao.getActiveSku(user)
 		if (skus == None):
 			return
 
-		userDao = UserDao()
-		user = userDao.getUser("token");
 		for sku in skus:
 			enemies = self.getEnemies(sku['link'])
 			self.priceAlgorithm(enemies, user, sku)
@@ -48,23 +52,19 @@ class PriceAutomaticallyWorker(object):
 		if (sku['special_price'] == newSpecialPrice):
 			return
 
-		print ("new special price: ", newSpecialPrice)
-		self.doUpdatePrice(sku, newSpecialPrice)
+		self.doUpdatePrice(sku, user, newSpecialPrice)
 
 
-	def doUpdatePrice(self, sku, newSpecialPrice):
+	def doUpdatePrice(self, sku, user, newSpecialPrice):
 		sku['updated_at'] = int(round(time.time()))
 		sku['special_price'] = newSpecialPrice
 		# Update internal database
 		skuDao = SkuDao()
 		skuDao.update(sku)
 		# Update external database
-		userDao = UserDao()
-		temporaryUser = userDao.getUser("token");
 		lazadaSkuApi = LazadaSkuApi()
-		lazadaProduct = lazadaSkuApi.updateProductSpecialPrice(sku, temporaryUser, newSpecialPrice)
-		print("*********** Price Automatically do updated price ***********")
-		print("Sku: ", sku['sku'], "/nnew special price: ", newSpecialPrice)
+		lazadaProduct = lazadaSkuApi.updateProductSpecialPrice(sku, user, newSpecialPrice)
+		print ('''{}-{}: updated price to: {}'''.format(user['lazada_user_name'], sku['sku'], newSpecialPrice))
 
 
 	def getEnemies(self, pageUrl):

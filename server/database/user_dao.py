@@ -46,9 +46,31 @@ class UserDao(object):
                 user['lazada_user_name'] = row[1]
                 user['lazada_user_id'] = row[2]
                 user['lazada_api_key'] = row[3]
-            conn.close()
 
+            conn.close()
             return user
+        except Exception as ex:
+            print(ex)
+            return None
+
+
+    def getAllUser(self):
+        try:
+            query = '''SELECT id, lazada_user_name FROM t_user'''
+            conn = DatabaseHelper.getConnection()
+            cur = conn.cursor()
+            cur.execute(query)
+
+            users = []
+            rows = cur.fetchall()
+            for row in rows:
+                users.append({
+                        "id": row[0],
+                        "lazada_user_name": row[1]
+                })
+
+            conn.close()
+            return users
         except Exception as ex:
             print(ex)
             return None

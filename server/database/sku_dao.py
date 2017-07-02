@@ -54,11 +54,11 @@ class SkuDao(object):
             return None
 
     # --------------------------------------------------------------------------
-    # Get all active SKU
+    # Get all active SKU of a user
     # --------------------------------------------------------------------------
-    def getActiveSku(self):
+    def getActiveSku(self, user):
         try:
-            query = '''SELECT * from sku_management WHERE state = 1 ORDER BY id DESC LIMIT 100'''
+            query = '''SELECT * from sku_management WHERE state = 1 and user_id = {} ORDER BY id DESC LIMIT 100'''.format(user['id'])
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)
