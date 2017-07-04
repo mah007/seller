@@ -17,4 +17,11 @@ class UserManager(object):
 	def getUser(self, token):
 		userDao = UserDao()
 		return userDao.getUser(token)
+		
+	def login(self, login):
+		userDao = UserDao()
+		return userDao.login(login)
+
+
+
 

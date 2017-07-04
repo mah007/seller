@@ -27,3 +27,11 @@ class SkuManager(object):
 		skudao = SkuDao()
 		skudao.updateState(sku)
 
+	def getById(self, id):
+		skudao = SkuDao()
+		return skudao.getById(id)
+
+	def updateSku(self, sku):
+		skudao = SkuDao()
+		return skudao.update(sku)
+

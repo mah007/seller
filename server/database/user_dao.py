@@ -75,6 +75,22 @@ class UserDao(object):
             print(ex)
             return None
 
+    def login(self, login):
+        try:
+            query = '''SELECT * FROM t_user WHERE user_name = '{}' and password = '{}'  '''.format(login['username'], login['password'])
+            conn = DatabaseHelper.getConnection()
+            cur = conn.cursor()
+            cur.execute(query)
+            flag = 1
+            rows = cur.fetchall()
+            if not rows:
+                flag = 0
+
+            conn.close()
+            return flag
+        except Exception as ex:
+            print(ex)
+            return None   
 
 
 

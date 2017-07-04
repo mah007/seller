@@ -11,32 +11,33 @@ jQuery(document).ready(function() {
 
     if($('.btnnew').length > 0) {
         $(".btnnew").click(function() {
+            $('#portlet-config').attr('data-type', "insert");
             $('#portlet-config').modal('show');
         });
     }
 
-    if($('.btnedt').length > 0) {
-        $(".btnedt").click(function() {
-            var id = $(this).parents('tr').data('id');
-            $.ajax({
-                method: 'GET',
-                url: '?act=skugetitm&id=' + id,
-                success: function(data) {
-                    data = $.parseJSON(data);
-                    $('.portlet-config .modal-title').html('Chỉnh sửa ' + data['name']);
-                    $('input[name=id]').val(data['id_sku_data']);
-                    $('input[name=txt_act]').val('skuupdate');
-                    $('input[name=txt_sku]').val(data['seller_sku']);
-                    $('input[name=txt_min]').val(data['min_price']);
-                    $('input[name=txt_max]').val(data['max_price']);
-                    $('input[name=txt_stp]').val(data['delta_value']);
-                    $('input[name=txt_seq]').val(data['frequency']);
-                    $('input[name=txt_stt]').val(data['status']);
-                    $('#portlet-config').modal('show');
-                }
-            });
-        });
-    }
+    // if($('.btnedt').length > 0) {
+    //     $(".btnedt").click(function() {
+    //         var id = $(this).parents('tr').data('id');
+    //         $.ajax({
+    //             method: 'GET',
+    //             url: '?act=skugetitm&id=' + id,
+    //             success: function(data) {
+    //                 data = $.parseJSON(data);
+    //                 $('.portlet-config .modal-title').html('Chỉnh sửa ' + data['name']);
+    //                 $('input[name=id]').val(data['id_sku_data']);
+    //                 $('input[name=txt_act]').val('skuupdate');
+    //                 $('input[name=txt_sku]').val(data['seller_sku']);
+    //                 $('input[name=txt_min]').val(data['min_price']);
+    //                 $('input[name=txt_max]').val(data['max_price']);
+    //                 $('input[name=txt_stp]').val(data['delta_value']);
+    //                 $('input[name=txt_seq]').val(data['frequency']);
+    //                 $('input[name=txt_stt]').val(data['status']);
+    //                 $('#portlet-config').modal('show');
+    //             }
+    //         });
+    //     });
+    // }
 
     if($('.btnstt').length > 0) {
         $(".btnstt").each(function () {
@@ -171,6 +172,32 @@ function enableSwitchery() {
             });
         });
     }
+
+    // Edit Sku---------------------------------------------------------------
+    if($('.btnedt').length > 0) {
+        $(".btnedt").click(function() {
+            var parent = $(this).parents('tr');
+            var id = parent.data('id');
+            var name = parent.data('name');
+            var sku = parent.data('sku');
+            var repeat_time = parent.data('repeat_time');
+            var min_price = parent.data('min_price');
+            var max_price = parent.data('max_price');
+            var compete_price = parent.data('compete_price');
+
+            $('#portlet-config').attr('data-type', "edit");
+            $('#portlet-config .modal-title').html('Chỉnh sửa ' + name);
+            $('input[name=id]').val(id);
+            $('input[name=txt_sku]').val(sku).prop('disabled', true);
+            $('input[name=txt_seq]').val(repeat_time).prop('disabled', true);
+            $('input[name=txt_min]').val(min_price);
+            $('input[name=txt_max]').val(max_price);
+            $('input[name=txt_stp]').val(compete_price);
+
+            $('#portlet-config').modal('show');
+        });
+    }
+
 }
 
 function validNull (selector) {
@@ -272,7 +299,42 @@ $(".btnmodalsubmit").click(function() {
 
     if(error.length > 0) {
         swal("Không hợp lệ", error, "error");
-    } else {
+        return;  
+    }
+
+    var dataType = $('#portlet-config').data('type');
+    console.log(dataType)
+    if(dataType == "edit")
+    {
+        $.ajax({
+            method:'POST',
+            url: 'http://localhost:5000/sku/update',
+            contentType: "application/json",
+            data: JSON.stringify({
+                id: $('input[name=id]').val(),
+                sku: $('input[name=txt_sku]').val(),
+                min_price: $('input[name=txt_min]').val(),
+                max_price: $('input[name=txt_max]').val(),
+                compete_price: $('input[name=txt_stp]').val(),
+                repeat_time: $('input[name=txt_seq]').val(),
+                state: $('select[name=txt_stt]').val() == "active" ? 1 : 0
+            }),
+            success: function(data) {
+                console.log(data);
+                swal("Success", "", "success");
+                $('#portlet-config').modal('hide');
+                getAndFillOutAllSku();
+            },
+            error: function(error) {
+                console.log(error);
+                var exception = JSON.parse(error.responseText);
+                var errorTag = $this.parent().find('.error');
+                errorTag.html(exception.error).removeClass('hidden')
+            }
+        });
+    }
+    else if (dataType == "insert")
+    {
         $.ajax({
             method:'POST',
             url: 'http://localhost:5000/sku/insert?token=token',
@@ -321,6 +383,32 @@ function getAndFillOutAllSku() {
         }
     });
 }
+
+//-------------------------------------------------------------------------------------
+// Get and fill out all SKU
+//-------------------------------------------------------------------------------------
+    if($('.btnloginsubmit').length > 0) {
+        $(".btnloginsubmit").click(function() {
+            $.ajax({
+            method:'POST',
+            url: 'http://localhost:5000/user/login',
+            contentType: "application/json",
+            data: JSON.stringify({
+                username: $('input[name=username]').val(),
+                password: $('input[name=password]').val()                
+            }),
+            success: function(data) {
+                window.location.href = "http://localhost:8000/lazada-seller-master/lazada-seller/font-end/sku-management";
+            },
+            error: function(error) {
+                var exception = JSON.parse(error.responseText);
+                swal("Incorrect Account", "");
+                console.log(error);
+            }
+        });
+        });
+    }
+
 
 
 

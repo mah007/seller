@@ -108,25 +108,15 @@ class SkuDao(object):
         DatabaseHelper.execute(query)
 
 
-    # --------------------------------------------------------------------------
+    # ---------------------------------------------------------------------------------------
     # Update KSU
-    # --------------------------------------------------------------------------
+    # ---------------------------------------------------------------------------------------
     def update(self, sku):
-        query = '''UPDATE sku_management set sku = '{}', name = '{}', link = '{}', min_price = {}, max_price = {},
-                    compete_price = {}, special_price = {}, state = {}, repeat_time = {}, updated_at = {}
-                    WHERE id = '{}' '''.format(
-                    sku['sku'], sku['name'], sku['link'], sku['min_price'], sku['max_price'],
-                    sku['compete_price'], sku['special_price'], sku['state'], sku['repeat_time'],
+        query = '''UPDATE sku_management set min_price = '{}', max_price = '{}', compete_price = '{}', updated_at = '{}'
+                    WHERE id = '{}' '''.format(sku['min_price'], sku['max_price'], sku['compete_price'], 
                     sku['updated_at'], sku['id'])
         DatabaseHelper.execute(query)
 
-
-    # --------------------------------------------------------------------------
-    # Update KSU's state
-    # --------------------------------------------------------------------------
-    def updateState(self, sku):
-        query = '''UPDATE sku_management set state = {} WHERE id = '{}' '''.format(sku['state'], sku['id'])
-        DatabaseHelper.execute(query)
 
 
 

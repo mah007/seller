@@ -21,8 +21,7 @@ def getAll():
 
 	skuManager = SkuManager()
 	return make_response(jsonify({"data": skuManager.getAll(request.args.get('token'))}))
-
-
+	
 # ------------------------------------------------------------------------------
 # Delete KSU
 # ------------------------------------------------------------------------------
@@ -120,8 +119,42 @@ def insert():
 		return make_response(jsonify({'error': 'Seller SKU is wrong !!!'}), 404)
 
 
+# ---------------------------------------------------------------------------------------
+# Update KSU
+# ---------------------------------------------------------------------------------------
+@SkuAPI.route('/sku/update', methods=['POST'])
+@cross_origin()
+def update():
+	if not request.json:
+		return make_response(jsonify({'error': 'Missig json parameters value'}), 404)
+	if not 'id' in request.json:
+		return make_response(jsonify({'error': 'Missig id parameter'}), 404)	
+	if not 'sku' in request.json:
+		return make_response(jsonify({'error': 'Missig sku parameter'}), 404)		
+	if not 'min_price' in request.json:
+		return make_response(jsonify({'error': 'Missig min_price parameter'}), 404)
+	if not 'max_price' in request.json:
+		return make_response(jsonify({'error': 'Missig max_price parameter'}), 404)
+	if not 'compete_price' in request.json:
+		return make_response(jsonify({'error': 'Missig compete_price parameter'}), 404)
+	if not 'state' in request.json:
+		return make_response(jsonify({'error': 'Missig state parameter'}), 404)
+	if not 'repeat_time' in request.json:
+		return make_response(jsonify({'error': 'Missig repeat_time parameter'}), 404)
 
+	sku = {
+		"id": request.json['id'],
+		"min_price": int(request.json['min_price']),
+		"max_price": int(request.json['max_price']),
+		"compete_price": int(request.json['compete_price']),
+		"state": int(request.json['state']),
+		"repeat_time": int(request.json['repeat_time']),
+		"updated_at": int(round(time.time()))
+	}
 
+	skuManager = SkuManager()
+	skuManager.updateSku(sku)
+	return make_response(jsonify(sku), 201)
 
 
 
