@@ -1,14 +1,10 @@
-@import url('https://fonts.googleapis.com/css?family=Poppins');
-
-/* BASIC */
-
 html {
   background-color: #56baed;
 }
 
 body {
-  font-family: "Poppins", sans-serif;
-  height: 100vh;
+  min-height: 1200px;
+  overflow: hidden;
 }
 
 a {
@@ -24,7 +20,7 @@ h2 {
   font-weight: 600;
   text-transform: uppercase;
   display:inline-block;
-  margin: 40px 8px 10px 8px; 
+  margin: 40px 8px 10px 8px;
   color: #cccccc;
 }
 
@@ -35,7 +31,7 @@ h2 {
 .wrapper {
   display: flex;
   align-items: center;
-  flex-direction: column; 
+  flex-direction: column;
   justify-content: center;
   width: 100%;
   min-height: 100%;
@@ -277,7 +273,7 @@ input[type=text]:placeholder {
 
 *:focus {
     outline: none;
-} 
+}
 
 #icon {
   width:60%;
@@ -285,4 +281,9 @@ input[type=text]:placeholder {
 
 * {
   box-sizing: border-box;
+}
+
+
+button.btnloginsubmit {
+  margin-top: 10px;
 }

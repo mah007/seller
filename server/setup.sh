@@ -17,3 +17,6 @@ pip3 install simplejson
 
 echo "Install lxml"
 pip3 install lxml
+
+echo "Install jwt"
+pip3 install pyjwt

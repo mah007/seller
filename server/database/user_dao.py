@@ -21,8 +21,8 @@ class UserDao(object):
 
     def insert(self, user):
         query = '''INSERT INTO t_user (user_name, password, token, lazada_user_name, lazada_user_id, lazada_api_key, created_at, updated_at)
-                    VALUES ('{}', '{}', '{}', '{}', '{}', '{}', {}, 0)'''.format(
-                    user['user_name'], user['password'], user['token'], user['lazada_user_name'], user['lazada_user_id'],
+                    VALUES ('{}', '{}', '', '{}', '{}', '{}', {}, 0)'''.format(
+                    user['user_name'], user['password'], user['lazada_user_name'], user['lazada_user_id'],
                     user['lazada_api_key'], user['created_at'])
         DatabaseHelper.execute(query)
 
@@ -75,22 +75,41 @@ class UserDao(object):
             print(ex)
             return None
 
-    def login(self, login):
+
+    def login(self, user):
         try:
-            query = '''SELECT * FROM t_user WHERE user_name = '{}' and password = '{}'  '''.format(login['username'], login['password'])
+            query = '''SELECT id, user_name FROM t_user WHERE user_name = '{}' and password = '{}' '''.format(user['username'], user['password'])
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)
-            flag = 1
+
             rows = cur.fetchall()
             if not rows:
-                flag = 0
+                cur.close()
+                return None
+
+            user = None
+            for row in rows:
+                user = {
+                    "id": row[0],
+                    "user_name": row[1]
+                }
 
             conn.close()
-            return flag
+            return user
         except Exception as ex:
             print(ex)
-            return None   
+            return None
+
+
+    def updateUserToken(self, user):
+        try:
+            query = '''UPDATE t_user set token = '{}' WHERE id = '{}' '''.format(user['token'], user['id'])
+            DatabaseHelper.execute(query)
+            return user
+        except Exception as ex:
+            print(ex)
+            return None
 
 
 

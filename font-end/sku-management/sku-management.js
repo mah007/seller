@@ -16,29 +16,6 @@ jQuery(document).ready(function() {
         });
     }
 
-    // if($('.btnedt').length > 0) {
-    //     $(".btnedt").click(function() {
-    //         var id = $(this).parents('tr').data('id');
-    //         $.ajax({
-    //             method: 'GET',
-    //             url: '?act=skugetitm&id=' + id,
-    //             success: function(data) {
-    //                 data = $.parseJSON(data);
-    //                 $('.portlet-config .modal-title').html('Chỉnh sửa ' + data['name']);
-    //                 $('input[name=id]').val(data['id_sku_data']);
-    //                 $('input[name=txt_act]').val('skuupdate');
-    //                 $('input[name=txt_sku]').val(data['seller_sku']);
-    //                 $('input[name=txt_min]').val(data['min_price']);
-    //                 $('input[name=txt_max]').val(data['max_price']);
-    //                 $('input[name=txt_stp]').val(data['delta_value']);
-    //                 $('input[name=txt_seq]').val(data['frequency']);
-    //                 $('input[name=txt_stt]').val(data['status']);
-    //                 $('#portlet-config').modal('show');
-    //             }
-    //         });
-    //     });
-    // }
-
     if($('.btnstt').length > 0) {
         $(".btnstt").each(function () {
             if ($(this).data("bit") == 'active') {
@@ -299,7 +276,7 @@ $(".btnmodalsubmit").click(function() {
 
     if(error.length > 0) {
         swal("Không hợp lệ", error, "error");
-        return;  
+        return;
     }
 
     var dataType = $('#portlet-config').data('type');
@@ -384,30 +361,6 @@ function getAndFillOutAllSku() {
     });
 }
 
-//-------------------------------------------------------------------------------------
-// Get and fill out all SKU
-//-------------------------------------------------------------------------------------
-    if($('.btnloginsubmit').length > 0) {
-        $(".btnloginsubmit").click(function() {
-            $.ajax({
-            method:'POST',
-            url: 'http://localhost:5000/user/login',
-            contentType: "application/json",
-            data: JSON.stringify({
-                username: $('input[name=username]').val(),
-                password: $('input[name=password]').val()                
-            }),
-            success: function(data) {
-                window.location.href = "http://localhost:8000/lazada-seller-master/lazada-seller/font-end/sku-management";
-            },
-            error: function(error) {
-                var exception = JSON.parse(error.responseText);
-                swal("Incorrect Account", "");
-                console.log(error);
-            }
-        });
-        });
-    }
 
 
 

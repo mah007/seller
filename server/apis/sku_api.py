@@ -21,7 +21,7 @@ def getAll():
 
 	skuManager = SkuManager()
 	return make_response(jsonify({"data": skuManager.getAll(request.args.get('token'))}))
-	
+
 # ------------------------------------------------------------------------------
 # Delete KSU
 # ------------------------------------------------------------------------------
@@ -128,9 +128,9 @@ def update():
 	if not request.json:
 		return make_response(jsonify({'error': 'Missig json parameters value'}), 404)
 	if not 'id' in request.json:
-		return make_response(jsonify({'error': 'Missig id parameter'}), 404)	
+		return make_response(jsonify({'error': 'Missig id parameter'}), 404)
 	if not 'sku' in request.json:
-		return make_response(jsonify({'error': 'Missig sku parameter'}), 404)		
+		return make_response(jsonify({'error': 'Missig sku parameter'}), 404)
 	if not 'min_price' in request.json:
 		return make_response(jsonify({'error': 'Missig min_price parameter'}), 404)
 	if not 'max_price' in request.json:

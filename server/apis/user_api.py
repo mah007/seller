@@ -14,8 +14,6 @@ UserAPI = Blueprint('user_api', __name__, template_folder='apis')
 @UserAPI.route('/user/login', methods=['POST'])
 @cross_origin()
 def login():
-	# if not request.json:
-		# return make_response(jsonify({'error': 'Missig json parameters value'}), 404)
 	if not 'username' in request.json:
 		return make_response(jsonify({'error': 'Missig username parameter'}), 404)
 	if not 'password' in request.json:
@@ -26,13 +24,9 @@ def login():
 		"password": request.json['password']
 	}
 
-	# skuManager = SkuManager()
-	# if(skuManager.login(sku)):
-	# 	return make_response(jsonify({"success": "done"}))	
-	# else:
-	# 	return make_response(jsonify({'error': 'Incorrect Account'}), 404)
 	userManager = UserManager()
-	if(userManager.login(login) == 1):
-		return make_response(jsonify({"success": "done"}))
+	user = userManager.login(login);
+	if user:
+		return make_response(jsonify({"success": "done", "data": user}))
 	else:
-		return make_response(jsonify({'error': 'Incorres Account'}), 404)
+		return make_response(jsonify({'error': 'Username or password is incorrect'}), 404)
