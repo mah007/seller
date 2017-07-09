@@ -23,9 +23,9 @@ class SkuDao(object):
         DatabaseHelper.execute(query)
 
 
-    def getAll(self):
+    def getAll(self, user):
         try:
-            query = '''SELECT * from sku_management ORDER BY id DESC LIMIT 100'''
+            query = '''SELECT * from sku_management WHERE user_id = '{}' ORDER BY id DESC LIMIT 100'''.format(user['id'])
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)
@@ -113,8 +113,16 @@ class SkuDao(object):
     # ---------------------------------------------------------------------------------------
     def update(self, sku):
         query = '''UPDATE sku_management set min_price = '{}', max_price = '{}', compete_price = '{}', updated_at = '{}'
-                    WHERE id = '{}' '''.format(sku['min_price'], sku['max_price'], sku['compete_price'], 
+                    WHERE id = '{}' '''.format(sku['min_price'], sku['max_price'], sku['compete_price'],
                     sku['updated_at'], sku['id'])
+        DatabaseHelper.execute(query)
+
+
+    # ---------------------------------------------------------------------------------------
+    # Update KSU
+    # ---------------------------------------------------------------------------------------
+    def updateState(self, sku):
+        query = '''UPDATE sku_management set state = {} WHERE id = '{}' '''.format(sku['state'], sku['id'])
         DatabaseHelper.execute(query)
 
 

@@ -29,10 +29,15 @@ class UserDao(object):
 
     def getUser(self, token):
         try:
-            query = '''SELECT id, lazada_user_name, lazada_user_id, lazada_api_key FROM t_user WHERE token={}'''.format(token)
+            query = '''SELECT id, lazada_user_name, lazada_user_id, lazada_api_key FROM t_user WHERE token='{}' '''.format(token)
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)
+
+            rows = cur.fetchall()
+            if not rows:
+                conn.close()
+                return None
 
             user = {
                 "id": "",
@@ -40,7 +45,6 @@ class UserDao(object):
                 "lazada_user_id": "",
                 "lazada_api_key": "",
             }
-            rows = cur.fetchall()
             for row in rows:
                 user['id'] = row[0]
                 user['lazada_user_name'] = row[1]

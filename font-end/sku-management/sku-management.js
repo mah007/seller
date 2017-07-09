@@ -1,3 +1,5 @@
+var leoz = new LeoZ();
+
 jQuery(document).ready(function() {
 
     // Init data
@@ -96,7 +98,7 @@ function enableSwitchery() {
             }
             $.ajax({
                 method:'POST',
-                url: 'http://localhost:5000/sku/update-state?token=token',
+                url: leoz.generateUpdateStateSkuEndpoind(),
                 contentType: "application/json",
                 data: JSON.stringify({
                     id: id,
@@ -127,7 +129,7 @@ function enableSwitchery() {
             }, function () {
                 $.ajax({
                     method:'POST',
-                    url: 'http://localhost:5000/sku/delete?token=token',
+                    url: leoz.generateDeleteSkuEndpoind(),
                     contentType: "application/json",
                     data: JSON.stringify({
                         id: id
@@ -285,7 +287,7 @@ $(".btnmodalsubmit").click(function() {
     {
         $.ajax({
             method:'POST',
-            url: 'http://localhost:5000/sku/update',
+            url: leoz.generateUpdateSkuEndpoind(),
             contentType: "application/json",
             data: JSON.stringify({
                 id: $('input[name=id]').val(),
@@ -314,7 +316,7 @@ $(".btnmodalsubmit").click(function() {
     {
         $.ajax({
             method:'POST',
-            url: 'http://localhost:5000/sku/insert?token=token',
+            url: leoz.generateInsertSkuEndpoind(),
             contentType: "application/json",
             data: JSON.stringify({
                 sku: $('input[name=txt_sku]').val(),
@@ -346,7 +348,7 @@ $(".btnmodalsubmit").click(function() {
 function getAndFillOutAllSku() {
     $.ajax({
         method:'GET',
-        url: 'http://localhost:5000/sku/get-all?token=token',
+        url: leoz.generateGetAllSkuEndpoind(),
         contentType: "application/json",
         success: function(data) {
             console.log(data);

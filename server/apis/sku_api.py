@@ -3,8 +3,6 @@ import simplejson as json
 from flask_cors import CORS, cross_origin
 from flask import Blueprint, render_template, abort, request, make_response, jsonify
 from managers.sku_manager import SkuManager
-from managers.user_manager import UserManager
-from lazada_api.lazada_sku_api import LazadaSkuApi
 
 
 SkuAPI = Blueprint('sku_api', __name__, template_folder='apis')
@@ -19,8 +17,14 @@ def getAll():
 	if not request.args:
 		return make_response(jsonify({'error': 'Missig token parameter value'}), 404)
 
+	token = request.args.get('token')
 	skuManager = SkuManager()
-	return make_response(jsonify({"data": skuManager.getAll(request.args.get('token'))}))
+	result = skuManager.getAll(token)
+	if 'error' in result:
+		return make_response(jsonify(result))
+	else:
+		return make_response(jsonify({"data": result}))
+
 
 # ------------------------------------------------------------------------------
 # Delete KSU
@@ -28,6 +32,8 @@ def getAll():
 @SkuAPI.route('/sku/delete', methods=['POST'])
 @cross_origin()
 def delete():
+	if not request.args:
+		return make_response(jsonify({'error': 'Missig token parameter value'}), 404)
 	if not request.json:
 		return make_response(jsonify({'error': 'Missig json parameters value'}), 404)
 	if not 'id' in request.json:
@@ -38,9 +44,11 @@ def delete():
 	}
 
 	skuManager = SkuManager()
-	skuManager.deleteSku(sku)
-	return make_response(jsonify({"success": "done"}))
-
+	result = skuManager.deleteSku(sku, request.args.get('token'))
+	if 'success' in result:
+		return make_response(jsonify({"success": "done"}))
+	else:
+		return make_response(jsonify(result))
 
 # ------------------------------------------------------------------------------
 # Update SKU's state
@@ -48,6 +56,8 @@ def delete():
 @SkuAPI.route('/sku/update-state', methods=['POST'])
 @cross_origin()
 def updateSkuState():
+	if not request.args:
+		return make_response(jsonify({'error': 'Missig token parameter value'}), 404)
 	if not request.json:
 		return make_response(jsonify({'error': 'Missig json parameters value'}), 404)
 	if not 'id' in request.json:
@@ -61,8 +71,11 @@ def updateSkuState():
 	}
 
 	skuManager = SkuManager()
-	skuManager.updateSkuState(sku)
-	return make_response(jsonify({"success": "done"}))
+	result = skuManager.updateSkuState(sku, request.args.get('token'))
+	if 'success' in result:
+		return make_response(jsonify({"success": "done"}))
+	else:
+		return make_response(jsonify(result))
 
 
 # ------------------------------------------------------------------------------
@@ -101,22 +114,12 @@ def insert():
 		"created_at": int(round(time.time()))
 	}
 
-	token = request.args.get('token')
-	userManager = UserManager()
-	temporaryUser = userManager.getUser(token)
-
-	lazadaSkuApi = LazadaSkuApi()
-	lazadaProduct = lazadaSkuApi.getSku(sku, temporaryUser)
-
-	if (lazadaProduct):
-		sku['name'] = lazadaProduct['Attributes']['name'].encode('utf-8')
-		sku['link'] = lazadaProduct['Skus'][0]['Url'].encode('utf-8')
-		sku['special_price'] = lazadaProduct['Skus'][0]['special_price']
-		skuManager = SkuManager()
-		skuManager.insertSku(sku, temporaryUser)
+	skuManager = SkuManager()
+	result = skuManager.insertSku(sku, request.args.get('token'))
+	if 'success' in result:
 		return make_response(json.dumps(sku), 201)
 	else:
-		return make_response(jsonify({'error': 'Seller SKU is wrong !!!'}), 404)
+		return make_response(jsonify(result), 404)
 
 
 # ---------------------------------------------------------------------------------------
@@ -153,8 +156,11 @@ def update():
 	}
 
 	skuManager = SkuManager()
-	skuManager.updateSku(sku)
-	return make_response(jsonify(sku), 201)
+	result = skuManager.updateSku(sku, request.args.get('token'))
+	if 'success' in result:
+		return make_response(jsonify(sku), 201)
+	else:
+		return make_response(jsonify(result), 404)
 
 
 

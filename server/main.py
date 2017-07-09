@@ -7,6 +7,7 @@ from flask import Flask, jsonify, request, make_response
 from flask_cors import CORS, cross_origin
 from time import sleep
 
+
 app = Flask(__name__)
 CORS(app)	# Should allow CORS only for our domain.
 app.register_blueprint(SkuAPI)
@@ -20,15 +21,6 @@ if __name__ == "__main__":
 
   app.run(debug=True)
 
-
-  # token = jwt.encode({'user' : 'username'}, 'leoz')
-  # print(token)
-
-  # try:
-  #   data = jwt.decode(token, 'leoz')
-  #   print(data)
-  # except Exception as ex:
-  #   print(ex)
 
 
 

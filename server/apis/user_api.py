@@ -1,4 +1,5 @@
 import simplejson as json
+import crypt, getpass, pwd
 from flask_cors import CORS, cross_origin
 from flask import Blueprint, render_template, abort, request, make_response, jsonify
 from managers.sku_manager import SkuManager
@@ -19,9 +20,13 @@ def login():
 	if not 'password' in request.json:
 		return make_response(jsonify({'error': 'Missig password parameter'}), 404)
 
+	username = request.json['username']
+	password = request.json['password']
+	password = crypt.crypt(password, username)
+	# print(password)
 	login = {
-		"username": request.json['username'],
-		"password": request.json['password']
+		"username": username,
+		"password": password
 	}
 
 	userManager = UserManager()
