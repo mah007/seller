@@ -22,7 +22,7 @@ def login():
 
 	username = request.json['username']
 	password = request.json['password']
-	password = crypt.crypt(password, username)
+	# password = crypt.crypt(password, username)
 	# print(password)
 	login = {
 		"username": username,

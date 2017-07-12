@@ -60,7 +60,7 @@ class UserDao(object):
 
     def getAllUser(self):
         try:
-            query = '''SELECT id, lazada_user_name FROM t_user'''
+            query = '''SELECT id, lazada_user_name, lazada_user_id, lazada_api_key FROM t_user'''
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)
@@ -70,7 +70,9 @@ class UserDao(object):
             for row in rows:
                 users.append({
                         "id": row[0],
-                        "lazada_user_name": row[1]
+                        "lazada_user_name": row[1],
+                        "lazada_user_id": row[2],
+                        "lazada_api_key": row[3]
                 })
 
             conn.close()

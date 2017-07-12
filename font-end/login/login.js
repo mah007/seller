@@ -5,7 +5,7 @@ $("#btnloginsubmit").click(function() {
         contentType: "application/json",
         data: JSON.stringify({
             username: $('input[name=username]').val(),
-            password: $.md5($('input[name=password]').val(), "leoz")
+            password: $('input[name=password]').val()
         }),
         success: function(data) {
             // console.log(data.data, data.data.token);
