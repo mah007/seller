@@ -1,6 +1,6 @@
 import psycopg2
 from database.database_helper import DatabaseHelper
-
+from utils.string_utils import StringUtils
 
 class UserDao(object):
 
@@ -21,9 +21,13 @@ class UserDao(object):
 
     def insert(self, user):
         query = '''INSERT INTO t_user (user_name, password, token, lazada_user_name, lazada_user_id, lazada_api_key, created_at, updated_at)
-                    VALUES ('{}', '{}', '', '{}', '{}', '{}', {}, 0)'''.format(
-                    user['user_name'], user['password'], user['lazada_user_name'], user['lazada_user_id'],
-                    user['lazada_api_key'], user['created_at'])
+                    VALUES ('{}', '{}', 'temptoken', '{}', '{}', '{}', '{}', 0)'''.format(
+                    StringUtils.toString(user['username']), 
+                    StringUtils.toString(user['password']), 
+                    StringUtils.toString(user['lazada_user_name']),  
+                    StringUtils.toString(user['lazada_user_id']), 
+                    StringUtils.toString(user['lazada_api_key']),
+                    user['created_at'])
         DatabaseHelper.execute(query)
 
 
@@ -58,9 +62,9 @@ class UserDao(object):
             return None
 
 
-    def getAllUser(self):
+    def getAll(self):
         try:
-            query = '''SELECT id, lazada_user_name FROM t_user'''
+            query = '''SELECT * FROM t_user'''
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)
@@ -70,7 +74,12 @@ class UserDao(object):
             for row in rows:
                 users.append({
                         "id": row[0],
-                        "lazada_user_name": row[1]
+                        "username": row[1],
+                        "password": row[2],
+                        "lazada_user_name": row[4],
+                        "lazada_user_id": row[5],
+                        "lazada_api_key": row[6]
+
                 })
 
             conn.close()
@@ -114,6 +123,17 @@ class UserDao(object):
         except Exception as ex:
             print(ex)
             return None
+
+    # --------------------------------------------------------------------------
+    # Delete User
+    # --------------------------------------------------------------------------
+    def deleteUser(self, user):
+        query = '''DELETE from t_user where id = '{}' '''.format(user['id'])
+        DatabaseHelper.execute(query)
+
+    def updateUser(self, user):
+        query = '''UPDATE t_user SET password = '{}' WHERE id = '{}' '''.format(user['password'], user['id'])
+        DatabaseHelper.execute(query)
 
 
 

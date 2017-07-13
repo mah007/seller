@@ -38,6 +38,22 @@ class UserManager(object):
 
 		return user
 
+	def getAll(self):
+		# user = self.validateToken(token)
+		# if 'error' in user:
+		# 	return user
+
+		userDao = UserDao()
+		return userDao.getAll()
+
+	def deleteUser(self, user):
+		userDao = UserDao()
+		return userDao.deleteUser(user)
+
+
+	def updateUser(self, user):
+		userDao = UserDao()
+		return userDao.updateUser(user)
 
 
 
