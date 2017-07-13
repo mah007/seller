@@ -119,6 +119,14 @@ class SkuDao(object):
 
 
     # ---------------------------------------------------------------------------------------
+    # [pRunner] Update Specical Price
+    # ---------------------------------------------------------------------------------------
+    def updateSpecialPrice(self, sku):
+        query = '''UPDATE sku_management set special_price = '{}' WHERE id = '{}' '''.format(sku['special_price'], sku['id'])
+        DatabaseHelper.execute(query)
+
+
+    # ---------------------------------------------------------------------------------------
     # Update KSU
     # ---------------------------------------------------------------------------------------
     def updateState(self, sku):

@@ -11,7 +11,7 @@ if __name__ == "__main__":
   userDao = UserDao();
 
   while True:
-    users = userDao.getAllUser()
+    users = userDao.getAll()
     if (users):
       for user in users:
         clone = PriceAutomaticallyWorker({"user": user})

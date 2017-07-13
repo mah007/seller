@@ -60,7 +60,7 @@ class PriceAutomaticallyWorker(threading.Thread):
 		sku['special_price'] = newSpecialPrice
 		# Update internal database
 		skuDao = SkuDao()
-		skuDao.update(sku)
+		skuDao.updateSpecialPrice(sku)
 		# Update external database
 		lazadaSkuApi = LazadaSkuApi()
 		lazadaProduct = lazadaSkuApi.updateProductSpecialPrice(sku, user, newSpecialPrice)
