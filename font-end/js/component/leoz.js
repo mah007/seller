@@ -3,6 +3,7 @@ var endpoint = "http://localhost:5000";
 var LeoZ = function() {
 
   LeoZ.prototype.generateGetAllSkuEndpoind = function() {
+    console.log("LeoZ", $.cookie('token'));
     return endpoint + '/sku/get-all?token=' + $.cookie('token');
   }
 

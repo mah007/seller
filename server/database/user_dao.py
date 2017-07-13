@@ -33,7 +33,7 @@ class UserDao(object):
 
     def getUser(self, token):
         try:
-            query = '''SELECT id, lazada_user_name, lazada_user_id, lazada_api_key FROM t_user WHERE token='{}' '''.format(token)
+            query = '''SELECT id, lazada_user_name, lazada_user_id, lazada_api_key FROM t_user WHERE token='{}' '''.format(StringUtils.toString(token))
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)
@@ -79,7 +79,6 @@ class UserDao(object):
                         "lazada_user_name": row[4],
                         "lazada_user_id": row[5],
                         "lazada_api_key": row[6]
-
                 })
 
             conn.close()

@@ -282,7 +282,6 @@ $(".btnmodalsubmit").click(function() {
     }
 
     var dataType = $('#portlet-config').data('type');
-    console.log(dataType)
     if(dataType == "edit")
     {
         $.ajax({

@@ -16,8 +16,12 @@ SkuAPI = Blueprint('sku_api', __name__, template_folder='apis')
 def getAll():
 	if not request.args:
 		return make_response(jsonify({'error': 'Missig token parameter value'}), 404)
-
+	if not 'token' in request.args:
+		return make_response(jsonify({'error': 'Missig token parameter value'}), 404)
 	token = request.args.get('token')
+	if token == None:
+		return make_response(jsonify({'error': 'Missig token parameter value'}), 404)
+
 	skuManager = SkuManager()
 	result = skuManager.getAll(token)
 	if 'error' in result:
