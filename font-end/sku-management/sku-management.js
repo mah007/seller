@@ -1,6 +1,11 @@
-var leoz = new LeoZ();
+var configUtil = new LeoZ();
 
 jQuery(document).ready(function() {
+
+    // Validate Token
+    if (!configUtil.validateLocalToken()) {
+        window.location.href = "../login";
+    }
 
     // Init data
     getAndFillOutAllSku();
@@ -98,7 +103,7 @@ function enableSwitchery() {
             }
             $.ajax({
                 method:'POST',
-                url: leoz.generateUpdateStateSkuEndpoind(),
+                url: configUtil.generateUpdateStateSkuEndpoind(),
                 contentType: "application/json",
                 data: JSON.stringify({
                     id: id,
@@ -129,7 +134,7 @@ function enableSwitchery() {
             }, function () {
                 $.ajax({
                     method:'POST',
-                    url: leoz.generateDeleteSkuEndpoind(),
+                    url: configUtil.generateDeleteSkuEndpoind(),
                     contentType: "application/json",
                     data: JSON.stringify({
                         id: id
@@ -286,7 +291,7 @@ $(".btnmodalsubmit").click(function() {
     {
         $.ajax({
             method:'POST',
-            url: leoz.generateUpdateSkuEndpoind(),
+            url: configUtil.generateUpdateSkuEndpoind(),
             contentType: "application/json",
             data: JSON.stringify({
                 id: $('input[name=id]').val(),
@@ -315,7 +320,7 @@ $(".btnmodalsubmit").click(function() {
     {
         $.ajax({
             method:'POST',
-            url: leoz.generateInsertSkuEndpoind(),
+            url: configUtil.generateInsertSkuEndpoind(),
             contentType: "application/json",
             data: JSON.stringify({
                 sku: $('input[name=txt_sku]').val(),
@@ -347,7 +352,7 @@ $(".btnmodalsubmit").click(function() {
 function getAndFillOutAllSku() {
     $.ajax({
         method:'GET',
-        url: leoz.generateGetAllSkuEndpoind(),
+        url: configUtil.generateGetAllSkuEndpoind(),
         contentType: "application/json",
         success: function(data) {
             console.log(data);
@@ -363,8 +368,14 @@ function getAndFillOutAllSku() {
 }
 
 
-
-
+//-------------------------------------------------------------------------------------
+// Logout
+//-------------------------------------------------------------------------------------
+$('#logoutButton').click(function() {
+    $.removeCookie('token');
+    $.removeCookie('user');
+    window.location.href = "../login";
+});
 
 
 

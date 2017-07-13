@@ -22,4 +22,10 @@ var LeoZ = function() {
   LeoZ.prototype.generateUpdateStateSkuEndpoind = function() {
     return endpoint + '/sku/update-state?token=' + $.cookie('token');
   }
+
+  LeoZ.prototype.validateLocalToken = function() {
+    var token = $.cookie('token');
+    // console.log(token);
+    return token != null && token.length > 0;
+  }
 }

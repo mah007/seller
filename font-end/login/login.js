@@ -1,3 +1,11 @@
+jQuery(document).ready(function() {
+    var configUtil = new LeoZ();
+    //console.log(configUtil.validateLocalToken());
+    if (configUtil.validateLocalToken()) {
+        window.location.href = "../sku-management";
+    }
+});
+
 $("#btnloginsubmit").click(function() {
     $.ajax({
         method:'POST',

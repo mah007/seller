@@ -3,12 +3,12 @@
     <meta charset="utf-8">
     <script src="js/plugin/jquery.min.js" type="text/javascript"></script>
     <script src="../js/plugin/jquery.cookie.js" type="text/javascript"></script>
+    <script src="../js/component/leoz.js" type="text/javascript"></script>
 </head>
 <body>
     <script type="text/javascript">
-        var token = $.cookie('token');
-        console.log(token);
-        if (token) {
+        var configUtil = new LeoZ();
+        if (configUtil.validateLocalToken()) {
           window.location.href = "/sku-management";
         } else {
           window.location.href = "/login";
