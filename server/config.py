@@ -1,11 +1,13 @@
 
 class Database(object):
-	DATABASE = "lazada"
-	USER = "postgres"
-	PASSWORD = "postgres"
-	HOST = "localhost"
-	PORT = "5432"
-
+	mysql = {
+    'user': 'root',
+    'password': '',
+    'host': '127.0.0.1',
+    'database': 'lazada',
+    'use_unicode':True,
+    'charset': 'utf8'
+  }
 
 class LazadaAPI(object):
 	ENDPOINT = "https://api.sellercenter.lazada.vn"

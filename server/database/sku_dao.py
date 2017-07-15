@@ -6,10 +6,10 @@ class SkuDao(object):
 
     def createTable(self):
         query = '''CREATE TABLE IF NOT EXISTS sku_management(
-        			id 				SERIAL		PRIMARY KEY NOT NULL,
-                    sku           	TEXT    	NOT NULL,
-                    name          	TEXT     	NOT NULL,
-                    link			TEXT		NOT NULL,
+        			id 				INT AUTO_INCREMENT primary key NOT NULL,
+                    sku           	VARCHAR(500)    	NOT NULL,
+                    name          	VARCHAR(500)     	NOT NULL,
+                    link			VARCHAR(500)		NOT NULL,
                     min_price     	INTEGER		NOT NULL,
                     max_price     	INTEGER    	NOT NULL,
                     compete_price 	INTEGER 	NOT NULL,
@@ -105,6 +105,7 @@ class SkuDao(object):
     				StringUtils.toString(sku['sku']), StringUtils.toString(sku['name']), StringUtils.toString(sku['link']),
                     sku['min_price'], sku['max_price'], sku['compete_price'], sku['special_price'], sku['state'], sku['repeat_time'], sku['created_at'],
                     user['id'])
+        print(query)
         DatabaseHelper.execute(query)
 
 

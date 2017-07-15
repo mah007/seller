@@ -2,6 +2,7 @@ from database.sku_dao import SkuDao
 from database.user_dao import UserDao
 from managers.user_manager import UserManager
 from lazada_api.lazada_sku_api import LazadaSkuApi
+from managers.response_helper import ResponseHelper
 
 
 ERROR = {"error": ""}
@@ -19,12 +20,14 @@ class SkuManager(object):
 		userDao = UserDao()
 		user = userDao.getUser(token)
 		if user == None:
-			ERROR['error'] = "invalid token"
-			return ERROR
+			return ResponseHelper.generateErrorResponse("Invalid token")
 		else:
 			return user
 
 
+	#-----------------------------------------------------------------------------
+	# insert new sku
+	#-----------------------------------------------------------------------------
 	def insertSku(self, sku, token):
 		user = self.validateToken(token)
 		if 'error' in user:
@@ -34,8 +37,7 @@ class SkuManager(object):
 		lazadaSkuApi = LazadaSkuApi()
 		lazadaProduct = lazadaSkuApi.getSku(sku, user)
 		if not lazadaProduct:
-			ERROR['error'] = "Can't access to Lazada service"
-			return ERROR
+			return ResponseHelper.generateErrorResponse("Can't access to Lazada service")
 
 		# Add missing arguments and insert to our database
 		sku['name'] = lazadaProduct['Attributes']['name'].encode('utf-8')
@@ -43,7 +45,7 @@ class SkuManager(object):
 		sku['special_price'] = lazadaProduct['Skus'][0]['special_price']
 		skudao = SkuDao()
 		skudao.insert(sku, user)
-		return SUCCESS
+		return ResponseHelper.generateSuccessResponse(None)
 
 
 	def deleteSku(self, sku, token):
@@ -62,7 +64,8 @@ class SkuManager(object):
 			return user
 
 		skudao = SkuDao()
-		return skudao.getAll(user)
+		skus = skudao.getAll(user)
+		return ResponseHelper.generateSuccessResponse(skus)
 
 
 	def updateSkuState(self, sku, token):

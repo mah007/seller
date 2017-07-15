@@ -6,7 +6,7 @@ pip3 install psycopg2
 echo "Install Flask"
 pip3 install flask
 
-echo "Install flask_cors"
+echo "Install flask cross platform"
 pip3 install -U flask-cors
 
 echo "Install requests"
@@ -29,3 +29,6 @@ pip3 install bcrypt
 # $ sudo apt-get install build-essential libffi-dev python-dev
 # For Fedora and RHEL-derivatives, the following command will ensure that the required dependencies are installed:
 # $ sudo yum install gcc libffi-devel python-devel
+
+echo "Install mysql"
+pip3 install pymysql

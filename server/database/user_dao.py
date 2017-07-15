@@ -6,12 +6,12 @@ class UserDao(object):
 
     def createTable(self):
         query = '''CREATE TABLE IF NOT EXISTS t_user(
-                    id                  SERIAL		PRIMARY KEY NOT NULL,
-                    user_name           TEXT     	NOT NULL,
+                    id              INT AUTO_INCREMENT primary key NOT NULL,
+                    user_name           VARCHAR(200)     	NOT NULL,
                     password            TEXT        NOT NULL,
                     token               TEXT        NOT NULL,
-                    lazada_user_name    TEXT,
-                    lazada_user_id      TEXT,
+                    lazada_user_name    VARCHAR(200),
+                    lazada_user_id      VARCHAR(200),
                     lazada_api_key      TEXT,
                     created_at          INTEGER 	NOT NULL,
                     updated_at          INTEGER

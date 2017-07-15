@@ -18,16 +18,13 @@ def getAll():
 		return make_response(jsonify({'error': 'Missig token parameter value'}), 404)
 	if not 'token' in request.args:
 		return make_response(jsonify({'error': 'Missig token parameter value'}), 404)
-	token = request.args.get('token')
-	if token == None:
-		return make_response(jsonify({'error': 'Missig token parameter value'}), 404)
 
 	skuManager = SkuManager()
-	result = skuManager.getAll(token)
-	if 'error' in result:
+	result = skuManager.getAll(request.args.get('token'))
+	if 'success' in result:
 		return make_response(jsonify(result))
 	else:
-		return make_response(jsonify({"data": result}))
+		return make_response(jsonify(result), 404)
 
 
 # ------------------------------------------------------------------------------
