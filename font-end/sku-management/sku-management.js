@@ -355,7 +355,7 @@ function getAndFillOutAllSku() {
         url: configUtil.generateGetAllSkuEndpoind(),
         contentType: "application/json",
         success: function(data) {
-            console.log(data);
+            console.log(data.data);
             var template = $("#sku-content-template").html();
             var contentHtml = Handlebars.compile(template);
             $("#tbody_sku").html(contentHtml(data));
