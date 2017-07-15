@@ -1,18 +1,17 @@
+import time
 import simplejson as json
-# import crypt, getpass, pwd
 from flask_cors import CORS, cross_origin
 from flask import Blueprint, render_template, abort, request, make_response, jsonify
 from managers.sku_manager import SkuManager
 from managers.user_manager import UserManager
 from lazada_api.lazada_sku_api import LazadaSkuApi
-import time
 
 
 UserAPI = Blueprint('user_api', __name__, template_folder='apis')
 
-# ---------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Login
-# ---------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 @UserAPI.route('/user/login', methods=['POST'])
 @cross_origin()
 def login():
@@ -23,18 +22,18 @@ def login():
 
 	username = request.json['username']
 	password = request.json['password']
-	# password = crypt.crypt(password, username)
-	login = {
+	user = {
 		"username": username,
 		"password": password
 	}
 
 	userManager = UserManager()
-	user = userManager.login(login);
-	if user:
-		return make_response(jsonify({"success": "done", "data": user}))
+	result = userManager.login(user);
+	if 'success' in result:
+		return make_response(jsonify(result))
 	else:
-		return make_response(jsonify({'error': 'Username or password is incorrect'}), 404)
+		return make_response(jsonify(result), 403)
+
 
 # ------------------------------------------------------------------------------
 # Get All User
@@ -52,6 +51,7 @@ def getAll():
 		return make_response(jsonify(result))
 	else:
 		return make_response(jsonify({"data": result}))
+
 
 # ------------------------------------------------------------------------------
 # User KSU
@@ -77,6 +77,7 @@ def delete():
 	# 	return make_response(jsonify({"success": "done"}))
 	# else:
 	# 	return make_response(jsonify(result))
+
 
 # ---------------------------------------------------------------------------------------
 # Update USER
@@ -107,6 +108,7 @@ def update():
 	# 	return make_response(jsonify(user), 201)
 	# else:
 	# 	return make_response(jsonify(result), 404)
+
 
 # ------------------------------------------------------------------------------
 # Insert User
@@ -142,3 +144,10 @@ def insert():
 	# 	return make_response(json.dumps(user), 201)
 	# else:
 	# 	return make_response(jsonify(result), 404)
+
+
+
+
+
+
+

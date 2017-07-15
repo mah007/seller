@@ -22,10 +22,10 @@ class UserDao(object):
     def insert(self, user):
         query = '''INSERT INTO t_user (user_name, password, token, lazada_user_name, lazada_user_id, lazada_api_key, created_at, updated_at)
                     VALUES ('{}', '{}', 'temptoken', '{}', '{}', '{}', '{}', 0)'''.format(
-                    StringUtils.toString(user['username']), 
-                    StringUtils.toString(user['password']), 
-                    StringUtils.toString(user['lazada_user_name']),  
-                    StringUtils.toString(user['lazada_user_id']), 
+                    StringUtils.toString(user['username']),
+                    StringUtils.toString(user['password']),
+                    StringUtils.toString(user['lazada_user_name']),
+                    StringUtils.toString(user['lazada_user_id']),
                     StringUtils.toString(user['lazada_api_key']),
                     user['created_at'])
         DatabaseHelper.execute(query)
@@ -88,9 +88,15 @@ class UserDao(object):
             return None
 
 
-    def login(self, user):
+    # --------------------------------------------------------------------------
+    # Supported user login
+    # <p>
+    # Called from:
+    # 1. user_manager::login
+    # --------------------------------------------------------------------------
+    def getUserByUsername(self, username):
         try:
-            query = '''SELECT id, user_name FROM t_user WHERE user_name = '{}' and password = '{}' '''.format(user['username'], user['password'])
+            query = '''SELECT id, lazada_user_name, password FROM t_user WHERE user_name = '{}' '''.format(username)
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)
@@ -104,7 +110,8 @@ class UserDao(object):
             for row in rows:
                 user = {
                     "id": row[0],
-                    "user_name": row[1]
+                    "username": row[1],
+                    "password": row[2],
                 }
 
             conn.close()
@@ -112,7 +119,6 @@ class UserDao(object):
         except Exception as ex:
             print(ex)
             return None
-
 
     def updateUserToken(self, user):
         try:

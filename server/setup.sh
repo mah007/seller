@@ -20,3 +20,12 @@ pip3 install lxml
 
 echo "Install jwt"
 pip3 install pyjwt
+
+echo "Install bycrypt"
+pip3 install bcrypt
+
+# For bycrypt dependencies
+# For Debian and Ubuntu, the following command will ensure that the required dependencies are installed:
+# $ sudo apt-get install build-essential libffi-dev python-dev
+# For Fedora and RHEL-derivatives, the following command will ensure that the required dependencies are installed:
+# $ sudo yum install gcc libffi-devel python-devel

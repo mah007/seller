@@ -1,7 +1,9 @@
 import time
 import jwt
 import datetime
+import bcrypt
 from database.user_dao import UserDao
+from managers.response_helper import ResponseHelper
 
 
 class UserManager(object):
@@ -21,22 +23,28 @@ class UserManager(object):
 		return userDao.getUser(token)
 
 
+	# ----------------------------------------------------------------------------
+	# Login
+	# ----------------------------------------------------------------------------
 	def login(self, user):
 		userDao = UserDao()
-		user = userDao.login(user)
+		userDB = userDao.getUserByUsername(user['username'])
+		if (userDB == None):
+			return ResponseHelper.generateErrorResponse("Username is invalid")
 
-		# Invalide user name or password
-		if not user:
-			return None
+		if bcrypt.checkpw(user['password'].encode('utf-8'), userDB['password'].encode('utf-8')):
+			token = jwt.encode({'user' : 'username', 'createdAt': datetime.datetime.utcnow().isoformat()}, 'leoz')
+			user['id'] = userDB['id']
+			user['token'] = token.decode("utf-8")
+			user['username'] = userDB['username'] # using lazada_user_name in database instead.
+			user = userDao.updateUserToken(user)
+			if not user:
+				return ResponseHelper.generateErrorResponse("System error, please try again")
 
-		# Generate token
-		token = jwt.encode({'user' : 'username', 'createdAt': datetime.datetime.utcnow().isoformat()}, 'leoz')
-		user['token'] = token.decode("utf-8")
-		user = userDao.updateUserToken(user)
-		if not user:
-			return None # Error from update datebase.
+			return ResponseHelper.generateSuccessResponse(user)
+		else:
+			return ResponseHelper.generateErrorResponse("Password is invalid")
 
-		return user
 
 	def getAll(self):
 		# user = self.validateToken(token)
