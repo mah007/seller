@@ -1,6 +1,7 @@
+var configUtil = new LeoZ();
+
 jQuery(document).ready(function() {
     var configUtil = new LeoZ();
-    //console.log(configUtil.validateLocalToken());
     if (configUtil.validateLocalToken()) {
         window.location.href = "../sku-management";
     }
@@ -9,14 +10,13 @@ jQuery(document).ready(function() {
 $("#btnloginsubmit").click(function() {
     $.ajax({
         method:'POST',
-        url: 'http://localhost:5000/user/login',
+        url: configUtil.generateLoginEndpoind(),
         contentType: "application/json",
         data: JSON.stringify({
             username: $('input[name=username]').val(),
             password: $('input[name=password]').val()
         }),
         success: function(data) {
-            // console.log(data.data, data.data.token);
             var userObj = data.data;
             $.cookie('userJson', data.data, { expires: 1 });
             $.cookie('token', userObj.token, { expires: 1 });
