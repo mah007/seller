@@ -1,8 +1,8 @@
-var configUtil = new LeoZ();
+var endpoint = new EndpointConfig();
+var cookie = new CookieConfig();
 
 jQuery(document).ready(function() {
-    var configUtil = new LeoZ();
-    if (configUtil.validateLocalToken()) {
+    if (cookie.validateLocalToken()) {
         window.location.href = "../sku-management";
     }
 });
@@ -10,7 +10,7 @@ jQuery(document).ready(function() {
 $("#btnloginsubmit").click(function() {
     $.ajax({
         method:'POST',
-        url: configUtil.generateLoginEndpoind(),
+        url: endpoint.generateLoginEndpoind(),
         contentType: "application/json",
         data: JSON.stringify({
             username: $('input[name=username]').val(),
@@ -18,9 +18,9 @@ $("#btnloginsubmit").click(function() {
         }),
         success: function(data) {
             var userObj = data.data;
-            $.cookie('userJson', data.data, { expires: 1 });
-            $.cookie('token', userObj.token, { expires: 1 });
-            console.log(userObj, $.cookie('token'));
+            console.log(userObj);
+            cookie.save('myUser', data.data);
+            cookie.save('token', userObj.token);
             window.location.href = "../sku-management";
         },
         error: function(error) {

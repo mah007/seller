@@ -1,9 +1,10 @@
-var configUtil = new LeoZ();
+var endpoint = new EndpointConfig();
+var cookie = new CookieConfig();
 
 jQuery(document).ready(function() {
 
     // Validate Token
-    if (!configUtil.validateLocalToken()) {
+    if (!cookie.validateLocalToken()) {
         window.location.href = "../login";
     }
 
@@ -103,7 +104,7 @@ function enableSwitchery() {
             }
             $.ajax({
                 method:'POST',
-                url: configUtil.generateUpdateStateSkuEndpoind(),
+                url: endpoint.generateUpdateStateSkuEndpoind(),
                 contentType: "application/json",
                 data: JSON.stringify({
                     id: id,
@@ -134,7 +135,7 @@ function enableSwitchery() {
             }, function () {
                 $.ajax({
                     method:'POST',
-                    url: configUtil.generateDeleteSkuEndpoind(),
+                    url: endpoint.generateDeleteSkuEndpoind(),
                     contentType: "application/json",
                     data: JSON.stringify({
                         id: id
@@ -291,7 +292,7 @@ $(".btnmodalsubmit").click(function() {
     {
         $.ajax({
             method:'POST',
-            url: configUtil.generateUpdateSkuEndpoind(),
+            url: endpoint.generateUpdateSkuEndpoind(),
             contentType: "application/json",
             data: JSON.stringify({
                 id: $('input[name=id]').val(),
@@ -320,7 +321,7 @@ $(".btnmodalsubmit").click(function() {
     {
         $.ajax({
             method:'POST',
-            url: configUtil.generateInsertSkuEndpoind(),
+            url: endpoint.generateInsertSkuEndpoind(),
             contentType: "application/json",
             data: JSON.stringify({
                 sku: $('input[name=txt_sku]').val(),
@@ -352,7 +353,7 @@ $(".btnmodalsubmit").click(function() {
 function getAndFillOutAllSku() {
     $.ajax({
         method:'GET',
-        url: configUtil.generateGetAllSkuEndpoind(),
+        url: endpoint.generateGetAllSkuEndpoind(),
         contentType: "application/json",
         success: function(data) {
             console.log(data.data);

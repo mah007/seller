@@ -157,7 +157,7 @@
                                         <div class="col-md-8">
                                             <input type="text" class="form-control" maxlength="20" name="txt_lazada_apikey" placeholder="lazada2017">
                                         </div>
-                                    </div>                                    
+                                    </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
@@ -186,7 +186,7 @@
                 <!-- BEGIN PAGE CONTENT-->
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="tabbable-custom tabbable-noborder blue">                           
+                        <div class="tabbable-custom tabbable-noborder blue">
                             <div class="tab-content">
                                 <!-- SKU MANAGEMENT TAB -->
                                 <div class="tab-pane active" id="tab_1_1">
@@ -274,8 +274,8 @@
             <script src="../js/plugin/jquery-migrate.min.js" type="text/javascript"></script>
             <script src="../js/plugin/handlebars-v4.0.8.js" type="text/javascript"></script>
             <script src="../js/plugin/jquery.cookie.js" type="text/javascript"></script>
-            <script src="../js/component/leoz.js" type="text/javascript"></script>
-            <!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+            <script src="../js/cookieConfig.js" type="text/javascript"></script>
+            <script src="../js/endpointConfig.js" type="text/javascript"></script>            <!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
             <script src="../js/plugin/jquery-ui.min.js" type="text/javascript"></script>
             <script src="../js/plugin/bootstrap.min.js" type="text/javascript"></script>
             <script src="../js/plugin/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
@@ -299,11 +299,11 @@
                 <tr data-id="{{id}}" data-user_name={{username}} data-password={{password}} data-lazada_user_name={{lazada_user_name}} data-lazada_user_id={{lazada_user_id}} data-lazada_api_key={{lazada_api_key}}>
                     <td>{{id}}</td>
                     <!-- <td><a href="{{link}}" style="color:#3598dc;" target="_blank">{{username}}</a></td> -->
-                    <td class="text-right">{{username}}</td>                    
+                    <td class="text-right">{{username}}</td>
                     <td class="text-right">{{password}}</td>
                     <td class="text-right">{{lazada_user_name}}</td>
                     <td class="text-right">{{lazada_user_id}}</td>
-                    <td class="text-right">{{lazada_api_key}}</td>  
+                    <td class="text-right">{{lazada_api_key}}</td>
                     <td class="text-left">
                         <button type="button" class="btn btn-circle blue btnedt" style="margin: 0 2px 4px;"><i class="fa fa-edit"></i></button>
                         <button type="button" class="btn btn-circle red btndel" style="margin: 0 2px 4px;"><i class="fa fa-close"></i></button>
