@@ -7,7 +7,7 @@ DOMAIN = {
 # Database configuration.
 class Database(object):
 	DATABASE = "lazada"
-	USER = "postgres"
-	PASSWORD = "postgres"
+	USER = "root"
+	PASSWORD = ""
 	HOST = "localhost"
-	PORT = "5432"
+	PORT = "8000"

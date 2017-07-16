@@ -12,10 +12,18 @@ class UserManager(object):
 		userDao = UserDao()
 		userDao.createTable()
 
-
-	def createUser(self, user):
+	# ----------------------------------------------------------------------------
+	# Insert User
+	# ----------------------------------------------------------------------------
+	def insertUser(self, user):
 		userDao = UserDao()
-		return userDao.insert(user)
+		userDB = userDao.getUserByUsername(user['username'])
+		if (userDB != None):
+			return ResponseHelper.generateErrorResponse("Username is already used")
+
+		else:
+			userDao.insert(user)
+			return ResponseHelper.generateSuccessResponse(user)
 
 
 	def getUser(self, token):
