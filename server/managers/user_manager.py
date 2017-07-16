@@ -45,6 +45,7 @@ class UserManager(object):
 			user['id'] = userDB['id']
 			user['token'] = token.decode("utf-8")
 			user['username'] = userDB['username'] # using lazada_user_name in database instead.
+			user['password'] = None
 			user = userDao.updateUserToken(user)
 			if not user:
 				return ResponseHelper.generateErrorResponse("System error, please try again")
