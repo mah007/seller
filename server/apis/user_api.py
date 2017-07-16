@@ -134,16 +134,14 @@ def insert():
 		"lazada_user_id": request.json['lazada_user_id'],
 		"lazada_api_key": request.json['lazada_api_key'],
 		"created_at": int(round(time.time()))
-		# "created_at": int(request.json['created_at'])
 	}
 
 	userManager = UserManager()
-	result = userManager.createUser(user)
-	return make_response(jsonify({"success": "done"}))
-	# if 'success' in result:
-	# 	return make_response(json.dumps(user), 201)
-	# else:
-	# 	return make_response(jsonify(result), 404)
+	result = userManager.insertUser(user)
+	if 'success' in result:
+		return make_response(json.dumps(user), 201)
+	else:
+		return make_response(jsonify(result), 404)
 
 
 

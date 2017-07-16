@@ -7,8 +7,9 @@ jQuery(document).ready(function() {
 
     if($('.btnnew').length > 0) {
         $(".btnnew").click(function() {
-            $('#portlet-user').attr('data-type', "insert");
+            $('#portlet-user').attr('data-type', "insert");            
             $('#portlet-user').modal('show');
+            $('input[name=txt_id').prop('disabled', true);
         });
     }
 
@@ -70,7 +71,6 @@ function enableSwitchery() {
             $('input[name=txt_id').val(id).prop('disabled', true);
 
             $('input[name=txt_username]').val(username).prop('disabled', true);
-            $('input[name=txt_password]').val(password);
             $('input[name=txt_lazada_username]').val(lazada_username).prop('disabled', true);
             $('input[name=txt_lazada_userid]').val(lazada_userid).prop('disabled', true);
             $('input[name=txt_lazada_apikey]').val(lazada_apikey).prop('disabled', true);
@@ -99,39 +99,40 @@ $(".btnmodalsubmit").click(function() {
     var txt_lazada_username = $('input[name=txt_lazada_username]').val();
     var txt_lazada_userid = $('input[name=txt_lazada_userid]').val();
     var txt_lazada_apikey = $('input[name=txt_lazada_apikey]').val();
+
     var $this = $(this);
     var error = "";
 
-    // if(validNull('input[name=txt_username]')) {
-    //     $('input[name=txt_username]').removeClass('has-error');
-    // } else {
-    //     error += "Username không được bỏ trống.\n";
-    //     $('input[name=txt_username]').addClass('has-error');
-    // }
-    // if(validNull('input[name=txt_password]')) {
-    //     $('input[name=txt_password]').removeClass('has-error');
-    // } else {
-    //     error += "Password không được bỏ trống.\n";
-    //     $('input[name=txt_password]').addClass('has-error');
-    // }
-    // if(validNull('input[name=txt_lazada_username]')) {
-    //     $('input[name=txt_lazada_username]').removeClass('has-error');
-    // } else {
-    //     error += "Lazada username không được bỏ trống.\n";
-    //     $('input[name=txt_lazada_username]').addClass('has-error');
-    // }
-    // if(validNull('input[name=txt_lazada_userid]')) {
-    //     $('input[name=txt_lazada_userid]').removeClass('has-error');
-    // } else {
-    //     error += "Lazada userid không được bỏ trống.\n";
-    //     $('input[name=txt_lazada_userid]').addClass('has-error');
-    // }
-    // if(validNull('input[name=txt_lazada_apikey]')) {
-    //     $('input[name=txt_lazada_apikey]').removeClass('has-error');
-    // } else {
-    //     error += "Lazada api key không được bỏ trống.\n";
-    //     $('input[name=txt_lazada_apikey]').addClass('has-error');
-    // }
+    if(validNull('input[name=txt_username]')) {
+        $('input[name=txt_username]').removeClass('has-error');
+    } else {
+        error += "Username không được bỏ trống.\n";
+        $('input[name=txt_username]').addClass('has-error');
+    }
+    if(validNull('input[name=txt_password]')) {
+        $('input[name=txt_password]').removeClass('has-error');
+    } else {
+        error += "Password không được bỏ trống.\n";
+        $('input[name=txt_password]').addClass('has-error');
+    }
+    if(validNull('input[name=txt_lazada_username]')) {
+        $('input[name=txt_lazada_username]').removeClass('has-error');
+    } else {
+        error += "Lazada username không được bỏ trống.\n";
+        $('input[name=txt_lazada_username]').addClass('has-error');
+    }
+    if(validNull('input[name=txt_lazada_userid]')) {
+        $('input[name=txt_lazada_userid]').removeClass('has-error');
+    } else {
+        error += "Lazada userid không được bỏ trống.\n";
+        $('input[name=txt_lazada_userid]').addClass('has-error');
+    }
+    if(validNull('input[name=txt_lazada_apikey]')) {
+        $('input[name=txt_lazada_apikey]').removeClass('has-error');
+    } else {
+        error += "Lazada api key không được bỏ trống.\n";
+        $('input[name=txt_lazada_apikey]').addClass('has-error');
+    }
 
 
     if(error.length > 0) {
@@ -176,6 +177,7 @@ $(".btnmodalsubmit").click(function() {
         $.ajax({
             method:'POST',
             // url: leoz.generateInsertSkuEndpoind(),
+
             url: 'http://localhost:5000/user/insert',
             contentType: "application/json",
             data: JSON.stringify({
