@@ -373,8 +373,8 @@ function getAndFillOutAllSku() {
 // Logout
 //-------------------------------------------------------------------------------------
 $('#logoutButton').click(function() {
-    $.removeCookie('token');
-    $.removeCookie('user');
+    cookie.clearToken('token');
+    cookie.clearToken('myUser');
     window.location.href = "../login";
 });
 
