@@ -198,6 +198,103 @@ function validNull (selector) {
 }
 
 
+$(".btnupdatePw").click(function() {
+    var txt_username = $('input[name=txt_username]').val();
+    var txt_oldpass = $('input[name=txt_oldpass]').val();
+    var txt_newpass = $('input[name=txt_newpass]').val();
+    var txt_repass = $('input[name=txt_repass]').val();
+    var token = cookie.getToken();
+    console.log(token);
+    var $this = $(this);
+    var error = "";
+
+    
+    if($('input[name=txt_newpass]').hasClass('has-error') == false && $('input[name=txt_repass]').hasClass('has-error') == false) {
+        var newpass = ($('input[name=txt_newpass]').val());
+        var repass = ($('input[name=txt_repass]').val());
+        if(repass == newpass) {
+            $('input[name=txt_repass]').removeClass('has-error');
+            $('input[name=txt_newpass]').removeClass('has-error');
+        } else {
+            error += "Retype passwork và new passwork phải giống nhau.\n";
+            $('input[name=txt_repass]').addClass('has-error');
+            $('input[name=txt_newpass]').addClass('has-error');
+        }
+    }
+    if($('input[name=txt_newpass]').hasClass('has-error') == false && $('input[name=txt_oldpass]').hasClass('has-error') == false) {
+        var newpass = ($('input[name=txt_newpass]').val());
+        var oldpass = ($('input[name=txt_oldpass]').val());
+        if(oldpass != newpass) {
+            $('input[name=txt_newpass]').removeClass('has-error');
+            $('input[name=txt_oldpass]').removeClass('has-error');
+        } else {
+            error += "Old passwork và new passwork phải khác nhau.\n";
+            $('input[name=txt_newpass]').addClass('has-error');
+            $('input[name=txt_oldpass]').addClass('has-error');
+        }
+    }
+    if(validNull('input[name=txt_username]')) {
+        $('input[name=txt_username]').removeClass('has-error');
+    } else {
+        error += "Username không được bỏ trống.\n";
+        $('input[name=txt_username]').addClass('has-error');
+    }
+    if(validNull('input[name=txt_oldpass]')) {
+        $('input[name=txt_oldpass]').removeClass('has-error');
+    } else {
+        error += "Old password không được bỏ trống.\n";
+        $('input[name=txt_oldpass]').addClass('has-error');
+    }
+    if(validNull('input[name=txt_newpass]')) {
+        $('input[name=txt_newpass]').removeClass('has-error');
+    } else {
+        error += "New password không được bỏ trống.\n";
+        $('input[name=txt_newpass]').addClass('has-error');
+    }
+    if(validNull('input[name=txt_repass]')) {
+        $('input[name=txt_repass]').removeClass('has-error');
+    } else {
+        error += "Retype password không được bỏ trống.\n";
+        $('input[name=txt_repass]').addClass('has-error');
+    }
+
+
+    if(error.length > 0) {
+        swal("Không hợp lệ", error, "error");
+        return;
+    }
+
+    var dataType = $('#portlet-updatePw').data('type');
+    if(dataType == "updatePw")
+    {
+        $.ajax({
+            method:'POST',
+            // url: endpoint.generateUpdateSkuEndpoind(),
+            url: 'http://localhost:5000/user/update-password',            
+            contentType: "application/json",
+            data: JSON.stringify({
+                username: $('input[name=txt_username]').val(),
+                oldpass: $('input[name=txt_oldpass]').val(),
+                newpass: $('input[name=txt_newpass]').val(),
+                token: cookie.getToken()               
+            }),
+            success: function(data) {
+                console.log(data);
+                swal("Success", "", "success");
+                $('#portlet-updatePw').modal('hide');
+                getAndFillOutAllSku();
+            },
+            error: function(error) {
+                console.log(error);
+                var exception = JSON.parse(error.responseText);
+                var errorTag = $this.parent().find('.error');
+                errorTag.html(exception.error).removeClass('hidden')
+            }
+        });
+    }
+
+});
+
 //-------------------------------------------------------------------------------------
 // ???
 //-------------------------------------------------------------------------------------
@@ -211,7 +308,6 @@ $('#portlet-config').on('hidden.bs.modal', function() {
     $('input[name=txt_seq]').val('');
     $('select[name=txt_stt]').val('active');
 });
-
 
 //-------------------------------------------------------------------------------------
 // Add new SKU
@@ -346,7 +442,6 @@ $(".btnmodalsubmit").click(function() {
     }
 });
 
-
 //-------------------------------------------------------------------------------------
 // Get and fill out all SKU
 //-------------------------------------------------------------------------------------
@@ -377,6 +472,16 @@ $('#logoutButton').click(function() {
     cookie.clearToken('myUser');
     window.location.href = "../login";
 });
+
+//-------------------------------------------------------------------------------------
+// Update Password
+//-------------------------------------------------------------------------------------
+$('#updatePwButton').click(function() {
+    $('#portlet-updatePw').attr('data-type', "updatePw");
+    $('#portlet-updatePw').modal('show');
+});
+
+
 
 
 

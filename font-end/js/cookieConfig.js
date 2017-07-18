@@ -16,4 +16,9 @@ var CookieConfig = function() {
   CookieConfig.prototype.clearToken = function(name) {
     $.removeCookie(name, {path: '/'});
   }
+
+  CookieConfig.prototype.getToken = function() {
+    var token = $.cookie('token');
+    return token;
+  }
 }

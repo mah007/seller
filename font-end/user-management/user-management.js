@@ -1,4 +1,4 @@
-var leoz = new LeoZ();
+// var leoz = new LeoZ();
 
 jQuery(document).ready(function() {
 

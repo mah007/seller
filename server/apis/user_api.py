@@ -143,6 +143,36 @@ def insert():
 	else:
 		return make_response(jsonify(result), 404)
 
+# ------------------------------------------------------------------------------
+# Insert User
+# ------------------------------------------------------------------------------
+@UserAPI.route('/user/update-password', methods=['POST'])
+@cross_origin()
+def updatePw():
+	if not 'username' in request.json:
+		return make_response(jsonify({'error': 'Missig username parameter'}), 404)
+	if not 'oldpass' in request.json:
+		return make_response(jsonify({'error': 'Missig oldpass parameter'}), 404)
+	if not 'newpass' in request.json:
+		return make_response(jsonify({'error': 'Missig newpass parameter'}), 404)
+	if not 'token' in request.json:
+		return make_response(jsonify({'error': 'Missig token parameter'}), 404)
+	
+
+	user = {
+		"username": request.json['username'],
+		"oldpass": request.json['oldpass'],
+		"newpass": request.json['newpass'],
+		"token": request.json['token']
+	}
+
+	userManager = UserManager()
+	result = userManager.updatePw(user)
+	if 'success' in result:
+		return make_response(json.dumps(user), 201)
+	else:
+		return make_response(jsonify(result), 404)
+
 
 
 

@@ -140,6 +140,15 @@ class UserDao(object):
         query = '''UPDATE t_user SET password = '{}' WHERE id = '{}' '''.format(user['password'], user['id'])
         DatabaseHelper.execute(query)
 
+    def updatePw(self, user):
+        try:
+            query = '''UPDATE t_user SET password = '{}' WHERE token = '{}' '''.format(user['newpass'], user['token'])
+            DatabaseHelper.execute(query)
+            return user;
+        except Exception as ex:
+            print(ex)
+            return None
+
 
 
 

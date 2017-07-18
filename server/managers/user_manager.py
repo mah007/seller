@@ -4,7 +4,7 @@ import datetime
 import bcrypt
 from database.user_dao import UserDao
 from managers.response_helper import ResponseHelper
-
+from utils.string_utils import StringUtils
 
 class UserManager(object):
 
@@ -22,10 +22,38 @@ class UserManager(object):
 			return ResponseHelper.generateErrorResponse("Username is already used")
 
 		else:
+			password = user['password'].encode('utf-8')
+			user['password'] = bcrypt.hashpw(password, bcrypt.gensalt())
 			userDao.insert(user)
 			return ResponseHelper.generateSuccessResponse(user)
 
+	# $2b$14$I0kJJacc1gZijKOJKsabvuZGe4txpB7OJJl4uzw3XT4a.EbuuNhyu
+	# $2b$14$I0kJJacc1gZijKOJKsabvuZGe4txpB7OJJl4uzw3XT4a.EbuuNhyu
+	# ----------------------------------------------------------------------------
+	# Update Password
+	# ----------------------------------------------------------------------------
+	def updatePw(self, user):
+		userDao = UserDao()
+		userDB = userDao.getUserByUsername(user['username'])		
+		if (userDB == None):
+			return ResponseHelper.generateErrorResponse("Account not exist!")
 
+		if bcrypt.checkpw(user['oldpass'].encode('utf-8'), userDB['password'].encode('utf-8')):
+			password = user['newpass'].encode('utf-8')
+			user['newpass'] = bcrypt.hashpw(password, bcrypt.gensalt())
+			user['newpass'] = user['newpass'].decode('utf-8')
+			user = userDao.updatePw(user)
+			if not user:
+				return ResponseHelper.generateErrorResponse("System error, please try again")
+
+			return ResponseHelper.generateSuccessResponse(user)
+		else:
+			return ResponseHelper.generateErrorResponse("Password is invalid")
+
+
+	# ----------------------------------------------------------------------------
+	# Get User
+	# ----------------------------------------------------------------------------
 	def getUser(self, token):
 		userDao = UserDao()
 		return userDao.getUser(token)

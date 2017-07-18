@@ -21,7 +21,7 @@ $("#btnloginsubmit").click(function() {
             console.log(userObj);
             cookie.save('myUser', data.data);
             cookie.save('token', userObj.token);
-            window.location.href = "../sku-management";
+            window.location.href = "../sku-management"; 
         },
         error: function(error) {
             var exception = JSON.parse(error.responseText);
