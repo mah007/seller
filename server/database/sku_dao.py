@@ -105,7 +105,6 @@ class SkuDao(object):
     				StringUtils.toString(sku['sku']), StringUtils.toString(sku['name']), StringUtils.toString(sku['link']),
                     sku['min_price'], sku['max_price'], sku['compete_price'], sku['special_price'], sku['state'], sku['repeat_time'], sku['created_at'],
                     user['id'])
-        print(query)
         DatabaseHelper.execute(query)
 
 
