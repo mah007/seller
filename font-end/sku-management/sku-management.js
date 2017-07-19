@@ -203,8 +203,7 @@ $(".btnupdatePw").click(function() {
     var txt_oldpass = $('input[name=txt_oldpass]').val();
     var txt_newpass = $('input[name=txt_newpass]').val();
     var txt_repass = $('input[name=txt_repass]').val();
-    var token = cookie.getToken();
-    console.log(token);
+
     var $this = $(this);
     var error = "";
 
@@ -269,8 +268,7 @@ $(".btnupdatePw").click(function() {
     {
         $.ajax({
             method:'POST',
-            // url: endpoint.generateUpdateSkuEndpoind(),
-            url: 'http://localhost:5000/user/update-password',            
+            url: endpoint.generateUpdateUserPwEndpoind(),
             contentType: "application/json",
             data: JSON.stringify({
                 username: $('input[name=txt_username]').val(),

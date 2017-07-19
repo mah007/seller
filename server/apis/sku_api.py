@@ -9,15 +9,15 @@ SkuAPI = Blueprint('sku_api', __name__, template_folder='apis')
 
 
 # ------------------------------------------------------------------------------
-# Get All KSU
+# Get All SKU
 # ------------------------------------------------------------------------------
 @SkuAPI.route('/sku/get-all', methods=['GET'])
 @cross_origin()
 def getAll():
 	if not request.args:
-		return make_response(jsonify({'error': 'Missig token parameter value'}), 404)
+		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
 	if not 'token' in request.args:
-		return make_response(jsonify({'error': 'Missig token parameter value'}), 404)
+		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
 
 	skuManager = SkuManager()
 	result = skuManager.getAll(request.args.get('token'))
@@ -28,17 +28,17 @@ def getAll():
 
 
 # ------------------------------------------------------------------------------
-# Delete KSU
+# Delete SKU
 # ------------------------------------------------------------------------------
 @SkuAPI.route('/sku/delete', methods=['POST'])
 @cross_origin()
 def delete():
 	if not request.args:
-		return make_response(jsonify({'error': 'Missig token parameter value'}), 404)
+		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
 	if not request.json:
-		return make_response(jsonify({'error': 'Missig json parameters value'}), 404)
+		return make_response(jsonify({'error': 'Missing json parameters value'}), 404)
 	if not 'id' in request.json:
-		return make_response(jsonify({'error': 'Missig json parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing json parameter'}), 404)
 
 	sku = {
 		"id": request.json['id']
@@ -58,13 +58,13 @@ def delete():
 @cross_origin()
 def updateSkuState():
 	if not request.args:
-		return make_response(jsonify({'error': 'Missig token parameter value'}), 404)
+		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
 	if not request.json:
-		return make_response(jsonify({'error': 'Missig json parameters value'}), 404)
+		return make_response(jsonify({'error': 'Missing json parameters value'}), 404)
 	if not 'id' in request.json:
-		return make_response(jsonify({'error': 'Missig json parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing json parameter'}), 404)
 	if not 'state' in request.json:
-		return make_response(jsonify({'error': 'Missig state parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing state parameter'}), 404)
 
 	sku = {
 		"id": request.json['id'],
@@ -80,27 +80,27 @@ def updateSkuState():
 
 
 # ------------------------------------------------------------------------------
-# Insert KSU
+# Insert SKU
 # ------------------------------------------------------------------------------
 @SkuAPI.route('/sku/insert', methods=['POST'])
 @cross_origin()
 def insert():
 	if not request.args:
-		return make_response(jsonify({'error': 'Missig token parameter value'}), 404)
+		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
 	if not request.json:
-		return make_response(jsonify({'error': 'Missig json parameters value'}), 404)
+		return make_response(jsonify({'error': 'Missing json parameters value'}), 404)
 	if not 'sku' in request.json:
-		return make_response(jsonify({'error': 'Missig sku parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing sku parameter'}), 404)
 	if not 'min_price' in request.json:
-		return make_response(jsonify({'error': 'Missig min_price parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing min_price parameter'}), 404)
 	if not 'max_price' in request.json:
-		return make_response(jsonify({'error': 'Missig max_price parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing max_price parameter'}), 404)
 	if not 'compete_price' in request.json:
-		return make_response(jsonify({'error': 'Missig compete_price parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing compete_price parameter'}), 404)
 	if not 'state' in request.json:
-		return make_response(jsonify({'error': 'Missig state parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing state parameter'}), 404)
 	if not 'repeat_time' in request.json:
-		return make_response(jsonify({'error': 'Missig repeat_time parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing repeat_time parameter'}), 404)
 
 	sku = {
 		"sku": request.json['sku'],
@@ -124,27 +124,27 @@ def insert():
 
 
 # ---------------------------------------------------------------------------------------
-# Update KSU
+# Update SKU
 # ---------------------------------------------------------------------------------------
 @SkuAPI.route('/sku/update', methods=['POST'])
 @cross_origin()
 def update():
 	if not request.json:
-		return make_response(jsonify({'error': 'Missig json parameters value'}), 404)
+		return make_response(jsonify({'error': 'Missing json parameters value'}), 404)
 	if not 'id' in request.json:
-		return make_response(jsonify({'error': 'Missig id parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing id parameter'}), 404)
 	if not 'sku' in request.json:
-		return make_response(jsonify({'error': 'Missig sku parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing sku parameter'}), 404)
 	if not 'min_price' in request.json:
-		return make_response(jsonify({'error': 'Missig min_price parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing min_price parameter'}), 404)
 	if not 'max_price' in request.json:
-		return make_response(jsonify({'error': 'Missig max_price parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing max_price parameter'}), 404)
 	if not 'compete_price' in request.json:
-		return make_response(jsonify({'error': 'Missig compete_price parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing compete_price parameter'}), 404)
 	if not 'state' in request.json:
-		return make_response(jsonify({'error': 'Missig state parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing state parameter'}), 404)
 	if not 'repeat_time' in request.json:
-		return make_response(jsonify({'error': 'Missig repeat_time parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing repeat_time parameter'}), 404)
 
 	sku = {
 		"id": request.json['id'],

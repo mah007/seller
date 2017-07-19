@@ -16,9 +16,9 @@ UserAPI = Blueprint('user_api', __name__, template_folder='apis')
 @cross_origin()
 def login():
 	if not 'username' in request.json:
-		return make_response(jsonify({'error': 'Missig username parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing username parameter'}), 404)
 	if not 'password' in request.json:
-		return make_response(jsonify({'error': 'Missig password parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing password parameter'}), 404)
 
 	username = request.json['username']
 	password = request.json['password']
@@ -41,12 +41,14 @@ def login():
 @UserAPI.route('/user/get-all', methods=['GET'])
 @cross_origin()
 def getAll():
-	# if not request.args:
-	# 	return make_response(jsonify({'error': 'Missig token parameter value'}), 404)
+	if not request.args:
+		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
+	if not request.args:
+		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
 
 	# token = request.args.get('token')
 	userManager = UserManager()
-	result = userManager.getAll()
+	result = userManager.getAll(request.args.get('token'))
 	if 'error' in result:
 		return make_response(jsonify(result))
 	else:
@@ -59,25 +61,20 @@ def getAll():
 @UserAPI.route('/user/delete', methods=['POST'])
 @cross_origin()
 def delete():
-	# if not request.args:
-	# 	return make_response(jsonify({'error': 'Missig token parameter value'}), 404)
-	# if not request.json:
-	# 	return make_response(jsonify({'error': 'Missig json parameters value'}), 404)
+	if not request.args:
+		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
+	if not request.json:
+		return make_response(jsonify({'error': 'Missing json parameters value'}), 404)
 	if not 'id' in request.json:
-		return make_response(jsonify({'error': 'Missig json parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing json parameter'}), 404)
 
 	user = {
 		"id": request.json['id']
 	}
 
 	userManager = UserManager()
-	result = userManager.deleteUser(user)
+	result = userManager.deleteUser(user, request.args.get('token'))
 	return make_response(jsonify({"success": "done"}))
-	# if 'success' in result:
-	# 	return make_response(jsonify({"success": "done"}))
-	# else:
-	# 	return make_response(jsonify(result))
-
 
 # ---------------------------------------------------------------------------------------
 # Update USER
@@ -85,12 +82,14 @@ def delete():
 @UserAPI.route('/user/update', methods=['POST'])
 @cross_origin()
 def update():
+	if not request.args:
+		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
 	if not request.json:
-		return make_response(jsonify({'error': 'Missig json parameters value'}), 404)
+		return make_response(jsonify({'error': 'Missing json parameters value'}), 404)
 	if not 'id' in request.json:
-		return make_response(jsonify({'error': 'Missig id parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing id parameter'}), 404)
 	if not 'password' in request.json:
-		return make_response(jsonify({'error': 'Missig password parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing password parameter'}), 404)
 
 	user = {
 		"id": request.json['id'],
@@ -98,16 +97,13 @@ def update():
 		"password": (request.json['password']),
 		"lazada_username": (request.json['lazada_username']),
 		"lazada_userid": (request.json['lazada_userid']),
-		"lazada_apikey": (request.json['lazada_apikey'])
+		"lazada_apikey": (request.json['lazada_apikey']),
 	}
 
-	userManage = UserManager()
-	result = userManage.updateUser(user)
+	userManager = UserManager()
+	result = userManager.updateUser(user, request.args.get('token'))
 	return make_response(jsonify({"success": "done"}))
-	# if 'success' in result:
-	# 	return make_response(jsonify(user), 201)
-	# else:
-	# 	return make_response(jsonify(result), 404)
+
 
 
 # ------------------------------------------------------------------------------
@@ -116,16 +112,20 @@ def update():
 @UserAPI.route('/user/insert', methods=['POST'])
 @cross_origin()
 def insert():
+	if not request.args:
+		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
+	if not request.args:
+		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
 	if not 'username' in request.json:
-		return make_response(jsonify({'error': 'Missig username parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing username parameter'}), 404)
 	if not 'password' in request.json:
-		return make_response(jsonify({'error': 'Missig password parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing password parameter'}), 404)
 	if not 'lazada_user_name' in request.json:
-		return make_response(jsonify({'error': 'Missig lazada_username parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing lazada_username parameter'}), 404)
 	if not 'lazada_user_id' in request.json:
-		return make_response(jsonify({'error': 'Missig lazada_userid parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing lazada_userid parameter'}), 404)
 	if not 'lazada_api_key' in request.json:
-		return make_response(jsonify({'error': 'Missig lazada_apikey parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing lazada_apikey parameter'}), 404)
 
 	user = {
 		"username": request.json['username'],
@@ -137,7 +137,8 @@ def insert():
 	}
 
 	userManager = UserManager()
-	result = userManager.insertUser(user)
+	result = userManager.insertUser(user, request.args.get('token'))
+
 	if 'success' in result:
 		return make_response(json.dumps(user), 201)
 	else:
@@ -149,14 +150,18 @@ def insert():
 @UserAPI.route('/user/update-password', methods=['POST'])
 @cross_origin()
 def updatePw():
+	if not request.args:
+		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
+	if not request.args:
+		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
 	if not 'username' in request.json:
-		return make_response(jsonify({'error': 'Missig username parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing username parameter'}), 404)
 	if not 'oldpass' in request.json:
-		return make_response(jsonify({'error': 'Missig oldpass parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing oldpass parameter'}), 404)
 	if not 'newpass' in request.json:
-		return make_response(jsonify({'error': 'Missig newpass parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing newpass parameter'}), 404)
 	if not 'token' in request.json:
-		return make_response(jsonify({'error': 'Missig token parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing token parameter'}), 404)
 	
 
 	user = {
@@ -167,7 +172,7 @@ def updatePw():
 	}
 
 	userManager = UserManager()
-	result = userManager.updatePw(user)
+	result = userManager.updatePw(user, request.args.get('token'))
 	if 'success' in result:
 		return make_response(json.dumps(user), 201)
 	else:

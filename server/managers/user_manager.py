@@ -12,10 +12,24 @@ class UserManager(object):
 		userDao = UserDao()
 		userDao.createTable()
 
+
+	def validateToken(self, token):
+		userDao = UserDao()
+		user = userDao.getUser(token)
+		if user == None:
+			return ResponseHelper.generateErrorResponse("Invalid token")
+		else:
+			return user
+
+
 	# ----------------------------------------------------------------------------
 	# Insert User
 	# ----------------------------------------------------------------------------
-	def insertUser(self, user):
+	def insertUser(self, user, token):
+		userToken = self.validateToken(token)
+		if 'error' in userToken:
+			return userToken
+
 		userDao = UserDao()
 		userDB = userDao.getUserByUsername(user['username'])
 		if (userDB != None):
@@ -31,7 +45,11 @@ class UserManager(object):
 	# ----------------------------------------------------------------------------
 	# Update Password
 	# ----------------------------------------------------------------------------
-	def updatePw(self, user):
+	def updatePw(self, user, token):
+		userToken = self.validateToken(token)
+		if 'error' in userToken:
+			return userToken
+
 		userDao = UserDao()
 		userDB = userDao.getUserByUsername(user['username'])		
 		if (userDB == None):
@@ -82,20 +100,32 @@ class UserManager(object):
 			return ResponseHelper.generateErrorResponse("Password is invalid")
 
 
-	def getAll(self):
-		# user = self.validateToken(token)
-		# if 'error' in user:
-		# 	return user
+	def getAll(self, token):
+		userToken = self.validateToken(token)
+		if 'error' in userToken:
+			return userToken
 
 		userDao = UserDao()
 		return userDao.getAll()
 
-	def deleteUser(self, user):
+	def deleteUser(self, user, token):
+		userToken = self.validateToken(token)
+		if 'error' in userToken:
+			return userToken
+
 		userDao = UserDao()
 		return userDao.deleteUser(user)
 
 
-	def updateUser(self, user):
+	def updateUser(self, user, token):
+		userToken = self.validateToken(token)
+		if 'error' in userToken:
+			return userToken
+
+		password = user['password'].encode('utf-8')
+		user['password'] = bcrypt.hashpw(password, bcrypt.gensalt())
+		user['password'] = user['password'].decode('utf-8')
+
 		userDao = UserDao()
 		return userDao.updateUser(user)
 

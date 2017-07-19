@@ -1,4 +1,4 @@
-// var leoz = new LeoZ();
+var endpoint = new EndpointConfig();
 var cookie = new CookieConfig();
 
 jQuery(document).ready(function() {
@@ -32,8 +32,7 @@ function enableSwitchery() {
             }, function () {
                 $.ajax({
                     method:'POST',
-                    // url: leoz.generateDeleteSkuEndpoind(),
-                    url: 'http://localhost:5000/user/delete',
+                    url: endpoint.generateDeleteUserEndpoind(),
                     contentType: "application/json",
                     data: JSON.stringify({
                         id: id
@@ -45,7 +44,7 @@ function enableSwitchery() {
                             type: "success",
                             confirmButtonText: "OK! Redirect to list",
                         }, function () {
-                            window.location.href = "http://localhost:8000/lazada-seller/font-end/user-management/";
+                            window.location.href = "";
                         });
                     },
                     error: function(error) {
@@ -93,6 +92,19 @@ function validNull (selector) {
         return false;
     }
 }
+
+//-------------------------------------------------------------------------------------
+// ???
+//-------------------------------------------------------------------------------------
+$('#portlet-user').on('hidden.bs.modal', function() {
+    $('.portlet-user .modal-title').html('Tạo mới');
+    $('input[name=txt_username]').val('skucreate');
+    $('input[name=txt_password]').val('');
+    $('input[name=txt_repassword]').val('');
+    $('input[name=txt_lazada_username]').val('');
+    $('input[name=txt_lazada_userid]').val('');
+    $('input[name=txt_lazada_apikey]').val('')
+});
 
 $(".btnmodalsubmit").click(function() {
     var txt_username = $('input[name=txt_username]').val();
@@ -159,8 +171,7 @@ $(".btnmodalsubmit").click(function() {
     {
         $.ajax({
             method:'POST',
-            // url: leoz.generateUpdateSkuEndpoind(),
-            url: 'http://localhost:5000/user/update',
+            url: endpoint.generateUpdateUserEndpoind(),
             contentType: "application/json",
             data: JSON.stringify({
                 id: $('input[name=txt_id]').val(),
@@ -189,9 +200,7 @@ $(".btnmodalsubmit").click(function() {
     {
         $.ajax({
             method:'POST',
-            // url: leoz.generateInsertSkuEndpoind(),
-
-            url: 'http://localhost:5000/user/insert',
+            url: endpoint.generateInsertUserEndpoind(),
             contentType: "application/json",
             data: JSON.stringify({
                 username: $('input[name=txt_username]').val(),
@@ -221,8 +230,7 @@ $(".btnmodalsubmit").click(function() {
 function getAndFillOutAllUser() {
     $.ajax({
         method:'GET',
-        // url: leoz.generateGetAllSkuEndpoind(),
-        url: 'http://localhost:5000/user/get-all',
+        url: endpoint.generateGetAllUserEndpoind(),
         contentType: "application/json",
         success: function(data) {
             console.log(data);
