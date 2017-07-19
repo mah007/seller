@@ -1,4 +1,5 @@
 // var leoz = new LeoZ();
+var cookie = new CookieConfig();
 
 jQuery(document).ready(function() {
 
@@ -133,6 +134,18 @@ $(".btnmodalsubmit").click(function() {
         error += "Lazada api key không được bỏ trống.\n";
         $('input[name=txt_lazada_apikey]').addClass('has-error');
     }
+    if($('input[name=txt_password]').hasClass('has-error') == false && $('input[name=txt_repassword]').hasClass('has-error') == false) {
+        var newpass = ($('input[name=txt_password]').val());
+        var repass = ($('input[name=txt_repassword]').val());
+        if(repass == newpass) {
+            $('input[name=txt_password]').removeClass('has-error');
+            $('input[name=txt_repassword]').removeClass('has-error');
+        } else {
+            error += "Retype passwork và new passwork phải giống nhau.\n";
+            $('input[name=txt_password]').addClass('has-error');
+            $('input[name=txt_repassword]').addClass('has-error');
+        }
+    }
 
 
     if(error.length > 0) {
@@ -224,6 +237,14 @@ function getAndFillOutAllUser() {
     });
 }
 
+//-------------------------------------------------------------------------------------
+// Logout
+//-------------------------------------------------------------------------------------
+$('#logoutButton').click(function() {
+    cookie.clearToken('token');
+    cookie.clearToken('myUser');
+    window.location.href = "../login";
+});
 
 
 

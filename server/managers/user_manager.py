@@ -28,7 +28,6 @@ class UserManager(object):
 			return ResponseHelper.generateSuccessResponse(user)
 
 	# $2b$14$I0kJJacc1gZijKOJKsabvuZGe4txpB7OJJl4uzw3XT4a.EbuuNhyu
-	# $2b$14$I0kJJacc1gZijKOJKsabvuZGe4txpB7OJJl4uzw3XT4a.EbuuNhyu
 	# ----------------------------------------------------------------------------
 	# Update Password
 	# ----------------------------------------------------------------------------
