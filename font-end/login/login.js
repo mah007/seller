@@ -19,7 +19,8 @@ $("#btnloginsubmit").click(function() {
         success: function(data) {
             var userObj = data.data;
             console.log(userObj);
-            cookie.save('myUser', data.data);
+            cookie.save('myUser', data.data);         
+            cookie.save('username', userObj.username)  
             cookie.save('token', userObj.token);
             window.location.href = "../sku-management"; 
         },

@@ -100,13 +100,18 @@ class UserManager(object):
 			return ResponseHelper.generateErrorResponse("Password is invalid")
 
 
-	def getAll(self, token):
+	def getAll(self, token, username):
 		userToken = self.validateToken(token)
 		if 'error' in userToken:
 			return userToken
 
 		userDao = UserDao()
-		return userDao.getAll()
+		userAdmin = userDao.getAdminUser(username)
+
+		if (userAdmin == None):
+			return ResponseHelper.generateErrorResponse("System error, please try again")
+		else:
+			return userDao.getAll()
 
 	def deleteUser(self, user, token):
 		userToken = self.validateToken(token)

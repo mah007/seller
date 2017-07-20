@@ -3,14 +3,20 @@ var cookie = new CookieConfig();
 
 jQuery(document).ready(function() {
 
+    // Validate Token
+    if (!cookie.validateLocalToken()) {
+        window.location.href = "../login";
+    }
     // Init data
     getAndFillOutAllUser();
 
     if($('.btnnew').length > 0) {
         $(".btnnew").click(function() {
-            $('#portlet-user').attr('data-type', "insert");            
+            $('#portlet-user .modal-title').html('Thêm mới');
+            $('#portlet-user').attr('data-type', "insert");       
+            $('input[name=txt_id').prop('disabled', true);    
             $('#portlet-user').modal('show');
-            $('input[name=txt_id').prop('disabled', true);
+            
         });
     }
 
@@ -92,13 +98,13 @@ function validNull (selector) {
         return false;
     }
 }
-
 //-------------------------------------------------------------------------------------
 // ???
 //-------------------------------------------------------------------------------------
 $('#portlet-user').on('hidden.bs.modal', function() {
     $('.portlet-user .modal-title').html('Tạo mới');
-    $('input[name=txt_username]').val('skucreate');
+    $('#portlet-user').attr('data-type', "");
+    $('input[name=txt_username]').val('');
     $('input[name=txt_password]').val('');
     $('input[name=txt_repassword]').val('');
     $('input[name=txt_lazada_username]').val('');
@@ -159,7 +165,6 @@ $(".btnmodalsubmit").click(function() {
         }
     }
 
-
     if(error.length > 0) {
         swal("Không hợp lệ", error, "error");
         return;
@@ -195,7 +200,6 @@ $(".btnmodalsubmit").click(function() {
         });
     }
 
-
     else if (dataType == "insert")
     {
         $.ajax({
@@ -225,7 +229,7 @@ $(".btnmodalsubmit").click(function() {
 
 });
 //-------------------------------------------------------------------------------------
-// Get and fill out all SKU
+// Get and fill out all User
 //-------------------------------------------------------------------------------------
 function getAndFillOutAllUser() {
     $.ajax({
@@ -251,6 +255,7 @@ function getAndFillOutAllUser() {
 $('#logoutButton').click(function() {
     cookie.clearToken('token');
     cookie.clearToken('myUser');
+    cookie.clearToken('username');
     window.location.href = "../login";
 });
 

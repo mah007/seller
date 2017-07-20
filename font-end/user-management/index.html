@@ -90,7 +90,10 @@
                 <!-- BEGIN SIDEBAR MENU -->
                 <ul class="page-sidebar-menu " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
                     <li class="start active">
-                        <a href="/sku-management"><i class="icon-basket"></i><span class="title">Chỉnh giá tự động</span></a>
+                        <a href="../user-management"><i class="icon-basket"></i><span class="title">Quản lý User</span></a>
+                    </li>
+                    <li class="start active">
+                        <a href="../sku-management"><i class="icon-basket"></i><span class="title">Quản lý Sku</span></a>
                     </li>
                     <li class="last ">
                         <a href="/help"><i class="icon-question"></i><span class="title">Trợ giúp</span></a>
@@ -112,16 +115,6 @@
                             </div>
                             <div class="modal-body">
                                 <form class="form-horizontal form-bordered">
-                                    <!-- <div clas="form-body clearfix">
-                                        <div class="form-group">
-                                            <label class="control-label col-md-4"><b style="color:#FF0000">*</b> Seller SKU</label>
-                                            <input type="hidden" name="id" value="" />
-                                            <input type="hidden" name="txt_act" value="skucreate" />
-                                            <div class="col-md-8">
-                                                <input type="text" class="seller-sku form-control" maxlength="255" name="txt_sku" placeholder="Apple iPhone 7">
-                                            </div>
-                                        </div>
-                                    </div> -->
                                     <div class="form-group">
                                         <label class="control-label col-md-4"><b style="color:#FF0000">*</b> ID</label>
                                         <div class="col-md-8">
@@ -209,15 +202,6 @@
                                                 </form>
                                             </div>
                                             <div class="col-md-6">
-                                                        <!-- <div class="btn-group pull-right">
-                                                            <button class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="md-click-circle md-click-animate" style="height: 85px; width: 85px; top: -19.5px; left: 33.4062px;"></span>Công cụ <i class="fa fa-angle-down"></i>
-                                                            </button>
-                                                            <ul class="dropdown-menu pull-right">
-                                                                <li>
-                                                                    <a href="?act=exportxls">Xuất ra Excel </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div> -->
                                                         <div class="btn-group pull-right btnnew" style="margin-right: 20px;">
                                                             <button id="sample_editable_1_new" class="btn green"><span class="md-click-circle md-click-animate" style="height: 104px; width: 104px; top: -28px; left: 0px;"></span>
                                                                 Thêm mới <i class="fa fa-plus"></i>
@@ -313,11 +297,6 @@
                     <td class="text-left">
                         <button type="button" class="btn btn-circle blue btnedt" style="margin: 0 2px 4px;"><i class="fa fa-edit"></i></button>
                         <button type="button" class="btn btn-circle red btndel" style="margin: 0 2px 4px;"><i class="fa fa-close"></i></button>
-                        <!-- <input type="checkbox" class="js-switch btnstatus" {{#ifEqual state 1}} checked {{else}} none {{/ifEqual}}/>
-                        <div class="btn-group btn-group-solid btnstt hide" style="margin: 0 2px 4px;" data-bit="active">
-                            <button type="button" class="btn bit-like" data-bit="active" style="margin: 0;">Bật</button>
-                            <button type="button" class="btn bit-nope" data-bit="deactive" style="margin: 0;">Tắt</button>
-                        </div> -->
                     </td>
                 </tr>
                 {{/each}}

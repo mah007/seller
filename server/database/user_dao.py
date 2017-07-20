@@ -64,7 +64,7 @@ class UserDao(object):
 
     def getAll(self):
         try:
-            query = '''SELECT * FROM t_user'''
+            query = '''SELECT * FROM t_user '''
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)
@@ -145,6 +145,33 @@ class UserDao(object):
             query = '''UPDATE t_user SET password = '{}' WHERE token = '{}' '''.format(user['newpass'], user['token'])
             DatabaseHelper.execute(query)
             return user;
+        except Exception as ex:
+            print(ex)
+            return None
+
+    def getAdminUser(self, username):
+        try:
+            query = '''SELECT * FROM t_user WHERE user_name = 'admin' AND user_name = '{}' '''.format(StringUtils.toString(username))
+            conn = DatabaseHelper.getConnection()
+            cur = conn.cursor()
+            cur.execute(query)
+
+            rows = cur.fetchall()
+            if not rows:
+                cur.close()
+                return None
+
+            user = None
+            for row in rows:
+                user = {
+                    "id": row[0],
+                    "username": row[1],
+                    "password": row[2],
+                }
+
+            conn.close()
+            return user
+
         except Exception as ex:
             print(ex)
             return None

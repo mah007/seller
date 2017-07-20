@@ -41,7 +41,7 @@ var EndpointConfig = function() {
   // User management section
   //----------------------------------------------------------------------------
   EndpointConfig.prototype.generateGetAllUserEndpoind = function() {
-    return endpointUrl + '/user/get-all?token=' + $.cookie('token');
+    return endpointUrl + '/user/get-all?token=' + $.cookie('token') + '&username=' + $.cookie('username');
   }
 
   EndpointConfig.prototype.generateInsertUserEndpoind = function() {

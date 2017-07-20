@@ -45,10 +45,11 @@ def getAll():
 		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
 	if not request.args:
 		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
+	if not request.args:
+		return make_response(jsonify({'error': 'Missing username parameter value'}), 404)
 
-	# token = request.args.get('token')
 	userManager = UserManager()
-	result = userManager.getAll(request.args.get('token'))
+	result = userManager.getAll(request.args.get('token'), request.args.get('username'))
 	if 'error' in result:
 		return make_response(jsonify(result))
 	else:
