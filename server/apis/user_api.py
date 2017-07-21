@@ -51,7 +51,7 @@ def getAll():
 	userManager = UserManager()
 	result = userManager.getAll(request.args.get('token'), request.args.get('username'))
 	if 'error' in result:
-		return make_response(jsonify(result))
+		return make_response(jsonify(result), 403)
 	else:
 		return make_response(jsonify({"data": result}))
 

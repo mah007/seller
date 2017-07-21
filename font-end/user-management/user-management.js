@@ -241,10 +241,16 @@ function getAndFillOutAllUser() {
             var template = $("#user-content-template").html();
             var contentHtml = Handlebars.compile(template);
             $("#tbody_sku").html(contentHtml(data));
+            $('input[name=txt_username]').prop('disabled', false);
+            $('input[name=txt_lazada_username]').prop('disabled', false);
+            $('input[name=txt_lazada_userid]').prop('disabled', false);
+            $('input[name=txt_lazada_apikey]').prop('disabled', false);
+
             enableSwitchery();
         },
         error: function(error) {
             console.log(error);
+            window.location.href = "../sku-management"; 
         }
     });
 }
