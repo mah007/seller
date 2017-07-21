@@ -13,8 +13,13 @@ jQuery(document).ready(function() {
     if($('.btnnew').length > 0) {
         $(".btnnew").click(function() {
             $('#portlet-user .modal-title').html('Thêm mới');
-            $('#portlet-user').attr('data-type', "insert");       
-            $('input[name=txt_id').prop('disabled', true);    
+            $('#portlet-user').data('type', "insert");       
+            $('input[name=txt_id').prop('disabled', true);  
+
+            $('input[name=txt_username]').prop('disabled', false);
+            $('input[name=txt_lazada_username]').prop('disabled', false);
+            $('input[name=txt_lazada_userid]').prop('disabled', false);
+            $('input[name=txt_lazada_apikey]').prop('disabled', false);  
             $('#portlet-user').modal('show');
             
         });
@@ -72,7 +77,7 @@ function enableSwitchery() {
             var lazada_userid = parent.data('lazada_user_id');
             var lazada_apikey = parent.data('lazada_api_key');
 
-            $('#portlet-user').attr('data-type', "edit");
+            $('#portlet-user').data('type', "edit");
             $('#portlet-user .modal-title').html('Chỉnh sửa ' + username);
             $('input[name=txt_id').val(id).prop('disabled', true);
 
@@ -103,7 +108,7 @@ function validNull (selector) {
 //-------------------------------------------------------------------------------------
 $('#portlet-user').on('hidden.bs.modal', function() {
     $('.portlet-user .modal-title').html('Tạo mới');
-    $('#portlet-user').attr('data-type', "");
+    $('#portlet-user').data('type', "");
     $('input[name=txt_username]').val('');
     $('input[name=txt_password]').val('');
     $('input[name=txt_repassword]').val('');
@@ -241,15 +246,17 @@ function getAndFillOutAllUser() {
             var template = $("#user-content-template").html();
             var contentHtml = Handlebars.compile(template);
             $("#tbody_sku").html(contentHtml(data));
+
+            $('input[name=txt_id]').val('').prop('disabled', false);
             $('input[name=txt_username]').prop('disabled', false);
             $('input[name=txt_lazada_username]').prop('disabled', false);
             $('input[name=txt_lazada_userid]').prop('disabled', false);
             $('input[name=txt_lazada_apikey]').prop('disabled', false);
-
             enableSwitchery();
         },
         error: function(error) {
             console.log(error);
+            alert("Sorry! You don't have permission to access this page!");
             window.location.href = "../sku-management"; 
         }
     });

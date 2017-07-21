@@ -19,7 +19,7 @@ jQuery(document).ready(function() {
 
     if($('.btnnew').length > 0) {
         $(".btnnew").click(function() {
-            $('#portlet-config').attr('data-type', "insert");
+            $('#portlet-config').data('data-type', "insert");
             $('#portlet-config').modal('show');
         });
     }
@@ -170,7 +170,7 @@ function enableSwitchery() {
             var max_price = parent.data('max_price');
             var compete_price = parent.data('compete_price');
 
-            $('#portlet-config').attr('data-type', "edit");
+            $('#portlet-config').data('data-type', "edit");
             $('#portlet-config .modal-title').html('Chỉnh sửa ' + name);
             $('input[name=id]').val(id);
             $('input[name=txt_sku]').val(sku).prop('disabled', true);
@@ -476,7 +476,7 @@ $('#logoutButton').click(function() {
 // Update Password
 //-------------------------------------------------------------------------------------
 $('#updatePwButton').click(function() {
-    $('#portlet-updatePw').attr('data-type', "updatePw");
+    $('#portlet-updatePw').data('data-type', "updatePw");
     $('#portlet-updatePw').modal('show');
 });
 
