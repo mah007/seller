@@ -101,8 +101,8 @@ def insert():
 		return make_response(jsonify({'error': 'Missing compete_price parameter'}), 404)
 	if not 'state' in request.json:
 		return make_response(jsonify({'error': 'Missing state parameter'}), 404)
-	if not 'repeat_time' in request.json:
-		return make_response(jsonify({'error': 'Missing repeat_time parameter'}), 404)
+	# if not 'repeat_time' in request.json:
+	# 	return make_response(jsonify({'error': 'Missing repeat_time parameter'}), 404)
 
 	sku = {
 		"sku": request.json['sku'],
@@ -113,12 +113,12 @@ def insert():
 		"compete_price": int(request.json['compete_price']),
 		"special_price": 0,
 		"state": int(request.json['state']),
-		"repeat_time": int(request.json['repeat_time']),
+		# "repeat_time": int(request.json['repeat_time']),
 		"created_at": int(round(time.time()))
 	}
 
 	skuManager = SkuManager()
-	result = skuManager.insertSku(sku, request.args.get('token'), request.args.get('username'))
+	result = skuManager.insertSku(sku, request.args.get('token'))
 	if 'success' in result:
 		return make_response(json.dumps(sku), 201)
 	else:
@@ -145,8 +145,8 @@ def update():
 		return make_response(jsonify({'error': 'Missing compete_price parameter'}), 404)
 	if not 'state' in request.json:
 		return make_response(jsonify({'error': 'Missing state parameter'}), 404)
-	if not 'repeat_time' in request.json:
-		return make_response(jsonify({'error': 'Missing repeat_time parameter'}), 404)
+	# if not 'repeat_time' in request.json:
+	# 	return make_response(jsonify({'error': 'Missing repeat_time parameter'}), 404)
 
 	sku = {
 		"id": request.json['id'],
@@ -154,7 +154,7 @@ def update():
 		"max_price": int(request.json['max_price']),
 		"compete_price": int(request.json['compete_price']),
 		"state": int(request.json['state']),
-		"repeat_time": int(request.json['repeat_time']),
+		# "repeat_time": int(request.json['repeat_time']),
 		"updated_at": int(round(time.time()))
 	}
 

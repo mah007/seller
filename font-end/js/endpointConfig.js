@@ -22,7 +22,7 @@ var EndpointConfig = function() {
   }
 
   EndpointConfig.prototype.generateInsertSkuEndpoind = function() {
-    return endpointUrl + '/sku/insert?token=' + $.cookie('token') + '&username=' + $.cookie('username');
+    return endpointUrl + '/sku/insert?token=' + $.cookie('token');
   }
 
   EndpointConfig.prototype.generateUpdateSkuEndpoind = function() {

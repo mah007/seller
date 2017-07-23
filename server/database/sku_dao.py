@@ -15,7 +15,7 @@ class SkuDao(object):
                     compete_price 	INTEGER 	NOT NULL,
                     special_price   INTEGER     NOT NULL,
                     state			INTEGER		NOT NULL,
-                    repeat_time 	INTEGER 	NOT NULL,
+                    repeat_time 	INTEGER 	,
                     created_at 		INTEGER 	NOT NULL,
                     updated_at		INTEGER,
                     user_id          INTEGER     NOT NULL
@@ -43,7 +43,7 @@ class SkuDao(object):
                     "compete_price": row[6],
                     "special_price": row[7],
                     "state": row[8],
-                    "repeat_time": row[9],
+                    # "repeat_time": row[9],
                     "created_at": row[10]
                 })
 
@@ -100,10 +100,10 @@ class SkuDao(object):
     # --------------------------------------------------------------------------
     def insert(self, sku, user):
         query = '''INSERT INTO sku_management (sku, name, link, min_price, max_price,
-    				compete_price, special_price, state, repeat_time, created_at, updated_at, user_id)
-    				VALUES ('{}', '{}', '{}', {}, {}, {}, {}, {}, {}, {}, 0, {})'''.format(
+    				compete_price, special_price, state, created_at, updated_at, user_id)
+    				VALUES ('{}', '{}', '{}', {}, {}, {}, {}, {}, {}, 0, {})'''.format(
     				StringUtils.toString(sku['sku']), StringUtils.toString(sku['name']), StringUtils.toString(sku['link']),
-                    sku['min_price'], sku['max_price'], sku['compete_price'], sku['special_price'], sku['state'], sku['repeat_time'], sku['created_at'],
+                    sku['min_price'], sku['max_price'], sku['compete_price'], sku['special_price'], sku['state'], sku['created_at'],
                     user['id'])
         DatabaseHelper.execute(query)
 
@@ -133,8 +133,8 @@ class SkuDao(object):
         query = '''UPDATE sku_management set state = {} WHERE id = '{}' '''.format(sku['state'], sku['id'])
         DatabaseHelper.execute(query)
         
-    def getAddedSize(self, username):
-        query = ''' SELECT count(*) FROM sku_management as sku, t_user as user  WHERE user.id = sku.user_id AND user.lazada_user_name = '{}'  '''.format(StringUtils.toString(username))
+    def getAddedSize(self, id):
+        query = ''' SELECT count(*) FROM sku_management as sku, t_user as user  WHERE user.id = sku.user_id AND user.id = '{}'  '''.format(id)
         conn = DatabaseHelper.getConnection()
         cur = conn.cursor()
         cur.execute(query)
@@ -147,19 +147,7 @@ class SkuDao(object):
         return count
 
 
-    def getCertainSize(self, username):        
-        query = ''' SELECT certain_size FROM t_user WHERE lazada_user_name = '{}' '''.format(StringUtils.toString(username))
-        conn = DatabaseHelper.getConnection()
-        cur = conn.cursor()
-        cur.execute(query)
 
-        count = 0
-        row = cur.fetchone()
-    
-        count = row[0];
-
-        conn.close()
-        return count
   
 
 

@@ -14,7 +14,9 @@ class UserDao(object):
                     lazada_user_id      VARCHAR(200),
                     lazada_api_key      TEXT,
                     created_at          INTEGER 	NOT NULL,
-                    updated_at          INTEGER
+                    updated_at          INTEGER,
+                    role                INTEGER,
+                    certain_size        INTEGER
                     );'''
         DatabaseHelper.execute(query)
 
@@ -175,6 +177,20 @@ class UserDao(object):
         except Exception as ex:
             print(ex)
             return None
+
+    def getCertainSize(self, id):        
+        query = ''' SELECT certain_size FROM t_user WHERE id = '{}' '''.format(id)
+        conn = DatabaseHelper.getConnection()
+        cur = conn.cursor()
+        cur.execute(query)
+
+        count = 0
+        row = cur.fetchone()
+    
+        count = row[0];
+
+        conn.close()
+        return count
 
 
 

@@ -165,7 +165,7 @@ function enableSwitchery() {
             var id = parent.data('id');
             var name = parent.data('name');
             var sku = parent.data('sku');
-            var repeat_time = parent.data('repeat_time');
+            // var repeat_time = parent.data('repeat_time');
             var min_price = parent.data('min_price');
             var max_price = parent.data('max_price');
             var compete_price = parent.data('compete_price');
@@ -174,7 +174,7 @@ function enableSwitchery() {
             $('#portlet-config .modal-title').html('Chỉnh sửa ' + name);
             $('input[name=id]').val(id);
             $('input[name=txt_sku]').val(sku).prop('disabled', true);
-            $('input[name=txt_seq]').val(repeat_time).prop('disabled', true);
+            // $('input[name=txt_seq]').val(repeat_time).prop('disabled', true);
             $('input[name=txt_min]').val(min_price);
             $('input[name=txt_max]').val(max_price);
             $('input[name=txt_stp]').val(compete_price);
@@ -352,15 +352,15 @@ $(".btnmodalsubmit").click(function() {
         error += "Mức giá thấp hơn đối thủ không được bỏ trống.\n";
         $('input[name=txt_stp]').addClass('has-error');
     }
-    if(!validNull('input[name=txt_seq]')) {
-        error += "Tầng suất kiểm tra giá không được bỏ trống.\n";
-        $('input[name=txt_seq]').addClass('has-error');
-    } else if($('input[name=txt_seq]').val() < 120) {
-        error += "Tầng suất kiểm tra giá phải lớn hơn 120.\n";
-        $('input[name=txt_seq]').addClass('has-error');
-    } else {
-        $('input[name=txt_seq]').removeClass('has-error');
-    }
+    // if(!validNull('input[name=txt_seq]')) {
+    //     error += "Tầng suất kiểm tra giá không được bỏ trống.\n";
+    //     $('input[name=txt_seq]').addClass('has-error');
+    // } else if($('input[name=txt_seq]').val() < 120) {
+    //     error += "Tầng suất kiểm tra giá phải lớn hơn 120.\n";
+    //     $('input[name=txt_seq]').addClass('has-error');
+    // } else {
+    //     $('input[name=txt_seq]').removeClass('has-error');
+    // }
 
     if(error.length > 0) {
         swal("Không hợp lệ", error, "error");
@@ -381,7 +381,7 @@ $(".btnmodalsubmit").click(function() {
                 min_price: $('input[name=txt_min]').val(),
                 max_price: $('input[name=txt_max]').val(),
                 compete_price: $('input[name=txt_stp]').val(),
-                repeat_time: $('input[name=txt_seq]').val(),
+                // repeat_time: $('input[name=txt_seq]').val(),
                 state: $('select[name=txt_stt]').val() == "active" ? 1 : 0
             }),
             success: function(data) {
@@ -409,7 +409,7 @@ $(".btnmodalsubmit").click(function() {
                 min_price: $('input[name=txt_min]').val(),
                 max_price: $('input[name=txt_max]').val(),
                 compete_price: $('input[name=txt_stp]').val(),
-                repeat_time: $('input[name=txt_seq]').val(),
+                // repeat_time: $('input[name=txt_seq]').val(),
                 state: $('select[name=txt_stt]').val() == "active" ? 1 : 0
             }),
             success: function(data) {

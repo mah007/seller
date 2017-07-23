@@ -28,7 +28,7 @@ class SkuManager(object):
 	#-----------------------------------------------------------------------------
 	# insert new sku
 	#-----------------------------------------------------------------------------
-	def insertSku(self, sku, token, username):
+	def insertSku(self, sku, token):
 		user = self.validateToken(token)
 		if 'error' in user:
 			return user
@@ -45,12 +45,10 @@ class SkuManager(object):
 		sku['special_price'] = lazadaProduct['Skus'][0]['special_price']
 
 		skudao = SkuDao()
-		addedSize = skudao.getAddedSize(username)
-		certainSize = skudao.getCertainSize(username)
-
-		print(addedSize)
-		print(certainSize)
-
+		userdao = UserDao()
+		addedSize = skudao.getAddedSize(user['id'])
+		certainSize = userdao.getCertainSize(user['id'])
+		
 		if (addedSize >= certainSize):
 			return ResponseHelper.generateErrorResponse("You cannot add more SKU!")
 
