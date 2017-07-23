@@ -132,6 +132,35 @@ class SkuDao(object):
     def updateState(self, sku):
         query = '''UPDATE sku_management set state = {} WHERE id = '{}' '''.format(sku['state'], sku['id'])
         DatabaseHelper.execute(query)
+        
+    def getAddedSize(self, username):
+        query = ''' SELECT count(*) FROM sku_management as sku, t_user as user  WHERE user.id = sku.user_id AND user.lazada_user_name = '{}'  '''.format(StringUtils.toString(username))
+        conn = DatabaseHelper.getConnection()
+        cur = conn.cursor()
+        cur.execute(query)
+
+        count = 0
+        row = cur.fetchone()
+        count = row[0];
+
+        conn.close()
+        return count
+
+
+    def getCertainSize(self, username):        
+        query = ''' SELECT certain_size FROM t_user WHERE lazada_user_name = '{}' '''.format(StringUtils.toString(username))
+        conn = DatabaseHelper.getConnection()
+        cur = conn.cursor()
+        cur.execute(query)
+
+        count = 0
+        row = cur.fetchone()
+    
+        count = row[0];
+
+        conn.close()
+        return count
+  
 
 
 

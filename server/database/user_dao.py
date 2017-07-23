@@ -151,7 +151,7 @@ class UserDao(object):
 
     def getAdminUser(self, username):
         try:
-            query = '''SELECT * FROM t_user WHERE user_name = 'admin' AND user_name = '{}' '''.format(StringUtils.toString(username))
+            query = '''SELECT * FROM t_user WHERE lazada_user_name = '{}' AND role = 1  '''.format(StringUtils.toString(username))
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)

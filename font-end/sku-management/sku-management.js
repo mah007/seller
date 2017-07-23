@@ -19,7 +19,7 @@ jQuery(document).ready(function() {
 
     if($('.btnnew').length > 0) {
         $(".btnnew").click(function() {
-            $('#portlet-config').data('data-type', "insert");
+            $('#portlet-config').data('type', "insert");
             $('#portlet-config').modal('show');
         });
     }
@@ -170,7 +170,7 @@ function enableSwitchery() {
             var max_price = parent.data('max_price');
             var compete_price = parent.data('compete_price');
 
-            $('#portlet-config').data('data-type', "edit");
+            $('#portlet-config').data('type', "edit");
             $('#portlet-config .modal-title').html('Chỉnh sửa ' + name);
             $('input[name=id]').val(id);
             $('input[name=txt_sku]').val(sku).prop('disabled', true);
@@ -321,20 +321,6 @@ $(".btnmodalsubmit").click(function() {
     if(!validNull('input[name=txt_sku]')) {
         error += "Seller SKU không được bỏ trống.\n";
         $('input[name=txt_sku]').addClass('has-error');
-    } else {
-        $.ajax({
-            async:false,
-            method:'POST',
-            url: '?act=skuvalid&q=' + $('input[name=txt_sku]').val(),
-            success: function(data) {
-                if(data === 0) {
-                    error += "Seller SKU không hợp lệ.\n";
-                    $('input[name=txt_sku]').addClass('has-error');
-                } else {
-                    $('input[name=txt_sku]').removeClass('has-error');
-                }
-            }
-        });
     }
     if(validNull('input[name=txt_min]')) {
         $('input[name=txt_min]').removeClass('has-error');
@@ -382,6 +368,7 @@ $(".btnmodalsubmit").click(function() {
     }
 
     var dataType = $('#portlet-config').data('type');
+    console.log(dataType);
     if(dataType == "edit")
     {
         $.ajax({
@@ -476,7 +463,7 @@ $('#logoutButton').click(function() {
 // Update Password
 //-------------------------------------------------------------------------------------
 $('#updatePwButton').click(function() {
-    $('#portlet-updatePw').data('data-type', "updatePw");
+    $('#portlet-updatePw').data('type', "updatePw");
     $('#portlet-updatePw').modal('show');
 });
 

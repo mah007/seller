@@ -89,6 +89,8 @@ def insert():
 		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
 	if not request.json:
 		return make_response(jsonify({'error': 'Missing json parameters value'}), 404)
+	if not request.json:
+		return make_response(jsonify({'error': 'Missing username parameters value'}), 404)
 	if not 'sku' in request.json:
 		return make_response(jsonify({'error': 'Missing sku parameter'}), 404)
 	if not 'min_price' in request.json:
@@ -116,7 +118,7 @@ def insert():
 	}
 
 	skuManager = SkuManager()
-	result = skuManager.insertSku(sku, request.args.get('token'))
+	result = skuManager.insertSku(sku, request.args.get('token'), request.args.get('username'))
 	if 'success' in result:
 		return make_response(json.dumps(sku), 201)
 	else:
