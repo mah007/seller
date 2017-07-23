@@ -43,7 +43,7 @@ class SkuDao(object):
                     "compete_price": row[6],
                     "special_price": row[7],
                     "state": row[8],
-                    # "repeat_time": row[9],
+                    "repeat_time": row[9],
                     "created_at": row[10]
                 })
 
@@ -108,9 +108,9 @@ class SkuDao(object):
         DatabaseHelper.execute(query)
 
 
-    # ---------------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Update KSU
-    # ---------------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     def update(self, sku):
         query = '''UPDATE sku_management set min_price = '{}', max_price = '{}', compete_price = '{}', updated_at = '{}'
                     WHERE id = '{}' '''.format(sku['min_price'], sku['max_price'], sku['compete_price'],
@@ -118,21 +118,21 @@ class SkuDao(object):
         DatabaseHelper.execute(query)
 
 
-    # ---------------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # [pRunner] Update Specical Price
-    # ---------------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     def updateSpecialPrice(self, sku):
         query = '''UPDATE sku_management set special_price = '{}' WHERE id = '{}' '''.format(sku['special_price'], sku['id'])
         DatabaseHelper.execute(query)
 
 
-    # ---------------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Update KSU
-    # ---------------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     def updateState(self, sku):
         query = '''UPDATE sku_management set state = {} WHERE id = '{}' '''.format(sku['state'], sku['id'])
         DatabaseHelper.execute(query)
-        
+
     def getAddedSize(self, id):
         query = ''' SELECT count(*) FROM sku_management as sku, t_user as user  WHERE user.id = sku.user_id AND user.id = '{}'  '''.format(id)
         conn = DatabaseHelper.getConnection()
@@ -148,7 +148,7 @@ class SkuDao(object):
 
 
 
-  
+
 
 
 

@@ -5,10 +5,6 @@ from lazada_api.lazada_sku_api import LazadaSkuApi
 from managers.response_helper import ResponseHelper
 
 
-ERROR = {"error": ""}
-SUCCESS = {"success": "done"}
-
-
 class SkuManager(object):
 
 	def initialize(self):
@@ -33,6 +29,14 @@ class SkuManager(object):
 		if 'error' in user:
 			return user
 
+		# Validate certain size
+		skudao = SkuDao()
+		userdao = UserDao()
+		addedSize = skudao.getAddedSize(user['id'])
+		certainSize = userdao.getCertainSize(user['id'])
+		if (addedSize >= certainSize):
+			return ResponseHelper.generateErrorResponse("You cannot add more SKU!")
+
 		# Validate SKU by lazada API
 		lazadaSkuApi = LazadaSkuApi()
 		lazadaProduct = lazadaSkuApi.getSku(sku, user)
@@ -44,18 +48,13 @@ class SkuManager(object):
 		sku['link'] = lazadaProduct['Skus'][0]['Url'].encode('utf-8')
 		sku['special_price'] = lazadaProduct['Skus'][0]['special_price']
 
-		skudao = SkuDao()
-		userdao = UserDao()
-		addedSize = skudao.getAddedSize(user['id'])
-		certainSize = userdao.getCertainSize(user['id'])
-		
-		if (addedSize >= certainSize):
-			return ResponseHelper.generateErrorResponse("You cannot add more SKU!")
-
 		skudao.insert(sku, user)
 		return ResponseHelper.generateSuccessResponse(None)
 
 
+	#-----------------------------------------------------------------------------
+	# delete sku
+	#-----------------------------------------------------------------------------
 	def deleteSku(self, sku, token):
 		user = self.validateToken(token)
 		if 'error' in user:
@@ -63,9 +62,12 @@ class SkuManager(object):
 
 		skudao = SkuDao()
 		skudao.delete(sku)
-		return SUCCESS
+		return ResponseHelper.generateSuccessResponse(None)
 
 
+	#-----------------------------------------------------------------------------
+	# get all skus
+	#-----------------------------------------------------------------------------
 	def getAll(self, token):
 		user = self.validateToken(token)
 		if 'error' in user:
@@ -76,6 +78,9 @@ class SkuManager(object):
 		return ResponseHelper.generateSuccessResponse(skus)
 
 
+	#-----------------------------------------------------------------------------
+	# Update sku state
+	#-----------------------------------------------------------------------------
 	def updateSkuState(self, sku, token):
 		user = self.validateToken(token)
 		if 'error' in user:
@@ -83,9 +88,12 @@ class SkuManager(object):
 
 		skudao = SkuDao()
 		skudao.updateState(sku)
-		return SUCCESS
+		return ResponseHelper.generateSuccessResponse(None)
 
 
+	#-----------------------------------------------------------------------------
+	# update sku's info
+	#-----------------------------------------------------------------------------
 	def updateSku(self, sku, token):
 		user = self.validateToken(token)
 		if 'error' in user:
@@ -93,7 +101,7 @@ class SkuManager(object):
 
 		skudao = SkuDao()
 		skudao.update(sku)
-		return SUCCESS
+		return ResponseHelper.generateSuccessResponse(None)
 
 
 

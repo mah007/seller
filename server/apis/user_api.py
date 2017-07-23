@@ -163,7 +163,7 @@ def updatePw():
 		return make_response(jsonify({'error': 'Missing newpass parameter'}), 404)
 	if not 'token' in request.json:
 		return make_response(jsonify({'error': 'Missing token parameter'}), 404)
-	
+
 
 	user = {
 		"username": request.json['username'],

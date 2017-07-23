@@ -22,8 +22,8 @@ class UserDao(object):
 
 
     def insert(self, user):
-        query = '''INSERT INTO t_user (user_name, password, token, lazada_user_name, lazada_user_id, lazada_api_key, created_at, updated_at)
-                    VALUES ('{}', '{}', 'temptoken', '{}', '{}', '{}', '{}', 0)'''.format(
+        query = '''INSERT INTO t_user (user_name, password, token, lazada_user_name, lazada_user_id, lazada_api_key, created_at, updated_at, role, certain_size)
+                    VALUES ('{}', '{}', 'temptoken', '{}', '{}', '{}', '{}', 0, 0, 5)'''.format(
                     StringUtils.toString(user['username']),
                     StringUtils.toString(user['password']),
                     StringUtils.toString(user['lazada_user_name']),
@@ -178,7 +178,7 @@ class UserDao(object):
             print(ex)
             return None
 
-    def getCertainSize(self, id):        
+    def getCertainSize(self, id):
         query = ''' SELECT certain_size FROM t_user WHERE id = '{}' '''.format(id)
         conn = DatabaseHelper.getConnection()
         cur = conn.cursor()
@@ -186,7 +186,7 @@ class UserDao(object):
 
         count = 0
         row = cur.fetchone()
-    
+
         count = row[0];
 
         conn.close()

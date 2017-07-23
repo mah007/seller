@@ -101,8 +101,6 @@ def insert():
 		return make_response(jsonify({'error': 'Missing compete_price parameter'}), 404)
 	if not 'state' in request.json:
 		return make_response(jsonify({'error': 'Missing state parameter'}), 404)
-	# if not 'repeat_time' in request.json:
-	# 	return make_response(jsonify({'error': 'Missing repeat_time parameter'}), 404)
 
 	sku = {
 		"sku": request.json['sku'],
@@ -113,7 +111,6 @@ def insert():
 		"compete_price": int(request.json['compete_price']),
 		"special_price": 0,
 		"state": int(request.json['state']),
-		# "repeat_time": int(request.json['repeat_time']),
 		"created_at": int(round(time.time()))
 	}
 

@@ -24,6 +24,9 @@ class UserManager(object):
 
 	# ----------------------------------------------------------------------------
 	# Insert User
+	#
+	# Update:
+	# Only admin can insert
 	# ----------------------------------------------------------------------------
 	def insertUser(self, user, token):
 		userToken = self.validateToken(token)
@@ -41,7 +44,7 @@ class UserManager(object):
 			userDao.insert(user)
 			return ResponseHelper.generateSuccessResponse(user)
 
-	# $2b$14$I0kJJacc1gZijKOJKsabvuZGe4txpB7OJJl4uzw3XT4a.EbuuNhyu
+
 	# ----------------------------------------------------------------------------
 	# Update Password
 	# ----------------------------------------------------------------------------
@@ -51,7 +54,7 @@ class UserManager(object):
 			return userToken
 
 		userDao = UserDao()
-		userDB = userDao.getUserByUsername(user['username'])		
+		userDB = userDao.getUserByUsername(user['username'])
 		if (userDB == None):
 			return ResponseHelper.generateErrorResponse("Account not exist!")
 
@@ -70,6 +73,9 @@ class UserManager(object):
 
 	# ----------------------------------------------------------------------------
 	# Get User
+	#
+	# Update:
+	# Who is uisng it???
 	# ----------------------------------------------------------------------------
 	def getUser(self, token):
 		userDao = UserDao()
@@ -107,12 +113,15 @@ class UserManager(object):
 
 		userDao = UserDao()
 		userAdmin = userDao.getAdminUser(username)
-
 		if (userAdmin == None):
 			return ResponseHelper.generateErrorResponse("System error, please try again")
 		else:
 			return userDao.getAll()
 
+
+	# Update:
+	# Only admin can insert
+	# ----------------------------------------------------------------------------
 	def deleteUser(self, user, token):
 		userToken = self.validateToken(token)
 		if 'error' in userToken:
@@ -122,6 +131,9 @@ class UserManager(object):
 		return userDao.deleteUser(user)
 
 
+	# Update:
+	# Only admin can insert
+	# ----------------------------------------------------------------------------
 	def updateUser(self, user, token):
 		userToken = self.validateToken(token)
 		if 'error' in userToken:
