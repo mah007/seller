@@ -49,7 +49,7 @@ def getAll():
 		return make_response(jsonify({'error': 'Missing username parameter value'}), 404)
 
 	userManager = UserManager()
-	result = userManager.getAll(request.args.get('token'), request.args.get('username'))
+	result = userManager.getAll(request.args.get('token'))
 	if 'error' in result:
 		return make_response(jsonify(result), 403)
 	else:
@@ -75,7 +75,10 @@ def delete():
 
 	userManager = UserManager()
 	result = userManager.deleteUser(user, request.args.get('token'))
-	return make_response(jsonify({"success": "done"}))
+	if 'success' in result:
+		return make_response(jsonify({"success": "done"}))		
+	else:		
+		return make_response(jsonify(result), 403)
 
 # ---------------------------------------------------------------------------------------
 # Update USER
@@ -99,11 +102,15 @@ def update():
 		"lazada_username": (request.json['lazada_username']),
 		"lazada_userid": (request.json['lazada_userid']),
 		"lazada_apikey": (request.json['lazada_apikey']),
+		"certain_size":  (request.json['certain_size'])
 	}
 
 	userManager = UserManager()
 	result = userManager.updateUser(user, request.args.get('token'))
-	return make_response(jsonify({"success": "done"}))
+	if 'success' in result:
+		return make_response(jsonify({"success": "done"}))		
+	else:		
+		return make_response(jsonify(result), 403)
 
 
 
@@ -134,7 +141,9 @@ def insert():
 		"lazada_user_name": request.json['lazada_user_name'],
 		"lazada_user_id": request.json['lazada_user_id'],
 		"lazada_api_key": request.json['lazada_api_key'],
-		"created_at": int(round(time.time()))
+		"created_at": int(round(time.time())),
+		"role": request.json['role'],
+		'certain_size': request.json['certain_size']
 	}
 
 	userManager = UserManager()
@@ -154,22 +163,17 @@ def updatePw():
 	if not request.args:
 		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
 	if not request.args:
-		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
-	if not 'username' in request.json:
-		return make_response(jsonify({'error': 'Missing username parameter'}), 404)
+		return make_response(jsonify({'error': 'Missing username parameter value'}), 404)
 	if not 'oldpass' in request.json:
 		return make_response(jsonify({'error': 'Missing oldpass parameter'}), 404)
 	if not 'newpass' in request.json:
 		return make_response(jsonify({'error': 'Missing newpass parameter'}), 404)
-	if not 'token' in request.json:
-		return make_response(jsonify({'error': 'Missing token parameter'}), 404)
+
 
 
 	user = {
-		"username": request.json['username'],
 		"oldpass": request.json['oldpass'],
 		"newpass": request.json['newpass'],
-		"token": request.json['token']
 	}
 
 	userManager = UserManager()

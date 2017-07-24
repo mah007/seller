@@ -95,6 +95,9 @@
                     <li class="start active">
                         <a href="../sku-management"><i class="icon-basket"></i><span class="title">Quản lý Sku</span></a>
                     </li>
+                    <li class="start active">
+                        <a href="../user-management"><i class="icon-basket"></i><span class="title">Quản lý User</span></a>
+                    </li>
                     <li class="last ">
                         <a href="/help"><i class="icon-question"></i><span class="title">Trợ giúp</span></a>
                     </li>
@@ -180,12 +183,12 @@
                             </div>
                             <div class="modal-body">
                                 <form class="form-horizontal form-bordered">                                    
-                                    <div class="form-group">
+                                   <!--  <div class="form-group">
                                         <label class="control-label col-md-4"><b style="color:#FF0000">*</b> Username</label>
                                         <div class="col-md-8">
                                             <input type="text" class="form-control" maxlength="20" name="txt_username" placeholder="">
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="form-group">
                                         <label class="control-label col-md-4"><b style="color:#FF0000">*</b> Old password</label>
                                         <div class="col-md-8">
@@ -277,11 +280,11 @@
                                                 <table id="table_sku" class="table table-hover">
                                                     <thead>
                                                         <tr>
-                                                            <th style="vertical-align:top;">SKU</th>
-                                                            <th style="vertical-align:top;width: 30%;">Tên sản phẩm</th>
-                                                            <th style="vertical-align:top;" class="text-right">Khoảng giá<br>chỉnh sửa</th>
-                                                            <th style="vertical-align:top;" class="text-right">Giá hiện tại<br>
-                                                            <th style="vertical-align:top;" class="text-right">Giá thấp hơn<br>đối thủ</th>
+                                                            <th style="vertical-align:top;" class="text-left">SKU</th>
+                                                            <th style="vertical-align:top;width: 30%;" class="text-left">Tên sản phẩm</th>
+                                                            <th style="vertical-align:top;" class="text-left">Khoảng giá<br>chỉnh sửa</th>
+                                                            <th style="vertical-align:top;" class="text-left">Giá hiện tại<br>
+                                                            <th style="vertical-align:top;" class="text-left">Giá thấp hơn<br>đối thủ</th>
                                                             <th style="vertical-align:top;width:180px;" class="text-left">Quản trị</th>
                                                         </tr>
                                                     </thead>
@@ -410,9 +413,9 @@
                 <tr data-id="{{id}}" data-max_price={{max_price}} data-min_price={{min_price}} data-compete_price={{compete_price}} data-name={{name}} data-sku={{sku}}, data-repeat_time={{repeat_time}}>
                     <td>{{sku}}</td>
                     <td><a href="{{link}}" style="color:#3598dc;" target="_blank">{{name}}</a></td>
-                    <td class="text-right">Từ <b>{{min_price}}</b> VNĐ<br/>tới <b>{{max_price}}</b> VNĐ</td>
-                    <td class="text-right"><b>{{special_price}}</b> VNĐ</td>
-                    <td class="text-right"><b>{{compete_price}}</b> VNĐ</td>
+                    <td class="text-left">Từ <b>{{min_price}}</b> VNĐ<br/>tới <b>{{max_price}}</b> VNĐ</td>
+                    <td class="text-left"><b>{{special_price}}</b> VNĐ</td>
+                    <td class="text-left"><b>{{compete_price}}</b> VNĐ</td>
                     <td class="text-left">
                         <button type="button" class="btn btn-circle blue btnedt" style="margin: 0 2px 4px;"><i class="fa fa-edit"></i></button>
                         <button type="button" class="btn btn-circle red btndel" style="margin: 0 2px 4px;"><i class="fa fa-close"></i></button>

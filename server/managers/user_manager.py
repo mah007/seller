@@ -34,6 +34,9 @@ class UserManager(object):
 			return userToken
 
 		userDao = UserDao()
+		userAdmin = userDao.getAdminUser(userToken['id'])
+		if userAdmin == None:
+			return ResponseHelper.generateErrorResponse("Sorry! You are not allowed to insert new user!")
 		userDB = userDao.getUserByUsername(user['username'])
 		if (userDB != None):
 			return ResponseHelper.generateErrorResponse("Username is already used")
@@ -49,12 +52,8 @@ class UserManager(object):
 	# Update Password
 	# ----------------------------------------------------------------------------
 	def updatePw(self, user, token):
-		userToken = self.validateToken(token)
-		if 'error' in userToken:
-			return userToken
-
 		userDao = UserDao()
-		userDB = userDao.getUserByUsername(user['username'])
+		userDB = userDao.getUserUpdatePW(token)
 		if (userDB == None):
 			return ResponseHelper.generateErrorResponse("Account not exist!")
 
@@ -62,24 +61,13 @@ class UserManager(object):
 			password = user['newpass'].encode('utf-8')
 			user['newpass'] = bcrypt.hashpw(password, bcrypt.gensalt())
 			user['newpass'] = user['newpass'].decode('utf-8')
-			user = userDao.updatePw(user)
+			user = userDao.updatePw(user, token)
 			if not user:
 				return ResponseHelper.generateErrorResponse("System error, please try again")
 
 			return ResponseHelper.generateSuccessResponse(user)
 		else:
 			return ResponseHelper.generateErrorResponse("Password is invalid")
-
-
-	# ----------------------------------------------------------------------------
-	# Get User
-	#
-	# Update:
-	# Who is uisng it???
-	# ----------------------------------------------------------------------------
-	def getUser(self, token):
-		userDao = UserDao()
-		return userDao.getUser(token)
 
 
 	# ----------------------------------------------------------------------------
@@ -106,21 +94,22 @@ class UserManager(object):
 			return ResponseHelper.generateErrorResponse("Password is invalid")
 
 
-	def getAll(self, token, username):
+	def getAll(self, token):
 		userToken = self.validateToken(token)
 		if 'error' in userToken:
 			return userToken
 
 		userDao = UserDao()
-		userAdmin = userDao.getAdminUser(username)
-		if (userAdmin == None):
-			return ResponseHelper.generateErrorResponse("System error, please try again")
-		else:
-			return userDao.getAll()
+		return userDao.getAll()
+		# userAdmin = userDao.getAdminUser(userToken['id'])
+		# if (userAdmin == None):
+		# 	return ResponseHelper.generateErrorResponse("System error, please try again")
+		# else:
+		# 	return userDao.getAll()
 
 
 	# Update:
-	# Only admin can insert
+	# Only admin can delete
 	# ----------------------------------------------------------------------------
 	def deleteUser(self, user, token):
 		userToken = self.validateToken(token)
@@ -128,11 +117,15 @@ class UserManager(object):
 			return userToken
 
 		userDao = UserDao()
-		return userDao.deleteUser(user)
+		userAdmin = userDao.getAdminUser(userToken['id'])
+		if userAdmin == None:
+			return ResponseHelper.generateErrorResponse("Sorry! You are not allowed to delete user!")
+		userDao.deleteUser(user)
+		return ResponseHelper.generateSuccessResponse(None)
 
 
 	# Update:
-	# Only admin can insert
+	# Only admin can update for other user
 	# ----------------------------------------------------------------------------
 	def updateUser(self, user, token):
 		userToken = self.validateToken(token)
@@ -144,7 +137,11 @@ class UserManager(object):
 		user['password'] = user['password'].decode('utf-8')
 
 		userDao = UserDao()
-		return userDao.updateUser(user)
+		userAdmin = userDao.getAdminUser(userToken['id'])
+		if userAdmin == None:
+			return ResponseHelper.generateErrorResponse("Sorry! You are not allowed to update user!")
+		userDao.updateUser(user)
+		return ResponseHelper.generateSuccessResponse(None)
 
 
 

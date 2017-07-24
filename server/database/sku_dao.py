@@ -146,6 +146,19 @@ class SkuDao(object):
         conn.close()
         return count
 
+    def checkExistSku(self, sku):
+        query = ''' SELECT count(*) FROM sku_management WHERE sku = '{}'  '''.format(StringUtils.toString(sku['sku']))
+        conn = DatabaseHelper.getConnection()
+        cur = conn.cursor()
+        cur.execute(query)
+
+        count = 0
+        row = cur.fetchone()
+        count = row[0];
+
+        conn.close()
+        return count
+
 
 
 

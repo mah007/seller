@@ -130,8 +130,11 @@ function enableSwitchery() {
                 type: "warning",
                 showReloadButton: true,
                 confirmButtonColor: "#DD6B55",
+                cancelButtonColor: '#d33',
                 confirmButtonText: "Yes, delete it!",
-                closeOnConfirm: false
+                closeOnConfirm: false,
+                showCancelButton: true,
+
             }, function () {
                 $.ajax({
                     method:'POST',
@@ -199,7 +202,6 @@ function validNull (selector) {
 
 
 $(".btnupdatePw").click(function() {
-    var txt_username = $('input[name=txt_username]').val();
     var txt_oldpass = $('input[name=txt_oldpass]').val();
     var txt_newpass = $('input[name=txt_newpass]').val();
     var txt_repass = $('input[name=txt_repass]').val();
@@ -231,12 +233,6 @@ $(".btnupdatePw").click(function() {
             $('input[name=txt_newpass]').addClass('has-error');
             $('input[name=txt_oldpass]').addClass('has-error');
         }
-    }
-    if(validNull('input[name=txt_username]')) {
-        $('input[name=txt_username]').removeClass('has-error');
-    } else {
-        error += "Username không được bỏ trống.\n";
-        $('input[name=txt_username]').addClass('has-error');
     }
     if(validNull('input[name=txt_oldpass]')) {
         $('input[name=txt_oldpass]').removeClass('has-error');
@@ -271,10 +267,9 @@ $(".btnupdatePw").click(function() {
             url: endpoint.generateUpdateUserPwEndpoind(),
             contentType: "application/json",
             data: JSON.stringify({
-                username: $('input[name=txt_username]').val(),
                 oldpass: $('input[name=txt_oldpass]').val(),
                 newpass: $('input[name=txt_newpass]').val(),
-                token: cookie.getToken()               
+                // token: cookie.getToken()               
             }),
             success: function(data) {
                 console.log(data);

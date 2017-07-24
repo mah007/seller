@@ -32,6 +32,9 @@ class SkuManager(object):
 		# Validate certain size
 		skudao = SkuDao()
 		userdao = UserDao()
+		checkExistSku = skudao.checkExistSku(sku)
+		if (checkExistSku > 0):
+			return ResponseHelper.generateErrorResponse("You cannot add SKU already exist!!!")
 		addedSize = skudao.getAddedSize(user['id'])
 		certainSize = userdao.getCertainSize(user['id'])
 		if (addedSize >= certainSize):

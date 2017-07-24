@@ -20,6 +20,7 @@ jQuery(document).ready(function() {
             $('input[name=txt_lazada_username]').prop('disabled', false);
             $('input[name=txt_lazada_userid]').prop('disabled', false);
             $('input[name=txt_lazada_apikey]').prop('disabled', false);  
+            $('input[name=txt_certain_size]').prop('disabled', false);  
             $('#portlet-user').modal('show');
             
         });
@@ -38,8 +39,10 @@ function enableSwitchery() {
                 type: "warning",
                 showReloadButton: true,
                 confirmButtonColor: "#DD6B55",
+                cancelButtonColor: '#d33',
                 confirmButtonText: "Yes, delete it!",
-                closeOnConfirm: false
+                closeOnConfirm: false,
+                showCancelButton: true,
             }, function () {
                 $.ajax({
                     method:'POST',
@@ -60,6 +63,12 @@ function enableSwitchery() {
                     },
                     error: function(error) {
                         console.log(error);
+                        swal({
+                            title: "Don't Have Permission!",
+                            text: "",
+                            type: "error",
+                            confirmButtonText: "Understand",
+                        });
                     }
                 });
             });
@@ -76,6 +85,7 @@ function enableSwitchery() {
             var lazada_username = parent.data('lazada_user_name');
             var lazada_userid = parent.data('lazada_user_id');
             var lazada_apikey = parent.data('lazada_api_key');
+            var lazada_apikey = parent.data('certain_size');
 
             $('#portlet-user').data('type', "edit");
             $('#portlet-user .modal-title').html('Chỉnh sửa ' + username);
@@ -85,6 +95,7 @@ function enableSwitchery() {
             $('input[name=txt_lazada_username]').val(lazada_username).prop('disabled', true);
             $('input[name=txt_lazada_userid]').val(lazada_userid).prop('disabled', true);
             $('input[name=txt_lazada_apikey]').val(lazada_apikey).prop('disabled', true);
+            $('input[name=txt_lazada_apikey]').val(certain_size).prop('disabled', true);
 
             $('#portlet-user').modal('show');
         });
@@ -189,7 +200,8 @@ $(".btnmodalsubmit").click(function() {
                 password: $('input[name=txt_password]').val(),
                 lazada_username: $('input[name=txt_lazada_username]').val(),
                 lazada_userid: $('input[name=txt_lazada_userid]').val(),
-                lazada_apikey: $('input[name=txt_lazada_apikey]').val()
+                lazada_apikey: $('input[name=txt_lazada_apikey]').val(),
+                certain_size: $('input[name=txt_certain_size]').val()
             }),
             success: function(data) {
                 swal("Success", "", "success");
@@ -216,7 +228,9 @@ $(".btnmodalsubmit").click(function() {
                 password: $('input[name=txt_password]').val(),
                 lazada_user_name: $('input[name=txt_lazada_username]').val(),
                 lazada_user_id: $('input[name=txt_lazada_userid]').val(),
-                lazada_api_key: $('input[name=txt_lazada_apikey]').val()
+                lazada_api_key: $('input[name=txt_lazada_apikey]').val(),
+                certain_size: $('input[name=txt_certain_size]').val(),
+                role: $('select[name=txt_role]').val() == "active" ? 1 : 0
             }),
             success: function(data) {
                 swal("Success", "", "success");
@@ -252,6 +266,7 @@ function getAndFillOutAllUser() {
             $('input[name=txt_lazada_username]').prop('disabled', false);
             $('input[name=txt_lazada_userid]').prop('disabled', false);
             $('input[name=txt_lazada_apikey]').prop('disabled', false);
+            $('input[name=txt_certain_size]').prop('disabled', false);
             enableSwitchery();
         },
         error: function(error) {

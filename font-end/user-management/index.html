@@ -154,7 +154,22 @@
                                     <div class="form-group">
                                         <label class="control-label col-md-4"><b style="color:#FF0000">*</b> Lazada API Key</label>
                                         <div class="col-md-8">
-                                            <input type="text" class="form-control" maxlength="20" name="txt_lazada_apikey" placeholder="lazada2017">
+                                            <input type="text" class="form-control" maxlength="64" name="txt_lazada_apikey" placeholder="lazada2017">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4"><b style="color:#FF0000">*</b> Certain Size</label>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control" maxlength="20" name="txt_certain_size" placeholder="5">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4">Quyền hạn</label>
+                                        <div class="col-md-8">
+                                            <select name="txt_role" class="form-control">
+                                                <option value="active" selected="selected">Admin</option>
+                                                <option value="deactive">User</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </form>
@@ -211,16 +226,18 @@
                                                 </div>
                                             </div>
                                             <div class="table-scrollable">
-                                                <table id="table_sku" class="table table-hover">
+                                                <table id="table_sku" class="table table-hover" style="width:100%">
                                                     <thead>
                                                         <tr>
-                                                            <th style="vertical-align:top;">ID</th>
-                                                            <th style="vertical-align:top;">Username</th>
-                                                            <th style="vertical-align:top;">Password</th>
-                                                            <th style="vertical-align:top;">Lazada Username<br>
-                                                            <th style="vertical-align:top;">Lazada User ID</th>
-                                                            <th style="vertical-align:top;" class="text-right">Lazada API Key</th>
-                                                            <th style="vertical-align:top;width:180px;" class="text-left">Quản trị</th>
+                                                            <th style="vertical-align:top;" class="text-left">ID</th>
+                                                            <th style="vertical-align:top;" class="text-left">Username</th>
+                                                            <th style="vertical-align:top;" class="text-left">Password</th>
+                                                            <th style="vertical-align:top;" class="text-left">Lazada Username<br>
+                                                            <th style="vertical-align:top;" class="text-left">Lazada User ID</th>
+                                                            <th style="vertical-align:top;" class="text-left">Lazada API Key</th>
+                                                            <th style="vertical-align:top;" class="text-left">Certain Size</th>
+                                                            <th style="vertical-align:top;" class="text-left">Role</th>
+                                                            <th style="vertical-align:top;" class="text-left">Quản trị</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="tbody_sku">
@@ -286,14 +303,16 @@
 
             <script id="user-content-template" type="text/x-handlebars-template">
                 {{#each data}}
-                <tr data-id="{{id}}" data-user_name={{username}} data-password={{password}} data-lazada_user_name={{lazada_user_name}} data-lazada_user_id={{lazada_user_id}} data-lazada_api_key={{lazada_api_key}}>
+                <tr data-id="{{id}}" data-user_name={{username}} data-password={{password}} data-lazada_user_name={{lazada_user_name}} data-lazada_user_id={{lazada_user_id}} data-lazada_api_key={{lazada_api_key}} data-role={{role}}, data-certain_size={{certain_size}}>
                     <td>{{id}}</td>
                     <!-- <td><a href="{{link}}" style="color:#3598dc;" target="_blank">{{username}}</a></td> -->
-                    <td class="text-right">{{username}}</td>
-                    <td class="text-right">{{password}}</td>
-                    <td class="text-right">{{lazada_user_name}}</td>
-                    <td class="text-right">{{lazada_user_id}}</td>
-                    <td class="text-right">{{lazada_api_key}}</td>
+                    <td class="text-left">{{username}}</td>
+                    <td class="text-left">{{password}}</td>
+                    <td class="text-left">{{lazada_user_name}}</td>
+                    <td class="text-left">{{lazada_user_id}}</td>
+                    <td class="text-left">{{lazada_api_key}}</td>
+                    <td class="text-left">{{certain_size}}</td>
+                    <td class="text-left">{{role}}</td>
                     <td class="text-left">
                         <button type="button" class="btn btn-circle blue btnedt" style="margin: 0 2px 4px;"><i class="fa fa-edit"></i></button>
                         <button type="button" class="btn btn-circle red btndel" style="margin: 0 2px 4px;"><i class="fa fa-close"></i></button>

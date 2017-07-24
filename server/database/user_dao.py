@@ -23,13 +23,15 @@ class UserDao(object):
 
     def insert(self, user):
         query = '''INSERT INTO t_user (user_name, password, token, lazada_user_name, lazada_user_id, lazada_api_key, created_at, updated_at, role, certain_size)
-                    VALUES ('{}', '{}', 'temptoken', '{}', '{}', '{}', '{}', 0, 0, 5)'''.format(
+                    VALUES ('{}', '{}', 'temptoken', '{}', '{}', '{}', '{}', 0, '{}', '{}')'''.format(
                     StringUtils.toString(user['username']),
                     StringUtils.toString(user['password']),
                     StringUtils.toString(user['lazada_user_name']),
                     StringUtils.toString(user['lazada_user_id']),
                     StringUtils.toString(user['lazada_api_key']),
-                    user['created_at'])
+                    user['created_at'],
+                    user['role'],
+                    user['certain_size'])
         DatabaseHelper.execute(query)
 
 
@@ -49,7 +51,7 @@ class UserDao(object):
                 "id": "",
                 "lazada_user_name": "",
                 "lazada_user_id": "",
-                "lazada_api_key": "",
+                "lazada_api_key": "",   
             }
             for row in rows:
                 user['id'] = row[0]
@@ -63,6 +65,33 @@ class UserDao(object):
             print(ex)
             return None
 
+    def getUserUpdatePW(self, token):
+        try:
+            query = '''SELECT id, user_name, password FROM t_user WHERE token='{}' '''.format(StringUtils.toString(token))
+            conn = DatabaseHelper.getConnection()
+            cur = conn.cursor()
+            cur.execute(query)
+
+            rows = cur.fetchall()
+            if not rows:
+                conn.close()
+                return None
+
+            user = {
+                "id": "",
+                "user_name": "",  
+                "password": "",  
+            }
+            for row in rows:
+                user['id'] = row[0]
+                user['user_name'] = row[1]
+                user['password'] = row[2]
+
+            conn.close()
+            return user
+        except Exception as ex:
+            print(ex)
+            return None
 
     def getAll(self):
         try:
@@ -74,13 +103,18 @@ class UserDao(object):
             users = []
             rows = cur.fetchall()
             for row in rows:
+                role = "User"
+                if (row[9] == 1):
+                    role = "Admin"
                 users.append({
                         "id": row[0],
                         "username": row[1],
                         "password": row[2],
                         "lazada_user_name": row[4],
                         "lazada_user_id": row[5],
-                        "lazada_api_key": row[6]
+                        "lazada_api_key": row[6],
+                        "role": role,
+                        "certain_size": row[10]
                 })
 
             conn.close()
@@ -139,37 +173,36 @@ class UserDao(object):
         DatabaseHelper.execute(query)
 
     def updateUser(self, user):
-        query = '''UPDATE t_user SET password = '{}' WHERE id = '{}' '''.format(user['password'], user['id'])
+        query = '''UPDATE t_user SET password = '{}', certain_size = '{}' WHERE id = '{}' '''.format(user['password'], user['certain_size'], user['id'])
         DatabaseHelper.execute(query)
 
-    def updatePw(self, user):
+    def updatePw(self, user, token):
         try:
-            query = '''UPDATE t_user SET password = '{}' WHERE token = '{}' '''.format(user['newpass'], user['token'])
+            query = '''UPDATE t_user SET password = '{}' WHERE token = '{}' '''.format(user['newpass'], token)
             DatabaseHelper.execute(query)
             return user;
         except Exception as ex:
             print(ex)
             return None
 
-    def getAdminUser(self, username):
+    def getAdminUser(self, userid):
         try:
-            query = '''SELECT * FROM t_user WHERE lazada_user_name = '{}' AND role = 1  '''.format(StringUtils.toString(username))
+            query = '''SELECT * FROM t_user WHERE id = '{}' AND role = 1  '''.format(userid)
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)
 
-            rows = cur.fetchall()
+            rows = cur.fetchone()
             if not rows:
                 cur.close()
                 return None
 
             user = None
-            for row in rows:
-                user = {
-                    "id": row[0],
-                    "username": row[1],
-                    "password": row[2],
-                }
+            user = {
+                "id": rows[0],
+                "username": rows[1],
+                "password": rows[2],
+            }
 
             conn.close()
             return user
