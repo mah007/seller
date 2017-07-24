@@ -113,7 +113,7 @@ class UserDao(object):
                         "lazada_user_name": row[4],
                         "lazada_user_id": row[5],
                         "lazada_api_key": row[6],
-                        "role": role,
+                        "role": role,   
                         "certain_size": row[10]
                 })
 
@@ -173,7 +173,7 @@ class UserDao(object):
         DatabaseHelper.execute(query)
 
     def updateUser(self, user):
-        query = '''UPDATE t_user SET password = '{}', certain_size = '{}' WHERE id = '{}' '''.format(user['password'], user['certain_size'], user['id'])
+        query = '''UPDATE t_user SET password = '{}', lazada_user_id = '{}', lazada_user_name = '{}', lazada_api_key = '{}', certain_size = '{}' WHERE id = '{}' '''.format(user['password'], user['lazada_userid'], user['lazada_username'], user['lazada_apikey'], user['certain_size'], user['id'])
         DatabaseHelper.execute(query)
 
     def updatePw(self, user, token):

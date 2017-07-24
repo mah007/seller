@@ -90,12 +90,10 @@ function enableSwitchery() {
             $('#portlet-user').data('type', "edit");
             $('#portlet-user .modal-title').html('Chỉnh sửa ' + username);
             $('input[name=txt_id').val(id).prop('disabled', true);
-
             $('input[name=txt_username]').val(username).prop('disabled', true);
-            $('input[name=txt_lazada_username]').val(lazada_username).prop('disabled', true);
-            $('input[name=txt_lazada_userid]').val(lazada_userid).prop('disabled', true);
-            $('input[name=txt_lazada_apikey]').val(lazada_apikey).prop('disabled', true);
-            $('input[name=txt_lazada_apikey]').val(certain_size).prop('disabled', true);
+            // $('input[name=txt_lazada_username]').val(lazada_username).prop('disabled', true);
+            // $('input[name=txt_lazada_userid]').val(lazada_userid).prop('disabled', true);
+            // $('input[name=txt_lazada_apikey]').val(lazada_apikey).prop('disabled', true);
 
             $('#portlet-user').modal('show');
         });
