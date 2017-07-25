@@ -24,9 +24,6 @@ class UserManager(object):
 
 	# ----------------------------------------------------------------------------
 	# Insert User
-	#
-	# Update:
-	# Only admin can insert
 	# ----------------------------------------------------------------------------
 	def insertUser(self, user, token):
 		userToken = self.validateToken(token)
@@ -37,6 +34,7 @@ class UserManager(object):
 		userAdmin = userDao.getAdminUser(userToken['id'])
 		if userAdmin == None:
 			return ResponseHelper.generateErrorResponse("Sorry! You are not allowed to insert new user!")
+
 		userDB = userDao.getUserByUsername(user['username'])
 		if (userDB != None):
 			return ResponseHelper.generateErrorResponse("Username is already used")
@@ -94,22 +92,25 @@ class UserManager(object):
 			return ResponseHelper.generateErrorResponse("Password is invalid")
 
 
+	# ----------------------------------------------------------------------------
+	# get all user
+	# ----------------------------------------------------------------------------
 	def getAll(self, token):
 		userToken = self.validateToken(token)
 		if 'error' in userToken:
 			return userToken
 
 		userDao = UserDao()
+		userAdmin = userDao.getAdminUser(userToken['id'])
+		if userAdmin == None:
+			return ResponseHelper.generateErrorResponse("Sorry! You are not allowed to delete user!")
+
+		userDao = UserDao()
 		return userDao.getAll()
-		# userAdmin = userDao.getAdminUser(userToken['id'])
-		# if (userAdmin == None):
-		# 	return ResponseHelper.generateErrorResponse("System error, please try again")
-		# else:
-		# 	return userDao.getAll()
 
 
-	# Update:
-	# Only admin can delete
+	# ----------------------------------------------------------------------------
+	# Delete user
 	# ----------------------------------------------------------------------------
 	def deleteUser(self, user, token):
 		userToken = self.validateToken(token)
@@ -120,12 +121,13 @@ class UserManager(object):
 		userAdmin = userDao.getAdminUser(userToken['id'])
 		if userAdmin == None:
 			return ResponseHelper.generateErrorResponse("Sorry! You are not allowed to delete user!")
+
 		userDao.deleteUser(user)
 		return ResponseHelper.generateSuccessResponse(None)
 
 
-	# Update:
-	# Only admin can update for other user
+	# ----------------------------------------------------------------------------
+	# Update user
 	# ----------------------------------------------------------------------------
 	def updateUser(self, user, token):
 		userToken = self.validateToken(token)
@@ -140,6 +142,7 @@ class UserManager(object):
 		userAdmin = userDao.getAdminUser(userToken['id'])
 		if userAdmin == None:
 			return ResponseHelper.generateErrorResponse("Sorry! You are not allowed to update user!")
+
 		userDao.updateUser(user)
 		return ResponseHelper.generateSuccessResponse(None)
 
