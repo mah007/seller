@@ -187,7 +187,7 @@ def updatePw():
 # ------------------------------------------------------------------------------
 @UserAPI.route('/user/register', methods=['POST'])
 @cross_origin()
-def updatePw():
+def register():
 	if not 'username' in request.json:
 		return make_response(jsonify({'error': 'Missing username parameter'}), 404)
 	if not 'password' in request.json:
