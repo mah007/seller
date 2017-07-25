@@ -134,9 +134,10 @@ class UserManager(object):
 		if 'error' in userToken:
 			return userToken
 
-		password = user['password'].encode('utf-8')
-		user['password'] = bcrypt.hashpw(password, bcrypt.gensalt())
-		user['password'] = user['password'].decode('utf-8')
+		else:			
+			password = user['password'].encode('utf-8')
+			user['password'] = bcrypt.hashpw(password, bcrypt.gensalt())
+			user['password'] = user['password'].decode('utf-8')
 
 		userDao = UserDao()
 		userAdmin = userDao.getAdminUser(userToken['id'])
