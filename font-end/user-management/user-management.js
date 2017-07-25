@@ -15,12 +15,7 @@ jQuery(document).ready(function() {
             $('#portlet-user .modal-title').html('Thêm mới');
             $('#portlet-user').data('type', "insert");       
             $('input[name=txt_id').prop('disabled', true);  
-
             $('input[name=txt_username]').prop('disabled', false);
-            $('input[name=txt_lazada_username]').prop('disabled', false);
-            $('input[name=txt_lazada_userid]').prop('disabled', false);
-            $('input[name=txt_lazada_apikey]').prop('disabled', false);  
-            $('input[name=txt_certain_size]').prop('disabled', false);  
             $('#portlet-user').modal('show');
             
         });
@@ -85,15 +80,16 @@ function enableSwitchery() {
             var lazada_username = parent.data('lazada_user_name');
             var lazada_userid = parent.data('lazada_user_id');
             var lazada_apikey = parent.data('lazada_api_key');
-            var lazada_apikey = parent.data('certain_size');
+            var certain_size = parent.data('certain_size');
 
             $('#portlet-user').data('type', "edit");
             $('#portlet-user .modal-title').html('Chỉnh sửa ' + username);
             $('input[name=txt_id').val(id).prop('disabled', true);
             $('input[name=txt_username]').val(username).prop('disabled', true);
-            // $('input[name=txt_lazada_username]').val(lazada_username).prop('disabled', true);
-            // $('input[name=txt_lazada_userid]').val(lazada_userid).prop('disabled', true);
-            // $('input[name=txt_lazada_apikey]').val(lazada_apikey).prop('disabled', true);
+            $('input[name=txt_lazada_username]').val(lazada_username);
+            $('input[name=txt_lazada_userid]').val(lazada_userid);
+            $('input[name=txt_lazada_apikey]').val(lazada_apikey);
+            $('input[name=txt_certain_size]').val(certain_size);
 
             $('#portlet-user').modal('show');
         });
@@ -123,7 +119,8 @@ $('#portlet-user').on('hidden.bs.modal', function() {
     $('input[name=txt_repassword]').val('');
     $('input[name=txt_lazada_username]').val('');
     $('input[name=txt_lazada_userid]').val('');
-    $('input[name=txt_lazada_apikey]').val('')
+    $('input[name=txt_lazada_apikey]').val('');
+    $('input[name=txt_certain_size]').val('');
 });
 
 $(".btnmodalsubmit").click(function() {
@@ -132,6 +129,7 @@ $(".btnmodalsubmit").click(function() {
     var txt_lazada_username = $('input[name=txt_lazada_username]').val();
     var txt_lazada_userid = $('input[name=txt_lazada_userid]').val();
     var txt_lazada_apikey = $('input[name=txt_lazada_apikey]').val();
+    var txt_certain_size = $('input[name=txt_certain_size]').val();
 
     var $this = $(this);
     var error = "";
@@ -165,6 +163,12 @@ $(".btnmodalsubmit").click(function() {
     } else {
         error += "Lazada api key không được bỏ trống.\n";
         $('input[name=txt_lazada_apikey]').addClass('has-error');
+    }
+    if(validNull('input[name=txt_certain_size]')) {
+        $('input[name=txt_certain_size]').removeClass('has-error');
+    } else {
+        error += "Lazada api key không được bỏ trống.\n";
+        $('input[name=txt_certain_size]').addClass('has-error');
     }
     if($('input[name=txt_password]').hasClass('has-error') == false && $('input[name=txt_repassword]').hasClass('has-error') == false) {
         var newpass = ($('input[name=txt_password]').val());
@@ -261,10 +265,6 @@ function getAndFillOutAllUser() {
 
             $('input[name=txt_id]').val('').prop('disabled', false);
             $('input[name=txt_username]').prop('disabled', false);
-            $('input[name=txt_lazada_username]').prop('disabled', false);
-            $('input[name=txt_lazada_userid]').prop('disabled', false);
-            $('input[name=txt_lazada_apikey]').prop('disabled', false);
-            $('input[name=txt_certain_size]').prop('disabled', false);
             enableSwitchery();
         },
         error: function(error) {
