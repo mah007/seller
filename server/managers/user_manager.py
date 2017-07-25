@@ -5,6 +5,8 @@ import bcrypt
 from database.user_dao import UserDao
 from managers.response_helper import ResponseHelper
 from utils.string_utils import StringUtils
+from config import SkuConfig
+
 
 class UserManager(object):
 
@@ -134,7 +136,7 @@ class UserManager(object):
 		if 'error' in userToken:
 			return userToken
 
-		else:			
+		else:
 			password = user['password'].encode('utf-8')
 			user['password'] = bcrypt.hashpw(password, bcrypt.gensalt())
 			user['password'] = user['password'].decode('utf-8')
@@ -146,6 +148,26 @@ class UserManager(object):
 
 		userDao.updateUser(user)
 		return ResponseHelper.generateSuccessResponse(None)
+
+
+	# ----------------------------------------------------------------------------
+	# Register
+	# ----------------------------------------------------------------------------
+	def register(self, user):
+		password = user['password'].encode('utf-8')
+		user['password'] = bcrypt.hashpw(password, bcrypt.gensalt()).decode('utf-8')
+		user['certain_size'] = SkuConfig.DEFAULT_CERTAIN_SIZE
+
+		userDao.insert(user)
+		return ResponseHelper.generateSuccessResponse(None)
+
+
+
+
+
+
+
+
 
 
 

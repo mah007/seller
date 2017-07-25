@@ -169,8 +169,6 @@ def updatePw():
 	if not 'newpass' in request.json:
 		return make_response(jsonify({'error': 'Missing newpass parameter'}), 404)
 
-
-
 	user = {
 		"oldpass": request.json['oldpass'],
 		"newpass": request.json['newpass'],
@@ -178,6 +176,40 @@ def updatePw():
 
 	userManager = UserManager()
 	result = userManager.updatePw(user, request.args.get('token'))
+	if 'success' in result:
+		return make_response(json.dumps(user), 201)
+	else:
+		return make_response(jsonify(result), 404)
+
+
+# ------------------------------------------------------------------------------
+# Register
+# ------------------------------------------------------------------------------
+@UserAPI.route('/user/register', methods=['POST'])
+@cross_origin()
+def updatePw():
+	if not 'username' in request.json:
+		return make_response(jsonify({'error': 'Missing username parameter'}), 404)
+	if not 'password' in request.json:
+		return make_response(jsonify({'error': 'Missing password parameter'}), 404)
+	if not 'lazada_email' in request.json:
+		return make_response(jsonify({'error': 'Missing lazada email parameter'}), 404)
+	if not 'lazada_api_key' in request.json:
+		return make_response(jsonify({'error': 'Missing lazada api key parameter'}), 404)
+
+	user = {
+		"username": request.json['username'],
+		"password": request.json['password'],
+		"lazada_user_name": request.json['lazada_email'],
+		"lazada_user_id": request.json['lazada_email'],
+		"lazada_api_key": request.json['lazada_api_key'],
+		"created_at": int(round(time.time())),
+		"role": 0, 				# Default is user not admin
+		"certain_size": 0 # User manager will updae for it
+	}
+
+	userManager = UserManager()
+	result = userManager.register(user)
 	if 'success' in result:
 		return make_response(json.dumps(user), 201)
 	else:
