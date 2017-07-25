@@ -21,4 +21,8 @@ var CookieConfig = function() {
     var token = $.cookie('token');
     return token;
   }
+
+  CookieConfig.prototype.getUsername = function() {
+    return $.cookie('username');
+  }
 }

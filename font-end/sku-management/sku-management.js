@@ -8,6 +8,9 @@ jQuery(document).ready(function() {
         window.location.href = "../login";
     }
 
+    // Fill user name
+    $('#username-on-header').html(cookie.getUsername());
+
     // Init data
     getAndFillOutAllSku();
 

@@ -7,6 +7,10 @@ jQuery(document).ready(function() {
     if (!cookie.validateLocalToken()) {
         window.location.href = "../login";
     }
+    
+    // Fill user name
+    $('#username-on-header').html(cookie.getUsername());
+
     // Init data
     getAndFillOutAllUser();
 
