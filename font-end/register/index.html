@@ -3,12 +3,15 @@
 
 <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="http://powersell.net/wp-content/uploads/2017/05/LogoSquare-x200.png" type="image/png">
     <title>Đăng ký sử dụng | PowerRunner</title>
-    <link rel="stylesheet" type="text/css" href="../css/register.header.css">
-    <link rel="stylesheet" type="text/css" href="../css/register.body.css">
-
-    <link rel='stylesheet' id='style-css' href='https://powersell.net/wp-content/themes/specular/style.css?ver=4.8' type='text/css' media='all' />
+    <link rel="icon" href="../img/title_icon.png" type="image/png">
+    <link rel='stylesheet' href="../register/register.header.css" type='text/css' media='all' />
+    <link rel='stylesheet' href="../register/register.body.css" type='text/css' media='all' />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link rel='stylesheet' href="../register/flexslider.css" type='text/css' media='all' />
+    <link rel='stylesheet' href="../register/shortcodes.css" type='text/css' media='all' />
+    <link rel='stylesheet' href="../register/animate.min.css" type='text/css' media='all' />
+    <link rel='stylesheet' href="../register/register-style.css" type='text/css' media='all' />
 </head>
 
 <body class="page-template-default page page-id-1210 header_1 page_header_yes nicescroll sticky_active wpb-js-composer js-comp-ver-5.0.1 vc_responsive">
@@ -37,7 +40,7 @@
                 <div class="container">
                     <div class="titles">
                         <div id="logo" class="">
-                            <a href='#'><img class='dark' src="../img/logo-light.png" alt='' /><img class='light' alt='' /></a>
+                            <a href='/register'><img class='dark' src="../img/logo-light.png" alt='' /></a>
                         </div>
                     </div>
                     <div class="breadcrumbss">
@@ -60,7 +63,7 @@
                                 <div class="wpb_wrapper">
                                     <div class="wpb_text_column wpb_content_element ">
                                         <div class="wpb_wrapper">
-                                            <p><img src="../img/register_background.jpg" /></p>
+                                            <p><img src="../img/register_background.jpg" width="520px" /></p>
                                             <p>Nếu đã có tài khoản &#8211; <a href="/login"><strong>đăng nhập tại đây</strong></a></p>
                                             <p>Hãy đăng ký ngay một tài khoản tại PowerRunner cho shop của mình để sử dụng những tính năng quản lý giá thông minh và hiệu quả mọi lúc mọi nơi.</p>
                                             <p>Chúc các bạn<strong> Thảnh thơi bán hàng!</strong></p>
@@ -75,26 +78,26 @@
                                             <form id="mc4wp-form-1" class="mc4wp-form mc4wp-form-1207" method="post" data-id="1207" data-name="Đăng ký sử dụng">
                                                 <div class="mc4wp-form-fields">
                                                     <p>
-                                                        <input type="text" name="FNAME" placeholder="Username" required="" style="width: 400px">
+                                                    <input class="register-input" type="text" name="FNAME" placeholder="Username" required="">
                                                     </p>
                                                     <p>
-                                                        <input type="text" name="LNAME" placeholder="Password" style="width: 400px">
+                                                    <input class="register-input" type="text" name="LNAME" placeholder="Password">
                                                     </p>
                                                     <p>
-                                                        <input type="tel" name="PHONE" placeholder="Repeat Password" style="width: 400px">
+                                                    <input class="register-input" type="tel" name="PHONE" placeholder="Repeat Password">
                                                     </p>
                                                     <p>
-                                                        <input type="email" name="EMAIL" placeholder="Lazada Email" required="" style="width: 400px">
+                                                    <input class="register-input" type="email" name="EMAIL" placeholder="Lazada Email" required="">
                                                     </p>
                                                     <p>
-                                                        <input type="email" name="EMAIL" placeholder="Lazada API Key" required="" style="width: 400px">
+                                                    <input class="register-input" type="email" name="EMAIL" placeholder="Lazada API Key" required="">
                                                     </p>
                                                     <p>
                                                         <strong>API Key</strong> - Hoặc <a href="https://sellercenter.lazada.vn/seller/userManage">click vào đây</a> để lấy API Key
-                                                        <input type="text" name="API" style="width: 400px">
+                                                        <input class="register-input" placeholder="lazada api key" type="text" name="API">
                                                     </p>
                                                     <p>
-                                                        <input type="submit" value="Đăng ký dịch vụ >" class="wpcf7-form-control wpcf7-submit btn-bt default">
+                                                    <input type="submit" value="Đăng ký dịch vụ >" class="wpcf7-form-control wpcf7-submit btn-bt default">
                                                     </p>
                                                 </div>
                                                 <div class="mc4wp-response"></div>
@@ -108,6 +111,6 @@
                 </div>
             </section>
         </div>
-</body>
+    </body>
 
-</html>
+    </html>
