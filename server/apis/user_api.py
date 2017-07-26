@@ -205,7 +205,7 @@ def register():
 		"lazada_api_key": request.json['lazada_api_key'],
 		"created_at": int(round(time.time())),
 		"role": 0, 				# Default is user not admin
-		"certain_size": 0 # User manager will updae for it
+		"certain_size": 0 # User manager will update for it
 	}
 
 	userManager = UserManager()

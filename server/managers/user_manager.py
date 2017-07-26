@@ -158,8 +158,13 @@ class UserManager(object):
 		user['password'] = bcrypt.hashpw(password, bcrypt.gensalt()).decode('utf-8')
 		user['certain_size'] = SkuConfig.DEFAULT_CERTAIN_SIZE
 
-		userDao.insert(user)
-		return ResponseHelper.generateSuccessResponse(None)
+		userDao = UserDao()
+		userDB = userDao.getUserByUsername(user['username'])
+		if (userDB != None):
+			return ResponseHelper.generateErrorResponse("Username is already used")
+		else:
+			userDao.insert(user)
+			return ResponseHelper.generateSuccessResponse(None)
 
 
 
