@@ -59,4 +59,8 @@ var EndpointConfig = function() {
   EndpointConfig.prototype.generateUpdateUserPwEndpoind = function() {
     return endpointUrl + '/user/update-password?token=' + $.cookie('token');
   }
+
+  EndpointConfig.prototype.generateRegisterEndpoind = function() {
+    return endpointUrl + '/user/register';
+  }
 }
