@@ -158,13 +158,21 @@ class UserManager(object):
 		user['password'] = bcrypt.hashpw(password, bcrypt.gensalt()).decode('utf-8')
 		user['certain_size'] = SkuConfig.DEFAULT_CERTAIN_SIZE
 
+		# Check user exist
 		userDao = UserDao()
 		userDB = userDao.getUserByUsername(user['username'])
 		if (userDB != None):
 			return ResponseHelper.generateErrorResponse("Username is already used")
-		else:
-			userDao.insert(user)
-			return ResponseHelper.generateSuccessResponse(None)
+		
+		# Insert new user
+		userDao.insert(user)
+
+		# Login it in
+		loginUser = {
+			"username": user['username'],
+			"password": password
+		}
+		self.login(loginUser)
 
 
 
