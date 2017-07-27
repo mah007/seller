@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,13 +19,13 @@
     <!-- style css -->
     <link rel="stylesheet" href="style.css">
     <!-- mobilemenu css -->
-    <link rel="stylesheet" href="../css/meanmenu.min.css"/>
+    <link rel="stylesheet" href="../css/meanmenu.min.css" />
     <!-- responsive css -->
-    <link rel="stylesheet" href="../css/responsive.css"/>
+    <link rel="stylesheet" href="../css/responsive.css" />
     <link rel="shortcut icon" href="images/icon.ico" />
+</head>
 
-  </head>
-  <body>
+<body>
     <div class="cart-page-content page-section-padding">
         <div class="container">
             <div class="row">
@@ -36,47 +37,35 @@
                         <table class="cart-table text-center">
                             <thead>
                                 <tr id="cart_th">
-                                    <th>ID Sản phẩm</th>
-                                    <th>ID Lazada</th>
-                                    <th>Seller SKU</th>
-                                    <th>Lazad SKU</th>
-                                    <th>Sản phẩm</th>
-                                    <th>Hình thức giao hàng</th>
-                                    
+                                    <th>Ngày</th>
+                                    <th>Thông tin khách hàng</th>
+                                    <<th>Số điện thoại</th>
+                                    <th>Thông tin giao dịch</th>
+                                    <th>Hình thức thanh toán</th>
+                                    <th>Địa chỉ thanh toán</th>
+                                    <th>Địa chỉ giao hàng</th>
                                 </tr>
                             </thead>
-                            <tbody>                                
+                            <tbody>
                                 <tr>
-                                    <td>1</td>
+                                    <td>2017-07-25 12:00:00</td>
                                     <td>
-                                        <a href="#">1</a>
+                                        <a href="#">Nguyễn Văn A</a>
                                     </td>
                                     <td>
-                                        <h6><a href="#">Lorem ipsum dolor sit amet,</a></h6>
+                                        <a href="#">18001080</a>
                                     </td>
                                     <td>
-                                        <form id="qua_in" action="action_page.php">
-                                            <input type="number" value="1" name="quantity" min="1" max="5">
-                                        </form>
+                                        <h6><a href="#">None</a></h6>
                                     </td>
                                     <td>
-                                        <div class="cart-price">$104.99</div>
+                                        <a href="#">Cash</a>
                                     </td>
                                     <td>
-                                        <div class="cart-subtotal">$104.99</div>
-                                    </td>
-                                    
-                                </tr>
-                                <tr id="total_colspan">
-                                    <td colspan="3" class="text-left">total</td>
-                                    <td>
-                                        2
+                                        <a href="#">100/100 Nguyễn Thị Thập</a>
                                     </td>
                                     <td>
-                                        190.98$
-                                    </td>
-                                    <td colspan="2">
-                                        <a class="checkPageBtn" href="#">add to wishlist</a>
+                                        <a href="#">100/100 Nguyễn Thị Thập</a>
                                     </td>
                                 </tr>
                             </tbody>
@@ -84,7 +73,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-xs-12">
                     <div class="cart_title">
@@ -98,7 +86,7 @@
                                     <th>ID Sản phẩm</th>
                                     <th>ID Lazada</th>
                                     <th>Seller SKU</th>
-                                    <th>Lazad SKU</th>
+                                    <th>Lazada SKU</th>
                                     <th>Sản phẩm</th>
                                     <th>Hình thức giao hàng</th>
                                     <th>Giá bán lẻ</th>
@@ -115,12 +103,10 @@
                                         <a href="#">1</a>
                                     </td>
                                     <td>
-                                        <h6><a href="#">Lorem ipsum dolor sit amet,</a></h6>
+                                        <h6><a href="#">None</a></h6>
                                     </td>
                                     <td>
-                                        <form id="qua_in" action="action_page.php">
-                                            <input type="number" value="1" name="quantity" min="1" max="5">
-                                        </form>
+                                        <a href="#">1</a>
                                     </td>
                                     <td>
                                         <div class="cart-price">$104.99</div>
@@ -140,12 +126,10 @@
                                         <a href="#">1</a>
                                     </td>
                                     <td>
-                                        <h6><a href="#">Lorem ipsum dolor sit amet,</a></h6>
+                                        <h6><a href="#">None</a></h6>
                                     </td>
                                     <td>
-                                        <form id="qua_in" action="action_page.php">
-                                            <input type="number" value="1" name="quantity" min="1" max="5">
-                                        </form>
+                                        <a href="#">1</a>
                                     </td>
                                     <td>
                                         <div class="cart-price">$104.99</div>
@@ -160,16 +144,40 @@
                                     <td>1</td>
                                 </tr>
                                 <tr id="total_colspan">
-                                    <td colspan="3" class="text-left">total</td>
+                                    <td colspan="9" class="text-left" style="text-align:right;">Tổng cộng</td>
                                     <td>
                                         2
                                     </td>
                                     <td>
                                         190.98$
                                     </td>
-                                    <td colspan="2">
+                                    <!-- <td colspan="2">
                                         <a class="checkPageBtn" href="#">add to wishlist</a>
+                                    </td> -->
+                                </tr>
+                                <tr id="total_colspan">
+                                    <td colspan="9" class="text-left" style="text-align:right;">Số thuế</td>
+                                    <td>
+                                        2
                                     </td>
+                                    <td>
+                                        190.98$
+                                    </td>
+                                    <!-- <td colspan="2">
+                                        <a class="checkPageBtn" href="#">add to wishlist</a>
+                                    </td> -->
+                                </tr>
+                                <tr id="total_colspan">
+                                    <td colspan="9" class="text-left" style="text-align:right;">Tổng số khuyến mãi</td>
+                                    <td>
+                                        2
+                                    </td>
+                                    <td>
+                                        190.98$
+                                    </td>
+                                    <!-- <td colspan="2">
+                                        <a class="checkPageBtn" href="#">add to wishlist</a>
+                                    </td> -->
                                 </tr>
                             </tbody>
                         </table>
@@ -177,8 +185,8 @@
                 </div>
             </div>
         </div>
-        </div>
+    </div>
+    </div>
+</body>
 
-    </div> 
-  </body>
 </html>
