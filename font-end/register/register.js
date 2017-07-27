@@ -1,4 +1,5 @@
 var endpoint = new EndpointConfig();
+var cookie = new CookieConfig();
 
 function validNull(selector) {
     if ($(selector).length > 0) {
@@ -53,10 +54,10 @@ function registerUser() {
         error += "Lazada API Key không được bỏ trống.\n";
         $('input[name=txt_lazada_api_key]').addClass('has-error');
     }
-       if($('input[name=txt_password]').hasClass('has-error') == false && $('input[name=txt_repassword]').hasClass('has-error') == false) {
+    if ($('input[name=txt_password]').hasClass('has-error') == false && $('input[name=txt_repassword]').hasClass('has-error') == false) {
         var pass = ($('input[name=txt_password]').val());
         var repass = ($('input[name=txt_repassword]').val());
-        if(repass == pass) {
+        if (repass == pass) {
             $('input[name=txt_password]').removeClass('has-error');
             $('input[name=txt_repassword]').removeClass('has-error');
         } else {
@@ -81,11 +82,13 @@ function registerUser() {
                 lazada_api_key: $('input[name=txt_lazada_api_key]').val()
             }),
             success: function(data) {
-                console.log(data);
-                window.location.href = "../login";
+                var user = JSON.parse(data);
+                cookie.save('myUser', user.data);
+                cookie.save('token', user.data.token);
+                window.location.href = "../sku-management/";
             },
             error: function(error) {
-            	alert("Username already used!");
+                alert("Username already used!");
                 console.log(error);
                 var exception = JSON.parse(error.responseText);
                 var errorTag = $this.parent().find('.error');

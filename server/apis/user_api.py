@@ -210,10 +210,10 @@ def register():
 
 	userManager = UserManager()
 	result = userManager.register(user)
-	if 'success' in result:
-		return make_response(json.dumps(user), 201)
+	if 'error' in result:
+		return make_response(jsonify(result), 404)		
 	else:
-		return make_response(jsonify(result), 404)
+		return make_response(json.dumps(result), 201)
 
 
 

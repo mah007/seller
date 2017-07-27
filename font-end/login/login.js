@@ -20,7 +20,7 @@ $("#btnloginsubmit").click(function() {
             var userObj = data.data;
             console.log(userObj);
             cookie.save('myUser', data.data);         
-            cookie.save('username', userObj.username)  
+            cookie.save('username', userObj.username);  
             cookie.save('token', userObj.token);
             window.location.href = "../sku-management"; 
         },

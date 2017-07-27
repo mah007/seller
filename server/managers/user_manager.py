@@ -154,6 +154,7 @@ class UserManager(object):
 	# Register
 	# ----------------------------------------------------------------------------
 	def register(self, user):
+		passwordOriginal = user['password']
 		password = user['password'].encode('utf-8')
 		user['password'] = bcrypt.hashpw(password, bcrypt.gensalt()).decode('utf-8')
 		user['certain_size'] = SkuConfig.DEFAULT_CERTAIN_SIZE
@@ -170,11 +171,9 @@ class UserManager(object):
 		# Login it in
 		loginUser = {
 			"username": user['username'],
-			"password": password
+			"password": passwordOriginal
 		}
-		self.login(loginUser)
-
-
+		return self.login(loginUser)
 
 
 
