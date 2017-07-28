@@ -84,6 +84,7 @@ function registerUser() {
             success: function(data) {
                 var user = JSON.parse(data);
                 cookie.save('myUser', user.data);
+                cookie.save('username', user.username);  
                 cookie.save('token', user.data.token);
                 window.location.href = "../sku-management/";
             },

@@ -1,8 +1,8 @@
 
 var CookieConfig = function() {
 
-  CookieConfig.prototype.save = function(name, object) {
-    $.cookie(name, object, {
+  CookieConfig.prototype.save = function(name, value) {
+    $.cookie(name, value, {
       path: '/',
       expires: 1
     });
