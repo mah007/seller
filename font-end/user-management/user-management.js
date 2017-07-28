@@ -9,7 +9,11 @@ jQuery(document).ready(function() {
     }
     
     // Fill user name
-    $('#username-on-header').html(cookie.getUsername());
+    if (cookie.getUsername() === undefined) {
+        $('#username-on-header').html("User info");
+    } else {
+        $('#username-on-header').html(cookie.getUsername());
+    }
 
     // Init data
     getAndFillOutAllUser();
