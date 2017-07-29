@@ -2,8 +2,11 @@ import requests
 import json
 from lazada_api.lazada_api_helper import LazadaApiHelper
 from config import LazadaAPI
+import sys
+import codecs
 
-class LazadaUserApi(object):
+
+class LazadaOrderApi(object):
 
 	def getOrder(self, order, user):
 		parameters = {
@@ -12,19 +15,19 @@ class LazadaUserApi(object):
 		'Timestamp': LazadaApiHelper.getCurrentUTCTime(),
 		'UserID': user['lazada_user_id'],
 		'Version': '1.0',
-		'OrderId': '''["{}"]'''.format(order['id'])
+		'OrderId': (order['id'])
 		}
 
 		parameters['Signature'] = LazadaApiHelper.generateSignature(parameters, user['lazada_api_key'])
-		url = "{}/?Action={}&Format={}&Timestamp={}&UserID={}&Version={}&Signature={}&OrderId={}".format(
+		url = "{}?Action={}&Format={}&OrderId={}&Timestamp={}&UserID={}&Version={}&Signature={}".format(
 						LazadaAPI.ENDPOINT,
 		 				parameters["Action"], 
 		 				parameters["Format"], 
+		 				parameters["OrderId"],
 		 				LazadaApiHelper.formatTimestamp(parameters["Timestamp"]), 
 		 				parameters["UserID"], 
 		 				parameters["Version"],
-		 				parameters["Signature"],
-		 				parameters["OrderId"])
+		 				parameters["Signature"],)
 
 		resp = requests.get(url)
 		if resp.status_code == 200:
@@ -33,10 +36,21 @@ class LazadaUserApi(object):
 				return None
 
 			data = response['SuccessResponse']['Body']
-			if (data['TotalProducts'] == 1):
-				return data['Products'][0]
+			if (data['Orders'] != None):
+				return data['Orders']
+				
 			
-		return None
+		return url
+
+	def initialize(self):
+		 user = {
+		  'lazada_api_key': 'jusjWjdv13rre3RxH9b-cXmmA7B9cQQh4jtiLcDyAqX-8PMkhutFeRsv',
+		  'lazada_user_id': 'info@zakos.vn'
+		 }
+		 order = {
+		 	'id': '111682924'
+		 }
+		 print(self.getOrder(order, user).encode("utf-8"))
 
 
 
