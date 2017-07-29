@@ -63,4 +63,8 @@ var EndpointConfig = function() {
   EndpointConfig.prototype.generateRegisterEndpoind = function() {
     return endpointUrl + '/user/register';
   }
+
+  EndpointConfig.prototype.generateOrderEndPoint = function() {
+    return endpointUrl + '/order/get-order';
+  }
 }
