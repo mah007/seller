@@ -35,9 +35,6 @@ class LazadaOrderApi(object):
 			data = response['SuccessResponse']['Body']
 			if (data['Orders'] != None):
 				return data['Orders']
-
-		print(url)
-				
 			
 		return None
 

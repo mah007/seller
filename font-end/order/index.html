@@ -48,111 +48,57 @@
                                 </tr>
                             </thead>
                             <tbody id="tbody_customer">
-                                <!-- <tr>
-                                    <td>2017-07-25 12:00:00</td>
-                                    <td>
-                                        <a href="#">Nguyễn Văn A</a>
-                                    </td>
-                                    <td>
-                                        <a href="#">18001080</a>
-                                    </td>
-                                    <td>
-                                        <h6><a href="#">None</a></h6>
-                                    </td>
-                                    <td>
-                                        <a href="#">Cash</a>
-                                    </td>
-                                    <td>
-                                        <a href="#">100/100 Nguyễn Thị Thập</a>
-                                    </td>
-                                    <td>
-                                        <a href="#">100/100 Nguyễn Thị Thập</a>
-                                    </td>
-                                </tr> -->
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="cart_title">
-                        </br>
-                        <h4>Sản phẩm</h4>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="cart-table text-center">
-                            <thead>
-                                <tr id="cart_th">
-                                    <th>ID Sản phẩm</th>
-                                    <th>ID Lazada</th>
-                                    <th>Hình ảnh</th>
-                                    <th>Seller SKU</th>
-                                    <th>Lazada SKU</th>
-                                    <th>Sản phẩm</th>
-                                    <th>Hình thức giao hàng</th>
-                                    <th>Giá bán lẻ</th>
-                                    <th>Bundle ID</th>
-                                    <th>Bundle Discount</th>
-                                    <th>Vận chuyển</th>
-                                    <th>Tình trạng </th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbody_order">
-                                <tr>
-                                    <td>1</td>
-                                    <td>1</td>
-                                    <td>
-                                        <a href="#">1</a>
-                                    </td>
-                                    <td>
-                                        <h6><a href="#">None</a></h6>
-                                    </td>
-                                    <td>
-                                        <a href="#">1</a>
-                                    </td>
-                                    <td>
-                                        <div class="cart-price">$104.99</div>
-                                    </td>
-                                    <td>
-                                        <div class="cart-subtotal">$104.99</div>
-                                    </td>
-                                    <td>1</td>
-                                    <td>1</td>
-                                    <td>1</td>
-                                    <td>1</td>
-                                    <td>1</td>
-                                </tr>
-                                <tr id="total_colspan">
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="cart_title">
+                    </br>
+                    <h4>Sản phẩm</h4>
+                </div>
+                <div class="table-responsive">
+                    <table class="cart-table text-center" id="table-order-items">
+                        <thead>
+                            <tr id="cart_th">
+                                <th>ID Sản phẩm</th>
+                                <th>ID Lazada</th>
+                                <th>Hình ảnh</th>
+                                <th>Seller SKU</th>
+                                <th>Lazada SKU</th>
+                                <th>Sản phẩm</th>
+                                <th>Hình thức giao hàng</th>
+                                <th>Giá bán lẻ</th>
+                                <th>Bundle ID</th>
+                                <th>Bundle Discount</th>
+                                <th>Vận chuyển</th>
+                                <th>Tình trạng </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody_order-items">
+                            <!-- <tr id="total_colspan">
                                     <td colspan="11" class="text-left" style="text-align:right;">Tổng cộng</td>
                                     <td>
                                         190.98$
                                     </td>
-                                    <!-- <td colspan="2">
-                                        <a class="checkPageBtn" href="#">add to wishlist</a>
-                                    </td> -->
                                 </tr>
                                 <tr id="total_colspan">
                                     <td colspan="11" class="text-left" style="text-align:right;">Số thuế</td>
                                     <td>
                                         190.98$
                                     </td>
-                                    <!-- <td colspan="2">
-                                        <a class="checkPageBtn" href="#">add to wishlist</a>
-                                    </td> -->
                                 </tr>
                                 <tr id="total_colspan">
                                     <td colspan="11" class="text-left" style="text-align:right;">Tổng số khuyến mãi</td>
                                     <td>
                                         190.98$
                                     </td>
-                                    <!-- <td colspan="2">
-                                        <a class="checkPageBtn" href="#">add to wishlist</a>
-                                    </td> -->
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                                </tr> -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -195,6 +141,42 @@
             <td>None</td>
             <td>{{AddressBilling.Address1}}</td>
             <td>{{AddressShipping.Address1}}</td>
+        </tr>
+        {{/each}}
+    </script>
+    <script id="order-items-content-template" type="text/x-handlebars-template">
+        {{#each data}}
+        <tr data-OrderItemId="{{OrderItemId}}" data-productMainImage={{productMainImage}} data-Sku={{Sku}} data-ShopSku={{ShopSku}} data-ShopSku={{ShopSku}} data-Name={{Name}} data-ShippingProviderType={{ShippingProviderType}} data-ItemPrice={{ItemPrice}} data-ShippingAmount={{ShippingAmount}} data-Status={{Status}} data-TaxAmount={{TaxAmount}} data-VoucherAmount={{VoucherAmount}} data-PaidPrice={{PaidPrice}}>
+            <td>{{OrderItemId}}</td>
+            <td>1</td>
+            <td>{{productMainImage}}</td>
+            <td>{{Sku}}</td>
+            <td>{{ShopSku}}</td>
+            <td>{{Name}}</td>
+            <td>{{ShippingProviderType}}</td>
+            <td>{{ItemPrice}}</td>
+            <td>BundleId</td>
+            <td>BundleDiscount</td>
+            <td>{{ShippingAmount}}</td>
+            <td>{{Status}}</td>
+        </tr>
+        <tr id="total_colspan">
+            <td colspan="11" class="text-left" style="text-align:right;">Tổng cộng</td>
+            <td>
+                {{PaidPrice}}
+            </td>
+        </tr>
+        <tr id="total_colspan">
+            <td colspan="11" class="text-left" style="text-align:right;">Số thuế</td>
+            <td>
+                {{TaxAmount}}
+            </td>
+        </tr>
+        <tr id="total_colspan">
+            <td colspan="11" class="text-left" style="text-align:right;">Tổng số khuyến mãi</td>
+            <td>
+                {{VoucherAmount}}
+            </td>
         </tr>
         {{/each}}
     </script>
