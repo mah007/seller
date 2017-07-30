@@ -38,11 +38,7 @@
                         <table class="cart-table text-center" id="table-customer">
                             <thead>
                                 <tr id="cart_th">
-                                    <th>Ngày</th>
-                                    <th>Thông tin khách hàng</th>
-                                    <th>Số điện thoại</th>
-                                    <th>Thông tin giao dịch</th>
-                                    <th>Hình thức thanh toán</th>
+                                    <th colspan="2">Thông tin khách hàng</th>
                                     <th>Địa chỉ thanh toán</th>
                                     <th>Địa chỉ giao hàng</th>
                                 </tr>
@@ -65,15 +61,12 @@
                         <thead>
                             <tr id="cart_th">
                                 <th>ID Sản phẩm</th>
-                                <th>ID Lazada</th>
                                 <th>Hình ảnh</th>
                                 <th>Seller SKU</th>
                                 <th>Lazada SKU</th>
                                 <th>Sản phẩm</th>
                                 <th>Hình thức giao hàng</th>
                                 <th>Giá bán lẻ</th>
-                                <th>Bundle ID</th>
-                                <th>Bundle Discount</th>
                                 <th>Vận chuyển</th>
                                 <th>Tình trạng </th>
                             </tr>
@@ -133,50 +126,58 @@
     <!-- END JAVASCRIPTS -->
     <script id="customer-content-template" type="text/x-handlebars-template">
         {{#each data}}
-        <tr data-CreatedAt="{{CreatedAt}}" data-CustomerFirstName={{CustomerFirstName}} data-Phone={{AddressShipping.Phone}} data-AddressBilling={{AddressBilling.Address1}} data-AddessShipping={{AddressShipping.Address1}}>
-            <td class="text-left">{{CreatedAt}}</td>
-            <td>{{CustomerFirstName}}</td>
-            <td>{{AddressShipping.Phone}}</td>
-            <td>None</td>
-            <td>None</td>
-            <td>{{AddressBilling.Address1}}</td>
-            <td>{{AddressShipping.Address1}}</td>
+        <tr data-CreatedAt="{{CreatedAt}}" data-CustomerFirstName={{CustomerFirstName}} data-Phone={{AddressShipping.Phone}} data-AddressBilling={{AddressBilling.Address1}} data-AddessShipping={{AddressShipping.Address1}} data-Price={{Price}} data-Voucher={{Voucher}} data-PaymentMethod={{PaymentMethod}} data-ShippingFee={{ShippingFee}}>
+            <td style="text-align:right;" width="20%">
+                <div>
+                    <p>Ngày</p>
+                    <p>Họ tên</p>
+                    <p>Điện thoại</p>
+                    <p>Hình thức thanh toán</p>
+                </div>
+            </td>
+            <td class="text-left" width="20%">
+                <div>
+                    <p>{{CreatedAt}}</p>
+                    <p>{{CustomerFirstName}}</p>
+                    <p>{{AddressShipping.Phone}}</p>
+                    <p>{{PaymentMethod}}</p>
+                </div>
+            </td>
+            <td max-width="30%" min-width="28%">{{AddressBilling.Address1}}</td>
+            <td max-width="30%" min-width="28%">{{AddressShipping.Address1}}</td>
+        </tr>
+        <tr id="total_colspan">
+            <td colspan="3" class="text-left" style="text-align:right;">Tổng cộng</td>
+            <td>
+                {{Price}}
+            </td>
+        </tr>
+        <tr id="total_colspan">
+            <td colspan="3" class="text-left" style="text-align:right;">Số thuế</td>
+            <td>
+                {{ShippingFee}}
+            </td>
+        </tr>
+        <tr id="total_colspan">
+            <td colspan="3" class="text-left" style="text-align:right;">Tổng số khuyến mãi</td>
+            <td>
+                {{Voucher}}
+            </td>
         </tr>
         {{/each}}
     </script>
     <script id="order-items-content-template" type="text/x-handlebars-template">
         {{#each data}}
         <tr data-OrderItemId="{{OrderItemId}}" data-productMainImage={{productMainImage}} data-Sku={{Sku}} data-ShopSku={{ShopSku}} data-ShopSku={{ShopSku}} data-Name={{Name}} data-ShippingProviderType={{ShippingProviderType}} data-ItemPrice={{ItemPrice}} data-ShippingAmount={{ShippingAmount}} data-Status={{Status}} data-TaxAmount={{TaxAmount}} data-VoucherAmount={{VoucherAmount}} data-PaidPrice={{PaidPrice}}>
-            <td>{{OrderItemId}}</td>
-            <td>1</td>
-            <td>{{productMainImage}}</td>
-            <td>{{Sku}}</td>
-            <td>{{ShopSku}}</td>
-            <td>{{Name}}</td>
-            <td>{{ShippingProviderType}}</td>
-            <td>{{ItemPrice}}</td>
-            <td>BundleId</td>
-            <td>BundleDiscount</td>
-            <td>{{ShippingAmount}}</td>
-            <td>{{Status}}</td>
-        </tr>
-        <tr id="total_colspan">
-            <td colspan="11" class="text-left" style="text-align:right;">Tổng cộng</td>
-            <td>
-                {{PaidPrice}}
-            </td>
-        </tr>
-        <tr id="total_colspan">
-            <td colspan="11" class="text-left" style="text-align:right;">Số thuế</td>
-            <td>
-                {{TaxAmount}}
-            </td>
-        </tr>
-        <tr id="total_colspan">
-            <td colspan="11" class="text-left" style="text-align:right;">Tổng số khuyến mãi</td>
-            <td>
-                {{VoucherAmount}}
-            </td>
+            <td max-width="7.5%" min-width="7.5%">{{OrderItemId}}</td>
+            <td max-width="10%" min-width="7.5%"><img src="{{productMainImage}}" /></td>
+            <td max-width="10%" min-width="7.5%">{{Sku}}</td>
+            <td max-width="20%" min-width="7.5%">{{ShopSku}}</td>
+            <td max-width="20%" min-width="7.5%">{{Name}}</td>
+            <td max-width="10%" min-width="7.5%">{{ShippingProviderType}}</td>
+            <td max-width="7.5%" min-width="7.5%">{{ItemPrice}}</td>
+            <td max-width="7.5%" min-width="7.5%">{{ShippingAmount}}</td>
+            <td max-width="7.5%" min-width="7.5%">{{Status}}</td>
         </tr>
         {{/each}}
     </script>
