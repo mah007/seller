@@ -66,27 +66,42 @@ class LazadaOrderApi(object):
 				return None
 
 			data = response['SuccessResponse']['Body']
-			if (data['OrderItems'] != None):
-				count = 1
-				i = -1
-				result = data['OrderItems']
-				finalResult = []
+			result = data['OrderItems']
+			length = len(result)
+			finalResult = []
+			count = 1
 
-				for x in result:
-					i = i + 1
-					j = i
-					for y in result:
-						j = j + 1
+			print (length)
+
+			for o in range(length):
+				print(o)
+
+			if(result != None and length == 2):
+				if (result[0]['TrackingCode'] == result[1]['TrackingCode']):
+					count = count + 1
+					result.remove(result[1])
+				result[0]['Count'] = count
+				finalResult.append(result[0])
+				count = 1
+
+			if (result != None and length > 2):										
+				for i in range(0, length):
+					for j in range(1, length):
 						if(result[i]['TrackingCode'] == result[j]['TrackingCode']):
 							count = count + 1	
 							result.remove(result[j])		
 
 					result[i]['Count'] = count
-					if (count >= 1):
-						finalResult.append(result[i])
+					finalResult.append(result[i])
+					print(count)
 					count = 1
 
-				return finalResult
+			if (result != None and length == 1):
+				result[0]['Count'] = 1
+				finalResult.append(result[0])
+				count = 1
+
+			return finalResult
 
 		return None
 

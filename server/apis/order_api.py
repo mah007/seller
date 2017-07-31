@@ -34,8 +34,9 @@ def getOrderItems():
 		'lazada_api_key': 'jusjWjdv13rre3RxH9b-cXmmA7B9cQQh4jtiLcDyAqX-8PMkhutFeRsv',
 		'lazada_user_id': 'info@zakos.vn'
 	}
+	# 111677474, 111618240, 111682924
 	order = {
-		'id': '111677474'
+		'id': '111682924'
 	}
 
 	orderItems = OrderManager()
