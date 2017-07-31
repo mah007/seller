@@ -71,22 +71,9 @@ class LazadaOrderApi(object):
 			finalResult = []
 			count = 1
 
-			print (length)
-
-			for o in range(length):
-				print(o)
-
-			if(result != None and length == 2):
-				if (result[0]['TrackingCode'] == result[1]['TrackingCode']):
-					count = count + 1
-					result.remove(result[1])
-				result[0]['Count'] = count
-				finalResult.append(result[0])
-				count = 1
-
-			if (result != None and length > 2):										
-				for i in range(0, length):
-					for j in range(1, length):
+			if (result != None and length >= 2):										
+				for i in range(0, length - 1):
+					for j in range(1, length ):
 						if(result[i]['TrackingCode'] == result[j]['TrackingCode']):
 							count = count + 1	
 							result.remove(result[j])		

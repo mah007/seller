@@ -2,7 +2,7 @@
 class Database(object):
 	mysql = {
     'user': 'root',
-    'password': '',
+    'password': '1234',
     'host': '',
     'database': 'lazada',
     'use_unicode':True,
