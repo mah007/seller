@@ -67,29 +67,13 @@
                                 <th>Sản phẩm</th>
                                 <th>Hình thức giao hàng</th>
                                 <th>Giá bán lẻ</th>
+                                <th>Số lượng</th>
                                 <th>Vận chuyển</th>
                                 <th>Tình trạng </th>
                             </tr>
                         </thead>
                         <tbody id="tbody_order-items">
-                            <!-- <tr id="total_colspan">
-                                    <td colspan="11" class="text-left" style="text-align:right;">Tổng cộng</td>
-                                    <td>
-                                        190.98$
-                                    </td>
-                                </tr>
-                                <tr id="total_colspan">
-                                    <td colspan="11" class="text-left" style="text-align:right;">Số thuế</td>
-                                    <td>
-                                        190.98$
-                                    </td>
-                                </tr>
-                                <tr id="total_colspan">
-                                    <td colspan="11" class="text-left" style="text-align:right;">Tổng số khuyến mãi</td>
-                                    <td>
-                                        190.98$
-                                    </td>
-                                </tr> -->
+                            <!-- Fill out data order-items -->
                         </tbody>
                     </table>
                 </div>
@@ -147,35 +131,25 @@
             <td max-width="30%" min-width="28%">{{AddressShipping.Address1}}</td>
         </tr>
         <tr id="total_colspan">
-            <td colspan="3" class="text-left" style="text-align:right;">Tổng cộng</td>
-            <td>
-                {{Price}}
-            </td>
-        </tr>
-        <tr id="total_colspan">
-            <td colspan="3" class="text-left" style="text-align:right;">Số thuế</td>
-            <td>
-                {{ShippingFee}}
-            </td>
-        </tr>
-        <tr id="total_colspan">
-            <td colspan="3" class="text-left" style="text-align:right;">Tổng số khuyến mãi</td>
-            <td>
-                {{Voucher}}
-            </td>
+            <td colspan="2" class="text-left" style="text-align:right;">Tổng cộng: {{Price}}</td>
+            <td class="text-left" style="text-align:right;">Số thuế: {{ShippingFee}}</td>
+           
+            <td class="text-left" style="text-align:right;">Tổng số khuyến mãi: {{Voucher}}</td>
+            
         </tr>
         {{/each}}
     </script>
     <script id="order-items-content-template" type="text/x-handlebars-template">
         {{#each data}}
-        <tr data-OrderItemId="{{OrderItemId}}" data-productMainImage={{productMainImage}} data-Sku={{Sku}} data-ShopSku={{ShopSku}} data-ShopSku={{ShopSku}} data-Name={{Name}} data-ShippingProviderType={{ShippingProviderType}} data-ItemPrice={{ItemPrice}} data-ShippingAmount={{ShippingAmount}} data-Status={{Status}} data-TaxAmount={{TaxAmount}} data-VoucherAmount={{VoucherAmount}} data-PaidPrice={{PaidPrice}}>
-            <td max-width="7.5%" min-width="7.5%">{{OrderItemId}}</td>
+        <tr data-OrderItemId="{{OrderItemId}}" data-productMainImage={{productMainImage}} data-Sku={{Sku}} data-ShopSku={{ShopSku}} data-ShopSku={{ShopSku}} data-Name={{Name}} data-ShippingProviderType={{ShippingProviderType}} data-ItemPrice={{ItemPrice}} data-ShippingAmount={{ShippingAmount}} data-Status={{Status}} data-TaxAmount={{TaxAmount}} data-VoucherAmount={{VoucherAmount}} data-PaidPrice={{PaidPrice}} data-Count={{Count}}>
+            <td max-width="7.5%" min-width="7.5%">{{OrderItemId}} </td>
             <td max-width="10%" min-width="7.5%"><img src="{{productMainImage}}" /></td>
             <td max-width="10%" min-width="7.5%">{{Sku}}</td>
-            <td max-width="20%" min-width="7.5%">{{ShopSku}}</td>
-            <td max-width="20%" min-width="7.5%">{{Name}}</td>
+            <td max-width="18%" min-width="7.5%">{{ShopSku}}</td>
+            <td max-width="18%" min-width="7.5%">{{Name}}</td>
             <td max-width="10%" min-width="7.5%">{{ShippingProviderType}}</td>
             <td max-width="7.5%" min-width="7.5%">{{ItemPrice}}</td>
+            <td max-width="5%" min-width="5%">{{Count}}</td>
             <td max-width="7.5%" min-width="7.5%">{{ShippingAmount}}</td>
             <td max-width="7.5%" min-width="7.5%">{{Status}}</td>
         </tr>

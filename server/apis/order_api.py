@@ -5,7 +5,6 @@ from flask import Blueprint, render_template, abort, request, make_response, jso
 from lazada_api.lazada_order_api import LazadaOrderApi
 from managers.order_manager import OrderManager
 
-
 OrderAPI = Blueprint('order_api', __name__, template_folder='apis')
 
 
@@ -36,9 +35,10 @@ def getOrderItems():
 		'lazada_user_id': 'info@zakos.vn'
 	}
 	order = {
-		'id': '111682924'
+		'id': '111677474'
 	}
 
 	orderItems = OrderManager()
 	result = orderItems.getOrderItems(order, user)
+
 	return make_response(jsonify(result))

@@ -18,9 +18,6 @@ function getAndFillOutAllCustomer() {
         contentType: "application/json",
         success: function(data) {
             console.log(data);
-            // console.log(data.data[0].CreatedAt);
-            // console.log(data.data[0].AddressBilling.Address1);
-
             var template = $("#customer-content-template").html();
             var contentHtml = Handlebars.compile(template);
             $("#tbody_customer").html(contentHtml(data));
@@ -39,9 +36,6 @@ function getAndFillOutAllOrderItems() {
         contentType: "application/json",
         success: function(data) {
             console.log(data);
-            // console.log(data.data[0].CreatedAt);
-            // console.log(data.data[0].AddressBilling.Address1);
-
             var template = $("#order-items-content-template").html();
             var contentHtml = Handlebars.compile(template);
             $("#tbody_order-items").html(contentHtml(data));
