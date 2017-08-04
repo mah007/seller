@@ -7,6 +7,26 @@ from managers.order_manager import OrderManager
 
 OrderAPI = Blueprint('order_api', __name__, template_folder='apis')
 
+# ------------------------------------------------------------------------------
+# Scan barcode
+# ------------------------------------------------------------------------------
+@OrderAPI.route('/order/scan-barcode', methods=['POST'])
+@cross_origin()
+def scanBarcode():
+	if not request.args:
+		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
+	if not request.json:
+		return make_response(jsonify({'error': 'Missing json parameters value'}), 404)
+	if not 'barcode' in request.json:
+		return make_response(jsonify({'error': 'Missing json parameter value'}), 404)
+
+	orderManager = OrderManager()
+	result = orderManager.scanBarcode(request.args.get('token'), request.json['barcode'])
+	if 'success' in result:
+		return make_response(jsonify(result), 201)
+	else:
+		return make_response(jsonify(result), 404)
+
 
 # ------------------------------------------------------------------------------
 # Get Order
@@ -27,6 +47,9 @@ def getOrder():
 	return make_response(jsonify(result))
 
 
+# ------------------------------------------------------------------------------
+# Get Order Item
+# ------------------------------------------------------------------------------
 @OrderAPI.route('/order/get-order-items', methods=['GET'])
 @cross_origin()
 def getOrderItems():
@@ -43,3 +66,16 @@ def getOrderItems():
 	result = orderItems.getOrderItems(order, user)
 
 	return make_response(jsonify(result))
+
+
+
+
+
+
+
+
+
+
+
+
+

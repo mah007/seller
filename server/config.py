@@ -9,6 +9,7 @@ class Database(object):
     'charset': 'utf8'
   }
 
+
 class LazadaAPI(object):
 	ENDPOINT = "https://api.sellercenter.lazada.vn"
 
@@ -19,3 +20,8 @@ class RunnerConfig(object):
 
 class SkuConfig(object):
     DEFAULT_CERTAIN_SIZE = 5
+
+
+class OrderConfig(object):
+    BARCODE_START_WITH_1 = "LMPDS"
+    BARCODE_START_WITH_2 = "MPDS"

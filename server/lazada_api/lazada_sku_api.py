@@ -18,10 +18,10 @@ class LazadaSkuApi(object):
 		parameters['Signature'] = LazadaApiHelper.generateSignature(parameters, user['lazada_api_key'])
 		url = "{}/?Action={}&Format={}&Timestamp={}&UserID={}&Version={}&SkuSellerList={}&Signature={}".format(
 						LazadaAPI.ENDPOINT,
-		 				parameters["Action"], 
-		 				parameters["Format"], 
-		 				LazadaApiHelper.formatTimestamp(parameters["Timestamp"]), 
-		 				parameters["UserID"], 
+		 				parameters["Action"],
+		 				parameters["Format"],
+		 				LazadaApiHelper.formatTimestamp(parameters["Timestamp"]),
+		 				parameters["UserID"],
 		 				parameters["Version"],
 		 				parameters["SkuSellerList"],
 		 				parameters["Signature"])
@@ -35,7 +35,7 @@ class LazadaSkuApi(object):
 			data = response['SuccessResponse']['Body']
 			if (data['TotalProducts'] == 1):
 				return data['Products'][0]
-			
+
 		return None
 
 
@@ -51,10 +51,10 @@ class LazadaSkuApi(object):
 		parameters['Signature'] = LazadaApiHelper.generateSignature(parameters, user['lazada_api_key'])
 		url = "{}/?Action={}&Format={}&Timestamp={}&UserID={}&Version={}&Signature={}".format(
 						LazadaAPI.ENDPOINT,
-		 				parameters["Action"], 
-		 				parameters["Format"], 
-		 				LazadaApiHelper.formatTimestamp(parameters["Timestamp"]), 
-		 				parameters["UserID"], 
+		 				parameters["Action"],
+		 				parameters["Format"],
+		 				LazadaApiHelper.formatTimestamp(parameters["Timestamp"]),
+		 				parameters["UserID"],
 		 				parameters["Version"],
 		 				parameters["Signature"])
 
@@ -67,7 +67,7 @@ class LazadaSkuApi(object):
 				return True
 
 		return False
-			
+
 
 
 

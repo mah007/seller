@@ -18,12 +18,8 @@ app.register_blueprint(OrderAPI)
 if __name__ == "__main__":
   skuManager = SkuManager()
   userManager = UserManager()
-  # skuManager.initialize()
-  # userManager.initialize()
-  
-  # api = LazadaOrderApi()
-  # api.initialize()
-
+  skuManager.initialize()
+  userManager.initialize()
 
   # app.run(debug=True, threaded=True)
   app.run(host='0.0.0.0', debug=True, port=5000, threaded=True)

@@ -12,7 +12,9 @@ jQuery(document).ready(function() {
 
 $('#submitBarcode').on('click', function () {
     var $btn = $(this).button('loading');
-    var barcode = $("#barcodeInput").val();
+    var barcodeInput = $("#barcodeInput");
+    var barcode = barcodeInput.val();
+    barcodeInput.val(""); // clear barcode input.
     console.log(barcode);
 
     $("#processLogTitle").html("Log for order number: " + barcode);

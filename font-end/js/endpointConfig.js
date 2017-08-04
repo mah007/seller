@@ -72,7 +72,7 @@ var EndpointConfig = function() {
   }
 
   EndpointConfig.prototype.generateScanOrderEndPoint = function() {
-    return endpointUrl + '/order/scan-order?token=' + $.cookie('token');
+    return endpointUrl + '/order/scan-barcode?token=' + $.cookie('token');
   }
 }
 
