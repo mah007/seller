@@ -1,16 +1,39 @@
 var endpoint = new EndpointConfig();
+var cookie = new CookieConfig();
 
 jQuery(document).ready(function() {
-    // Init data
-    getAndFillOutAllCustomer();
-    getAndFillOutAllOrderItems();
-
-
+    if (!cookie.validateLocalToken()) {
+        window.location.href = "../login";
+    } else {
+        getAndFillOutAllCustomer();
+        getAndFillOutAllOrderItems();
+    }
 });
 
-//-------------------------------------------------------------------------------------
-// Get and fill out all User
-//-------------------------------------------------------------------------------------
+$('#submitBarcode').on('click', function () {
+    var $btn = $(this).button('loading');
+    var barcode = $("#barcodeInput").val();
+    console.log(barcode);
+
+    $("#processLogTitle").html("Log for order number: " + barcode);
+    $.ajax({
+        method:'POST',
+        url: endpoint.generateScanOrderEndPoint(),
+        contentType: "application/json",
+        data: JSON.stringify({
+            barcode: barcode
+        }),
+        success: function(data) {
+            console.log(data);
+            $btn.button('reset')
+        },
+        error: function(error) {
+            console.log(error);
+            $btn.button('reset')
+        }
+    });
+})
+
 function getAndFillOutAllCustomer() {
     $.ajax({
         method:'GET',

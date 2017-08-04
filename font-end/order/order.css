@@ -1,0 +1,21 @@
+body {
+    color: #333;
+}
+
+.scaning-section {
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+.scaning-section .scan-content {
+    padding: 15px;
+    position: relative;
+    height: auto;
+    width: auto;
+    display: -webkit-box;
+}
+.scaning-section .process-log {
+    border-top: 1px solid #ccc;
+    position: relative;
+    min-height: 50px;
+    padding: 15px 15px 5px 15px;
+}

@@ -64,7 +64,28 @@ var EndpointConfig = function() {
     return endpointUrl + '/user/register';
   }
 
+  //----------------------------------------------------------------------------
+  // Order management section
+  //----------------------------------------------------------------------------
   EndpointConfig.prototype.generateOrderEndPoint = function() {
     return endpointUrl + '/order/get-order';
   }
+
+  EndpointConfig.prototype.generateScanOrderEndPoint = function() {
+    return endpointUrl + '/order/scan-order?token=' + $.cookie('token');
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -50,7 +50,6 @@ text-shadow:none;
 font-size:60px;
 line-height:60px;
 font-weight:300;
-font-family:"Open Sans", sans-serif;
 background-color:transparent;
 text-decoration:none;
 text-transform:uppercase;
@@ -1311,7 +1310,7 @@ img.tp-slider-alternative-image	{	width:100%; height:auto;}
 		color-stop(0.13, rgb(0,0,0)),
 		color-stop(1, rgb(50,50,50))
 	);
-	
+
 	display:table;max-width:100%; overflow:hidden;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;
 }
 
@@ -2554,7 +2553,7 @@ Version: 1.0
 	font-style: normal;
 }
 [class^="flaticon-"]:before, [class*=" flaticon-"]:before,
-[class^="flaticon-"]:after, [class*=" flaticon-"]:after {   
+[class^="flaticon-"]:after, [class*=" flaticon-"]:after {
 	font-family: Flaticon;
 	font-style: normal;
 }
@@ -3077,7 +3076,7 @@ table, th, td {
 }
 th{
   text-align:center;
-  padding: 20px;
+  padding: 15px;
 }
 table tr td {
   color: rgb(37, 51, 69);
@@ -3193,7 +3192,7 @@ table tr td {
 [1. Checkout-Section ]
 =========================================================*/
 .page-section-padding{
-  padding-top:40px;
+  padding-top:20px;
   padding-bottom:80px;
 }
 /*-------------------------------
