@@ -54,8 +54,8 @@ class OrderManager(object):
 	#-----------------------------------------------------------------------------
 	def getOrderItems(self, order, user):
 		# Validate SKU by lazada API
-		lazadaSkuApi = LazadaOrderApi()
-		lazadaOrderItems = lazadaSkuApi.getOrderItems(order, user)
+		lazadaOrderApi = LazadaOrderApi()
+		lazadaOrderItems = lazadaOrderApi.getOrderItems(order, user)
 		if not lazadaOrderItems:
 			return ResponseHelper.generateErrorResponse("Can't access to Lazada service")
 
@@ -63,6 +63,13 @@ class OrderManager(object):
 
 
 
+	def getOrders(sekf, order, user):
+		lazadaOrderApi = LazadaOrderApi()
+		lazadaOrders = lazadOrderApi.getOrders(order, user)
+		if not lazadOrders:
+			return ResponseHelper.generateErrorResponse("Cannot access to Lazada service")
+
+		return ResponseHelper.generateSuccessResponse(lazadaOrders)
 
 
 

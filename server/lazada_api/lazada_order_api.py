@@ -93,6 +93,39 @@ class LazadaOrderApi(object):
 		return None
 
 
+	def getOrders(self, order, user):
+		parameters = {
+		'Action': 'GetOrders',
+		'Format':'JSON',
+		'Timestamp': LazadaApiHelper.getCurrentUTCTime(),
+		'UserID': user['lazada_user_id'],
+		'Version': '1.0',
+		'CreatedBefore': LazadaApiHelper.getCurrentUTCTime()
+		}
+
+		parameters['Signature'] = LazadaApiHelper.generateSignature(parameters, user['lazada_api_key'])
+		url = "{}?Action={}&CreatedBefore={}&Format={}&Timestamp={}&UserID={}&Version={}&Signature={}".format(
+						LazadaAPI.ENDPOINT,
+		 				parameters["Action"], 
+		 				LazadaApiHelper.formatTimestamp(parameters["CreatedBefore"]), 
+		 				parameters["Format"], 
+		 				LazadaApiHelper.formatTimestamp(parameters["Timestamp"]), 
+		 				parameters["UserID"], 
+		 				parameters["Version"],
+		 				parameters["Signature"])
+
+		resp = requests.get(url)
+		if resp.status_code == 200:
+			response = json.loads(resp.text)
+			if ('ErrorResponse' in response):
+				return None
+
+			data = response['SuccessResponse']['Body']
+			if (data['Orders'] != None):
+				return data['Orders']
+			
+		return None
+		
 	# def initialize(self):
 	# 	 user = {
 	# 	  'lazada_api_key': 'jusjWjdv13rre3RxH9b-cXmmA7B9cQQh4jtiLcDyAqX-8PMkhutFeRsv',
