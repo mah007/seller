@@ -47,14 +47,10 @@ class UserDao(object):
                 conn.close()
                 return None
 
-            user = {
-                "id": "",
-                "lazada_user_name": "",
-                "lazada_user_id": "",
-                "lazada_api_key": "",   
-            }
+            user = {}
             for row in rows:
                 user['id'] = row[0]
+                user['username'] = row[1]  # Using lazada user name instead.
                 user['lazada_user_name'] = row[1]
                 user['lazada_user_id'] = row[2]
                 user['lazada_api_key'] = row[3]
@@ -79,8 +75,8 @@ class UserDao(object):
 
             user = {
                 "id": "",
-                "user_name": "",  
-                "password": "",  
+                "user_name": "",
+                "password": "",
             }
             for row in rows:
                 user['id'] = row[0]
@@ -113,7 +109,7 @@ class UserDao(object):
                         "lazada_user_name": row[4],
                         "lazada_user_id": row[5],
                         "lazada_api_key": row[6],
-                        "role": role,   
+                        "role": role,
                         "certain_size": row[10]
                 })
 

@@ -1,6 +1,7 @@
 import time
 from managers.sku_manager import SkuManager
 from managers.user_manager import UserManager
+from managers.order_manager import OrderManager
 from apis.sku_api import SkuAPI
 from apis.user_api import UserAPI
 from apis.order_api import OrderAPI
@@ -18,11 +19,13 @@ app.register_blueprint(OrderAPI)
 if __name__ == "__main__":
   skuManager = SkuManager()
   userManager = UserManager()
+  orderManager = OrderManager()
   skuManager.initialize()
   userManager.initialize()
+  orderManager.initialize()
 
-  # app.run(debug=True, threaded=True)
-  app.run(host='0.0.0.0', debug=True, port=5000, threaded=True)
+  app.run(debug=True, threaded=True)
+  # app.run(host='0.0.0.0', debug=True, port=5000, threaded=True)
 
 
 

@@ -19,3 +19,23 @@ body {
     min-height: 50px;
     padding: 15px 15px 5px 15px;
 }
+
+.ul-left, .ul-right {
+    list-style: none;
+    float: left;
+    width: 50%;
+}
+.ul-left li, .ul-right li {
+    text-align: left;
+    padding-top: 5px;
+}
+
+.td-quantity {
+    font-size: 4rem !important;
+    color: #5cb85c;
+}
+
+
+
+
+

@@ -1,23 +1,40 @@
-var endpoint = new EndpointConfig();
-var cookie = new CookieConfig();
+var endpoint    = new EndpointConfig();
+var cookie      = new CookieConfig();
+var barcodeInput        = $("#barcodeInput");
+var submitBarcodeButton = $("#submitBarcode");
+var processLogTitle     = $("#processLogTitle");
+var processLogContent   = $("#processLogContent");
 
 jQuery(document).ready(function() {
     if (!cookie.validateLocalToken()) {
         window.location.href = "../login";
-    } else {
-        getAndFillOutAllCustomer();
-        getAndFillOutAllOrderItems();
+    }
+
+    // Always request focus for barcode input
+    barcodeInput.focus();
+});
+
+
+//------------------------------------------------------------------------------
+// Scan barcode section
+//------------------------------------------------------------------------------
+$('#barcodeInput').on("keypress", function(e) {
+    if (e.keyCode == 13) {  /* ENTER PRESSED*/
+        performSubmitBarcode();
     }
 });
 
 $('#submitBarcode').on('click', function () {
-    var $btn = $(this).button('loading');
-    var barcodeInput = $("#barcodeInput");
+    performSubmitBarcode();
+})
+
+function performSubmitBarcode() {
+    var $btn = submitBarcodeButton.button('loading');
     var barcode = barcodeInput.val();
     barcodeInput.val(""); // clear barcode input.
-    console.log(barcode);
+    barcodeInput.focus(); // Request focus again.
 
-    $("#processLogTitle").html("Log for order number: " + barcode);
+    processLogTitle.html("Log for order number: " + barcode);
     $.ajax({
         method:'POST',
         url: endpoint.generateScanOrderEndPoint(),
@@ -27,15 +44,35 @@ $('#submitBarcode').on('click', function () {
         }),
         success: function(data) {
             console.log(data);
-            $btn.button('reset')
+            $btn.button('reset');
+            // Fill status
+            var template = $("#process-log-success-template").html();
+            var contentHtml1 = Handlebars.compile(template);
+            processLogContent.html(contentHtml1(data.data));
+            // Fill order
+            var orderTemplate = $("#customer-content-template").html();
+            var contentHtml2 = Handlebars.compile(orderTemplate);
+            $("#tbody_customer").html(contentHtml2(data.data.order));
+            // Fill order items
+            var orderItemstemplate = $("#order-items-content-template").html();
+            var contentHtml3 = Handlebars.compile(orderItemstemplate);
+            $("#tbody_order-items").html(contentHtml3(data.data));
         },
         error: function(error) {
+            $btn.button('reset');
             console.log(error);
-            $btn.button('reset')
+            var exception = JSON.parse(error.responseText);
+            var template = $("#process-log-error-template").html();
+            var contentHtml = Handlebars.compile(template);
+            processLogContent.html(contentHtml(exception));
         }
     });
-})
+}
 
+
+//------------------------------------------------------------------------------
+// Get order
+//------------------------------------------------------------------------------
 function getAndFillOutAllCustomer() {
     $.ajax({
         method:'GET',
@@ -54,6 +91,10 @@ function getAndFillOutAllCustomer() {
     });
 }
 
+
+//------------------------------------------------------------------------------
+// Get order item
+//------------------------------------------------------------------------------
 function getAndFillOutAllOrderItems() {
     $.ajax({
         method:'GET',
