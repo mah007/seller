@@ -68,6 +68,19 @@ def getOrderItems():
 	return make_response(jsonify(result))
 
 
+@OrderAPI.route('/order/get-orders', methods=['GET'])
+@cross_origin()
+def getOrder():
+	user = {
+		'lazada_api_key': 'jusjWjdv13rre3RxH9b-cXmmA7B9cQQh4jtiLcDyAqX-8PMkhutFeRsv',
+		'lazada_user_id': 'info@zakos.vn'
+	}
+
+	orders = OrderManager()
+	result = orders.getOrderItems(order, user)
+
+	return make_response(jsonify(result))
+
 
 
 
