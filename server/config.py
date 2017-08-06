@@ -25,3 +25,10 @@ class SkuConfig(object):
 class OrderConfig(object):
     BARCODE_START_WITH_1 = "LMPDS"
     BARCODE_START_WITH_2 = "MPDS"
+
+
+
+
+
+
+

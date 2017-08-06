@@ -48,6 +48,35 @@ def refreshAllOrders():
 		return make_response(jsonify(result), 404)
 
 
+# ------------------------------------------------------------------------------
+# Set order status to ready-to-ship
+# ------------------------------------------------------------------------------
+@OrderAPI.route('/order/ready-to-ship', methods=['POST'])
+@cross_origin()
+def setStatusToReadyToShip():
+	if not request.args:
+		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
+	token = request.args.get('token');
+	if not token:
+		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
+	if not request.json:
+		return make_response(jsonify({'error': 'Missing json parameters value'}), 404)
+	if not 'orderItemIds' in request.json:
+		return make_response(jsonify({'error': 'Missing orderItemIds parameter value'}), 404)
+	if not 'shippingProvider' in request.json:
+		return make_response(jsonify({'error': 'Missing shippingProvider parameter value'}), 404)
+
+	orderItemIds = request.json['orderItemIds']
+	shippingProvider = request.json['shippingProvider']
+
+	orderManager = OrderManager()
+	result = orderManager.setStatusToReadyToShip(token, orderItemIds, shippingProvider)
+	if 'success' in result:
+		return make_response(jsonify(result), 201)
+	else:
+		return make_response(jsonify(result), 404)
+
+
 
 
 

@@ -1,10 +1,11 @@
 var endpoint    = new EndpointConfig();
 var cookie      = new CookieConfig();
 var barcodeInput            = $("#barcodeInput");
-var submitBarcodeButton     = $("#submitBarcode");
 var processLogTitle         = $("#processLogTitle");
 var processLogContent       = $("#processLogContent");
 var showOrderDetailCheckbox = $("#showOrderDetailCheckbox");
+var orderItemIds            = $("#orderItemIds");
+var shippingProvider        = $("#shippingProvider");
 
 jQuery(document).ready(function() {
     if (!cookie.validateLocalToken()) {
@@ -19,8 +20,13 @@ jQuery(document).ready(function() {
     }
 
     // Always request focus for barcode input
-    barcodeInput.focus();
+    clearAndFocusBarcodeInput();
 });
+
+function clearAndFocusBarcodeInput() {
+    barcodeInput.val("");
+    barcodeInput.focus();
+}
 
 function refreshLogAndOrder() {
     processLogTitle.html("Log for order number:");
@@ -29,12 +35,24 @@ function refreshLogAndOrder() {
     $("#tbody_order-items").html("");
 }
 
+function fillErrorLog(errorArray) {
+    var template = $("#process-log-error-template").html();
+    var contentHtml = Handlebars.compile(template);
+    processLogContent.html(contentHtml(errorArray));
+}
+
+function fillSuccessLog(successMessage) {
+    var template = $("#process-log-success-template").html();
+    var contentHtml = Handlebars.compile(template);
+    processLogContent.html(contentHtml(successMessage));
+}
+
 //------------------------------------------------------------------------------
 // Key shortcuts
 //------------------------------------------------------------------------------
 $(document).bind('keydown', '0', function() {
     console.log("ok 0");
-    barcodeInput.focus();
+    clearAndFocusBarcodeInput();
 })
 $(document).bind('keydown', '1', function() {
     console.log("ok 1");
@@ -50,14 +68,10 @@ $(document).bind('keydown', '3', function() {
 })
 $(document).bind('keydown', '4', function() {
     console.log("ok 4");
+    performSetStatusToReadyToShip();
 })
 
 
-$('#barcodeInput').on("keypress", function(e) {
-    if (e.keyCode == 13) {  /* ENTER PRESSED*/
-        performSubmitBarcode();
-    }
-});
 $("#barcodeInput").keyup(function() {
     var $this = $(this);
     var text = $this.val();
@@ -74,6 +88,12 @@ $("#barcodeInput").keyup(function() {
     }
     if (text == '4') {
         $this.val("");
+        performSetStatusToReadyToShip();
+    }
+});
+$('#barcodeInput').on("keypress", function(e) {
+    if (e.keyCode == 13) {  /* ENTER PRESSED*/
+        performSubmitBarcode();
     }
 });
 
@@ -103,12 +123,12 @@ function changeShowOrderDetailCheckbox() {
 // Refesh all orders
 //------------------------------------------------------------------------------
 $("#getAllOrdersButton").click(function() {
-    performRefreshAllOrders
+    performRefreshAllOrders();
 })
 
 function performRefreshAllOrders() {
     var $btn = $("#getAllOrdersButton").button('loading');
-    barcodeInput.focus(); // Request focus barcode input again.
+    clearAndFocusBarcodeInput();
     refreshLogAndOrder();
 
     $.ajax({
@@ -118,18 +138,12 @@ function performRefreshAllOrders() {
         success: function(data) {
             console.log(data);
             $btn.button('reset');
-            // Fill status
-            var template = $("#process-log-success-template").html();
-            var contentHtml1 = Handlebars.compile(template);
-            processLogContent.html(contentHtml1(data.success));
+            fillSuccessLog(data.success);
         },
         error: function(error) {
             $btn.button('reset');
             console.log(error);
-            var exception = JSON.parse(error.responseText);
-            var template = $("#process-log-error-template").html();
-            var contentHtml = Handlebars.compile(template);
-            processLogContent.html(contentHtml(exception));
+            fillErrorLog(JSON.parse(error.responseText));
         }
     });
 }
@@ -143,10 +157,9 @@ $('#submitBarcode').on('click', function () {
 })
 
 function performSubmitBarcode() {
-    var $btn = submitBarcodeButton.button('loading');
+    var $btn = $("#submitBarcode").button('loading');
     var barcode = barcodeInput.val();
-    barcodeInput.val(""); // clear barcode input.
-    barcodeInput.focus(); // Request focus again.
+    clearAndFocusBarcodeInput();
     refreshLogAndOrder();
 
     if (barcode == null || barcode == '') {
@@ -166,9 +179,7 @@ function performSubmitBarcode() {
             console.log(data);
             $btn.button('reset');
             // Fill status
-            var template = $("#process-log-success-template").html();
-            var contentHtml1 = Handlebars.compile(template);
-            processLogContent.html(contentHtml1(data.success));
+            fillSuccessLog(data.success);
             // Fill order
             var orderTemplate = $("#customer-content-template").html();
             var contentHtml2 = Handlebars.compile(orderTemplate);
@@ -177,17 +188,78 @@ function performSubmitBarcode() {
             var orderItemstemplate = $("#order-items-content-template").html();
             var contentHtml3 = Handlebars.compile(orderItemstemplate);
             $("#tbody_order-items").html(contentHtml3(data.data));
+            // Store orderItemIds
+            orderItemIds.html("")
+            if (data.data.orderItems.length > 0) {
+                $.each(data.data.orderItems, function(key, orderItem) {
+                    if (orderItemIds.html() === "" || orderItemIds.html() === null) {
+                        orderItemIds.html(orderItem.OrderItemId);
+                    } else {
+                        orderItemIds.html(orderItemIds.html() + "," + orderItem.OrderItemId);
+                    }
+                });
+            }
+            // Store shippingProvider
+            shippingProvider.html("");
+            if (data.data.orderItems.length > 0) {
+                var orderItem = data.data.orderItems[0];
+                shippingProvider.html(orderItem.ShipmentProvider)
+            }
         },
         error: function(error) {
             $btn.button('reset');
             console.log(error);
-            var exception = JSON.parse(error.responseText);
-            var template = $("#process-log-error-template").html();
-            var contentHtml = Handlebars.compile(template);
-            processLogContent.html(contentHtml(exception));
+            fillErrorLog(JSON.parse(error.responseText));
         }
     });
 }
+
+
+//------------------------------------------------------------------------------
+// Set status to ready to ship
+//------------------------------------------------------------------------------
+$("#readyToShipButton").click(function() {
+    performSetStatusToReadyToShip();
+})
+
+function performSetStatusToReadyToShip() {
+    var $btn = $("#readyToShipButton").button('loading');
+    var orderItemIdList = orderItemIds.html();
+    var shippingProviderData = shippingProvider.html();
+
+    if (orderItemIdList == null || orderItemIdList == '') {
+        $btn.button('reset');
+        fillErrorLog(["Can't get orderItem Id list, please scan barcode again fist and try again !"]);
+        return;
+    }
+    if (shippingProviderData == null || shippingProviderData == '') {
+        $btn.button('reset');
+        fillErrorLog(["Can't get shipping provider, please scan barcode again fist and try again !"]);
+        return;
+    }
+
+    $.ajax({
+        method:'POST',
+        url: endpoint.generateSetStatusReadyToShipEndPoint(),
+        contentType: "application/json",
+        data: JSON.stringify({
+            orderItemIds: orderItemIdList,
+            shippingProvider: shippingProviderData
+        }),
+        success: function(data) {
+            console.log(data);
+            $btn.button('reset');
+            fillSuccessLog(data.success);
+        },
+        error: function(error) {
+            $btn.button('reset');
+            console.log(error);
+            fillErrorLog(JSON.parse(error.responseText));
+        }
+    });
+}
+
+
 
 
 

@@ -105,7 +105,7 @@
                     <h4 class="table_title">Sản phẩm</h4>
                 </div>
                 <div class="col-md-6 none_padding">
-                    <button class="btn btn-success float_right update-order-status" type="button" data-loading-text="Loading..." autocomplete="off">(4) Ready to ship</button>
+                    <button id="readyToShipButton" class="btn btn-success float_right" type="button" data-loading-text="Loading..." autocomplete="off">(4) Ready to ship</button>
                 </div>
             </div>
             <div class="col-md-12 table-responsive none_padding">
@@ -115,8 +115,6 @@
                             <th>Tên Sản Phẩm</th>
                             <th>Hình ảnh</th>
                             <th>Số lượng</th>
-                            <th>Giá bán lẻ</th>
-                            <th>Giá vận chuyển</th>
                             <th>Tình trạng</th>
                         </tr>
                     </thead>
@@ -124,6 +122,8 @@
                         <!-- Fill out data order-items -->
                     </tbody>
                 </table>
+                <div id="orderItemIds" style="display:none"></div>
+                <div id="shippingProvider" style="display:none"></div>
             </div>
         </div>
     </div>
@@ -141,6 +141,7 @@
 <script src="../js/plugin/handlebars-v4.0.8.js" type="text/javascript"></script>
 <script src="../js/plugin/jquery.hotkeys.js" type="text/javascript"></script>
 <script src="../js/plugin/jquery.cookie.js" type="text/javascript"></script>
+<script src="../js/handlebarConfig.js" type="text/javascript"></script>
 <script src="../js/cookieConfig.js" type="text/javascript"></script>
 <script src="../js/endpointConfig.js" type="text/javascript"></script>
 <script src="../order/order.js" type="text/javascript"></script>
@@ -181,13 +182,11 @@
 
 <script id="order-items-content-template" type="text/x-handlebars-template">
     {{#each orderItems}}
-    <tr data-OrderItemId="{{OrderItemId}}" data-productMainImage={{productMainImage}} data-Sku={{Sku}} data-ShopSku={{ShopSku}} data-ShopSku={{ShopSku}} data-Name={{Name}} data-ShippingProviderType={{ShippingProviderType}} data-ItemPrice={{ItemPrice}} data-ShippingAmount={{ShippingAmount}} data-Status={{Status}} data-TaxAmount={{TaxAmount}} data-VoucherAmount={{VoucherAmount}} data-PaidPrice={{PaidPrice}} data-Count={{Count}}>
-        <td width="20%">{{Name}}</td>
-        <td width="20%"><img src="{{productMainImage}}"/></td>
-        <td class="td-quantity" width="10%">{{Count}}</td>
-        <td width="10%">{{ItemPrice}}</td>
-        <td width="10%">{{ShippingAmount}}</td>
-        <td width="10%">{{Status}}</td>
+    <tr class="{{#ifStatusNotPending Status}}row-error{{/ifStatusNotPending}}" data-OrderItemId="{{OrderItemId}}" data-productMainImage={{productMainImage}} data-Sku={{Sku}} data-ShopSku={{ShopSku}} data-ShopSku={{ShopSku}} data-Name={{Name}} data-ShippingProviderType={{ShippingProviderType}} data-ItemPrice={{ItemPrice}} data-ShippingAmount={{ShippingAmount}} data-Status={{Status}} data-TaxAmount={{TaxAmount}} data-VoucherAmount={{VoucherAmount}} data-PaidPrice={{PaidPrice}} data-Count={{Count}}>
+        <td width="30%">{{Name}}</td>
+        <td width="30%"><img src="{{productMainImage}}"/></td>
+        <td class="td-quantity" width="20%">1</td>
+        <td class="td-quantity" width="20%">{{Status}}</td>
     </tr>
     {{/each}}
 </script>
