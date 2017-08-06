@@ -103,13 +103,13 @@ class OrderManager(object):
 
         # Set status to Parked: this is necessary before set an order to Ready-To-Ship
         lazadaOrderApi = LazadaOrderApi()
-        orders = lazadaOrderApi.setStatusToPackedByMarketplace(user, orderItemIds, shippingProvider)
+        orders = lazadaOrderApi.setStatusToPackedByMarketplace(user, orderItemIds)
         if 'error' in orders:
             errorArray = ResponseUtils.convertToArryError(orders['error'])
             return ResponseUtils.generateErrorResponse(errorArray)
 
         # Set status to ready to ship
-        orders = lazadaOrderApi.setStatusToReadyToShip(user, orderItemIds, shippingProvider)
+        orders = lazadaOrderApi.setStatusToReadyToShip(user, orderItemIds)
         if 'error' in orders:
             errorArray = ResponseUtils.convertToArryError(orders['error'])
             return ResponseUtils.generateErrorResponse(errorArray)

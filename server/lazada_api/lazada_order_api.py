@@ -93,26 +93,65 @@ class LazadaOrderApi(object):
 	#-----------------------------------------------------------------------------
 	# Set Status: Ready to ship
 	#-----------------------------------------------------------------------------
-	def setStatusToPackedByMarketplace(self, user, orderItems, shippingProvider):
+	def setStatusToPackedByMarketplace(self, user, orderItems):
 		parameters = {
 		'Action': 'SetStatusToPackedByMarketplace',
 		'DeliveryType': 'dropship',
 		'Format':'json',
-		'OrderItemIds': '''[{}]'''.format(orderItems),
-		'ShippingProvider': shippingProvider,
+		'OrderItemIds': '''[{}]'''.format(orderItems), # orderItems format should be string like this: 3,425,234
 		'Timestamp': LazadaApiHelper.getCurrentUTCTime(),
 		'UserID': user['lazada_user_id'],
 		'Version': '1.0'
 		}
 
 		parameters['Signature'] = LazadaApiHelper.generateSignature(parameters, user['lazada_api_key'])
-		url = "{}/?Action={}&DeliveryType={}&Format={}&OrderItemIds={}&ShippingProvider={}&Timestamp={}&UserID={}&Version={}&Signature={}".format(
+		url = "{}/?Action={}&DeliveryType={}&Format={}&OrderItemIds={}&&Timestamp={}&UserID={}&Version={}&Signature={}".format(
 						LazadaAPI.ENDPOINT,
 		 				parameters["Action"],
 		 				parameters['DeliveryType'],
 		 				parameters["Format"],
 		 				parameters['OrderItemIds'],
-		 				parameters['ShippingProvider'],
+		 				LazadaApiHelper.formatTimestamp(parameters["Timestamp"]),
+		 				parameters["UserID"],
+		 				parameters["Version"],
+		 				parameters["Signature"])
+		try:
+			resp = requests.get(url)
+			if resp.status_code == 200:
+				response = json.loads(resp.text)
+				# Lazada return exception
+				if 'ErrorResponse' in response:
+					return ExceptionUtils.error('''User: {}-{}, Set Status to Packed is error: {}'''.format(user['id'], user['username'], response['ErrorResponse']['Head']['ErrorMessage']))
+
+				return ExceptionUtils.success("Set status to Parked is done") # Can't return None
+
+			# Request except
+			return ExceptionUtils.error('''User: {}-{}, Set Status to Packed is error: {}'''.format(user['id'], user['username'], resp.status_code))
+		except Exception as ex:
+			return ExceptionUtils.error('''User: {}-{}, Set Status to Packed is error: {}'''.format(user['id'], user['username'], str(ex)))
+
+
+	#-----------------------------------------------------------------------------
+	# Set Status To Packed By Market place
+	#-----------------------------------------------------------------------------
+	def setStatusToReadyToShip(self, user, orderItems):
+		parameters = {
+		'Action': 'SetStatusToReadyToShip',
+		'Format':'json',
+		'Timestamp': LazadaApiHelper.getCurrentUTCTime(),
+		'UserID': user['lazada_user_id'],
+		'Version': '1.0',
+		'DeliveryType': 'dropship',
+		'OrderItemIds': '''[{}]'''.format(orderItems) # orderItems format should be string like this: 3,425,234
+		}
+
+		parameters['Signature'] = LazadaApiHelper.generateSignature(parameters, user['lazada_api_key'])
+		url = "{}/?Action={}&Format={}&DeliveryType={}&OrderItemIds={}&&Timestamp={}&UserID={}&Version={}&Signature={}".format(
+						LazadaAPI.ENDPOINT,
+		 				parameters["Action"],
+		 				parameters["Format"],
+		 				parameters['DeliveryType'],
+		 				parameters['OrderItemIds'],
 		 				LazadaApiHelper.formatTimestamp(parameters["Timestamp"]),
 		 				parameters["UserID"],
 		 				parameters["Version"],
@@ -124,53 +163,9 @@ class LazadaOrderApi(object):
 				response = json.loads(resp.text)
 				# Lazada return exception
 				if 'ErrorResponse' in response:
-					return ExceptionUtils.error('''User: {}-{}, Set Status to Packed is error: {}'''.format(user['id'], user['username'], response['ErrorResponse']['Head']['ErrorMessage']))
-
-				return None # None likely is done
-
-			# Request except
-			return ExceptionUtils.error('''User: {}-{}, Set Status to Packed is error: {}'''.format(user['id'], user['username'], resp.status_code))
-		except Exception as ex:
-			return ExceptionUtils.error('''User: {}-{}, Set Status to Packed is error: {}'''.format(user['id'], user['username'], str(ex)))
-
-
-	#-----------------------------------------------------------------------------
-	# Set Status To Packed By Market place
-	#-----------------------------------------------------------------------------
-	def setStatusToReadyToShip(self, user, orderItems, shippingProvider):
-		parameters = {
-		'Action': 'SetStatusToReadyToShip',
-		'Format':'json',
-		'Timestamp': LazadaApiHelper.getCurrentUTCTime(),
-		'UserID': user['lazada_user_id'],
-		'Version': '1.0',
-		'DeliveryType': 'dropship',
-		'OrderItemIds': '''[{}]'''.format(orderItems), # orderItems format should be string like this: 3,425,234
-		'ShippingProvider': shippingProvider
-		}
-
-		parameters['Signature'] = LazadaApiHelper.generateSignature(parameters, user['lazada_api_key'])
-		url = "{}/?Action={}&Format={}&DeliveryType={}&OrderItemIds={}&ShippingProvider={}&Timestamp={}&UserID={}&Version={}&Signature={}".format(
-						LazadaAPI.ENDPOINT,
-		 				parameters["Action"],
-		 				parameters["Format"],
-		 				parameters['DeliveryType'],
-		 				parameters['OrderItemIds'],
-		 				parameters['ShippingProvider'],
-		 				LazadaApiHelper.formatTimestamp(parameters["Timestamp"]),
-		 				parameters["UserID"],
-		 				parameters["Version"],
-		 				parameters["Signature"])
-
-		try:
-			resp = requests.get(url)
-			if resp.status_code == 200:
-				response = json.loads(resp.text)
-				# Lazada return exception
-				if 'ErrorResponse' in response:
 					return ExceptionUtils.error('''User: {}-{}, Set Status to Ready-To-Ship is error: {}'''.format(user['id'], user['username'], response['ErrorResponse']['Head']['ErrorMessage']))
 
-				return None # None likely is done
+				return ExceptionUtils.success("Set status to Ready-to-ship is done") # Can't return None
 
 			# Request except
 			return ExceptionUtils.error('''User: {}-{}, Set Status to Ready-To-Ship is error: {}'''.format(user['id'], user['username'], resp.status_code))
