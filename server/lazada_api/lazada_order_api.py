@@ -96,28 +96,28 @@ class LazadaOrderApi(object):
 	def setStatusToPackedByMarketplace(self, user, orderItems, shippingProvider):
 		parameters = {
 		'Action': 'SetStatusToPackedByMarketplace',
-		'Format':'JSON',
+		'DeliveryType': 'dropship',
+		'Format':'json',
+		'OrderItemIds': '''[{}]'''.format(orderItems),
+		'ShippingProvider': shippingProvider,
 		'Timestamp': LazadaApiHelper.getCurrentUTCTime(),
 		'UserID': user['lazada_user_id'],
-		'Version': '1.0',
-		'DeliveryType': 'dropship',
-		'OrderItemIds': '''[{}]'''.format(orderItems),
-		'ShippingProvider': shippingProvider.replace(" ","%20")
+		'Version': '1.0'
 		}
 
 		parameters['Signature'] = LazadaApiHelper.generateSignature(parameters, user['lazada_api_key'])
-		url = "{}/?Action={}&Format={}&DeliveryType={}&OrderItemIds={}&ShippingProvider={}&Timestamp={}&UserID={}&Version={}&Signature={}".format(
+		url = "{}/?Action={}&DeliveryType={}&Format={}&OrderItemIds={}&ShippingProvider={}&Timestamp={}&UserID={}&Version={}&Signature={}".format(
 						LazadaAPI.ENDPOINT,
 		 				parameters["Action"],
-		 				parameters["Format"],
 		 				parameters['DeliveryType'],
+		 				parameters["Format"],
 		 				parameters['OrderItemIds'],
 		 				parameters['ShippingProvider'],
 		 				LazadaApiHelper.formatTimestamp(parameters["Timestamp"]),
 		 				parameters["UserID"],
 		 				parameters["Version"],
 		 				parameters["Signature"])
-
+		print(url)
 		try:
 			resp = requests.get(url)
 			if resp.status_code == 200:

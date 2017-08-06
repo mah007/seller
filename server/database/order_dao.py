@@ -12,8 +12,7 @@ class OrderDao(object):
                 order_number    VARCHAR(50)     NOT NULL,
                 order_json      TEXT            NOT NULL,
                 user_id         VARCHAR(30)         NOT NULL,
-                created_at      VARCHAR(30)     NOT NULL,
-                status          TEXT
+                created_at      VARCHAR(30)     NOT NULL
                 );'''
         DatabaseHelper.execute(query)
 
@@ -21,14 +20,14 @@ class OrderDao(object):
     # --------------------------------------------------------------------------
     # Insert order
     # --------------------------------------------------------------------------
-    def insert(self, order, user):
+    def insert(self, user, order):
         try:
-            query = '''INSERT INTO order_management (order_id, order_number, order_json, user_id, created_at, status) VALUES ('{}', '{}', '{}', '{}', '{}', '{}')'''.format(
-                    order['OrderId'], order['OrderNumber'], 'None', user['lazada_user_id'], order['CreatedAt'], order['Statuses'][0])
+            query = '''INSERT INTO order_management(order_id, order_number, order_json, user_id, created_at) VALUES ('{}', '{}', '{}', {}, {})'''.format(
+                    order['order_id'], order['order_number'], order['order_json'], user['id'], order['created_at'])
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:
-            return ExceptionUtils.error('''User: {}, Insert Order: {} failed: {}'''.format(user['lazada_user_id'], order['OrderId'], str(ex)))
+            return ExceptionUtils.error('''User: {}-{}, Insert Order: {} failed: {}'''.format(user['id'], user['username'], order['order_number'], str(ex)))
 
 
     # --------------------------------------------------------------------------
@@ -37,7 +36,6 @@ class OrderDao(object):
     def deleteAllOrders(self, user):
         try:
             query = '''DELETE FROM order_management WHERE user_id = {} '''.format(user['id'])
-            print(query)
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:
