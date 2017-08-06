@@ -17,12 +17,12 @@ app.register_blueprint(UserAPI)
 app.register_blueprint(OrderAPI)
 
 if __name__ == "__main__":
-  skuManager = SkuManager()
-  userManager = UserManager()
-  orderManager = OrderManager()
-  skuManager.initialize()
-  userManager.initialize()
-  orderManager.initialize()
+  # skuManager = SkuManager()
+  # userManager = UserManager()
+  # orderManager = OrderManager()
+  # skuManager.initialize()
+  # userManager.initialize()
+  # orderManager.initialize()
 
   app.run(debug=True, threaded=True)
   # app.run(host='0.0.0.0', debug=True, port=5000, threaded=True)

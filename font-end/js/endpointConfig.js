@@ -73,8 +73,20 @@ var EndpointConfig = function() {
 
   EndpointConfig.prototype.generateRefreshAllOrdersEndPoint = function() {
     return endpointUrl + '/order/refresh-all-orders?token=' + $.cookie('token');
+
+  } 
+
+  EndpointConfig.prototype.generateGetAllOrders = function(){
+      return endpointUrl + '/order/get-orders?token=' + $.cookie('token');
   }
+
+  EndpointConfig.prototype.generateUpdateOrderState = function(){
+      return endpointUrl + '/order/update-order?token=' + $.cookie('token');
+  }
+
 }
+  
+
 
 
 

@@ -92,6 +92,36 @@ class OrderManager(object):
             return ResponseHelper.generateSuccessResponse("Refresh all Orders is done", None)
 
 
+	def getFailedOrders(self):
+		# lazadaOrderApi = LazadaOrderApi()
+		# lazadaOrders = lazadaOrderApi.getrOrders(user)
+		orders = OrderDao()
+		result = orders.getFailedOrders()
+		if not result:
+			return ResponseHelper.generateErrorResponse("Can't access to Lazada service")
+
+		return ResponseHelper.generateSuccessResponse(result)
+
+	def insertOrder(self, order, user):
+		orderDao = OrderDao()
+		orderDao.insert(order, user)
+		return ResponseHelper.generateSuccessResponse(None)
+
+	#-----------------------------------------------------------------------------
+	# Update order state
+	#-----------------------------------------------------------------------------
+	def updataOrderState(self, order, token):
+		user = self.validateToken(token)
+		if 'error' in user:
+			return user
+
+		orderDao = OrderDao()
+		orderdao.updateState(order)
+		return ResponseHelper.generateSuccessResponse(None)
+
+
+
+
 
 
 
