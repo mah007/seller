@@ -156,7 +156,6 @@ class LazadaOrderApi(object):
 		 				parameters["UserID"],
 		 				parameters["Version"],
 		 				parameters["Signature"])
-		print(url)
 		try:
 			resp = requests.get(url)
 			if resp.status_code == 200:
