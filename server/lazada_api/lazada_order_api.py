@@ -4,43 +4,53 @@ from lazada_api.lazada_api_helper import LazadaApiHelper
 from config import LazadaAPI
 from utils.exception_utils import ExceptionUtils
 
+
+
+# Todo:
+# 1. Get error from error response util.
+
 class LazadaOrderApi(object):
 
 	#-----------------------------------------------------------------------------
-	# Get order by id
+	# Refresh all orders
 	#-----------------------------------------------------------------------------
-	def getOrder(self, order, user):
+	def refreshAllOrder(self, user):
 		parameters = {
-		'Action': 'GetOrder',
+		'Action': 'GetOrders',
 		'Format':'JSON',
 		'Timestamp': LazadaApiHelper.getCurrentUTCTime(),
 		'UserID': user['lazada_user_id'],
 		'Version': '1.0',
-		'OrderId': (order['id'])
+		'CreatedBefore': LazadaApiHelper.getCurrentUTCTime(),
+		'Status': 'pending'
 		}
 
 		parameters['Signature'] = LazadaApiHelper.generateSignature(parameters, user['lazada_api_key'])
-		url = "{}?Action={}&Format={}&OrderId={}&Timestamp={}&UserID={}&Version={}&Signature={}".format(
+		url = "{}?Action={}&CreatedBefore={}&Format={}&Status={}&Timestamp={}&UserID={}&Version={}&Signature={}".format(
 						LazadaAPI.ENDPOINT,
 		 				parameters["Action"],
+		 				LazadaApiHelper.formatTimestamp(parameters["CreatedBefore"]),
 		 				parameters["Format"],
-		 				parameters["OrderId"],
+		 				parameters["Status"],
 		 				LazadaApiHelper.formatTimestamp(parameters["Timestamp"]),
 		 				parameters["UserID"],
 		 				parameters["Version"],
-		 				parameters["Signature"],)
+		 				parameters["Signature"])
 
-		resp = requests.get(url)
-		if resp.status_code == 200:
-			response = json.loads(resp.text)
-			if ('ErrorResponse' in response):
-				return None
+		try:
+			resp = requests.get(url)
+			if resp.status_code == 200:
+				response = json.loads(resp.text)
+				if ('ErrorResponse' in response):
+					return ExceptionUtils.error('''User: {}-{}, Get Orders is error: {}'''.format(user['id'], user['username'], esponse['ErrorResponse']['Head']['ErrorMessage']))
 
-			data = response['SuccessResponse']['Body']
-			if (data['Orders'] != None):
-				return data['Orders']
+				data = response['SuccessResponse']['Body']
+				if (data['Orders'] != None):
+					return data['Orders']
 
-		return None
+			return ExceptionUtils.error('''User: {}-{}, Get Orders is error: {}'''.format(user['id'], user['username'], resp.status_code))
+		except Exception as ex:
+			return ExceptionUtils.error('''User: {}-{}, Get Orders is error: {}'''.format(user['id'], user['username'], str(ex)))
 
 
 	#-----------------------------------------------------------------------------

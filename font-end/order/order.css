@@ -2,6 +2,19 @@ body {
     color: #333;
 }
 
+.none_padding {
+    padding: 0px;
+}
+.margin_top_15 {
+    margin-top: 15px;
+}
+.padding_bottom_15 {
+    padding-bottom: 15px;
+}
+.float_right {
+    float: right;
+}
+
 .scaning-section {
     border: 1px solid #ccc;
     margin-bottom: 20px;
@@ -35,6 +48,16 @@ body {
     color: #5cb85c;
 }
 
+.cart_title {
+    line-height: 35px;
+    height: 45px;
+}
+.table_title {
+    line-height: 45px;
+}
+.process-log p {
+    font-size: 2rem;
+}
 
 
 

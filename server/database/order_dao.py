@@ -22,12 +22,25 @@ class OrderDao(object):
     # --------------------------------------------------------------------------
     def insert(self, user, order):
         try:
-            query = '''INSERT INTO order_management (order_id, order_number, order_json, user_id, created_at) VALUES ('{}', '{}', '{}', {}, {})'''.format(
-                    order['order_id'], order['order_number'], order['order_json'], order['created_at'], user['id'])
+            query = '''INSERT INTO order_management(order_id, order_number, order_json, user_id, created_at) VALUES ('{}', '{}', '{}', {}, {})'''.format(
+                    order['order_id'], order['order_number'], order['order_json'], user['id'], order['created_at'])
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:
             return ExceptionUtils.error('''User: {}-{}, Insert Order: {} failed: {}'''.format(user['id'], user['username'], order['order_id'], str(ex)))
+
+
+    # --------------------------------------------------------------------------
+    # delete all order
+    # --------------------------------------------------------------------------
+    def deleteAllOrders(self, user):
+        try:
+            query = '''DELETE FROM order_management WHERE user_id = {} '''.format(user['id'])
+            print(query)
+            DatabaseHelper.execute(query)
+            return ExceptionUtils.success()
+        except Exception as ex:
+            return ExceptionUtils.error('''User: {}-{}, Delete all orders is error: {}'''.format(user['id'], user['username'], str(ex)))
 
 
     # --------------------------------------------------------------------------

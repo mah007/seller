@@ -8,136 +8,89 @@ from managers.response_helper import ResponseHelper
 
 
 class OrderManager(object):
+    def initialize(self):
+        orderDao = OrderDao()
+        orderDao.createTable()
 
-	def initialize(self):
-		orderDao = OrderDao()
-		orderDao.createTable()
-
-
-	def validateToken(self, token):
-		userDao = UserDao()
-		user = userDao.getUser(token)
-		if user == None:
-			return ResponseHelper.generateErrorResponse("You should log out and login again to use this function !")
-		else:
-			return user
-
-	def tempOrder(self):
-		return {
-              "OrderId": 111990523,
-                    "CustomerFirstName": "Diem VUONG",
-                    "CustomerLastName": "",
-                    "OrderNumber": 343327867,
-                    "PaymentMethod": "CashOnDelivery",
-                    "Remarks": "",
-                    "DeliveryInfo": "",
-                    "Price": "78,000.00",
-                    "GiftOption": False,
-                    "GiftMessage": "",
-                    "VoucherCode": "",
-                    "CreatedAt": "2017-08-04 08:53:11",
-                    "UpdatedAt": "2017-08-05 11:16:47",
-                    "AddressBilling": {
-                        "FirstName": "Diem VUONG",
-                        "LastName": "",
-                        "Phone": "0908050920",
-                        "Phone2": "",
-                        "Address1": "164/28 duong so 1",
-                        "Address2": "",
-                        "Address3": "Hồ Chí Minh",
-                        "Address4": "Quận 7",
-                        "Address5": "Phường Tân Phú",
-                        "CustomerEmail": "",
-                        "City": "Hồ Chí Minh-Quận 7-Phường Tân Phú",
-                        "PostCode": "",
-                        "Country": "Vietnam"
-                    },
-                    "AddressShipping": {
-                        "FirstName": "Diem VUONG",
-                        "LastName": "",
-                        "Phone": "0908050920",
-                        "Phone2": "",
-                        "Address1": "164/28 duong so 1",
-                        "Address2": "",
-                        "Address3": "Hồ Chí Minh",
-                        "Address4": "Quận 7",
-                        "Address5": "Phường Tân Phú",
-                        "CustomerEmail": "",
-                        "City": "Hồ Chí Minh-Quận 7-Phường Tân Phú",
-                        "PostCode": "",
-                        "Country": "Vietnam"
-                    },
-                    "NationalRegistrationNumber": "",
-                    "ItemsCount": 2,
-                    "PromisedShippingTimes": "",
-                    "ExtraAttributes": "null",
-                    "Statuses": [
-                        "ready_to_ship"
-                    ],
-                    "Voucher": 0,
-                    "ShippingFee": 0
-          }
-
-	#-----------------------------------------------------------------------------
-	# Scan barcode
-	#-----------------------------------------------------------------------------
-	def scanBarcode(self, token, barcode):
-		user = self.validateToken(token)
-		if 'error' in user:
-			return user
-
-		# Get orderNumer
-		orderNumber = OrderHelper.getOrderNumberFromBarcode(barcode)
-		if not orderNumber:
-			return ResponseHelper.generateErrorResponse("Barcode is invalid !")
-
-		# Get order by orderNumber
-		orderDao = OrderDao()
-		order = orderDao.getOrderByOrderNumber(user, orderNumber)
-		order = self.tempOrder()
-		if 'error' in order:
-			return ResponseHelper.generateErrorResponse(order['error'])
-
-		# Get orderItem by order
-		lazadaOrderApi = LazadaOrderApi()
-		lazadaOrderItems = lazadaOrderApi.getOrderItems(order, user)
-		if 'error' in lazadaOrderItems:
-			return ResponseHelper.generateErrorResponse(lazadaOrderItems['error'])
-
-		result = {
-			"order": order,
-			"orderItems": lazadaOrderItems
-		}
-
-		return ResponseHelper.generateSuccessResponse(result)
+    def validateToken(self, token):
+        userDao = UserDao()
+        return userDao.getUser(token)
 
 
-	#-----------------------------------------------------------------------------
-	# Get order by id
-	#
-	# Refactor later
-	#-----------------------------------------------------------------------------
-	def getOrder(self, order, user):
-		lazadaSkuApi = LazadaOrderApi()
-		lazadaOrder = lazadaSkuApi.getOrder(order, user)
-		if not lazadaOrder:
-			return ResponseHelper.generateErrorResponse("Can't access to Lazada service")
+    #-----------------------------------------------------------------------------
+    # Scan barcode
+    #-----------------------------------------------------------------------------
+    def scanBarcode(self, token, barcode):
+        user = self.validateToken(token)
+        if not user:
+            errorArray = ResponseHelper.convertToArryError("Token is invalid, please logout and login again !")
+            return ResponseHelper.generateErrorResponse(errorArray);
 
-		return ResponseHelper.generateSuccessResponse(lazadaOrder)
+        # Get orderNumer
+        orderNumber = OrderHelper.getOrderNumberFromBarcode(barcode)
+        if not orderNumber:
+            errorArray = ResponseHelper.convertToArryError("Barcode is invalid !")
+            return ResponseHelper.generateErrorResponse(errorArray);
 
+        # Get order by orderNumber
+        orderDao = OrderDao()
+        order = orderDao.getOrderByOrderNumber(user, orderNumber)
+        if 'error' in order:
+            errorArray = ResponseHelper.convertToArryError(order['error'])
+            return ResponseHelper.generateErrorResponse(errorArray);
 
-	#-----------------------------------------------------------------------------
-	# Get orderItem by id
-	#
-	# Refactor later
-	#-----------------------------------------------------------------------------
-	def getOrderItems(self, order, user):
-		lazadaOrderApi = LazadaOrderApi()
-		lazadaOrderItems = lazadaOrderApi.getOrderItems(order, user)
-		if not lazadaOrderItems:
-			return ResponseHelper.generateErrorResponse("Can't access to Lazada service")
+        # Parse to ladaza format
+        order = OrderHelper.convertOrderToLazadaOrder(order)
+        # Get orderItem by order
+        lazadaOrderApi = LazadaOrderApi()
+        lazadaOrderItems = lazadaOrderApi.getOrderItems(order, user)
+        if 'error' in lazadaOrderItems:
+            errorArray = ResponseHelper.convertToArryError(lazadaOrderItems['error'])
+            return ResponseHelper.generateErrorResponse(errorArray);
 
-		return ResponseHelper.generateSuccessResponse(lazadaOrderItems)
+        # Return success response
+        result = {
+        "order": order,
+        "orderItems": lazadaOrderItems
+        }
+        return ResponseHelper.generateSuccessResponse("Scane barcode is done", result)
+
+    #-----------------------------------------------------------------------------
+    # Refresh all orders
+    #-----------------------------------------------------------------------------
+    def refreshAllOrders(self, token):
+        user = self.validateToken(token)
+        if not user:
+            errorArray = ResponseHelper.convertToArryError("Token is invalid, please logout and login again !")
+            return ResponseHelper.generateErrorResponse(errorArray);
+
+        # Delete all old orders first
+        orderDao = OrderDao()
+        result = orderDao.deleteAllOrders(user)
+        if 'error' in result:
+            errorArray = ResponseHelper.convertToArryError(result['error'])
+            return ResponseHelper.generateErrorResponse(errorArray);
+
+        # Get all orders from lazada
+        lazadaOrderApi = LazadaOrderApi()
+        orders = lazadaOrderApi.refreshAllOrder(user)
+        if 'error' in orders:
+            errorArray = ResponseHelper.convertToArryError(orders['error'])
+            return ResponseHelper.generateErrorResponse(errorArray);
+
+        # insert all orders into our database
+        insertLogs = []
+        for order in orders:
+            insertLog = orderDao.insert(user, OrderHelper.convertLazadaOrderToOrder(order))
+            if 'error' in insertLog:
+                insertLogs.append(insertLog)
+
+        # Check for success
+        if len(insertLogs) > 0:
+            return ResponseHelper.generateErrorResponse(insertLogs)
+        else:
+            return ResponseHelper.generateSuccessResponse("Refresh all Orders is done", None)
+
 
 
 

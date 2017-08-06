@@ -29,57 +29,23 @@ def scanBarcode():
 
 
 # ------------------------------------------------------------------------------
-# Get Order
+# Refresh all order
 # ------------------------------------------------------------------------------
-@OrderAPI.route('/order/get-order', methods=['GET'])
+@OrderAPI.route('/order/refresh-all-orders', methods=['GET'])
 @cross_origin()
-def getOrder():
-	user = {
-		'lazada_api_key': 'jusjWjdv13rre3RxH9b-cXmmA7B9cQQh4jtiLcDyAqX-8PMkhutFeRsv',
-		'lazada_user_id': 'info@zakos.vn'
-	}
-	order = {
-		'id': '111682924'
-	}
+def refreshAllOrders():
+	if not request.args:
+		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
+	token = request.args.get('token');
+	if not token:
+		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
 
-	customer = OrderManager()
-	result = customer.getOrder(order, user)
-	return make_response(jsonify(result))
-
-
-# ------------------------------------------------------------------------------
-# Get Order Item
-# ------------------------------------------------------------------------------
-@OrderAPI.route('/order/get-order-items', methods=['GET'])
-@cross_origin()
-def getOrderItems():
-	user = {
-		'lazada_api_key': 'jusjWjdv13rre3RxH9b-cXmmA7B9cQQh4jtiLcDyAqX-8PMkhutFeRsv',
-		'lazada_user_id': 'info@zakos.vn'
-	}
-	# 111677474, 111618240, 111682924
-	order = {
-		'id': '111682924'
-	}
-
-	orderItems = OrderManager()
-	result = orderItems.getOrderItems(order, user)
-
-	return make_response(jsonify(result))
-
-
-@OrderAPI.route('/order/get-orders', methods=['GET'])
-@cross_origin()
-def getOrder():
-	user = {
-		'lazada_api_key': 'jusjWjdv13rre3RxH9b-cXmmA7B9cQQh4jtiLcDyAqX-8PMkhutFeRsv',
-		'lazada_user_id': 'info@zakos.vn'
-	}
-
-	orders = OrderManager()
-	result = orders.getOrderItems(order, user)
-
-	return make_response(jsonify(result))
+	orderManager = OrderManager()
+	result = orderManager.refreshAllOrders(token)
+	if 'success' in result:
+		return make_response(jsonify(result), 201)
+	else:
+		return make_response(jsonify(result), 404)
 
 
 

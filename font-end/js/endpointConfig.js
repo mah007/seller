@@ -67,16 +67,12 @@ var EndpointConfig = function() {
   //----------------------------------------------------------------------------
   // Order management section
   //----------------------------------------------------------------------------
-  EndpointConfig.prototype.generateOrderEndPoint = function() {
-    return endpointUrl + '/order/get-order';
-  }
-
   EndpointConfig.prototype.generateScanOrderEndPoint = function() {
     return endpointUrl + '/order/scan-barcode?token=' + $.cookie('token');
+  }
 
-    EndpointConfig.prototype.generateGetAllOrders = function(){
-      return endpointUrl + 'order/get-orders';
-    }
+  EndpointConfig.prototype.generateRefreshAllOrdersEndPoint = function() {
+    return endpointUrl + '/order/refresh-all-orders?token=' + $.cookie('token');
   }
 }
 
