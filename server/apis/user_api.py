@@ -76,8 +76,8 @@ def delete():
 	userManager = UserManager()
 	result = userManager.deleteUser(user, request.args.get('token'))
 	if 'success' in result:
-		return make_response(jsonify({"success": "done"}))		
-	else:		
+		return make_response(jsonify({"success": "done"}))
+	else:
 		return make_response(jsonify(result), 403)
 
 # ---------------------------------------------------------------------------------------
@@ -108,8 +108,8 @@ def update():
 	userManager = UserManager()
 	result = userManager.updateUser(user, request.args.get('token'))
 	if 'success' in result:
-		return make_response(jsonify({"success": "done"}))		
-	else:		
+		return make_response(jsonify({"success": "done"}))
+	else:
 		return make_response(jsonify(result), 403)
 
 
@@ -211,7 +211,7 @@ def register():
 	userManager = UserManager()
 	result = userManager.register(user)
 	if 'error' in result:
-		return make_response(jsonify(result), 404)		
+		return make_response(jsonify(result), 404)
 	else:
 		return make_response(json.dumps(result), 201)
 

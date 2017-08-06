@@ -47,6 +47,86 @@ def refreshAllOrders():
 	else:
 		return make_response(jsonify(result), 404)
 
+def getOrder():
+	user = {
+		'lazada_api_key': 'jusjWjdv13rre3RxH9b-cXmmA7B9cQQh4jtiLcDyAqX-8PMkhutFeRsv',
+		'lazada_user_id': 'info@zakos.vn'
+	}
+	order = {
+		'id': '111682924'
+	}
+
+	customer = OrderManager()
+	result = customer.getOrder(order, user)
+	return make_response(jsonify(result))
+
+
+# ------------------------------------------------------------------------------
+# Get Order Item
+# ------------------------------------------------------------------------------
+@OrderAPI.route('/order/get-order-items', methods=['GET'])
+@cross_origin()
+def getOrderItems():
+	user = {
+		'lazada_api_key': 'jusjWjdv13rre3RxH9b-cXmmA7B9cQQh4jtiLcDyAqX-8PMkhutFeRsv',
+		'lazada_user_id': 'info@zakos.vn'
+	}
+	# 111677474, 111618240, 111682924
+	order = {
+		'id': '111682924'
+	}
+
+	orderItems = OrderManager()
+	result = orderItems.getOrderItems(order, user)
+
+	return make_response(jsonify(result))
+
+
+@OrderAPI.route('/order/get-orders', methods=['GET'])
+@cross_origin()
+def getFailedOrders():
+	user = {
+		'lazada_api_key': 'jusjWjdv13rre3RxH9b-cXmmA7B9cQQh4jtiLcDyAqX-8PMkhutFeRsv',
+		'lazada_user_id': 'info@zakos.vn'
+	}
+
+	orderManager = OrderManager()
+	# lazadaOrderApi = LazadaOrderApi()
+	# result = lazadaOrderApi.getOrders(user)
+
+	# for x in result:
+	# 	orderManager.insertOrder(x, user)
+
+
+	orders = orderManager.getFailedOrders()
+
+	print(orders)
+
+	return make_response(jsonify(orders))
+
+@OrderAPI.route('/order/update-order', methods=['POST'])
+@cross_origin()
+def updateOrderState():
+	if not request.args:
+		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
+	if not request.json:
+		return make_response(jsonify({'error': 'Missing json parameters value'}), 404)
+	if not 'id' in request.json:
+		return make_response(jsonify({'error': 'Missing json parameter'}), 404)
+
+	order = {
+		"id": request.json['id'],
+	}
+
+	orderManager = OrderManager()
+	result = orderManager.updataOrderState(order, token)
+
+	if 'success' in result:
+		return make_response(jsonify({"success": "done"}))
+	else:
+		return make_response(jsonify(result))
+
+
 
 # ------------------------------------------------------------------------------
 # Set order status to ready-to-ship

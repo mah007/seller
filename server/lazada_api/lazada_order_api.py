@@ -118,7 +118,6 @@ class LazadaOrderApi(object):
 		 				parameters["Version"],
 		 				parameters["Signature"])
 
-		print(url)
 		try:
 			resp = requests.get(url)
 			if resp.status_code == 200:
@@ -179,7 +178,41 @@ class LazadaOrderApi(object):
 			return ExceptionUtils.error('''User: {}-{}, Set Status to Ready-To-Ship is error: {}'''.format(user['id'], user['username'], str(ex)))
 
 
+	#-----------------------------------------------------------------------------
+	# Get Orders
+	#
+	# This should not be use???
+	#-----------------------------------------------------------------------------
+	def getOrders(self, user):
+		parameters = {
+		'Action': 'GetOrders',
+		'Format':'JSON',
+		'Timestamp': LazadaApiHelper.getCurrentUTCTime(),
+		'UserID': user['lazada_user_id'],
+		'Version': '1.0',
+		'CreatedBefore': LazadaApiHelper.getCurrentUTCTime()
+		}
 
+		parameters['Signature'] = LazadaApiHelper.generateSignature(parameters, user['lazada_api_key'])
+		url = "{}?Action={}&CreatedBefore={}&Format={}&Timestamp={}&UserID={}&Version={}&Signature={}".format(
+						LazadaAPI.ENDPOINT,
+		 				parameters["Action"],
+		 				LazadaApiHelper.formatTimestamp(parameters['CreatedBefore']),
+		 				parameters["Format"],
+		 				LazadaApiHelper.formatTimestamp(parameters["Timestamp"]),
+		 				parameters["UserID"],
+		 				parameters["Version"],
+		 				parameters["Signature"])
+
+		resp = requests.get(url)
+		if resp.status_code == 200:
+			response = json.loads(resp.text)
+			if ('ErrorResponse' in response):
+				return None
+
+			data = response['SuccessResponse']['Body']
+			if (data['Orders'] != None):
+				return data['Orders']
 
 
 

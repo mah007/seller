@@ -1,4 +1,6 @@
 
+# Deprecated now
+
 class ResponseHelper:
 
   @classmethod
@@ -9,15 +11,3 @@ class ResponseHelper:
   @classmethod
   def generateSuccessResponse(self, result):
     return {"success": "done", "data": result}
-
-
-  @classmethod
-  def generateSuccessResponse(self, message, result):
-    return {"success": message, "data": result}
-
-
-  @classmethod
-  def convertToArryError(self, errorMessage):
-    errorArray = []
-    errorArray.append(errorMessage)
-    return errorArray

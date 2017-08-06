@@ -47,6 +47,18 @@ function fillSuccessLog(successMessage) {
     processLogContent.html(contentHtml(successMessage));
 }
 
+//-------------------------------------------------------------------------------------
+// Need to be refactor: because any sites have to use this function, dont want to copy
+// and paste
+//-------------------------------------------------------------------------------------
+$('#logoutButton').click(function() {
+    cookie.clearToken('token');
+    cookie.clearToken('myUser');
+    cookie.clearToken('username');
+    window.location.href = "../login";
+});
+
+
 //------------------------------------------------------------------------------
 // Key shortcuts
 //------------------------------------------------------------------------------

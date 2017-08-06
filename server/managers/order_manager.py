@@ -4,7 +4,7 @@ from database.order_dao import OrderDao
 from managers.user_manager import UserManager
 from lazada_api.lazada_order_api import LazadaOrderApi
 from managers.order_helper import OrderHelper
-from managers.response_helper import ResponseHelper
+from utils.response_utils import ResponseUtils
 
 
 class OrderManager(object):
@@ -23,21 +23,21 @@ class OrderManager(object):
     def scanBarcode(self, token, barcode):
         user = self.validateToken(token)
         if not user:
-            errorArray = ResponseHelper.convertToArryError("Token is invalid, please logout and login again !")
-            return ResponseHelper.generateErrorResponse(errorArray)
+            errorArray = ResponseUtils.convertToArryError("Token is invalid, please logout and login again !")
+            return ResponseUtils.generateErrorResponse(errorArray)
 
         # Get orderNumer
         orderNumber = OrderHelper.getOrderNumberFromBarcode(barcode)
         if not orderNumber:
-            errorArray = ResponseHelper.convertToArryError("Barcode is invalid !")
-            return ResponseHelper.generateErrorResponse(errorArray)
+            errorArray = ResponseUtils.convertToArryError("Barcode is invalid !")
+            return ResponseUtils.generateErrorResponse(errorArray)
 
         # Get order by orderNumber
         orderDao = OrderDao()
         order = orderDao.getOrderByOrderNumber(user, orderNumber)
         if 'error' in order:
-            errorArray = ResponseHelper.convertToArryError(order['error'])
-            return ResponseHelper.generateErrorResponse(errorArray)
+            errorArray = ResponseUtils.convertToArryError(order['error'])
+            return ResponseUtils.generateErrorResponse(errorArray)
 
         # Parse to ladaza format
         order = OrderHelper.convertOrderToLazadaOrder(order)
@@ -45,15 +45,15 @@ class OrderManager(object):
         lazadaOrderApi = LazadaOrderApi()
         lazadaOrderItems = lazadaOrderApi.getOrderItems(order, user)
         if 'error' in lazadaOrderItems:
-            errorArray = ResponseHelper.convertToArryError(lazadaOrderItems['error'])
-            return ResponseHelper.generateErrorResponse(errorArray)
+            errorArray = ResponseUtils.convertToArryError(lazadaOrderItems['error'])
+            return ResponseUtils.generateErrorResponse(errorArray)
 
         # Return success response
         result = {
         "order": order,
         "orderItems": lazadaOrderItems
         }
-        return ResponseHelper.generateSuccessResponse("Scane barcode is done", result)
+        return ResponseUtils.generateSuccessResponse("Scane barcode is done", result)
 
     #-----------------------------------------------------------------------------
     # Refresh all orders
@@ -61,22 +61,22 @@ class OrderManager(object):
     def refreshAllOrders(self, token):
         user = self.validateToken(token)
         if not user:
-            errorArray = ResponseHelper.convertToArryError("Token is invalid, please logout and login again !")
-            return ResponseHelper.generateErrorResponse(errorArray)
+            errorArray = ResponseUtils.convertToArryError("Token is invalid, please logout and login again !")
+            return ResponseUtils.generateErrorResponse(errorArray)
 
         # Delete all old orders first
         orderDao = OrderDao()
         result = orderDao.deleteAllOrders(user)
         if 'error' in result:
-            errorArray = ResponseHelper.convertToArryError(result['error'])
-            return ResponseHelper.generateErrorResponse(errorArray)
+            errorArray = ResponseUtils.convertToArryError(result['error'])
+            return ResponseUtils.generateErrorResponse(errorArray)
 
         # Get all orders from lazada
         lazadaOrderApi = LazadaOrderApi()
         orders = lazadaOrderApi.refreshAllOrder(user)
         if 'error' in orders:
-            errorArray = ResponseHelper.convertToArryError(orders['error'])
-            return ResponseHelper.generateErrorResponse(errorArray)
+            errorArray = ResponseUtils.convertToArryError(orders['error'])
+            return ResponseUtils.generateErrorResponse(errorArray)
 
         # insert all orders into our database
         insertLogs = []
@@ -87,9 +87,9 @@ class OrderManager(object):
 
         # Check for success
         if len(insertLogs) > 0:
-            return ResponseHelper.generateErrorResponse(insertLogs)
+            return ResponseUtils.generateErrorResponse(insertLogs)
         else:
-            return ResponseHelper.generateSuccessResponse("Refresh all Orders is done", None)
+            return ResponseUtils.generateSuccessResponse("Refresh all Orders is done", None)
 
 
     #-----------------------------------------------------------------------------
@@ -98,23 +98,61 @@ class OrderManager(object):
     def setStatusToReadyToShip(self, token, orderItemIds, shippingProvider):
         user = self.validateToken(token)
         if not user:
-            errorArray = ResponseHelper.convertToArryError("Token is invalid, please logout and login again !")
-            return ResponseHelper.generateErrorResponse(errorArray)
+            errorArray = ResponseUtils.convertToArryError("Token is invalid, please logout and login again !")
+            return ResponseUtils.generateErrorResponse(errorArray)
 
         # Set status to Parked: this is necessary before set an order to Ready-To-Ship
         lazadaOrderApi = LazadaOrderApi()
         orders = lazadaOrderApi.setStatusToPackedByMarketplace(user, orderItemIds, shippingProvider)
         if 'error' in orders:
-            errorArray = ResponseHelper.convertToArryError(orders['error'])
-            return ResponseHelper.generateErrorResponse(errorArray)
+            errorArray = ResponseUtils.convertToArryError(orders['error'])
+            return ResponseUtils.generateErrorResponse(errorArray)
 
         # Set status to ready to ship
         orders = lazadaOrderApi.setStatusToReadyToShip(user, orderItemIds, shippingProvider)
         if 'error' in orders:
-            errorArray = ResponseHelper.convertToArryError(orders['error'])
-            return ResponseHelper.generateErrorResponse(errorArray)
+            errorArray = ResponseUtils.convertToArryError(orders['error'])
+            return ResponseUtils.generateErrorResponse(errorArray)
 
-        return ResponseHelper.generateSuccessResponse("Set status to Ready-To-Ship is done", None)
+        return ResponseUtils.generateSuccessResponse("Set status to Ready-To-Ship is done", None)
+
+
+    #-----------------------------------------------------------------------------
+    # Get Failed orders
+    #-----------------------------------------------------------------------------
+    def getFailedOrders(self):
+        # lazadaOrderApi = LazadaOrderApi()
+        # lazadaOrders = lazadaOrderApi.getrOrders(user)
+        orders = OrderDao()
+        result = orders.getFailedOrders()
+        if not result:
+            return ResponseUtils.generateErrorResponse("Can't access to Lazada service")
+
+        return ResponseUtils.generateSuccessResponse(result)
+
+
+    #-----------------------------------------------------------------------------
+    # Why insert order here????
+    #-----------------------------------------------------------------------------
+    def insertOrder(self, order, user):
+        orderDao = OrderDao()
+        orderDao.insert(order, user)
+        return ResponseUtils.generateSuccessResponse(None)
+
+
+    #-----------------------------------------------------------------------------
+    # Update order state
+    #-----------------------------------------------------------------------------
+    def updataOrderState(self, order, token):
+        user = self.validateToken(token)
+        if 'error' in user:
+            return user
+
+        orderDao = OrderDao()
+        orderdao.updateState(order)
+        return ResponseUtils.generateSuccessResponse(None)
+
+
 
 
 

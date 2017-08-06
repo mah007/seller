@@ -11,8 +11,9 @@ class OrderDao(object):
                 order_id        VARCHAR(50)     NOT NULL,
                 order_number    VARCHAR(50)     NOT NULL,
                 order_json      TEXT            NOT NULL,
-                user_id         INTEGER         NOT NULL,
-                created_at      INTEGER         NOT NULL
+                user_id         VARCHAR(30)         NOT NULL,
+                created_at      VARCHAR(30)     NOT NULL,
+                status          TEXT
                 );'''
         DatabaseHelper.execute(query)
 
@@ -20,14 +21,14 @@ class OrderDao(object):
     # --------------------------------------------------------------------------
     # Insert order
     # --------------------------------------------------------------------------
-    def insert(self, user, order):
+    def insert(self, order, user):
         try:
-            query = '''INSERT INTO order_management(order_id, order_number, order_json, user_id, created_at) VALUES ('{}', '{}', '{}', {}, {})'''.format(
-                    order['order_id'], order['order_number'], order['order_json'], user['id'], order['created_at'])
+            query = '''INSERT INTO order_management (order_id, order_number, order_json, user_id, created_at, status) VALUES ('{}', '{}', '{}', '{}', '{}', '{}')'''.format(
+                    order['OrderId'], order['OrderNumber'], 'None', user['lazada_user_id'], order['CreatedAt'], order['Statuses'][0])
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:
-            return ExceptionUtils.error('''User: {}-{}, Insert Order: {} failed: {}'''.format(user['id'], user['username'], order['order_id'], str(ex)))
+            return ExceptionUtils.error('''User: {}, Insert Order: {} failed: {}'''.format(user['lazada_user_id'], order['OrderId'], str(ex)))
 
 
     # --------------------------------------------------------------------------
@@ -73,9 +74,39 @@ class OrderDao(object):
             return ExceptionUtils.error('''User: {}-{}, Get Order: {} failed: {}'''.format(user['id'], user['username'], orderNumber, str(ex)))
 
 
+    # --------------------------------------------------------------------------
+    # Update Order State
+    # --------------------------------------------------------------------------
+    # def updateState(self, order):
+    #     query = '''UPDATE order_management set status = 'shipped' WHERE id = '{}' '''.format(order['id'])
+    #     DatabaseHelper.execute(query)
 
 
+    # def getFailedOrders(self):
+    #     try:
+    #         query = '''SELECT * FROM order_management WHERE status = 'pending' '''
+    #         conn = DatabaseHelper.getConnection()
+    #         cur = conn.cursor()
+    #         cur.execute(query)
 
+    #         orders = []
+    #         rows = cur.fetchall()
+    #         for row in rows:
+    #             orders.append({
+    #                 "Id": row[0],
+    #                 "OrderId": row[1],
+    #                 "OrderNumber": row[2],
+    #                 "OrderJson": row[3],
+    #                 "UserId": row[4],
+    #                 "CreatedAt": row[5],
+    #                 "Status": row[6]
+    #             })
+
+    #         conn.close()
+    #         return orders
+    #     except Exception as ex:
+    #         print(ex)
+    #         return None
 
 
 
