@@ -11,6 +11,13 @@ jQuery(document).ready(function() {
         window.location.href = "../login";
     }
 
+    // Fill user name
+    if (cookie.getUsername() === undefined) {
+        $('#username-on-header').html("User info");
+    } else {
+        $('#username-on-header').html(cookie.getUsername());
+    }
+
     // Always request focus for barcode input
     barcodeInput.focus();
 });
