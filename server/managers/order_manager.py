@@ -1,16 +1,20 @@
 from database.sku_dao import SkuDao
 from database.user_dao import UserDao
 from database.order_dao import OrderDao
+from database.failed_order_dao import FailedOrderDao
 from managers.user_manager import UserManager
 from lazada_api.lazada_order_api import LazadaOrderApi
 from managers.order_helper import OrderHelper
 from utils.response_utils import ResponseUtils
+from managers.response_helper import ResponseHelper
 
 
 class OrderManager(object):
     def initialize(self):
         orderDao = OrderDao()
         orderDao.createTable()
+        failedOrderDao = FailedOrderDao()
+        failedOrderDao.createTable()
 
     def validateToken(self, token):
         userDao = UserDao()
@@ -120,37 +124,39 @@ class OrderManager(object):
     #-----------------------------------------------------------------------------
     # Get Failed orders
     #-----------------------------------------------------------------------------
-    def getFailedOrders(self):
-        # lazadaOrderApi = LazadaOrderApi()
-        # lazadaOrders = lazadaOrderApi.getrOrders(user)
-        orders = OrderDao()
-        result = orders.getFailedOrders()
+    def getAllFailedOrders(self):
+        failedOrderDao = FailedOrderDao()        
+        result = failedOrderDao.getFailedOrders()
+
         if not result:
-            return ResponseUtils.generateErrorResponse("Can't access to Lazada service")
+            return ResponseHelper.generateErrorResponse("Can't access to Lazada service")
 
-        return ResponseUtils.generateSuccessResponse(result)
+        return ResponseHelper.generateSuccessResponse(result)
 
 
     #-----------------------------------------------------------------------------
-    # Why insert order here????
+    # Why insert order from Lazada to database????
     #-----------------------------------------------------------------------------
-    def insertOrder(self, order, user):
-        orderDao = OrderDao()
-        orderDao.insert(order, user)
-        return ResponseUtils.generateSuccessResponse(None)
+    def insertOrderFromLazada(self, user):        
+        lazadaOrderApi = LazadaOrderApi()
+        result = lazadaOrderApi.getOrders(user)
+
+        failedOrderDao = FailedOrderDao()
+        for x in result:
+          failedOrderDao.insert(x, user)
 
 
     #-----------------------------------------------------------------------------
     # Update order state
     #-----------------------------------------------------------------------------
-    def updataOrderState(self, order, token):
+    def updateOrderState(self, order, token):
         user = self.validateToken(token)
         if 'error' in user:
             return user
 
-        orderDao = OrderDao()
-        orderdao.updateState(order)
-        return ResponseUtils.generateSuccessResponse(None)
+        failedOrderDao = FailedOrderDao()
+        failedOrderDao.updateState(order)
+        return ResponseHelper.generateSuccessResponse(None)
 
 
 

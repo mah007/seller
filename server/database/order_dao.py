@@ -72,39 +72,6 @@ class OrderDao(object):
             return ExceptionUtils.error('''User: {}-{}, Get Order: {} failed: {}'''.format(user['id'], user['username'], orderNumber, str(ex)))
 
 
-    # --------------------------------------------------------------------------
-    # Update Order State
-    # --------------------------------------------------------------------------
-    # def updateState(self, order):
-    #     query = '''UPDATE order_management set status = 'shipped' WHERE id = '{}' '''.format(order['id'])
-    #     DatabaseHelper.execute(query)
-
-
-    # def getFailedOrders(self):
-    #     try:
-    #         query = '''SELECT * FROM order_management WHERE status = 'pending' '''
-    #         conn = DatabaseHelper.getConnection()
-    #         cur = conn.cursor()
-    #         cur.execute(query)
-
-    #         orders = []
-    #         rows = cur.fetchall()
-    #         for row in rows:
-    #             orders.append({
-    #                 "Id": row[0],
-    #                 "OrderId": row[1],
-    #                 "OrderNumber": row[2],
-    #                 "OrderJson": row[3],
-    #                 "UserId": row[4],
-    #                 "CreatedAt": row[5],
-    #                 "Status": row[6]
-    #             })
-
-    #         conn.close()
-    #         return orders
-    #     except Exception as ex:
-    #         print(ex)
-    #         return None
 
 
 

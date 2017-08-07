@@ -325,12 +325,13 @@
     <script src="../order-management/order-management.js" type="text/javascript"></script>
     <script id="order-content-template" type="text/x-handlebars-template">
         {{#each data}}
-        <tr data-Id="{{Id}}" data-OrderId="{{OrderId}}" data-OrderNumber={{OrderNumber}} data-CreatedAt={{CreatedAt}} data-Status={{Statuses}}>
-            <td class="text-left">{{Id}}</td>
-            <td class="text-left">{{OrderId}}</td>
-            <td class="text-left">{{OrderNumber}}</td>
-            <td class="text-left">{{CreatedAt}}</td>
-            <td class="text-left">{{Status}}</td>
+        <tr data-id="{{id}}" data-order_id="{{order_id}}" data-order_number={{order_number}} data-created_at={{created_at}} data-state={{state}}>
+            <td class="text-left">{{id}}</td>
+            <td class="text-left">{{order_id}}</td>
+            <td class="text-left">{{order_number}}</td>
+            <td class="text-left">{{created_at}}</td>
+            <td class="text-left">{{state}}</td>
+
             <td class="text-left">
                 <input type="checkbox" class="js-switch btnstatus" {{#ifEqual state 1}} checked {{else}} none {{/ifEqual}}/>
                 <div class="btn-group btn-group-solid btnstt hide" style="margin: 0 2px 4px;" data-bit="active">

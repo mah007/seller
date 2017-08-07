@@ -82,7 +82,7 @@ def getOrderItems():
 	return make_response(jsonify(result))
 
 
-@OrderAPI.route('/order/get-orders', methods=['GET'])
+@OrderAPI.route('/order/get-failed-orders', methods=['GET'])
 @cross_origin()
 def getFailedOrders():
 	user = {
@@ -91,18 +91,10 @@ def getFailedOrders():
 	}
 
 	orderManager = OrderManager()
-	# lazadaOrderApi = LazadaOrderApi()
-	# result = lazadaOrderApi.getOrders(user)
+	# orderManager.insertOrderFromLazada(user)
+	result = orderManager.getAllFailedOrders()
 
-	# for x in result:
-	# 	orderManager.insertOrder(x, user)
-
-
-	orders = orderManager.getFailedOrders()
-
-	print(orders)
-
-	return make_response(jsonify(orders))
+	return make_response(jsonify(result))
 
 @OrderAPI.route('/order/update-order', methods=['POST'])
 @cross_origin()
@@ -119,7 +111,7 @@ def updateOrderState():
 	}
 
 	orderManager = OrderManager()
-	result = orderManager.updataOrderState(order, token)
+	result = orderManager.updateOrderState(order, request.args.get('token'))
 
 	if 'success' in result:
 		return make_response(jsonify({"success": "done"}))

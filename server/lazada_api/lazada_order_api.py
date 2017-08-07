@@ -208,6 +208,8 @@ class LazadaOrderApi(object):
 			if (data['Orders'] != None):
 				return data['Orders']
 
+		return None
+
 
 
 

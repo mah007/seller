@@ -30,7 +30,7 @@ function enableSwitchery() {
             var switchery = new Switchery(html);
         });
         $('.btnstatus').change(function() {
-            var id = $(this).parents('tr').data('Id');
+            var id = $(this).parents('tr').data('id');
             var _parent = $(this).parents("tr");
             $.ajax({
                 method:'POST',
@@ -40,7 +40,14 @@ function enableSwitchery() {
                     id: id,
                 }),
                 success: function (data) {
-                    swal("Record " + $(_parent).data("Id"), "Trạng thái đã được cập nhập", "success");
+                        swal({
+                            title: "Trạng thái đã được cập nhật!",
+                            text: "",
+                            type: "success",
+                            confirmButtonText: "OK! Redirect to list",
+                        }, function () {
+                            window.location.href = "";
+                        });
                 },
                 error: function(error) {
                     console.log(error);
@@ -54,7 +61,7 @@ function enableSwitchery() {
 function getAndFillOutAllOrder() {
     $.ajax({
         method:'GET',
-        url: endpoint.generateGetAllOrders(),
+        url: endpoint.generateGetFailedOrders(),
         contentType: "application/json",
         success: function(data) {
             console.log(data);

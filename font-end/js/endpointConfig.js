@@ -84,8 +84,13 @@ var EndpointConfig = function() {
   }
 
   EndpointConfig.prototype.generateSetStatusReadyToShipEndPoint = function() {
-    return endpointUrl + '/order/ready-to-ship?token=' + $.cookie('token');
+      return endpointUrl + '/order/ready-to-ship?token=' + $.cookie('token');
   }
+
+  EndpointConfig.prototype.generateGetFailedOrders = function() {
+      return endpointUrl + '/order/get-failed-orders?token=' + $.cookie('token');
+  }
+
 }
 
 
