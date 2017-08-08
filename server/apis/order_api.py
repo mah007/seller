@@ -4,6 +4,7 @@ from flask_cors import CORS, cross_origin
 from flask import Blueprint, render_template, abort, request, make_response, jsonify
 from lazada_api.lazada_order_api import LazadaOrderApi
 from managers.order_manager import OrderManager
+from managers.constant_manager import ConstantManager
 
 OrderAPI = Blueprint('order_api', __name__, template_folder='apis')
 
@@ -91,7 +92,11 @@ def getFailedOrders():
 	}
 
 	orderManager = OrderManager()
-	# orderManager.insertOrderFromLazada(user)
+	constantManager = ConstantManager()
+	constantValue = constantManager.getConstantWithId(1)
+			
+	# Check condition constant. Then insert result to database
+	orderManager.insertOrderFromLazada(user, constantValue)
 	result = orderManager.getAllFailedOrders()
 
 	return make_response(jsonify(result))

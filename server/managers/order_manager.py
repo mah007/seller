@@ -7,6 +7,8 @@ from lazada_api.lazada_order_api import LazadaOrderApi
 from managers.order_helper import OrderHelper
 from utils.response_utils import ResponseUtils
 from managers.response_helper import ResponseHelper
+import schedule
+import time
 
 
 class OrderManager(object):
@@ -19,7 +21,6 @@ class OrderManager(object):
     def validateToken(self, token):
         userDao = UserDao()
         return userDao.getUser(token)
-
 
     #-----------------------------------------------------------------------------
     # Scan barcode
@@ -95,7 +96,6 @@ class OrderManager(object):
         else:
             return ResponseUtils.generateSuccessResponse("Refresh all Orders is done", None)
 
-
     #-----------------------------------------------------------------------------
     # Set order status to Ready-To-Ship
     #-----------------------------------------------------------------------------
@@ -120,31 +120,36 @@ class OrderManager(object):
 
         return ResponseUtils.generateSuccessResponse("Set status to Ready-To-Ship is done", None)
 
-
     #-----------------------------------------------------------------------------
     # Get Failed orders
     #-----------------------------------------------------------------------------
     def getAllFailedOrders(self):
-        failedOrderDao = FailedOrderDao()        
-        result = failedOrderDao.getFailedOrders()
+        failedOrderDao = FailedOrderDao()
+        result = failedOrderDao.getFailedOrders()  
 
         if not result:
             return ResponseHelper.generateErrorResponse("Can't access to Lazada service")
 
         return ResponseHelper.generateSuccessResponse(result)
 
+    #--------------------------------------------------------------------------------------------
+    # Insert order from Lazada with condition offset = constant. If (offset < constant) -> break;
+    #--------------------------------------------------------------------------------------------
+    def insertOrderFromLazada(self, user, constant):
+    	offset = 0
+    	failedOrderDao = FailedOrderDao()
+    	lazadaOrderApi = LazadaOrderApi()
+    	while (offset >= 0):
+    		result = lazadaOrderApi.getOrders(user, constant, offset)
+    		if result:
+    			for x in result:
+    				offset = offset + 1
+    				print (offset)
+    				failedOrderDao.insert(x, user)
+    		if (offset % 25 != 0):
+    			offset = -1
 
-    #-----------------------------------------------------------------------------
-    # Why insert order from Lazada to database????
-    #-----------------------------------------------------------------------------
-    def insertOrderFromLazada(self, user):        
-        lazadaOrderApi = LazadaOrderApi()
-        result = lazadaOrderApi.getOrders(user)
-
-        failedOrderDao = FailedOrderDao()
-        for x in result:
-          failedOrderDao.insert(x, user)
-
+    	return ResponseHelper.generateSuccessResponse(None)
 
     #-----------------------------------------------------------------------------
     # Update order state
@@ -157,6 +162,33 @@ class OrderManager(object):
         failedOrderDao = FailedOrderDao()
         failedOrderDao.updateState(order)
         return ResponseHelper.generateSuccessResponse(None)
+
+    #-----------------------------------------------------------------------------
+    # Insert order from Lazada with all user
+    #-----------------------------------------------------------------------------
+    def insertOrderFromLazadaWithAllUser():        
+    	userDao = UserDao()
+    	users = userDao.getAll()
+    	lazadaOrderApi = LazadaOrderApi()
+
+    	for user in users:
+        	result = lazadaOrderApi.getOrders(user)
+        	failedOrderDao = FailedOrderDao()
+	        for x in result:
+	          count = failedOrderDao.checkExistOrder(x)
+	          if (count == 0):
+	          	failedOrderDao.insert(x, user)
+
+
+
+		# schedule.every().day.at("00:00").do(insertOrderFromLazadaWithAllUser)
+
+	# schedule.every(10).minutes.do(insertOrderFromLazadaWithAllUser)
+	# while 1:
+	#     schedule.run_pending()
+	#     time.sleep(1)
+
+
 
 
 

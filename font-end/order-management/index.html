@@ -33,11 +33,15 @@
     <link href="../css/component/custom-md.css" rel="stylesheet" type="text/css" />
     <link href="../css/theme/light.css" rel="stylesheet" type="text/css" />
     <link href="../order-management/order-management.css" rel="stylesheet" type="text/css" />
+    <style> 
+      .yellow{background-color: yellow;} 
+      .red{background-color: red;} 
+    </style>
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
 
-<body class="page-md page-header-fixed page-sidebar-closed-hide-logo">
+<body class="page-md page-header-fixed page-sidebar-closed-hide-logo" onload="alternate('tbody_order')">
     <!-- BEGIN HEADER -->
     <div class="page-header md-shadow-z-1-i navbar navbar-fixed-top">
         <!-- BEGIN HEADER INNER -->
@@ -325,7 +329,7 @@
     <script src="../order-management/order-management.js" type="text/javascript"></script>
     <script id="order-content-template" type="text/x-handlebars-template">
         {{#each data}}
-        <tr data-id="{{id}}" data-order_id="{{order_id}}" data-order_number={{order_number}} data-created_at={{created_at}} data-state={{state}}>
+        <tr id="order" data-id="{{id}}" data-order_id="{{order_id}}" data-order_number={{order_number}} data-created_at={{created_at}} data-state={{state}}>
             <td class="text-left">{{id}}</td>
             <td class="text-left">{{order_id}}</td>
             <td class="text-left">{{order_number}}</td>
@@ -341,6 +345,28 @@
             </td>
         </tr>
         {{/each}}
+    </script>
+    <script>
+        function alternate(id){ 
+          if(document.getElementsByTagName){  
+            var table = document.getElementById(id);   
+            var rows = table.getElementsByTagName("tr"); 
+            var d = new Date;            
+
+            for(i = 0; i < rows.length; i++){   
+              cells = rows[i].getElementsByTagName('td');        
+              diffDays = (Date.parse(d) - Date.parse(cells[3].innerText)) / 86400000;
+
+              if(diffDays >= 10 && diffDays < 15)
+              {
+                rows[i].className = "yellow"; 
+              }
+              else if (diffDays >= 15) {
+                rows[i].className = "red"; 
+              } 
+            } 
+          } 
+        }
     </script>
     <script type="text/javascript">
     jQuery(document).ready(function() {

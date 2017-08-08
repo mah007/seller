@@ -65,6 +65,24 @@ class FailedOrderDao(object):
             print(ex)
             return None
 
+    def checkExistOrder(self, order):
+        try:
+            query = '''SELECT * FROM failed_order_management WHERE order_id = '{}' '''.format(order['order_id'])
+            conn = DatabaseHelper.getConnection()
+            cur = conn.cursor()
+            cur.execute(query)
+
+            rows = cur.fetchall()
+
+            if not rows:
+                return 0
+
+            conn.close()
+            return 1
+        except Exception as ex:
+            print(ex)
+            return None   
+
 
 
 

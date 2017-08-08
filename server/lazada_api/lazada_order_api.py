@@ -175,28 +175,36 @@ class LazadaOrderApi(object):
 	#-----------------------------------------------------------------------------
 	# Get Orders
 	#
-	# This should not be use???
 	#-----------------------------------------------------------------------------
-	def getOrders(self, user):
+	def getOrders(self, user, constant, offset):
 		parameters = {
 		'Action': 'GetOrders',
 		'Format':'JSON',
 		'Timestamp': LazadaApiHelper.getCurrentUTCTime(),
 		'UserID': user['lazada_user_id'],
 		'Version': '1.0',
-		'CreatedBefore': LazadaApiHelper.getCurrentUTCTime()
+		'CreatedBefore': LazadaApiHelper.getCurrentUTCTime(),
+		# 'UpdateAfter': constant
+		'UpdatedBefore': LazadaApiHelper.getCurrentUTCTime(),
+		'Limit': 25,
+		'Offset': offset
 		}
 
 		parameters['Signature'] = LazadaApiHelper.generateSignature(parameters, user['lazada_api_key'])
-		url = "{}?Action={}&CreatedBefore={}&Format={}&Timestamp={}&UserID={}&Version={}&Signature={}".format(
+		url = "{}?Action={}&CreatedBefore={}&UpdatedBefore={}&Limit=25&Offset={}&Format={}&Timestamp={}&UserID={}&Version={}&Signature={}".format(
 						LazadaAPI.ENDPOINT,
 		 				parameters["Action"],
 		 				LazadaApiHelper.formatTimestamp(parameters['CreatedBefore']),
+		 				LazadaApiHelper.formatTimestamp(parameters['UpdatedBefore']),
+		 				parameters["Offset"],
 		 				parameters["Format"],
 		 				LazadaApiHelper.formatTimestamp(parameters["Timestamp"]),
 		 				parameters["UserID"],
 		 				parameters["Version"],
 		 				parameters["Signature"])
+
+
+		print(url)
 
 		resp = requests.get(url)
 		if resp.status_code == 200:
