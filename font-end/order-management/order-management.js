@@ -16,6 +16,22 @@ jQuery(document).ready(function() {
         $('#username-on-header').html(cookie.getUsername());
     }
 
+    if($('.btnrefresh').length > 0) {
+        $(".btnnew").click(function() {
+            $.ajax({
+                method:'GET',
+                url: endpoint.generateRefreshFailedOrder(),
+                contentType: "application/json",
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+    }
+
     // Init data
     getAndFillOutAllOrder();
 

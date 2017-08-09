@@ -91,6 +91,10 @@ var EndpointConfig = function() {
       return endpointUrl + '/order/get-failed-orders?token=' + $.cookie('token');
   }
 
+  EndpointConfig.prototype.generateRefreshFailedOrder = function() {
+      return endpointUrl + '/order/refresh-failed-orders?token=' + $.cookie('token');
+  }
+
 }
 
 

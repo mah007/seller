@@ -133,9 +133,9 @@ class OrderManager(object):
         return ResponseHelper.generateSuccessResponse(result)
 
     #--------------------------------------------------------------------------------------------
-    # Insert order from Lazada with condition offset = constant. If (offset < constant) -> break;
+    # Insert order from Lazada with specific user
     #--------------------------------------------------------------------------------------------
-    def insertOrderFromLazada(self, user, constant):
+    def insertOrderFromLazadaWithOneUser(self, user, constant):
     	offset = 0
     	failedOrderDao = FailedOrderDao()
     	lazadaOrderApi = LazadaOrderApi()
@@ -151,6 +151,26 @@ class OrderManager(object):
 
     	return ResponseHelper.generateSuccessResponse(None)
 
+    #--------------------------------------------------------------------------------------------
+    # Insert order from Lazada with all user
+    #--------------------------------------------------------------------------------------------
+    def insertOrderFromLazadaWithAllUser(self, users, constant):
+    	offset = 0
+    	failedOrderDao = FailedOrderDao()
+    	lazadaOrderApi = LazadaOrderApi()
+    	for user in users:
+	    	while (offset >= 0):
+	    		result = lazadaOrderApi.getOrders(user, constant, offset)
+	    		if result:
+	    			for x in result:
+	    				offset = offset + 1
+	    				print (offset)
+	    				failedOrderDao.insert(x, user)
+	    		if (offset % 25 != 0):
+	    			offset = -1
+
+    	return ResponseHelper.generateSuccessResponse(None)
+
     #-----------------------------------------------------------------------------
     # Update order state
     #-----------------------------------------------------------------------------
@@ -163,32 +183,10 @@ class OrderManager(object):
         failedOrderDao.updateState(order)
         return ResponseHelper.generateSuccessResponse(None)
 
-    #-----------------------------------------------------------------------------
-    # Insert order from Lazada with all user
-    #-----------------------------------------------------------------------------
-    def insertOrderFromLazadaWithAllUser():        
-    	userDao = UserDao()
-    	users = userDao.getAll()
-    	lazadaOrderApi = LazadaOrderApi()
-
-    	for user in users:
-        	result = lazadaOrderApi.getOrders(user)
-        	failedOrderDao = FailedOrderDao()
-	        for x in result:
-	          count = failedOrderDao.checkExistOrder(x)
-	          if (count == 0):
-	          	failedOrderDao.insert(x, user)
 
 
 
-		# schedule.every().day.at("00:00").do(insertOrderFromLazadaWithAllUser)
-
-	# schedule.every(10).minutes.do(insertOrderFromLazadaWithAllUser)
-	# while 1:
-	#     schedule.run_pending()
-	#     time.sleep(1)
-
-
+	
 
 
 

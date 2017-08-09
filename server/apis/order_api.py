@@ -96,7 +96,7 @@ def getFailedOrders():
 	constantValue = constantManager.getConstantWithId(1)
 			
 	# Check condition constant. Then insert result to database
-	orderManager.insertOrderFromLazada(user, constantValue)
+	# orderManager.insertOrderFromLazadaWithOneUser(user, constantValue)
 	result = orderManager.getAllFailedOrders()
 
 	return make_response(jsonify(result))
@@ -152,6 +152,27 @@ def setStatusToReadyToShip():
 		return make_response(jsonify(result), 201)
 	else:
 		return make_response(jsonify(result), 404)
+
+@OrderAPI.route('/order/refresh-failed-orders', methods=['GET'])
+@cross_origin()
+def refreshFailedOrderWithAllUser():
+	if not request.args:
+		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
+	if not request.json:
+		return make_response(jsonify({'error': 'Missing json parameters value'}), 404)
+
+
+	constant = '2017-08-07 12:00:00'
+		
+	orderManager = OrderManager()
+	userManager = UserManager()
+	users = userManager.getAll(request.args.get('token'))
+	result = orderManager.insertOrderFromLazadaWithAllUser(users, constant)
+
+	if 'success' in result:
+		return make_response(jsonify({"success": "done"}))
+	else:
+		return make_response(jsonify(result))
 
 
 
