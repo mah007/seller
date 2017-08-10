@@ -7,9 +7,11 @@ class ConstantDao(object):
 
     def createTable(self):
         query = '''CREATE TABLE IF NOT EXISTS constant(
-                id              INT AUTO_INCREMENT primary key NOT NULL,
-                name            VARCHAR(50)     NOT NULL,
-                value           VARCHAR(50)         NOT NULL
+                id                     INT AUTO_INCREMENT primary key NOT NULL,
+                name                   VARCHAR(50)     NOT NULL,
+                date_time              VARCHAR(50)     NOT NULL,
+                offset                 INTEGER         NOT NULL,
+                user_id                VARCHAR(50)     NOT NULL
                 );'''
         DatabaseHelper.execute(query)
 
@@ -28,9 +30,9 @@ class ConstantDao(object):
     # --------------------------------------------------------------------------
     # Get constant with Id 
     # --------------------------------------------------------------------------
-    def getConstant(self, constant):
+    def getConstantWithUserId(self, user_id):
         try:
-            query = '''SELECT * FROM constant WHERE id = '{}' '''.format(constant['id'])
+            query = '''SELECT * FROM constant WHERE user_id = '{}' '''.format(user_id)
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)
@@ -41,7 +43,9 @@ class ConstantDao(object):
                 constant.append({
                     "id": row[0],
                     "name": row[1],
-                    "value": row[2]
+                    "date_time": row[2],
+                    "offset": row[3],
+                    "user_id": row[4]
                 })
 
             conn.close()
@@ -50,6 +54,37 @@ class ConstantDao(object):
             print(ex)
             return None
 
+    def getAllConstant(self):
+        try:            
+            query = '''SELECT * FROM constant WHERE  '''
+            conn = DatabaseHelper.getConnection()
+            cur = conn.cursor()
+            cur.execute(query)
+
+            constant = []
+            rows = cur.fetchall()
+            for row in rows:
+                constant.append({
+                    "id": row[0],
+                    "name": row[1],
+                    "date_time": row[2],
+                    "offset": row[3],
+                    "user_id": row[4]
+                })
+
+            conn.close()
+            return constant
+        except Exception as ex:
+            print(ex)
+            return None
+
+    def updateConstantOffset(self, offset, user):
+        try:
+            query = '''UPDATE constant SET offset = '{}' WHERE user_id = '{}' '''.format(offset, user['user_id'])
+            DatabaseHelper.execute(query)
+            return ExceptionUtils.success()
+        except Exception as ex:
+            return ExceptionUtils.error('Error')          
 
 
 

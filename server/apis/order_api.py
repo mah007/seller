@@ -87,16 +87,17 @@ def getOrderItems():
 @cross_origin()
 def getFailedOrders():
 	user = {
+		'user_id': 'lakami',
 		'lazada_api_key': 'jusjWjdv13rre3RxH9b-cXmmA7B9cQQh4jtiLcDyAqX-8PMkhutFeRsv',
 		'lazada_user_id': 'info@zakos.vn'
 	}
 
 	orderManager = OrderManager()
 	constantManager = ConstantManager()
-	constantValue = constantManager.getConstantWithId(1)
-			
+	constant = constantManager.getConstantWithUserId(user['user_id'])
 	# Check condition constant. Then insert result to database
-	# orderManager.insertOrderFromLazadaWithOneUser(user, constantValue)
+	# orderManager.insertOrderFromLazadaWithOneUser(user, constant)
+
 	result = orderManager.getAllFailedOrders()
 
 	return make_response(jsonify(result))
@@ -161,18 +162,18 @@ def refreshFailedOrderWithAllUser():
 	if not request.json:
 		return make_response(jsonify({'error': 'Missing json parameters value'}), 404)
 
-
-	constant = '2017-08-07 12:00:00'
-		
 	orderManager = OrderManager()
 	userManager = UserManager()
-	users = userManager.getAll(request.args.get('token'))
-	result = orderManager.insertOrderFromLazadaWithAllUser(users, constant)
+	constantManager = ConstantManager()
 
-	if 'success' in result:
-		return make_response(jsonify({"success": "done"}))
-	else:
-		return make_response(jsonify(result))
+	users = orderManager.getAllUser(request.args.get('token'))
+	for user in users:
+		constant = constantManager.getConstantWithUserId(user['user_id'])
+		orderManager.insertOrderFromLazadaWithOneUser(user, constant)
+
+	result = orderManager.getAllFailedOrders()
+	return make_response(jsonify(result))
+
 
 
 

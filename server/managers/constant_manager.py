@@ -22,18 +22,16 @@ class ConstantManager(object):
         return userDao.getUser(token)
 
     #-----------------------------------------------------------------------------
-    # Get Failed orders
+    # Get Constant with specific user_id
     #-----------------------------------------------------------------------------
-    def getConstantWithId(self, id):
+    def getConstantWithUserId(self, user_id):
         constantDao = ConstantDao()        
-        result = constantDao.getConstant(id)
+        result = constantDao.getConstantWithUserId(user_id)
 
         if not result:
             return ResponseHelper.generateErrorResponse("Value is not exist!")
 
         return ResponseHelper.generateSuccessResponse(result)
-
-
 
     def checkValueExist(self, constant):
         constantDao = ConstantDao()
@@ -41,6 +39,8 @@ class ConstantManager(object):
         if (result['value'] == None):
             return ResponseHelper.generateErrorResponse("Value is not exist!")
         return ResponseHelper.generateSuccessResponse(result)
+
+
 
     
 

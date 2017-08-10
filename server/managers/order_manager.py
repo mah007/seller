@@ -136,38 +136,19 @@ class OrderManager(object):
     # Insert order from Lazada with specific user
     #--------------------------------------------------------------------------------------------
     def insertOrderFromLazadaWithOneUser(self, user, constant):
-    	offset = 0
     	failedOrderDao = FailedOrderDao()
     	lazadaOrderApi = LazadaOrderApi()
-    	while (offset >= 0):
-    		result = lazadaOrderApi.getOrders(user, constant, offset)
+    	value = constant['data'][0]['offset']
+    	while (value >= 0):
+    		result = lazadaOrderApi.getOrders(user, constant)
     		if result:
     			for x in result:
-    				offset = offset + 1
-    				print (offset)
+    				value = value + 1
+    				print (value)
     				failedOrderDao.insert(x, user)
-    		if (offset % 25 != 0):
-    			offset = -1
-
-    	return ResponseHelper.generateSuccessResponse(None)
-
-    #--------------------------------------------------------------------------------------------
-    # Insert order from Lazada with all user
-    #--------------------------------------------------------------------------------------------
-    def insertOrderFromLazadaWithAllUser(self, users, constant):
-    	offset = 0
-    	failedOrderDao = FailedOrderDao()
-    	lazadaOrderApi = LazadaOrderApi()
-    	for user in users:
-	    	while (offset >= 0):
-	    		result = lazadaOrderApi.getOrders(user, constant, offset)
-	    		if result:
-	    			for x in result:
-	    				offset = offset + 1
-	    				print (offset)
-	    				failedOrderDao.insert(x, user)
-	    		if (offset % 25 != 0):
-	    			offset = -1
+    		if (value % 25 != 0):
+    			value = -1
+    	constantDao.updateConstantOffset(value, user)
 
     	return ResponseHelper.generateSuccessResponse(None)
 
