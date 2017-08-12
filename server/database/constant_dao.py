@@ -56,7 +56,7 @@ class ConstantDao(object):
 
     def getAllConstant(self):
         try:            
-            query = '''SELECT * FROM constant WHERE  '''
+            query = '''SELECT * FROM constant '''
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)

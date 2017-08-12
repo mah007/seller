@@ -2,6 +2,7 @@ from database.sku_dao import SkuDao
 from database.user_dao import UserDao
 from database.order_dao import OrderDao
 from database.failed_order_dao import FailedOrderDao
+from database.constant_dao import ConstantDao
 from managers.user_manager import UserManager
 from lazada_api.lazada_order_api import LazadaOrderApi
 from managers.order_helper import OrderHelper
@@ -135,22 +136,28 @@ class OrderManager(object):
     #--------------------------------------------------------------------------------------------
     # Insert order from Lazada with specific user
     #--------------------------------------------------------------------------------------------
-    def insertOrderFromLazadaWithOneUser(self, user, constant):
-    	failedOrderDao = FailedOrderDao()
-    	lazadaOrderApi = LazadaOrderApi()
-    	value = constant['data'][0]['offset']
-    	while (value >= 0):
-    		result = lazadaOrderApi.getOrders(user, constant)
-    		if result:
-    			for x in result:
-    				value = value + 1
-    				print (value)
-    				failedOrderDao.insert(x, user)
-    		if (value % 25 != 0):
-    			value = -1
-    	constantDao.updateConstantOffset(value, user)
+    def insertOrderFromLazadaWithOneUser(self, user):
+        constantDao = ConstantDao()
+        failedOrderDao = FailedOrderDao()
+        lazadaOrderApi = LazadaOrderApi()
+        flag = 1
+        while (flag > 0):
+            constant = constantDao.getConstantWithUserId(user['user_id'])
+            print(constant[0]['offset'])
+            # print(constant['offset'])
+            offset = constant[0]['offset']
+            result = lazadaOrderApi.getOrders(user, constant)
+            if result:
+                for x in result:
+                    offset = offset + 1
+                    print(offset)
+                    failedOrderDao.insert(x, user)
+            if(offset % 25 != 0):
+                flag = -1
+            constantDao.updateConstantOffset(offset, user)
 
-    	return ResponseHelper.generateSuccessResponse(None)
+
+        return ResponseHelper.generateSuccessResponse(None)
 
     #-----------------------------------------------------------------------------
     # Update order state

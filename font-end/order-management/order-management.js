@@ -16,14 +16,22 @@ jQuery(document).ready(function() {
         $('#username-on-header').html(cookie.getUsername());
     }
 
-    if($('.btnrefresh').length > 0) {
-        $(".btnnew").click(function() {
+    if ($('.btnrefresh').length > 0) {
+        $(".btnrefresh").click(function() {
             $.ajax({
-                method:'GET',
-                url: endpoint.generateRefreshFailedOrder(),
+                method: 'GET',
+                url: endpoint.generateGetFailedOrders(),
                 contentType: "application/json",
-                success: function (data) {
-                    console.log(data);
+                success: function(data) {
+                    // console.log(data);
+                    swal({
+                        title: "Refresh thành công!",
+                        text: "",
+                        type: "success",
+                        confirmButtonText: "OK! Redirect to list",
+                    }, function() {
+                        window.location.href = "";
+                    });
                 },
                 error: function(error) {
                     console.log(error);
@@ -40,7 +48,7 @@ jQuery(document).ready(function() {
 function enableSwitchery() {
 
     // Update state---------------------------------------------------------------------
-    if($('.btnstatus').length > 0) {
+    if ($('.btnstatus').length > 0) {
         var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
         elems.forEach(function(html) {
             var switchery = new Switchery(html);
@@ -49,21 +57,21 @@ function enableSwitchery() {
             var id = $(this).parents('tr').data('id');
             var _parent = $(this).parents("tr");
             $.ajax({
-                method:'POST',
+                method: 'POST',
                 url: endpoint.generateUpdateOrderState(),
                 contentType: "application/json",
                 data: JSON.stringify({
                     id: id,
                 }),
-                success: function (data) {
-                        swal({
-                            title: "Trạng thái đã được cập nhật!",
-                            text: "",
-                            type: "success",
-                            confirmButtonText: "OK! Redirect to list",
-                        }, function () {
-                            window.location.href = "";
-                        });
+                success: function(data) {
+                    swal({
+                        title: "Trạng thái đã được cập nhật!",
+                        text: "",
+                        type: "success",
+                        confirmButtonText: "OK! Redirect to list",
+                    }, function() {
+                        window.location.href = "";
+                    });
                 },
                 error: function(error) {
                     console.log(error);
@@ -76,7 +84,7 @@ function enableSwitchery() {
 
 function getAndFillOutAllOrder() {
     $.ajax({
-        method:'GET',
+        method: 'GET',
         url: endpoint.generateGetFailedOrders(),
         contentType: "application/json",
         success: function(data) {
@@ -94,28 +102,3 @@ function getAndFillOutAllOrder() {
         }
     });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

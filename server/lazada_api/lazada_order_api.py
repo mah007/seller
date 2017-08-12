@@ -184,10 +184,10 @@ class LazadaOrderApi(object):
 		'UserID': user['lazada_user_id'],
 		'Version': '1.0',
 		'CreatedBefore': LazadaApiHelper.getCurrentUTCTime(),
-		# 'UpdateAfter': constant['data'][0]['date_time'],
+		# 'UpdateAfter': constant[0]['date_time'],
 		'UpdatedBefore': LazadaApiHelper.getCurrentUTCTime(),
 		'Limit': 25,
-		'Offset': constant['data'][0]['offset']
+		'Offset': constant[0]['offset']
 		}
 
 		parameters['Signature'] = LazadaApiHelper.generateSignature(parameters, user['lazada_api_key'])

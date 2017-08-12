@@ -41,7 +41,7 @@ class FailedOrderDao(object):
 
     def getFailedOrders(self):
         try:
-            query = '''SELECT * FROM failed_order_management WHERE state = 'pending' '''
+            query = '''SELECT * FROM failed_order_management WHERE state = 'shipped' '''
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)
