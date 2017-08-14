@@ -8,6 +8,7 @@ from lazada_api.lazada_order_api import LazadaOrderApi
 from managers.order_helper import OrderHelper
 from utils.response_utils import ResponseUtils
 from managers.response_helper import ResponseHelper
+from lazada_api.lazada_api_helper import LazadaApiHelper
 import schedule
 import time
 
@@ -154,7 +155,8 @@ class OrderManager(object):
                     failedOrderDao.insert(x, user)
             if(offset % 25 != 0):
                 flag = -1
-            constantDao.updateConstantOffset(offset, user)
+            # dateTime = LazadaApiHelper.getCurrentUTCTime()
+            constantDao.updateConstantOffset(offset, LazadaApiHelper.getCurrentUTCTime(), user)
 
 
         return ResponseHelper.generateSuccessResponse(None)

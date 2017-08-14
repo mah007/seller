@@ -78,9 +78,9 @@ class ConstantDao(object):
             print(ex)
             return None
 
-    def updateConstantOffset(self, offset, user):
+    def updateConstantOffset(self, offset, dateTime, user):
         try:
-            query = '''UPDATE constant SET offset = '{}' WHERE user_id = '{}' '''.format(offset, user['user_id'])
+            query = '''UPDATE constant SET offset = '{}', date_time = '{}' WHERE user_id = '{}' '''.format(offset, dateTime, user['user_id'])
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:

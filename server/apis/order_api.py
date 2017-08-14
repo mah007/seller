@@ -94,14 +94,14 @@ def getFailedOrders():
 
 	orderManager = OrderManager()
 	# Check condition constant. Then insert result to database
-	# orderManager.insertOrderFromLazadaWithOneUser(user)
+	orderManager.insertOrderFromLazadaWithOneUser(user)
 
 	result = orderManager.getAllFailedOrders()
 
 	if 'success' in result:
 		return make_response(jsonify(result))
 	else:
-		return make_response(jsonify({"error": "Error"}))
+		return make_response(jsonify({"error": "There is no order here"}))
 
 @OrderAPI.route('/order/update-order', methods=['POST'])
 @cross_origin()
@@ -167,7 +167,7 @@ def refreshFailedOrderWithAllUser():
 	userManager = UserManager()
 	constantManager = ConstantManager()
 
-	users = orderManager.getAllUser(request.args.get('token'))
+	users = userManager.getAllUser(request.args.get('token'))
 	for user in users:
 		constant = constantManager.getConstantWithUserId(user['user_id'])
 		orderManager.insertOrderFromLazadaWithOneUser(user, constant)
