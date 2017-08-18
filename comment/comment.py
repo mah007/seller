@@ -1,58 +1,58 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import WebDriverWait
-# from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-import unittest
-
-# firefox_capabilities = DesiredCapabilities.FIREFOX
-# firefox_capabilities['marionette'] = True
-# firefox_capabilities['binary'] = '/usr/bin/firefox'
-
-class LoginTest(unittest.TestCase):
-
-	def setUp(self):
-
-		self.driver = webdriver.Firefox()
-		self.driver.get("https://www.lazada.vn/customer/account/login/")
 
 
-	def test_Login(self):
-		driver = self.driver
-		email = driver.find_element_by_id("LoginForm_email")
-		password = driver.find_element_by_id("LoginForm_password")
-		loginButton = driver.find_element_by_class_name("ui-buttonCta")
+class Comment:
 
-		email.clear()
-		email.send_keys("lzdseller@gmail.com")
+	def give_rating(self, driver, rating):
+		if (rating == 4):
+			star = driver.find_elements_by_xpath('//*[@id="ProductRatingForm"]/div[1]/div[1]/div/label[2]')
+			star.click()
+		else: # Default is 5 star
+			star = driver.find_elements_by_xpath('//*[@id="ProductRatingForm"]/div[1]/div[1]/div/label[1]')
+			star.click()
 
-		password.clear()
-		password.send_keys("Hoangbeatb3")
+	def enter_title(self, driver, title):
+		titleInput = driver.find_elements_by_xpath('//*[@id="RatingForm_title"]')
+		titleInput.clear()
+		titleInput.send_keys(title)
 
-		loginButton.click()
+	def enter_comment(self, driver, comment):
+		titleInput = driver.find_elements_by_xpath('//*[@id="RatingForm_title"]')
+		titleInput.clear()
+		titleInput.send_keys(comment)
 
-		div = self.driver.find_element_by_class_name('logo')
-		href = div.find_element_by_css_selector('a')
+	def click_submit_button(self, driver):
+		submitButton = driver.find_elements_by_xpath('//*[@id="ProductRatingFormAction"]/div/input')
+		submitButton.click()
 
-		href.click()
+	def giveComment(self, driver, product, comment):
+		print('''---// {} give comment for {} '''.format(account['email'], product['site']))
 
-		driver.get('https://www.lazada.vn/apple-iphone-7-32gb-hong-hang-nhap-khau-7629048.html?spm=a2o4n.home.sku-feed-slider-with-banner_452505.12.1cFAdR')		
+		try:
+			driver.get(product['site'])
 
-		div = self.driver.find_element_by_class_name('c-input-group__input-wrap')
-		textArea = div.find_element_by_css_selector('textarea')
-		commentText = "This is a good devices!"
-		textArea.clear()
-		textArea.send_keys(commentText)		
+			# Click this button to see feedback form
+			# give_feedback_button = driver.find_elements_by_xpath('//*[@id="productReview"]/div[1]/header/span')
+			# give_feedback_button.click()
 
-		div = driver.find_element_by_class_name('c-input-group__button-container')
-		questionButton = div.find_element_by_css_selector('button')
-		questionButton.click()		
+			self.give_rating(driver, comment['rating'])
+			self.enter_title(driver, comment['title'])
+			self.enter_comment(driver, comment['comment'])
+			self.click_submit_button(driver)
+
+			resultContent = driver.find_element_by_class_name('c-review-form__pending')
+			result = resultContent.find_element_by_class_name('c-review-pending__message') # If success there will be have a review message
+			if result is not None:
+				print('''---// Give comment result {} '''.format(result.text))
+
+			return result
+		except Exception as ex:
+			print('''---// Comment got exception: {} '''.format(ex))
+			return ex
 
 
 
 
-	def tearDown(self):
-		print("Login Success")
 
-if __name__ == '__main__':
-	unittest.main()
 

@@ -1,38 +1,40 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import WebDriverWait
-# from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-import unittest
 
-# firefox_capabilities = DesiredCapabilities.FIREFOX
-# firefox_capabilities['marionette'] = True
-# firefox_capabilities['binary'] = '/usr/bin/firefox'
+class Login:
 
-class LoginTest(unittest.TestCase):
+	def enter_email(self, driver, email):
+		emailInput = driver.find_element_by_id("LoginForm_email")
+		emailInput.clear()
+		emailInput.send_keys(email)
 
-	def setUp(self):
+	def enter_password(self, driver, password):
+		passwordInput = driver.find_element_by_id("LoginForm_password")
+		passwordInput.clear()
+		passwordInput.send_keys(password)
 
-		self.driver = webdriver.Firefox()
-		self.driver.get("https://www.lazada.vn/customer/account/login/")
-
-
-	def test_Login(self):
-		driver = self.driver
-		email = driver.find_element_by_id("LoginForm_email")
-		password = driver.find_element_by_id("LoginForm_password")
-		loginButton = driver.find_element_by_class_name("ui-buttonCta")
-
-		email.clear()
-		email.send_keys("info@lazada.com")
-
-		password.clear()
-		password.send_keys("lakamipassword")
-
+	def click_login_button(self, driver):
+		loginButton = driver.find_element_by_class_name('ui-buttonCta')
 		loginButton.click()
 
-	def tearDown(self):
-		print("Login Success")
+	def performLogin(self, driver, account):
+		print('''---// Login with account: {} '''.format(account['email']))
+		driver.get("https://www.lazada.vn/customer/account/login")
 
-if __name__ == '__main__':
-	unittest.main()
+		try:
+			self.enter_email(driver, account['email'])
+			self.enter_password(driver, account['password'])
+			self.click_login_button(driver);
+
+			result = driver.find_element_by_class_name("s-error")
+			if result is not None:
+				print('''---// Login result: {} '''.format(result.text))
+
+			return result
+		except Exception as ex:
+			print('''---// Login got exception: {} '''.format(ex))
+			return ex
+
+
+
 
