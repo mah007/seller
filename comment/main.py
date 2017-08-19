@@ -7,11 +7,6 @@ from importer.excel import ImportExcel
 
 if __name__ == "__main__":
 
-    account = {
-        'email': "lazada1243@gmail.com",
-        'name': "Nguyen Hoang Long",
-        'password': "nguyenhoanglong89"
-    }
     commentData = {
         'rating': 5,
         'title': "Excited!!!",
@@ -21,10 +16,14 @@ if __name__ == "__main__":
         'site': "https://www.lazada.vn/apple-iphone-7-32gb-hong-hang-nhap-khau-7629048.html?spm=a2o4n.home.sku-feed-slider-with-banner_452505.12.1cFAdR"
     }
 
+    # Read account
     importExcel = ImportExcel()
     accounts = importExcel.getAccounts()
-    print(accounts)
 
+    # Read comment and pro
+    # TODO implement
+
+    # Simple comment logic
     # driver = webdriver.Chrome()
     # driver.set_window_position(0, 0)
     # driver.set_window_size(720, 1100)
