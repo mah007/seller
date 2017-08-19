@@ -32,7 +32,7 @@ class Comment:
 		submitButton.click()
 
 	def giveComment(self, driver, account, product, comment):
-		print('''---// {} give comment ==> {} for {} '''.format(account['email'], comment['comment'], product['site']))
+		print('''---// {} give comment ==> {} ==> {} '''.format(account['email'], comment['comment'], product['site']))
 
 		try:
 			driver.get(product['site'])
