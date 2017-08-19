@@ -37,15 +37,18 @@ class Register:
             self.enter_password(driver, account['password'])
             self.enter_repassword(driver, account['password'])
             self.click_register_button(driver);
-
-            result = driver.find_element_by_class_name("s-error")
-            if result is not None:
-                print('''---// Register result: {} '''.format(result.text))
-
-            return result
         except Exception as ex:
             print('''---// Register got exception: {} '''.format(ex))
             return ex
+
+        try:
+            result = driver.find_element_by_class_name("s-error")
+            if result is not None:
+                print('''---// Register failed: {} '''.format(result.text))
+
+            return result
+        except Exception as ex: # If succes exception will happen because cannot find class s-error
+            return None         # Marked as success
 
 
 

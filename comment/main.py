@@ -10,12 +10,12 @@ if __name__ == "__main__":
     driver.set_window_size(720, 1100)
 
     account = {
-        'email': "nguyenhoanglong@gmail.com",
+        'email': "lazada1243@gmail.com",
         'name': "Nguyen Hoang Long",
         'password': "nguyenhoanglong89"
     }
-    comment = {
-        'rating': 4,
+    commentData = {
+        'rating': 5,
         'title': "Excited!!!",
         'comment': "This product is very great!!!"
     }
@@ -31,5 +31,7 @@ if __name__ == "__main__":
     if resutl is not None:
         resutl = register.performRegister(driver, account)
         if resutl is None:
-            comment.giveComment(driver, product, comment)
+            comment.giveComment(driver, account, product, commentData)
+    else:
+        comment.giveComment(driver, account, product, commentData)
 

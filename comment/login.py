@@ -25,15 +25,18 @@ class Login:
 			self.enter_email(driver, account['email'])
 			self.enter_password(driver, account['password'])
 			self.click_login_button(driver);
-
-			result = driver.find_element_by_class_name("s-error")
-			if result is not None:
-				print('''---// Login result: {} '''.format(result.text))
-
-			return result
 		except Exception as ex:
 			print('''---// Login got exception: {} '''.format(ex))
 			return ex
+
+		try:
+			result = driver.find_element_by_class_name("s-error")
+			if result is not None:
+				print('''---// Login failed: {} '''.format(result.text))
+
+			return result
+		except Exception as ex: # If succes exception will happen because cannot find class s-error
+			return None 	        # Marked as success
 
 
 
