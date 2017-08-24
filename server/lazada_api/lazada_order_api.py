@@ -78,7 +78,6 @@ class LazadaOrderApi(object):
 			resp = requests.get(url)
 			if resp.status_code == 200:
 				response = json.loads(resp.text)
-				# Lazada return exception
 				if 'ErrorResponse' in response:
 					return ExceptionUtils.error('''User: {}-{}, Get OrderItem: {} is error: {}'''.format(user['id'], user['username'], order['OrderNumber'], response['ErrorResponse']['Head']['ErrorMessage']))
 
@@ -119,7 +118,6 @@ class LazadaOrderApi(object):
 			resp = requests.get(url)
 			if resp.status_code == 200:
 				response = json.loads(resp.text)
-				# Lazada return exception
 				if 'ErrorResponse' in response:
 					return ExceptionUtils.error('''User: {}-{}, Set Status to Packed is error: {}'''.format(user['id'], user['username'], response['ErrorResponse']['Head']['ErrorMessage']))
 
@@ -160,7 +158,6 @@ class LazadaOrderApi(object):
 			resp = requests.get(url)
 			if resp.status_code == 200:
 				response = json.loads(resp.text)
-				# Lazada return exception
 				if 'ErrorResponse' in response:
 					return ExceptionUtils.error('''User: {}-{}, Set Status to Ready-To-Ship is error: {}'''.format(user['id'], user['username'], response['ErrorResponse']['Head']['ErrorMessage']))
 
@@ -176,7 +173,7 @@ class LazadaOrderApi(object):
 	# Get Orders
 	#
 	#-----------------------------------------------------------------------------
-	def getOrders(self, user, constant): 
+	def getOrders(self, user, constant):
 		parameters = {
 		'Action': 'GetOrders',
 		'Format':'JSON',
