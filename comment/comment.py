@@ -7,7 +7,7 @@ class Comment:
 
 	def click_give_feedback_button(self, driver):
 		showFeedbackButton = driver.find_element_by_class_name('c-review-form__button_name_write-review')
-		showFeedbackButton.click()
+		driver.execute_script("$(arguments[0]).click();", showFeedbackButton)
 
 	def give_rating(self, driver, rating):
 		if (rating == 4):
@@ -32,10 +32,9 @@ class Comment:
 		submitButton.click()
 
 	def giveComment(self, driver, account, product, comment):
-		print('''---// {} give comment ==> {} ==> {} '''.format(account['email'], comment['comment'], product['site']))
-
 		try:
 			driver.get(product['site'])
+			time.sleep(3)
 			self.click_give_feedback_button(driver)
 			self.give_rating(driver, comment['rating'])
 			self.enter_title(driver, comment['title'])
@@ -48,6 +47,7 @@ class Comment:
 		try:
 			time.sleep(1)
 			result = driver.find_element_by_class_name('c-review-pending__message')
+			print('''---// {} give comment ==> {} ==> {} '''.format(account['email'], comment['title'], product['site']))
 			return None # If success there will be have a review message
 		except Exception as ex:
 			print('''---// Give comment is error: {} '''.format(ex))

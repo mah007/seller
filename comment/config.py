@@ -5,6 +5,6 @@ class ExcelInputData(object):
     COMMENT_SHEET_NAME = "comment"
     ACCOUNT_SHEET_NAME = "account"
     MAX_RETRY_TIME = 3
-    ACCOUNT_NAME = 'A'
-    ACCOUNT_EMAIL = 'B'
-    ACCOUNT_PASSWORD = 'C'
+    COLUMN_A = 'A'
+    COLUMN_B = 'B'
+    COLUMN_C = 'C'

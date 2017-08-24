@@ -15,7 +15,7 @@ class Login:
 
 	def click_login_button(self, driver):
 		loginButton = driver.find_element_by_class_name('ui-buttonCta')
-		loginButton.click()
+		driver.execute_script("$(arguments[0]).click();", loginButton)
 
 	def performLogin(self, driver, account):
 		print('''---// Login with account: {} '''.format(account['email']))
