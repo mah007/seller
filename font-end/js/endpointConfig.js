@@ -95,6 +95,12 @@ var EndpointConfig = function() {
       return endpointUrl + '/order/refresh-failed-orders?token=' + $.cookie('token');
   }
 
+
+  // ENEMY
+  EndpointConfig.prototype.generateGetEnemy = function() {
+      return endpointUrl + '/enemy/get-all?token=' + $.cookie('token');
+  }  
+
 }
 
 

@@ -14,7 +14,8 @@ jQuery(document).ready(function() {
     } else {
         $('#username-on-header').html(cookie.getUsername());
     }
-
+    
+    $("#menuContent").load("../order/content.html"); 
     // Init data
     getAndFillOutAllUser();
 

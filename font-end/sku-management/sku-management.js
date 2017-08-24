@@ -15,8 +15,13 @@ jQuery(document).ready(function() {
         $('#username-on-header').html(cookie.getUsername());
     }
 
+    $("#menuContent").load("../order/content.html"); 
+
     // Init data
     getAndFillOutAllSku();
+    getAndFillOutEnemy();
+    
+    
 
     if($('.btntab1submit').length > 0) {
         $('.btntab1submit').click(function() {
@@ -448,7 +453,24 @@ function getAndFillOutAllSku() {
             console.log(error);
         }
     });
-}
+};
+
+function getAndFillOutEnemy() {
+    $.ajax({
+        method:'GET',
+        url: endpoint.generateGetEnemy(),
+        contentType: "application/json",
+        success: function(data) {
+            console.log(data.data);
+            var template = $("#history-content-template").html();
+            var contentHtml = Handlebars.compile(template);
+            $("#tbody_history").html(contentHtml(data));
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+};
 
 
 //-------------------------------------------------------------------------------------

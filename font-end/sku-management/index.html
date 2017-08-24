@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="vi" class="ie8 no-js"> <![endif]-->
 <!--[if IE 9]> <html lang="vi" class="ie9 no-js"> <![endif]-->
@@ -6,33 +5,36 @@
 <html lang="vi">
 <!--<![endif]-->
 <!-- BEGIN HEAD -->
+
 <head>
     <meta charset="utf-8" />
     <link rel="shortcut icon" href="../img/logo-light.png" />
     <title>Bidding Tool - PowerRunner</title>
     <link rel="icon" href="../img/title_icon.png" type="image/png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-    <meta content="" name="description"/>
-    <meta content="" name="author"/>
+    <meta content="" name="description" />
+    <meta content="" name="author" />
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <link href="//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css">
     <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="../css/simple-line-icons.min.css" rel="stylesheet" type="text/css">
     <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="../css/uniform.default.css" rel="stylesheet" type="text/css">
-    <link href="../css/select2.css" rel="stylesheet" type="text/css"/>
-    <link href="../css/sweetalert.css" rel="stylesheet" type="text/css"/>
-    <link href="../css/switchery.min.css" rel="stylesheet" type="text/css"/>
-    <link href="../css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/select2.css" rel="stylesheet" type="text/css" />
+    <link href="../css/sweetalert.css" rel="stylesheet" type="text/css" />
+    <link href="../css/switchery.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
     <!-- BEGIN THEME STYLES -->
-    <link href="../css/component/components-md.css" id="style_components" rel="stylesheet" type="text/css"/>
-    <link href="../css/component/plugins-md.css" rel="stylesheet" type="text/css"/>
-    <link href="../css/component/layout-md.css" rel="stylesheet" type="text/css"/>
-    <link href="../css/component/custom-md.css" rel="stylesheet" type="text/css"/>
-    <link href="../css/theme/light.css" rel="stylesheet" type="text/css"/>
-    <link href="../sku-management/sku-management.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/component/components-md.css" id="style_components" rel="stylesheet" type="text/css" />
+    <link href="../css/component/plugins-md.css" rel="stylesheet" type="text/css" />
+    <link href="../css/component/layout-md.css" rel="stylesheet" type="text/css" />
+    <link href="../css/component/custom-md.css" rel="stylesheet" type="text/css" />
+    <link href="../css/theme/light.css" rel="stylesheet" type="text/css" />
+    <link href="../sku-management/sku-management.css" rel="stylesheet" type="text/css" />
+    <link href="../mdl/material.css" rel="stylesheet" type="text/css" />
+    <link href="../mdl/material.min.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -75,29 +77,14 @@
     </div>
     <!-- END HEADER -->
     <div class="clearfix"></div>
+    </br>
+    </br>
+    </br>
+    </br>
     <!-- BEGIN CONTAINER -->
     <div class="page-container">
         <!-- BEGIN SIDEBAR -->
-        <div class="page-sidebar-wrapper">
-            <div class="page-sidebar md-shadow-z-2-i  navbar-collapse collapse">
-                <!-- BEGIN SIDEBAR MENU -->
-                <ul class="page-sidebar-menu " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-                    <li class="start active">
-                        <a href="../sku-management"><span class="title">Quản lý Sku</span></a>
-                    </li>
-                    <li class="start">
-                        <a href="../order"><span class="title">Scan barcode</span></a>
-                    </li>
-                    <li class="start failed">
-                        <a href="../order-management"><span class="title">Sản phẩm trả về</span></a>
-                    </li>
-                    <li class="last ">
-                        <a href="/help"><span class="title">Trợ giúp</span></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
+        <div id="menuContent"></div>
         <!-- BEGIN CONTENT -->
         <div class="page-content-wrapper">
             <div class="page-content">
@@ -139,7 +126,7 @@
                                             <input type="number" class="form-control" maxlength="20" name="txt_stp" placeholder="10">
                                         </div>
                                     </div>
-                               <!--      <div class="form-group">
+                                    <!--      <div class="form-group">
                                         <label class="control-label col-md-4"><b style="color:#FF0000">*</b> Tần suất check giá (giây)</label>
                                         <div class="col-md-8">
                                             <input type="number" class="form-control" maxlength="20" name="txt_seq" placeholder="60">
@@ -176,7 +163,7 @@
                             </div>
                             <div class="modal-body">
                                 <form class="form-horizontal form-bordered">
-                                   <!--  <div class="form-group">
+                                    <!--  <div class="form-group">
                                         <label class="control-label col-md-4"><b style="color:#FF0000">*</b> Username</label>
                                         <div class="col-md-8">
                                             <input type="text" class="form-control" maxlength="20" name="txt_username" placeholder="">
@@ -252,7 +239,7 @@
                                                 </form>
                                             </div>
                                             <div class="col-md-6">
-                                                        <!-- <div class="btn-group pull-right">
+                                                <!-- <div class="btn-group pull-right">
                                                             <button class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="md-click-circle md-click-animate" style="height: 85px; width: 85px; top: -19.5px; left: 33.4062px;"></span>Công cụ <i class="fa fa-angle-down"></i>
                                                             </button>
                                                             <ul class="dropdown-menu pull-right">
@@ -261,172 +248,178 @@
                                                                 </li>
                                                             </ul>
                                                         </div> -->
-                                                        <div class="btn-group pull-right btnnew" style="margin-right: 20px;">
-                                                            <button id="sample_editable_1_new" class="btn green"><span class="md-click-circle md-click-animate" style="height: 104px; width: 104px; top: -28px; left: 0px;"></span>
-                                                                Thêm mới <i class="fa fa-plus"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="table-scrollable">
-                                                <table id="table_sku" class="table table-hover">
-                                                    <thead>
-                                                        <tr>
-                                                            <th style="vertical-align:top;" class="text-left">SKU</th>
-                                                            <th style="vertical-align:top;width: 30%;" class="text-left">Tên sản phẩm</th>
-                                                            <th style="vertical-align:top;" class="text-left">Khoảng giá<br>chỉnh sửa</th>
-                                                            <th style="vertical-align:top;" class="text-left">Giá hiện tại<br>
-                                                            <th style="vertical-align:top;" class="text-left">Giá thấp hơn<br>đối thủ</th>
-                                                            <th style="vertical-align:top;width:180px;" class="text-left">Quản trị</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="tbody_sku">
-                                                        <!-- WILL BE FILL DATA IN HERE -->
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                </div>
-                                                <div class="col-sm-6 ">
-                                                    <ul class="pagination pull-right">
-                                                        <li class="active"><a href="javascript:;">1</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- HISTORY TAB -->
-                                        <div class="tab-pane " id="tab_1_2">
-                                            <div class="table-toolbar">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <form method="GET">
-                                                            <input type="hidden" name="q" value="" />
-                                                            <input type="hidden" name="p1" value="1" />
-                                                            <input type="hidden" name="tab" value="his" />
-                                                            <select class="form-control input-large sltfiltersku" name="s" data-placeholder="Select...">
-                                                                <option value="0">All</option>
-                                                                <option value="272810">Kep_Xe_Hoi_H81_A</option>
-                                                            </select>
-                                                        </form>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <!-- content right -->
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="table-scrollable">
-                                                <table class="table table-hover">
-                                                    <thead>
-                                                        <tr>
-                                                            <th style="vertical-align:top;">Ngày</th>
-                                                            <th style="vertical-align:top;">SKU</th>
-                                                            <th style="vertical-align:top;" class="text-right">Đổi Giá</th>
-                                                            <th style="vertical-align:top;">Hệ thống ghi nhận</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="tbody_history">
-                                                        <!-- WILL BE FILL DATA IN HERE -->
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-6"></div>
-                                                <div class="col-sm-6 ">
-                                                    <ul class="pagination pull-right">
-                                                        <li class="active"><a href="javascript:;">1</a></li>
-                                                    </ul>
+                                                <div class="btn-group pull-right btnnew" style="margin-right: 20px;">
+                                                    <button id="sample_editable_1_new" class="btn green"><span class="md-click-circle md-click-animate" style="height: 104px; width: 104px; top: -28px; left: 0px;"></span> Thêm mới <i class="fa fa-plus"></i>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="table-scrollable">
+                                        <table id="table_sku" class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th style="vertical-align:top;" class="text-left">SKU</th>
+                                                    <th style="vertical-align:top;width: 30%;" class="text-left">Tên sản phẩm</th>
+                                                    <th style="vertical-align:top;" class="text-left">Khoảng giá
+                                                        <br>chỉnh sửa</th>
+                                                    <th style="vertical-align:top;" class="text-left">Giá hiện tại
+                                                        <br>
+                                                        <th style="vertical-align:top;" class="text-left">Giá thấp hơn
+                                                            <br>đối thủ</th>
+                                                        <th style="vertical-align:top;width:180px;" class="text-left">Quản trị</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbody_sku">
+                                                <!-- WILL BE FILL DATA IN HERE -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                        </div>
+                                        <div class="col-sm-6 ">
+                                            <ul class="pagination pull-right">
+                                                <li class="active"><a href="javascript:;">1</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- HISTORY TAB -->
+                                <div class="tab-pane " id="tab_1_2">
+                                    <div class="table-toolbar">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <form method="GET">
+                                                    <input type="hidden" name="q" value="" />
+                                                    <input type="hidden" name="p1" value="1" />
+                                                    <input type="hidden" name="tab" value="his" />
+                                                    <select class="form-control input-large sltfiltersku" name="s" data-placeholder="Select...">
+                                                        <option value="0">All</option>
+                                                        <option value="272810">Kep_Xe_Hoi_H81_A</option>
+                                                    </select>
+                                                </form>
+                                            </div>
+                                            <div class="col-md-6">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+                                        <header class="mdl-layout__header">
+                                            <div class="mdl-layout__header-row">
+                                                <span class="mdl-layout-title">History Tab</span>
+                                                <div class="mdl-layout-spacer"></div>
+                                            </div>
+                                        </header>
+                                        <main class="mdl-layout__content">
+                                            <div>
+                                                <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp" width="100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="mdl-data-table__cell--non-numeric" width="25%"><b>Number</b></th>
+                                                            <th></th>
+                                                            <th class="mdl-data-table__cell--non-numeric" width="25%"><b>Sku</b></th>
+                                                            <th></th>
+                                                            <th class="mdl-data-table__cell--non-numeric" width="50%"><b>Enemy</b></th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tbody_history">
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </main>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- END PAGE CONTENT-->
                     </div>
                 </div>
-                <!-- END CONTENT -->
+                <!-- END PAGE CONTENT-->
             </div>
-            <!-- END CONTAINER -->
-            <!-- BEGIN FOOTER -->
-            <div class="page-footer">
-                <!-- TO BE DESIGN FOR FOOTER HERE -->
-            </div>
-            <!-- END FOOTER -->
+        </div>
+        <!-- END CONTENT -->
+    </div>
+    <!-- END CONTAINER -->
+    <!-- BEGIN FOOTER -->
+    <div class="page-footer">
+        <!-- TO BE DESIGN FOR FOOTER HERE -->
+    </div>
+    <!-- END FOOTER -->
+    <!-- BEGIN CORE PLUGINS JS -->
+    <script src="../js/plugin/jquery.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/jquery-migrate.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/handlebars-v4.0.8.js" type="text/javascript"></script>
+    <script src="../js/plugin/jquery.cookie.js" type="text/javascript"></script>
+    <script src="../js/cookieConfig.js" type="text/javascript"></script>
+    <script src="../js/endpointConfig.js" type="text/javascript"></script>
+    <!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+    <script src="../js/plugin/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/jquery.slimscroll.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/jquery.blockui.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/jquery.cokie.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/jquery.uniform.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/select2.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/sweetalert.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/switchery.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/bootstrap-switch.min.js" type="text/javascript"></script>
+    <!-- END CORE PLUGINS -->
+    <script src="../js/component/metronic.js" type="text/javascript"></script>
+    <script src="../js/component/layout.js" type="text/javascript"></script>
+    <script src="../js/component/style.js" type="text/javascript"></script>
+    <!-- END JAVASCRIPTS -->
+    <script src="../sku-management/sku-management.js" type="text/javascript"></script>
+    <!-- Templates -->
+    <script id="tab-content-template" type="text/x-handlebars-template">
+        {{#each data}}
+        <tr>
+            <td>{{execute_time}}</td>
+            <td><a href="{{link}}" style="color:#3598dc;" target="_blank">{{sku}}</a></td>
+            <td class="text-right">Từ <b>old_price</b>
+                <br/>tới <b>new_price</b></td>
+            <td class="text-left">Sản phẩm không online do nhà bán hàng: <b>0</b> đặt giá: <b>0 VNĐ </b>.</td>
+        </tr>
+        {{/each}}
+    </script>
+    <script id="sku-content-template" type="text/x-handlebars-template">
+        {{#each data}}
+        <tr data-id="{{id}}" data-max_price={{max_price}} data-min_price={{min_price}} data-compete_price={{compete_price}} data-name={{name}} data-sku={{sku}}, data-repeat_time={{repeat_time}}>
+            <td>{{sku}}</td>
+            <td><a href="{{link}}" style="color:#3598dc;" target="_blank">{{name}}</a></td>
+            <td class="text-left">Từ <b>{{min_price}}</b> VNĐ
+                <br/>tới <b>{{max_price}}</b> VNĐ</td>
+            <td class="text-left"><b>{{special_price}}</b> VNĐ</td>
+            <td class="text-left"><b>{{compete_price}}</b> VNĐ</td>
+            <td class="text-left">
+                <button type="button" class="btn btn-circle blue btnedt" style="margin: 0 2px 4px;"><i class="fa fa-edit"></i></button>
+                <button type="button" class="btn btn-circle red btndel" style="margin: 0 2px 4px;"><i class="fa fa-close"></i></button>
+                <input type="checkbox" class="js-switch btnstatus" {{#ifEqual state 1}} checked {{else}} none {{/ifEqual}}/>
+                <div class="btn-group btn-group-solid btnstt hide" style="margin: 0 2px 4px;" data-bit="active">
+                    <button type="button" class="btn bit-like" data-bit="active" style="margin: 0;">Bật</button>
+                    <button type="button" class="btn bit-nope" data-bit="deactive" style="margin: 0;">Tắt</button>
+                </div>
+            </td>
+        </tr>
+        {{/each}}
+    </script>
+        <script id="history-content-template" type="text/x-handlebars-template">
+        {{#each data}}
+        <tr data-id="{{id}}" data-sku={{sku}} data-enemy_json={{enemy_json}}>
+            <td class="mdl-data-table__cell--non-numeric" colspan="2">{{id}} </td>
+            <td class="mdl-data-table__cell--non-numeric" colspan="2">{{sku}} </td>
+            <td class="mdl-data-table__cell--non-numeric" colspan="4">{{enemy_json}} </td>
+        </tr>
+        {{/each}}
+    </script>
+    <script type="text/javascript">
+    jQuery(document).ready(function() {
+        Metronic.init(); // init metronic core components
+        Layout.init(); // init current layout
+        Demo.init(); // init demo features
+    });
+    </script>
+</body>
 
-            <!-- BEGIN CORE PLUGINS JS -->
-            <script src="../js/plugin/jquery.min.js" type="text/javascript"></script>
-            <script src="../js/plugin/jquery-migrate.min.js" type="text/javascript"></script>
-            <script src="../js/plugin/handlebars-v4.0.8.js" type="text/javascript"></script>
-            <script src="../js/plugin/jquery.cookie.js" type="text/javascript"></script>
-            <script src="../js/cookieConfig.js" type="text/javascript"></script>
-            <script src="../js/endpointConfig.js" type="text/javascript"></script>
-            <!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
-            <script src="../js/plugin/jquery-ui.min.js" type="text/javascript"></script>
-            <script src="../js/plugin/bootstrap.min.js" type="text/javascript"></script>
-            <script src="../js/plugin/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
-            <script src="../js/plugin/jquery.slimscroll.min.js" type="text/javascript"></script>
-            <script src="../js/plugin/jquery.blockui.min.js" type="text/javascript"></script>
-            <script src="../js/plugin/jquery.cokie.min.js" type="text/javascript"></script>
-            <script src="../js/plugin/jquery.uniform.min.js" type="text/javascript"></script>
-            <script src="../js/plugin/select2.min.js" type="text/javascript"></script>
-            <script src="../js/plugin/sweetalert.min.js" type="text/javascript"></script>
-            <script src="../js/plugin/switchery.min.js" type="text/javascript"></script>
-            <script src="../js/plugin/bootstrap-switch.min.js" type="text/javascript"></script>
-            <!-- END CORE PLUGINS -->
-            <script src="../js/component/metronic.js" type="text/javascript"></script>
-            <script src="../js/component/layout.js" type="text/javascript"></script>
-            <script src="../js/component/style.js" type="text/javascript"></script>
-            <!-- END JAVASCRIPTS -->
-            <script src="../sku-management/sku-management.js" type="text/javascript"></script>
-
-
-            <!-- Templates -->
-            <script id="tab-content-template" type="text/x-handlebars-template">
-                {{#each data}}
-                <tr>
-                    <td>{{execute_time}}</td>
-                    <td><a href="{{link}}" style="color:#3598dc;" target="_blank">{{sku}}</a></td>
-                    <td class="text-right">Từ <b>old_price</b><br/>tới <b>new_price</b></td>
-                    <td class="text-left">Sản phẩm không online do nhà bán hàng: <b>0</b> đặt giá: <b>0 VNĐ </b>.</td>
-                </tr>
-                {{/each}}
-            </script>
-
-            <script id="sku-content-template" type="text/x-handlebars-template">
-                {{#each data}}
-                <tr data-id="{{id}}" data-max_price={{max_price}} data-min_price={{min_price}} data-compete_price={{compete_price}} data-name={{name}} data-sku={{sku}}, data-repeat_time={{repeat_time}}>
-                    <td>{{sku}}</td>
-                    <td><a href="{{link}}" style="color:#3598dc;" target="_blank">{{name}}</a></td>
-                    <td class="text-left">Từ <b>{{min_price}}</b> VNĐ<br/>tới <b>{{max_price}}</b> VNĐ</td>
-                    <td class="text-left"><b>{{special_price}}</b> VNĐ</td>
-                    <td class="text-left"><b>{{compete_price}}</b> VNĐ</td>
-                    <td class="text-left">
-                        <button type="button" class="btn btn-circle blue btnedt" style="margin: 0 2px 4px;"><i class="fa fa-edit"></i></button>
-                        <button type="button" class="btn btn-circle red btndel" style="margin: 0 2px 4px;"><i class="fa fa-close"></i></button>
-                        <input type="checkbox" class="js-switch btnstatus" {{#ifEqual state 1}} checked {{else}} none {{/ifEqual}}/>
-                        <div class="btn-group btn-group-solid btnstt hide" style="margin: 0 2px 4px;" data-bit="active">
-                            <button type="button" class="btn bit-like" data-bit="active" style="margin: 0;">Bật</button>
-                            <button type="button" class="btn bit-nope" data-bit="deactive" style="margin: 0;">Tắt</button>
-                        </div>
-                    </td>
-                </tr>
-                {{/each}}
-            </script>
-
-            <script type="text/javascript">
-                jQuery(document).ready(function() {
-                    Metronic.init(); // init metronic core components
-                    Layout.init(); // init current layout
-                    Demo.init(); // init demo features
-                });
-            </script>
-    </body>
-    </html>
-
-
-
-
+</html>

@@ -16,6 +16,8 @@ jQuery(document).ready(function() {
         $('#username-on-header').html(cookie.getUsername());
     }
 
+    $("#menuContent").load("../order/content.html"); 
+
     if ($('.btnrefresh').length > 0) {
         $(".btnrefresh").click(function() {
             $.ajax({
@@ -102,3 +104,4 @@ function getAndFillOutAllOrder() {
         }
     });
 }
+
