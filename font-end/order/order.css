@@ -18,10 +18,6 @@ body {
     background-color: #f7abab;
 }
 
-.scaning-section {
-    border: 1px solid #ccc;
-    margin-bottom: 20px;
-}
 .scaning-section .scan-content {
     padding: 15px;
     position: relative;
