@@ -9,7 +9,7 @@ class ResponseUtils:
 
 
   @classmethod
-  def generateSuccessResponse(self, message, result):
+  def generateSuccessResponse(self, message="done", result=None):
     return {"success": message, "data": result}
 
 

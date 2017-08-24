@@ -2,6 +2,10 @@ from database.database_helper import DatabaseHelper
 from utils.string_utils import StringUtils
 
 
+# ------------------------------------------------------------------------------
+# TODO: Handle exception
+# ------------------------------------------------------------------------------
+
 class SkuDao(object):
 
     def createTable(self):

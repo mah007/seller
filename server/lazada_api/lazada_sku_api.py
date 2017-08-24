@@ -1,7 +1,8 @@
 import requests
 import json
-from lazada_api.lazada_api_helper import LazadaApiHelper
 from config import LazadaAPI
+from lazada_api.lazada_api_helper import LazadaApiHelper
+from utils.exception_utils import ExceptionUtils
 
 class LazadaSkuApi(object):
 
@@ -26,17 +27,22 @@ class LazadaSkuApi(object):
 		 				parameters["SkuSellerList"],
 		 				parameters["Signature"])
 
-		resp = requests.get(url)
-		if resp.status_code == 200:
-			response = json.loads(resp.text)
-			if ('ErrorResponse' in response):
-				return None
-
-			data = response['SuccessResponse']['Body']
-			if (data['TotalProducts'] == 1):
-				return data['Products'][0]
-
-		return None
+		try:
+			resp = requests.get(url)
+			if resp.status_code == 200:
+				response = json.loads(resp.text)
+				if 'SuccessResponse' in response:
+					data = response['SuccessResponse']['Body']
+					if data['TotalProducts'] == 1:
+						return data['Products'][0]
+					else:
+						return ExceptionUtils.error('''Invalide Seller SKU !''')
+				else:
+					return ExceptionUtils.returnError('''Can't get this product with error: ''', response)
+			else:
+				return ExceptionUtils.error('''Get product got error's response-code: {}'''.format(resp.status_code))
+		except Exception as ex:
+			return ExceptionUtils.error('''Get product got exception: {}'''.format(str(ex)))
 
 
 	def updateProductSpecialPrice(self, sku, user, newSpecialPrice):

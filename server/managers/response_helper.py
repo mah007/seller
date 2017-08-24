@@ -1,5 +1,7 @@
 
+# ------------------------------------------------------------------------------
 # Deprecated now
+# Please using response_utils.py instead.
 
 class ResponseHelper:
 

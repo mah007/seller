@@ -2,6 +2,10 @@ import psycopg2
 from database.database_helper import DatabaseHelper
 from utils.string_utils import StringUtils
 
+# ------------------------------------------------------------------------------
+# TODO: Handle exception
+# ------------------------------------------------------------------------------
+
 class UserDao(object):
 
     def createTable(self):
