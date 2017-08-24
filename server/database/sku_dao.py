@@ -10,18 +10,18 @@ class SkuDao(object):
 
     def createTable(self):
         query = '''CREATE TABLE IF NOT EXISTS sku_management(
-        			id 				INT AUTO_INCREMENT primary key NOT NULL,
-                    sku           	VARCHAR(500)    	NOT NULL,
-                    name          	VARCHAR(500)     	NOT NULL,
-                    link			VARCHAR(500)		NOT NULL,
-                    min_price     	INTEGER		NOT NULL,
-                    max_price     	INTEGER    	NOT NULL,
-                    compete_price 	INTEGER 	NOT NULL,
+                    id              INT AUTO_INCREMENT primary key NOT NULL,
+                    sku             VARCHAR(500)        NOT NULL,
+                    name            VARCHAR(500)        NOT NULL,
+                    link            VARCHAR(500)        NOT NULL,
+                    min_price       INTEGER     NOT NULL,
+                    max_price       INTEGER     NOT NULL,
+                    compete_price   INTEGER     NOT NULL,
                     special_price   INTEGER     NOT NULL,
-                    state			INTEGER		NOT NULL,
-                    repeat_time 	INTEGER 	,
-                    created_at 		INTEGER 	NOT NULL,
-                    updated_at		INTEGER,
+                    state           INTEGER     NOT NULL,
+                    repeat_time     INTEGER     ,
+                    created_at      INTEGER     NOT NULL,
+                    updated_at      INTEGER,
                     user_id          INTEGER     NOT NULL
                     );'''
         DatabaseHelper.execute(query)
@@ -104,9 +104,9 @@ class SkuDao(object):
     # --------------------------------------------------------------------------
     def insert(self, sku, user):
         query = '''INSERT INTO sku_management (sku, name, link, min_price, max_price,
-    				compete_price, special_price, state, created_at, updated_at, user_id)
-    				VALUES ('{}', '{}', '{}', {}, {}, {}, {}, {}, {}, 0, {})'''.format(
-    				StringUtils.toString(sku['sku']), StringUtils.toString(sku['name']), StringUtils.toString(sku['link']),
+                    compete_price, special_price, state, created_at, updated_at, user_id)
+                    VALUES ('{}', '{}', '{}', {}, {}, {}, {}, {}, {}, 0, {})'''.format(
+                    StringUtils.toString(sku['sku']), StringUtils.toString(sku['name']), StringUtils.toString(sku['link']),
                     sku['min_price'], sku['max_price'], sku['compete_price'], sku['special_price'], sku['state'], sku['created_at'],
                     user['id'])
         DatabaseHelper.execute(query)

@@ -33,9 +33,14 @@
     <link href="../css/component/custom-md.css" rel="stylesheet" type="text/css" />
     <link href="../css/theme/light.css" rel="stylesheet" type="text/css" />
     <link href="../order-management/order-management.css" rel="stylesheet" type="text/css" />
-    <style> 
-      .yellow{background-color: yellow;} 
-      .red{background-color: red;} 
+    <style>
+    .yellow {
+        background-color: yellow;
+    }
+
+    .red {
+        background-color: red;
+    }
     </style>
 </head>
 <!-- END HEAD -->
@@ -92,25 +97,7 @@
     <!-- BEGIN CONTAINER -->
     <div class="page-container">
         <!-- BEGIN SIDEBAR -->
-        <div class="page-sidebar-wrapper">
-            <div class="page-sidebar md-shadow-z-2-i  navbar-collapse collapse">
-                <!-- BEGIN SIDEBAR MENU -->
-                <ul class="page-sidebar-menu " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-                    <li class="start active">
-                        <a href="../sku-management"><span class="title">Quản lý Sku</span></a>
-                    </li>
-                    <li class="start">
-                        <a href="../order"><span class="title">Scan barcode</span></a>
-                    </li>
-                    <li class="start failed">
-                        <a href="../order-management"><span class="title">Sản phẩm trả về</span></a>
-                    </li>
-                    <li class="last ">
-                        <a href="/help"><span class="title">Trợ giúp</span></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <div id="menuContent"></div>
         <!-- BEGIN CONTENT -->
         <div class="page-content-wrapper">
             <div class="page-content">
@@ -335,7 +322,6 @@
             <td class="text-left">{{order_number}}</td>
             <td class="text-left">{{created_at}}</td>
             <td class="text-left">{{state}}</td>
-
             <td class="text-left">
                 <input type="checkbox" class="js-switch btnstatus" {{#ifEqual state 1}} checked {{else}} none {{/ifEqual}}/>
                 <div class="btn-group btn-group-solid btnstt hide" style="margin: 0 2px 4px;" data-bit="active">
@@ -347,26 +333,24 @@
         {{/each}}
     </script>
     <script>
-        function alternate(id){ 
-          if(document.getElementsByTagName){  
-            var table = document.getElementById(id);   
-            var rows = table.getElementsByTagName("tr"); 
-            var d = new Date;            
+    function alternate(id) {
+        if (document.getElementsByTagName) {
+            var table = document.getElementById(id);
+            var rows = table.getElementsByTagName("tr");
+            var d = new Date;
 
-            for(i = 0; i < rows.length; i++){   
-              cells = rows[i].getElementsByTagName('td');        
-              diffDays = (Date.parse(d) - Date.parse(cells[3].innerText)) / 86400000;
+            for (i = 0; i < rows.length; i++) {
+                cells = rows[i].getElementsByTagName('td');
+                diffDays = (Date.parse(d) - Date.parse(cells[3].innerText)) / 86400000;
 
-              if(diffDays >= 10 && diffDays < 15)
-              {
-                rows[i].className = "yellow"; 
-              }
-              else if (diffDays >= 15) {
-                rows[i].className = "red"; 
-              } 
-            } 
-          } 
+                if (diffDays >= 10 && diffDays < 15) {
+                    rows[i].className = "yellow";
+                } else if (diffDays >= 15) {
+                    rows[i].className = "red";
+                }
+            }
         }
+    }
     </script>
     <script type="text/javascript">
     jQuery(document).ready(function() {
