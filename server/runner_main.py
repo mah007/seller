@@ -1,7 +1,7 @@
 import time
 import threading
 from database.user_dao import UserDao
-from runners.price_automatically_worker import PriceAutomaticallyWorker
+from runners.auto_price_worker import AutoPriceWorker
 from config import RunnerConfig
 
 
@@ -14,7 +14,7 @@ if __name__ == "__main__":
     users = userDao.getAll()
     if (users):
       for user in users:
-        clone = PriceAutomaticallyWorker({"user": user})
+        clone = AutoPriceWorker({"user": user})
         try:
           clone.daemon = True
           clone.start()

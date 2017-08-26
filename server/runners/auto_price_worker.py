@@ -8,7 +8,7 @@ from database.sku_dao import SkuDao
 from lazada_api.lazada_sku_api import LazadaSkuApi
 
 
-class PriceAutomaticallyWorker(threading.Thread):
+class AutoPriceWorker(threading.Thread):
 
 	def __init__(self, kwargs):
 		threading.Thread.__init__(self)
