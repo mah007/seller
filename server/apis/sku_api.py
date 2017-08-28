@@ -17,12 +17,8 @@ def getAllHistory():
 	if not 'token' in request.args:
 		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
 
-	user = {
-		"id": 1
-	}
-
 	autoPriceManager = AutoPriceManager()
-	result = autoPriceManager.getEnemy(user, request.args.get('token'))
+	result = autoPriceManager.getEnemy(request.args.get('token'))
 	if 'success' in result:
 		return make_response(jsonify(result))
 	else:

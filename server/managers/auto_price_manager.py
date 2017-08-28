@@ -49,12 +49,12 @@ class AutoPriceManager(object):
 	#-----------------------------------------------------------------------------
 	# GET ALL ENEMIES IN DATABASE
 	#-----------------------------------------------------------------------------
-	def getEnemy(self, user, token):
+	def getEnemy(self, token):
 		user = self.validateToken(token)
 		historyDao = HistoryDao()
 		if 'error' in user:
 			return user
 
-		result = historyDao.getEnemy()
+		result = historyDao.getEnemy(user)
 
 		return ResponseHelper.generateSuccessResponse(result)

@@ -9,7 +9,8 @@ class HistoryDao(object):
         query = '''CREATE TABLE IF NOT EXISTS enemy_management(
                 id              INT AUTO_INCREMENT primary key NOT NULL,
                 sku             VARCHAR(50)     NOT NULL,
-                enemy_json      TEXT            NOT NULL
+                enemy_json      TEXT            NOT NULL,
+                user_id         INT             NOT NULL
                 );'''
         DatabaseHelper.execute(query)
 
@@ -37,9 +38,9 @@ class HistoryDao(object):
     # --------------------------------------------------------------------------
     # Get enemies
     # --------------------------------------------------------------------------
-    def getEnemy(self):
+    def getEnemy(self, user):
         try:
-            query = '''SELECT * from enemy_management '''
+            query = '''SELECT * from enemy_management WHERE user_id = '{}' '''.format(user['id'])
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)
