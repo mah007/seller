@@ -3,12 +3,30 @@ import simplejson as json
 from flask_cors import CORS, cross_origin
 from flask import Blueprint, render_template, abort, request, make_response, jsonify
 from managers.sku_manager import SkuManager
+from managers.auto_price_manager import AutoPriceManager
 from lazada_api.lazada_order_api import LazadaOrderApi
 
 
 SkuAPI = Blueprint('sku_api', __name__, template_folder='apis')
 
+@SkuAPI.route('/sku/get-all-history', methods=['GET'])
+@cross_origin()
+def getAllHistory():
+	if not request.args:
+		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
+	if not 'token' in request.args:
+		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
 
+	user = {
+		"id": 1
+	}
+
+	autoPriceManager = AutoPriceManager()
+	result = autoPriceManager.getEnemy(user, request.args.get('token'))
+	if 'success' in result:
+		return make_response(jsonify(result))
+	else:
+		return make_response(jsonify(result), 404)
 # ------------------------------------------------------------------------------
 # Get All SKU
 # ------------------------------------------------------------------------------

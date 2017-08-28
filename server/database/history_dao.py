@@ -3,7 +3,7 @@ from utils.string_utils import StringUtils
 from utils.exception_utils import ExceptionUtils
 
 
-class EnemyDao(object):
+class HistoryDao(object):
 
     def createTable(self):
         query = '''CREATE TABLE IF NOT EXISTS enemy_management(
@@ -15,9 +15,9 @@ class EnemyDao(object):
 
 
     # --------------------------------------------------------------------------
-    # Insert order
+    # Insert history
     # --------------------------------------------------------------------------
-    def insert(self, sku, enemy_json):
+    def insertHistory(self, sku, enemy_json):
         try:
             query = '''INSERT INTO enemy_management(sku, enemy_json) VALUES ('{}', '{}')'''.format(
                     sku['name'], enemy_json)
@@ -27,9 +27,9 @@ class EnemyDao(object):
             return ExceptionUtils.error('''Can't insert enemy''')
 
     # --------------------------------------------------------------------------
-    def deleteEnemyBeforeInsert(self):
+    def deleteHistoryBeforeInsert(self, sku):
         try:
-            query = '''DELETE FROM enemy_management '''                   
+            query = '''DELETE FROM enemy_management WHERE sku =  '{}' '''.format(StringUtils.toString(sku['name']))
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:

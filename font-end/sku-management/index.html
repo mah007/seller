@@ -305,30 +305,17 @@
                                         </div>
                                     </div>
                                     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-                                        <header class="mdl-layout__header">
-                                            <div class="mdl-layout__header-row">
-                                                <span class="mdl-layout-title">History Tab</span>
-                                                <div class="mdl-layout-spacer"></div>
-                                            </div>
-                                        </header>
-                                        <main class="mdl-layout__content">
-                                            <div>
-                                                <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp" width="100%">
-                                                    <thead>
-                                                        <tr>
-                                                            <th class="mdl-data-table__cell--non-numeric" width="25%"><b>Number</b></th>
-                                                            <th></th>
-                                                            <th class="mdl-data-table__cell--non-numeric" width="25%"><b>Sku</b></th>
-                                                            <th></th>
-                                                            <th class="mdl-data-table__cell--non-numeric" width="50%"><b>Enemy</b></th>
-                                                            <th></th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="tbody_history">
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </main>
+                                        <table class="table table-striped"">
+                                            <tr class="success">
+                                                <th width="10%">ID</th>
+                                                <th width="40">Sku</th>
+                                                <th width="50%">Enemy</th>
+                                            </tr>
+
+                                            <tbody id="tbody_history">
+                                                <!-- DATA HISTORY WILL BE FILL HERE -->
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -375,24 +362,24 @@
     <script id="tab-content-template" type="text/x-handlebars-template">
         {{#each data}}
         <tr>
-            <td>{{execute_time}}</td>
-            <td><a href="{{link}}" style="color:#3598dc;" target="_blank">{{sku}}</a></td>
-            <td class="text-right">Từ <b>old_price</b>
-                <br/>tới <b>new_price</b></td>
-            <td class="text-left">Sản phẩm không online do nhà bán hàng: <b>0</b> đặt giá: <b>0 VNĐ </b>.</td>
+            <th>{{execute_time}}</th>
+            <th><a href="{{link}}" style="color:#3598dc;" target="_blank">{{sku}}</a></th>
+            <th class="text-right">Từ <b>old_price</b>
+                <br/>tới <b>new_price</b></th>
+            <th class="text-left">Sản phẩm không online do nhà bán hàng: <b>0</b> đặt giá: <b>0 VNĐ </b>.</th>
         </tr>
         {{/each}}
     </script>
     <script id="sku-content-template" type="text/x-handlebars-template">
         {{#each data}}
         <tr data-id="{{id}}" data-max_price={{max_price}} data-min_price={{min_price}} data-compete_price={{compete_price}} data-name={{name}} data-sku={{sku}}, data-repeat_time={{repeat_time}}>
-            <td>{{sku}}</td>
-            <td><a href="{{link}}" style="color:#3598dc;" target="_blank">{{name}}</a></td>
-            <td class="text-left">Từ <b>{{min_price}}</b> VNĐ
-                <br/>tới <b>{{max_price}}</b> VNĐ</td>
-            <td class="text-left"><b>{{special_price}}</b> VNĐ</td>
-            <td class="text-left"><b>{{compete_price}}</b> VNĐ</td>
-            <td class="text-left">
+            <th>{{sku}}</th>
+            <th><a href="{{link}}" style="color:#3598dc;" target="_blank">{{name}}</a></th>
+            <th class="text-left">Từ <b>{{min_price}}</b> VNĐ
+                <br/>tới <b>{{max_price}}</b> VNĐ</th>
+            <th class="text-left"><b>{{special_price}}</b> VNĐ</th>
+            <th class="text-left"><b>{{compete_price}}</b> VNĐ</th>
+            <th class="text-left">
                 <button type="button" class="btn btn-circle blue btnedt" style="margin: 0 2px 4px;"><i class="fa fa-edit"></i></button>
                 <button type="button" class="btn btn-circle red btndel" style="margin: 0 2px 4px;"><i class="fa fa-close"></i></button>
                 <input type="checkbox" class="js-switch btnstatus" {{#ifEqual state 1}} checked {{else}} none {{/ifEqual}}/>
@@ -400,16 +387,16 @@
                     <button type="button" class="btn bit-like" data-bit="active" style="margin: 0;">Bật</button>
                     <button type="button" class="btn bit-nope" data-bit="deactive" style="margin: 0;">Tắt</button>
                 </div>
-            </td>
+            </th>
         </tr>
         {{/each}}
     </script>
-        <script id="history-content-template" type="text/x-handlebars-template">
+    <script id="history-content-template" type="text/x-handlebars-template">
         {{#each data}}
         <tr data-id="{{id}}" data-sku={{sku}} data-enemy_json={{enemy_json}}>
-            <td class="mdl-data-table__cell--non-numeric" colspan="2">{{id}} </td>
-            <td class="mdl-data-table__cell--non-numeric" colspan="2">{{sku}} </td>
-            <td class="mdl-data-table__cell--non-numeric" colspan="4">{{enemy_json}} </td>
+            <th scope="row">{{id}} </th>
+            <td>{{sku}} </td>
+            <td>{{enemy_json}} </td>
         </tr>
         {{/each}}
     </script>

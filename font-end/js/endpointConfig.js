@@ -97,8 +97,8 @@ var EndpointConfig = function() {
 
 
   // ENEMY
-  EndpointConfig.prototype.generateGetEnemy = function() {
-      return endpointUrl + '/enemy/get-all?token=' + $.cookie('token');
+  EndpointConfig.prototype.generateGetHistory = function() {
+      return endpointUrl + '/sku/get-all-history?token=' + $.cookie('token');
   }  
 
 }

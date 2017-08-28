@@ -19,7 +19,7 @@ jQuery(document).ready(function() {
 
     // Init data
     getAndFillOutAllSku();
-    getAndFillOutEnemy();
+    getAndFillOutHistory();
     
     
 
@@ -455,10 +455,10 @@ function getAndFillOutAllSku() {
     });
 };
 
-function getAndFillOutEnemy() {
+function getAndFillOutHistory() {
     $.ajax({
         method:'GET',
-        url: endpoint.generateGetEnemy(),
+        url: endpoint.generateGetHistory(),
         contentType: "application/json",
         success: function(data) {
             console.log(data.data);
@@ -490,26 +490,6 @@ $('#updatePwButton').click(function() {
     $('#portlet-updatePw').data('type', "updatePw");
     $('#portlet-updatePw').modal('show');
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
