@@ -6,11 +6,11 @@ from utils.exception_utils import ExceptionUtils
 class HistoryDao(object):
 
     def createTable(self):
-        query = '''CREATE TABLE IF NOT EXISTS enemy_management(
+        query = '''CREATE TABLE IF NOT EXISTS sku_history(
                 id              INT AUTO_INCREMENT primary key NOT NULL,
-                sku             VARCHAR(50)     NOT NULL,
+                sku             TEXT     NOT NULL,
                 enemy_json      TEXT            NOT NULL,
-                user_id         INT             NOT NULL
+                user_id         INT              
                 );'''
         DatabaseHelper.execute(query)
 
@@ -18,10 +18,10 @@ class HistoryDao(object):
     # --------------------------------------------------------------------------
     # Insert history
     # --------------------------------------------------------------------------
-    def insertHistory(self, sku, enemy_json):
+    def insertHistory(self, sku, enemy_json, user):
         try:
-            query = '''INSERT INTO enemy_management(sku, enemy_json) VALUES ('{}', '{}')'''.format(
-                    sku['name'], enemy_json)
+            query = '''INSERT INTO sku_history(sku, enemy_json, user_id) VALUES ('{}', '{}','{}') '''.format(
+                    sku['name'], enemy_json, user['id'])
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:
@@ -30,7 +30,7 @@ class HistoryDao(object):
     # --------------------------------------------------------------------------
     def deleteHistoryBeforeInsert(self, sku):
         try:
-            query = '''DELETE FROM enemy_management WHERE sku =  '{}' '''.format(StringUtils.toString(sku['name']))
+            query = '''DELETE FROM sku_history WHERE sku =  '{}' '''.format(StringUtils.toString(sku['name']))
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:
@@ -40,7 +40,7 @@ class HistoryDao(object):
     # --------------------------------------------------------------------------
     def getEnemy(self, user):
         try:
-            query = '''SELECT * from enemy_management WHERE user_id = '{}' '''.format(user['id'])
+            query = '''SELECT * from sku_history WHERE user_id = '{}' '''.format(user['id'])
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)

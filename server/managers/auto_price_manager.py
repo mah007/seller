@@ -13,8 +13,8 @@ import json
 class AutoPriceManager(object):
 
 	def initialize(self):
-		enemyDao = EnemyDao()
-		enemyDao.createTable()
+		historyDao = HistoryDao()
+		historyDao.createTable()
 
 
 	def validateToken(self, token):
@@ -29,20 +29,20 @@ class AutoPriceManager(object):
 	#-----------------------------------------------------------------------------
 	# INSERT NEW HISTORY
 	#-----------------------------------------------------------------------------
-	def insertHistory(self, sku, enemies):
+	def insertHistory(self, sku, enemies, user):
 		historyDao = HistoryDao()
 		i = 1
 		enemyJson = ""
 		historyDao.deleteHistoryBeforeInsert(sku)
 
 		for enemy in enemies:
-			enemyJson = enemyJson + str(enemy).replace(' ', '') + '\n'
+			enemyJson = enemyJson + str(enemy['name']) + ' - ' + str(enemy['price']) + "\n"
 			if(i > 5):
-				historyDao.insertHistory(sku, enemyJson)
+				historyDao.insertHistory(sku, enemyJson, user)
 				return ResponseHelper.generateSuccessResponse(None)	
 			i = i + 1
 			
-		historyDao.insertHistory(sku, enemyJson)
+		historyDao.insertHistory(sku, enemyJson, user)
 		
 		return ResponseHelper.generateSuccessResponse(None)
 

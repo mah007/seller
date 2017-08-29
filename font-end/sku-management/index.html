@@ -304,12 +304,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-                                        <table class="table table-striped"">
-                                            <tr class="success">
+                                    <div class="table-scrollable">
+                                        <table id="table_sku" class="table table-hover">
+                                            <tr>
                                                 <th width="10%">ID</th>
-                                                <th width="40">Sku</th>
-                                                <th width="50%">Enemy</th>
+                                                <th width="50%">Sku</th>
+                                                <th width="40%">Enemy</th>
                                             </tr>
 
                                             <tbody id="tbody_history">
@@ -394,9 +394,9 @@
     <script id="history-content-template" type="text/x-handlebars-template">
         {{#each data}}
         <tr data-id="{{id}}" data-sku={{sku}} data-enemy_json={{enemy_json}}>
-            <th scope="row">{{id}} </th>
-            <td>{{sku}} </td>
-            <td>{{enemy_json}} </td>
+            <th class="text-left">{{id}} </th>
+            <th class="text-left">{{sku}} </th>
+            <th class="text-left">{{enemy_json}} </th>
         </tr>
         {{/each}}
     </script>

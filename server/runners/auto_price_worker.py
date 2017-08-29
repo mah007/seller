@@ -6,6 +6,7 @@ from time import sleep
 from lxml import html
 from database.sku_dao import SkuDao
 from lazada_api.lazada_sku_api import LazadaSkuApi
+from managers.auto_price_manager import AutoPriceManager
 
 
 class AutoPriceWorker(threading.Thread):
@@ -23,9 +24,11 @@ class AutoPriceWorker(threading.Thread):
 		if (skus == None):
 			return
 
+		autoPriceManager = AutoPriceManager()
 		for sku in skus:
 			enemies = self.getEnemies(user, sku)
 			self.priceAlgorithm(enemies, user, sku)
+			autoPriceManager.insertHistory(sku, enemies, user)
 
 
 	def priceAlgorithm(self, enemies, user, sku):
@@ -76,7 +79,7 @@ class AutoPriceWorker(threading.Thread):
 		topEnemyPrice = tree.xpath('//*[@id="special_price_box"]/text()')
 		topEnemyName = tree.xpath('//*[@id="prod_content_wrapper"]/div[2]/div[2]/div[1]/div[1]/a/text()')
 		topEnemyJson = {
-			"name": topEnemyName[0],
+			"name": topEnemyName[0].replace(' ',''),
 			"price": int(topEnemyPrice[0].replace('VND', '').replace('.', '').replace(',', ''))
 		}
 		enemiesJson.append(topEnemyJson)
@@ -86,7 +89,7 @@ class AutoPriceWorker(threading.Thread):
 		enemyPrices = tree.xpath('//*[@id="multisource"]/div[2]/table/tr[2]/td[4]/span/text()')
 		for index, enemy in enumerate(enemies):
 			enemiesJson.append({
-				"name": enemy,
+				"name": enemy.replace(' ',''),
 				"price": int(enemyPrices[index].replace('VND', '').replace('.', ''))
 				})
 

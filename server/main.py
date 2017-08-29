@@ -23,11 +23,12 @@ if __name__ == "__main__":
   # userManager = UserManager()
   # orderManager = OrderManager()
   # constantManager = ConstantManager()
+  # autoPriceManager = AutoPriceManager()
   # skuManager.initialize()
   # userManager.initialize()
   # orderManager.initialize()
   # constantManager.initialize()
-  # enemyManager.initialize()
+  # autoPriceManager.initialize()
 
   app.run(debug=True, threaded=True)
   # app.run(host='0.0.0.0', debug=True, port=5000, threaded=True)
