@@ -42,6 +42,7 @@ class AutoPriceWorker(threading.Thread):
 		# Our product price will be lower then enemy compete_price unit
 		newSpecialPrice = lowestPriceEnemy['price'] - sku['compete_price']
 		if (user['lazada_user_name'].lower() == lowestPriceEnemy['name'].lower()):
+			# Improved: Should update our special price up to under next enemy's price.
 			newSpecialPrice = lowSecondPriceEnemy['price'] - sku['compete_price']
 
 		# But this is not lower then min_price and higher then max_price
@@ -50,6 +51,7 @@ class AutoPriceWorker(threading.Thread):
 		if (newSpecialPrice > sku['max_price']):
 			newSpecialPrice = sku['max_price']
 
+		# Prevent update multiple time
 		if (sku['special_price'] == newSpecialPrice):
 			return
 
@@ -64,7 +66,7 @@ class AutoPriceWorker(threading.Thread):
 		lazadaSkuApi = LazadaSkuApi()
 		lazadaProduct = lazadaSkuApi.updateProductSpecialPrice(sku, user, newSpecialPrice)
 		if 'error' in lazadaProduct:
-			print ('''{} ({}): updated price error {}'''.format(sku['sku'], user['lazada_user_name'], lazadaProduct['error']))
+			print ('''{} ({}): {}, Special price: {}'''.format(sku['sku'], user['lazada_user_name'], lazadaProduct['error'], newSpecialPrice))
 			return
 
 		# Update internal database
