@@ -64,6 +64,7 @@ class AutoPriceWorker(threading.Thread):
 		lazadaSkuApi = LazadaSkuApi()
 		lazadaProduct = lazadaSkuApi.updateProductSpecialPrice(sku, user, newSpecialPrice)
 		if 'error' in lazadaProduct:
+			print ('''{} ({}): updated price error {}'''.format(sku['sku'], user['lazada_user_name'], lazadaProduct['error']))
 			return
 
 		# Update internal database
