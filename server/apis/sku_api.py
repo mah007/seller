@@ -3,7 +3,6 @@ import simplejson as json
 from flask_cors import CORS, cross_origin
 from flask import Blueprint, render_template, abort, request, make_response, jsonify
 from managers.sku_manager import SkuManager
-from managers.auto_price_manager import AutoPriceManager
 from lazada_api.lazada_order_api import LazadaOrderApi
 
 
@@ -20,10 +19,10 @@ def getAllHistory():
 	if not 'token' in request.args:
 		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
 
-	autoPriceManager = AutoPriceManager()
-	result = autoPriceManager.getAllHistory(request.args.get('token'))
+	skuManager = SkuManager()
+	result = skuManager.getAllHistory(request.args.get('token'))
 	if 'success' in result:
-		return make_response(jsonify(result))
+		return make_response(jsonify(result), 201)
 	else:
 		return make_response(jsonify(result), 404)
 
@@ -41,7 +40,7 @@ def getAll():
 	skuManager = SkuManager()
 	result = skuManager.getAll(request.args.get('token'))
 	if 'success' in result:
-		return make_response(jsonify(result))
+		return make_response(jsonify(result), 201)
 	else:
 		return make_response(jsonify(result), 404)
 
@@ -66,9 +65,9 @@ def delete():
 	skuManager = SkuManager()
 	result = skuManager.deleteSku(sku, request.args.get('token'))
 	if 'success' in result:
-		return make_response(jsonify({"success": "done"}))
+		return make_response(jsonify({"success": "done"}), 201)
 	else:
-		return make_response(jsonify(result))
+		return make_response(jsonify(result), 404)
 
 # ------------------------------------------------------------------------------
 # Update SKU's state
@@ -93,9 +92,9 @@ def updateSkuState():
 	skuManager = SkuManager()
 	result = skuManager.updateSkuState(sku, request.args.get('token'))
 	if 'success' in result:
-		return make_response(jsonify({"success": "done"}))
+		return make_response(jsonify({"success": "done"}), 201)
 	else:
-		return make_response(jsonify(result))
+		return make_response(jsonify(result), 404)
 
 
 # ------------------------------------------------------------------------------

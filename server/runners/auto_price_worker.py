@@ -6,7 +6,7 @@ from time import sleep
 from lxml import html
 from database.sku_dao import SkuDao
 from lazada_api.lazada_sku_api import LazadaSkuApi
-from managers.auto_price_manager import AutoPriceManager
+from managers.sku_manager import SkuManager
 
 
 class AutoPriceWorker(threading.Thread):
@@ -20,6 +20,7 @@ class AutoPriceWorker(threading.Thread):
 		user = self.kwargs['user']
 		print('''*********** {}: is running ***********'''.format(user['lazada_user_name']))
 		skudao = SkuDao()
+		skuManager = SkuManager()
 		skus = skudao.getActiveSku(user)
 		if (skus == None):
 			return
@@ -27,6 +28,7 @@ class AutoPriceWorker(threading.Thread):
 		for sku in skus:
 			enemies = self.getEnemies(user, sku)
 			self.priceAlgorithm(enemies, user, sku)
+			skuManager.insertHistory(sku, enemies, user)
 
 
 	def priceAlgorithm(self, enemies, user, sku):
@@ -73,8 +75,8 @@ class AutoPriceWorker(threading.Thread):
 		skuDao = SkuDao()
 		skuDao.updateSpecialPrice(sku)
 		# Add history
-		autoPriceManager = AutoPriceManager()
-		autoPriceManager.insertHistory(sku, enemies, user)
+		skuManager = SkuManager()
+		skuManager.insertHistory(sku, enemies, user)
 		print ('''{} ({}): updated price to: {}'''.format(sku['sku'], user['lazada_user_name'], newSpecialPrice))
 
 

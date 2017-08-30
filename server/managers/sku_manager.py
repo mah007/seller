@@ -4,6 +4,13 @@ from managers.user_manager import UserManager
 from lazada_api.lazada_sku_api import LazadaSkuApi
 from managers.response_helper import ResponseHelper
 from utils.response_utils import ResponseUtils
+from database.history_dao import HistoryDao
+from config import SkuHistoryConfig
+import time
+from time import sleep
+from lxml import html
+import requests
+import json
 
 
 class SkuManager(object):
@@ -11,6 +18,8 @@ class SkuManager(object):
 	def initialize(self):
 		skudao = SkuDao()
 		skudao.createTable()
+		historyDao = HistoryDao()
+		historyDao.createTable()
 
 
 	def validateToken(self, token):
@@ -107,6 +116,39 @@ class SkuManager(object):
 		skudao = SkuDao()
 		skudao.update(sku)
 		return ResponseHelper.generateSuccessResponse(None)
+
+	#-----------------------------------------------------------------------------
+	# INSERT NEW HISTORY
+	#-----------------------------------------------------------------------------
+	def insertHistory(self, sku, enemies, user):
+		historyDao = HistoryDao()
+		i = 1
+		enemyJson = ""
+		historyDao.deleteHistory(sku)
+
+		for enemy in enemies:
+			enemyJson = enemyJson + str(enemy['name']) + ' - ' + str(enemy['price']) + "\n"
+			if(i > SkuHistoryConfig.HISTORY_SIZE):
+				historyDao.insertHistory(sku, enemyJson, user)
+				return ResponseHelper.generateSuccessResponse(None)
+			i = i + 1
+
+		historyDao.insertHistory(sku, enemyJson, user)
+
+		return ResponseHelper.generateSuccessResponse(None)
+
+	#-----------------------------------------------------------------------------
+	# GET ALL ENEMIES IN DATABASE
+	#-----------------------------------------------------------------------------
+	def getAllHistory(self, token):
+		user = self.validateToken(token)
+		historyDao = HistoryDao()
+		if 'error' in user:
+			return user
+
+		result = historyDao.getAllHistory(user)
+
+		return ResponseHelper.generateSuccessResponse(result)
 
 
 

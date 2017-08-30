@@ -24,7 +24,7 @@ class HistoryDao(object):
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:
-            return ExceptionUtils.error('''Can't insert enemy''')
+            return ExceptionUtils.error('''Insert new history failed: {}'''.format(str(ex)))
 
     # --------------------------------------------------------------------------
     # Delete history
@@ -35,7 +35,7 @@ class HistoryDao(object):
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:
-            return ExceptionUtils.error('''Unable to delete enemy''')
+            return ExceptionUtils.error('''Delete history failed: {}'''.format(str(ex)))
 
     # --------------------------------------------------------------------------
     # Get enemies
@@ -50,7 +50,7 @@ class HistoryDao(object):
             rows = cur.fetchall()
             if not rows:
                 conn.close()
-                return ExceptionUtils.error('''Sku's enemy is not found''')
+                return ExceptionUtils.error('''Get history failed: {}'''.format(str(ex)))
 
             enemies = []
             for row in rows:
@@ -63,7 +63,7 @@ class HistoryDao(object):
             conn.close()
             return enemies
         except Exception as ex:
-            return ExceptionUtils.error('''Get enemy's enemy failed: {}'''.format(str(ex)))
+            return ExceptionUtils.error('''Get history failed: {}'''.format(str(ex)))
 
 
 
