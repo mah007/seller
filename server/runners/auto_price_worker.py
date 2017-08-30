@@ -24,11 +24,9 @@ class AutoPriceWorker(threading.Thread):
 		if (skus == None):
 			return
 
-		autoPriceManager = AutoPriceManager()
 		for sku in skus:
 			enemies = self.getEnemies(user, sku)
 			self.priceAlgorithm(enemies, user, sku)
-			autoPriceManager.insertHistory(sku, enemies, user)
 
 
 	def priceAlgorithm(self, enemies, user, sku):
@@ -55,18 +53,25 @@ class AutoPriceWorker(threading.Thread):
 		if (sku['special_price'] == newSpecialPrice):
 			return
 
-		self.doUpdatePrice(sku, user, newSpecialPrice)
+		self.doUpdatePriceAndAddHistory(sku, user, newSpecialPrice)
 
 
-	def doUpdatePrice(self, sku, user, newSpecialPrice):
+	def doUpdatePriceAndAddHistory(self, sku, user, newSpecialPrice):
 		sku['updated_at'] = int(round(time.time()))
 		sku['special_price'] = newSpecialPrice
-		# Update internal database
-		skuDao = SkuDao()
-		skuDao.updateSpecialPrice(sku)
+
 		# Update external database
 		lazadaSkuApi = LazadaSkuApi()
 		lazadaProduct = lazadaSkuApi.updateProductSpecialPrice(sku, user, newSpecialPrice)
+		if 'error' in lazadaProduct:
+			return
+
+		# Update internal database
+		skuDao = SkuDao()
+		skuDao.updateSpecialPrice(sku)
+		# Add history
+		autoPriceManager = AutoPriceManager()
+		autoPriceManager.insertHistory(sku, enemies, user)
 		print ('''{} ({}): updated price to: {}'''.format(sku['sku'], user['lazada_user_name'], newSpecialPrice))
 
 

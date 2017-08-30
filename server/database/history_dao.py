@@ -7,13 +7,12 @@ class HistoryDao(object):
 
     def createTable(self):
         query = '''CREATE TABLE IF NOT EXISTS sku_history(
-                id              INT AUTO_INCREMENT primary key NOT NULL,
-                sku             TEXT     NOT NULL,
-                enemy_json      TEXT            NOT NULL,
-                user_id         INT
+                id              INT AUTO_INCREMENT  primary key NOT NULL,
+                sku             TEXT                NOT NULL,
+                enemy_json      TEXT                NOT NULL,
+                user_id         INT                 NOT NULL
                 );'''
         DatabaseHelper.execute(query)
-
 
     # --------------------------------------------------------------------------
     # Insert history

@@ -127,7 +127,7 @@ class OrderManager(object):
     #-----------------------------------------------------------------------------
     def getAllFailedOrders(self):
         failedOrderDao = FailedOrderDao()
-        result = failedOrderDao.getFailedOrders()  
+        result = failedOrderDao.getFailedOrders()
 
         if not result:
             return ResponseHelper.generateErrorResponse("Can't access to Lazada service")
@@ -158,7 +158,6 @@ class OrderManager(object):
             # dateTime = LazadaApiHelper.getCurrentUTCTime()
             constantDao.updateConstantOffset(offset, LazadaApiHelper.getCurrentUTCTime(), user)
 
-
         return ResponseHelper.generateSuccessResponse(None)
 
     #-----------------------------------------------------------------------------
@@ -176,7 +175,7 @@ class OrderManager(object):
 
 
 
-	
+
 
 
 

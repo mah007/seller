@@ -64,15 +64,21 @@ class LazadaSkuApi(object):
 		 				parameters["Version"],
 		 				parameters["Signature"])
 
+		# Must use xmlBody to update
 		xmlBody = LazadaApiHelper.generateUpdateProductXML(sku, newSpecialPrice)
 
-		resp = requests.post(url, data=xmlBody)
-		if resp.status_code == 200:
+		try:
+			resp = requests.post(url, data=xmlBody)
+			if resp.status_code != 200:
+				return ExceptionUtils.error('''Request error with response-code: {}'''.format(resp.status_code))
+
 			response = resp.json()
 			if ('SuccessResponse' in response):
-				return True
-
-		return False
+				return ExceptionUtils.success("Update procduct special price success")
+			else:
+				return ExceptionUtils.returnError("Update product special price error: ", response)
+		except Exception as ex:
+			return ExceptionUtils.error('''Update product special price got exception: {}'''.format(str(ex)))
 
 
 
