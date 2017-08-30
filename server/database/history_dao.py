@@ -10,7 +10,7 @@ class HistoryDao(object):
                 id              INT AUTO_INCREMENT primary key NOT NULL,
                 sku             TEXT     NOT NULL,
                 enemy_json      TEXT            NOT NULL,
-                user_id         INT              
+                user_id         INT
                 );'''
         DatabaseHelper.execute(query)
 
@@ -28,17 +28,20 @@ class HistoryDao(object):
             return ExceptionUtils.error('''Can't insert enemy''')
 
     # --------------------------------------------------------------------------
-    def deleteHistoryBeforeInsert(self, sku):
+    # Delete history
+    # --------------------------------------------------------------------------
+    def deleteHistory(self, sku):
         try:
             query = '''DELETE FROM sku_history WHERE sku =  '{}' '''.format(StringUtils.toString(sku['name']))
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:
             return ExceptionUtils.error('''Unable to delete enemy''')
+
     # --------------------------------------------------------------------------
     # Get enemies
     # --------------------------------------------------------------------------
-    def getEnemy(self, user):
+    def getAllHistory(self, user):
         try:
             query = '''SELECT * from sku_history WHERE user_id = '{}' '''.format(user['id'])
             conn = DatabaseHelper.getConnection()

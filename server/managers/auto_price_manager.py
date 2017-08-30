@@ -25,7 +25,6 @@ class AutoPriceManager(object):
 		else:
 			return user
 
-
 	#-----------------------------------------------------------------------------
 	# INSERT NEW HISTORY
 	#-----------------------------------------------------------------------------
@@ -33,28 +32,30 @@ class AutoPriceManager(object):
 		historyDao = HistoryDao()
 		i = 1
 		enemyJson = ""
-		historyDao.deleteHistoryBeforeInsert(sku)
+		historyDao.deleteHistory(sku)
 
 		for enemy in enemies:
 			enemyJson = enemyJson + str(enemy['name']) + ' - ' + str(enemy['price']) + "\n"
 			if(i > 5):
 				historyDao.insertHistory(sku, enemyJson, user)
-				return ResponseHelper.generateSuccessResponse(None)	
+				return ResponseHelper.generateSuccessResponse(None)
 			i = i + 1
-			
+
 		historyDao.insertHistory(sku, enemyJson, user)
-		
+
 		return ResponseHelper.generateSuccessResponse(None)
 
 	#-----------------------------------------------------------------------------
 	# GET ALL ENEMIES IN DATABASE
 	#-----------------------------------------------------------------------------
-	def getEnemy(self, token):
+	def getAllHistory(self, token):
 		user = self.validateToken(token)
 		historyDao = HistoryDao()
 		if 'error' in user:
 			return user
 
-		result = historyDao.getEnemy(user)
+		result = historyDao.getAllHistory(user)
 
 		return ResponseHelper.generateSuccessResponse(result)
+
+

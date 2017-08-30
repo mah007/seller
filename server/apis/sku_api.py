@@ -9,6 +9,9 @@ from lazada_api.lazada_order_api import LazadaOrderApi
 
 SkuAPI = Blueprint('sku_api', __name__, template_folder='apis')
 
+# ------------------------------------------------------------------------------
+# Get Sku histories
+# ------------------------------------------------------------------------------
 @SkuAPI.route('/sku/get-all-history', methods=['GET'])
 @cross_origin()
 def getAllHistory():
@@ -18,11 +21,12 @@ def getAllHistory():
 		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
 
 	autoPriceManager = AutoPriceManager()
-	result = autoPriceManager.getEnemy(request.args.get('token'))
+	result = autoPriceManager.getAllHistory(request.args.get('token'))
 	if 'success' in result:
 		return make_response(jsonify(result))
 	else:
 		return make_response(jsonify(result), 404)
+
 # ------------------------------------------------------------------------------
 # Get All SKU
 # ------------------------------------------------------------------------------
