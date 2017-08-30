@@ -373,13 +373,13 @@
     <script id="sku-content-template" type="text/x-handlebars-template">
         {{#each data}}
         <tr data-id="{{id}}" data-max_price={{max_price}} data-min_price={{min_price}} data-compete_price={{compete_price}} data-name={{name}} data-sku={{sku}}, data-repeat_time={{repeat_time}}>
-            <th>{{sku}}</th>
-            <th><a href="{{link}}" style="color:#3598dc;" target="_blank">{{name}}</a></th>
-            <th class="text-left">Từ <b>{{min_price}}</b> VNĐ
-                <br/>tới <b>{{max_price}}</b> VNĐ</th>
-            <th class="text-left"><b>{{special_price}}</b> VNĐ</th>
-            <th class="text-left"><b>{{compete_price}}</b> VNĐ</th>
-            <th class="text-left">
+            <td>{{sku}}</td>
+            <td><a href="{{link}}" style="color:#3598dc;" target="_blank">{{name}}</a></td>
+            <td class="text-left">Từ <b>{{min_price}}</b> VNĐ
+                <br/>tới <b>{{max_price}}</b> VNĐ</td>
+            <td class="text-left"><b>{{special_price}}</b> VNĐ</td>
+            <td class="text-left"><b>{{compete_price}}</b> VNĐ</td>
+            <td class="text-left">
                 <button type="button" class="btn btn-circle blue btnedt" style="margin: 0 2px 4px;"><i class="fa fa-edit"></i></button>
                 <button type="button" class="btn btn-circle red btndel" style="margin: 0 2px 4px;"><i class="fa fa-close"></i></button>
                 <input type="checkbox" class="js-switch btnstatus" {{#ifEqual state 1}} checked {{else}} none {{/ifEqual}}/>
@@ -387,7 +387,7 @@
                     <button type="button" class="btn bit-like" data-bit="active" style="margin: 0;">Bật</button>
                     <button type="button" class="btn bit-nope" data-bit="deactive" style="margin: 0;">Tắt</button>
                 </div>
-            </th>
+            </td>
         </tr>
         {{/each}}
     </script>
