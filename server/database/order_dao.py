@@ -11,11 +11,10 @@ class OrderDao(object):
                 order_id        VARCHAR(50)     NOT NULL,
                 order_number    VARCHAR(50)     NOT NULL,
                 order_json      TEXT            NOT NULL,
-                user_id         VARCHAR(30)         NOT NULL,
+                user_id         VARCHAR(30)     NOT NULL,
                 created_at      VARCHAR(30)     NOT NULL
                 );'''
         DatabaseHelper.execute(query)
-
 
     # --------------------------------------------------------------------------
     # Insert order
@@ -29,7 +28,6 @@ class OrderDao(object):
         except Exception as ex:
             return ExceptionUtils.error('''User: {}-{}, Insert Order: {} failed: {}'''.format(user['id'], user['username'], order['order_number'], str(ex)))
 
-
     # --------------------------------------------------------------------------
     # delete all order
     # --------------------------------------------------------------------------
@@ -40,7 +38,6 @@ class OrderDao(object):
             return ExceptionUtils.success()
         except Exception as ex:
             return ExceptionUtils.error('''User: {}-{}, Delete all orders is error: {}'''.format(user['id'], user['username'], str(ex)))
-
 
     # --------------------------------------------------------------------------
     # Get order by order number

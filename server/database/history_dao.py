@@ -8,19 +8,21 @@ class HistoryDao(object):
     def createTable(self):
         query = '''CREATE TABLE IF NOT EXISTS sku_history(
                 id              INT AUTO_INCREMENT  primary key NOT NULL,
-                sku             TEXT                NOT NULL,
-                enemy_json      TEXT                NOT NULL,
-                user_id         INT                 NOT NULL
+                sku             VARCHAR(500)        NOT NULL,
+                enemy_json      VARCHAR(500)        NOT NULL,
+                user_id         INTEGER             NOT NULL,
+                status          INTEGER             NOT NULL,   -- Sate for indicated that whether AutoPriceWorker can update special price on Lazada.
+                created_at      INTEGER             NOT NULL
                 );'''
         DatabaseHelper.execute(query)
 
     # --------------------------------------------------------------------------
     # Insert history
     # --------------------------------------------------------------------------
-    def insertHistory(self, sku, enemy_json, user):
+    def insertHistory(self, history, sku, user):
         try:
-            query = '''INSERT INTO sku_history(sku, enemy_json, user_id) VALUES ('{}', '{}','{}') '''.format(
-                    sku['name'], enemy_json, user['id'])
+            query = '''INSERT INTO sku_history(sku, enemy_json, user_id, status, created_at) VALUES ('{}', '{}', {}, {}, {}) '''.format(
+                    sku['sku'], history['enemy_json'], user['id'], history['status'], history['created_at'])
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:
@@ -28,10 +30,11 @@ class HistoryDao(object):
 
     # --------------------------------------------------------------------------
     # Delete history
+    # Delete histories with created time less than #millisecond
     # --------------------------------------------------------------------------
-    def deleteHistory(self, sku):
+    def deleteHistories(self, sku, millisecond):
         try:
-            query = '''DELETE FROM sku_history WHERE sku =  '{}' '''.format(StringUtils.toString(sku['name']))
+            query = '''DELETE FROM sku_history WHERE sku = '{}' and created_at < {} '''.format(StringUtils.toString(sku['sku'], millisecond))
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:
@@ -42,26 +45,27 @@ class HistoryDao(object):
     # --------------------------------------------------------------------------
     def getAllHistory(self, user):
         try:
-            query = '''SELECT * from sku_history WHERE user_id = '{}' '''.format(user['id'])
+            query = '''SELECT * from sku_history WHERE user_id = '{}' ORDER BY created_at DESC '''.format(user['id'])
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)
 
+            histories = []
             rows = cur.fetchall()
             if not rows:
                 conn.close()
-                return ExceptionUtils.error('''Get history failed: {}'''.format(str(ex)))
+                return histories
 
-            enemies = []
             for row in rows:
-                enemies.append({
+                histories.append({
                     'id': row[0],
                     'sku': row[1],
-                    'enemy_json': row[2]
+                    'enemy_json': row[2],
+                    'status': row[4]
                 })
 
             conn.close()
-            return enemies
+            return histories
         except Exception as ex:
             return ExceptionUtils.error('''Get history failed: {}'''.format(str(ex)))
 

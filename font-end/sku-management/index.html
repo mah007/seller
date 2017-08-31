@@ -391,10 +391,14 @@
     </script>
     <script id="history-content-template" type="text/x-handlebars-template">
         {{#each data}}
-        <tr data-id="{{id}}" data-sku={{sku}} data-enemy_json={{enemy_json}}>
-            <th class="text-left">{{id}} </th>
-            <th class="text-left">{{sku}} </th>
-            <th class="text-left">{{enemy_json}} </th>
+        <tr data-id="{{id}}" data-sku={{sku}} data-enemy_json={{enemy_json}} class="{{#if status}}error{{/if}}">
+            <td class="text-left">{{id}} </td>
+            <td class="text-left">{{sku}} </td>
+            <td class="text-left">
+                {{#each this.enemy_json}}
+                    <p>{{name}} - {{price}}</p>
+                {{/each}}
+            </td>
         </tr>
         {{/each}}
     </script>
@@ -408,3 +412,7 @@
 </body>
 
 </html>
+
+
+
+

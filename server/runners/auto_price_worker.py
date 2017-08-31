@@ -15,7 +15,6 @@ class AutoPriceWorker(threading.Thread):
 		threading.Thread.__init__(self)
 		self.kwargs = kwargs
 
-
 	def run(self):
 		user = self.kwargs['user']
 		print('''*********** {}: is running ***********'''.format(user['lazada_user_name']))
@@ -28,9 +27,10 @@ class AutoPriceWorker(threading.Thread):
 		for sku in skus:
 			enemies = self.getEnemies(user, sku)
 			self.priceAlgorithm(enemies, user, sku)
-			skuManager.insertHistory(sku, enemies, user)
 
-
+	#-----------------------------------------------------------------------------
+	# Auto price worker's algorithm
+	#-----------------------------------------------------------------------------
 	def priceAlgorithm(self, enemies, user, sku):
 		newSpecialPrice = sku['special_price']
 		if (enemies == None or len(enemies) <= 1):
@@ -57,29 +57,38 @@ class AutoPriceWorker(threading.Thread):
 		if (sku['special_price'] == newSpecialPrice):
 			return
 
-		self.doUpdatePriceAndAddHistory(sku, user, newSpecialPrice)
+		self.doUpdatePriceAndAddHistory(sku, user, enemies, newSpecialPrice)
 
-
-	def doUpdatePriceAndAddHistory(self, sku, user, newSpecialPrice):
+	#-----------------------------------------------------------------------------
+	# Task list
+	# 1. Update product special price on lazada
+	# 2. Update internal product price
+	# 3. Add history
+	#-----------------------------------------------------------------------------
+	def doUpdatePriceAndAddHistory(self, sku, user, enemies, newSpecialPrice):
+		skuManager = SkuManager()
 		sku['updated_at'] = int(round(time.time()))
 		sku['special_price'] = newSpecialPrice
 
-		# Update external database
+		# Update product special price on lazada
 		lazadaSkuApi = LazadaSkuApi()
 		lazadaProduct = lazadaSkuApi.updateProductSpecialPrice(sku, user, newSpecialPrice)
 		if 'error' in lazadaProduct:
+			# Add filed history
+			skuManager.insertHistory(sku, enemies, user, 1) 	# 1 is marked that we can't update special price on lazada
 			print ('''{} ({}): {}, Special price: {}'''.format(sku['sku'], user['lazada_user_name'], lazadaProduct['error'], newSpecialPrice))
 			return
 
-		# Update internal database
+		# Update internal product price
 		skuDao = SkuDao()
 		skuDao.updateSpecialPrice(sku)
-		# Add history
-		skuManager = SkuManager()
-		skuManager.insertHistory(sku, enemies, user)
+		# Add success history
+		skuManager.insertHistory(sku, enemies, user, 0) 		# 0 is marked that we updated special price successful
 		print ('''{} ({}): updated price to: {}'''.format(sku['sku'], user['lazada_user_name'], newSpecialPrice))
 
-
+	#-----------------------------------------------------------------------------
+	# Get enemies
+	#-----------------------------------------------------------------------------
 	def getEnemies(self, user, sku):
 		enemiesJson = []
 		page = requests.get(sku['link'])
@@ -89,7 +98,7 @@ class AutoPriceWorker(threading.Thread):
 		topEnemyPrice = tree.xpath('//*[@id="special_price_box"]/text()')
 		topEnemyName = tree.xpath('//*[@id="prod_content_wrapper"]/div[2]/div[2]/div[1]/div[1]/a/text()')
 		topEnemyJson = {
-			"name": topEnemyName[0].replace(' ',''),
+			"name": topEnemyName[0].replace(' ','').replace('\n', ''),
 			"price": int(topEnemyPrice[0].replace('VND', '').replace('.', '').replace(',', ''))
 		}
 		enemiesJson.append(topEnemyJson)
@@ -99,14 +108,16 @@ class AutoPriceWorker(threading.Thread):
 		enemyPrices = tree.xpath('//*[@id="multisource"]/div[2]/table/tr[2]/td[4]/span/text()')
 		for index, enemy in enumerate(enemies):
 			enemiesJson.append({
-				"name": enemy.replace(' ',''),
+				"name": enemy.replace(' ','').replace('\n', ''),
 				"price": int(enemyPrices[index].replace('VND', '').replace('.', ''))
 				})
 
 		print ('''{} ({}) enemies: {}'''.format(sku['sku'], user['lazada_user_name'], enemiesJson))
 		return enemiesJson
 
-
+	#-----------------------------------------------------------------------------
+	# Sort algorithm
+	#-----------------------------------------------------------------------------
 	def sortEnemies(self, enemies):
 		return sorted(enemies, key=operator.itemgetter('price'))
 

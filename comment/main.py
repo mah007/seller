@@ -13,29 +13,35 @@ if __name__ == "__main__":
         'comment': "This product is very great!!!"
     }
     product = {
-        'site': "https://www.lazada.vn/apple-iphone-7-32gb-hong-hang-nhap-khau-7629048.html?spm=a2o4n.home.sku-feed-slider-with-banner_452505.12.1cFAdR"
+        'site': "http://www.lazada.vn/thuoc-kich-thich-moc-long-may-rau-toc-snor-x3-thai-lan-10309753.html?spm=a2o4n.seller-37384.0.0.42ImOD&ff=1&sc=KwiS&mp=1&rs=37384"
     }
 
     # Read account
     importExcel = ImportExcel()
     accounts = importExcel.getAccounts()
-
-    # Read comment and pro
-    # TODO implement
+    comments = importExcel.getComments()
 
     # Simple comment logic
-    # driver = webdriver.Chrome()
-    # driver.set_window_position(0, 0)
-    # driver.set_window_size(720, 1100)
-    # login = Login()
-    # register = Register()
-    # comment = Comment()
+    driver = webdriver.Chrome()
+    driver.set_window_position(0, 0)
+    driver.set_window_size(720, 1100)
 
-    # resutl = login.performLogin(driver, account)
-    # if resutl is not None:
-    #     resutl = register.performRegister(driver, account)
-    #     if resutl is None:
-    #         comment.giveComment(driver, account, product, commentData)
-    # else:
-    #     comment.giveComment(driver, account, product, commentData)
+    login = Login()
+    register = Register()
+    comment = Comment()
+
+    j = 0;
+    for i in range(13, 25):
+        resutl = login.performLogin(driver, accounts[i])
+        if resutl is not None:
+            resutl = register.performRegister(driver, accounts[i])
+            if resutl is None:
+                comment.giveComment(driver, accounts[i], product, comments[j])
+                j = j + 1
+        else:
+            comment.giveComment(driver, accounts[i], product, comments[j])
+            j = j + 1
+
+        if j == 2:
+            break
 

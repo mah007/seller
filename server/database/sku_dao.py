@@ -22,7 +22,7 @@ class SkuDao(object):
                     repeat_time     INTEGER     ,
                     created_at      INTEGER     NOT NULL,
                     updated_at      INTEGER,
-                    user_id          INTEGER     NOT NULL
+                    user_id         INTEGER     NOT NULL
                     );'''
         DatabaseHelper.execute(query)
 

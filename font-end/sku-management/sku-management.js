@@ -15,13 +15,13 @@ jQuery(document).ready(function() {
         $('#username-on-header').html(cookie.getUsername());
     }
 
-    $("#menuContent").load("../order/content.html"); 
+    $("#menuContent").load("../order/content.html");
 
     // Init data
     getAndFillOutAllSku();
     getAndFillOutHistory();
-    
-    
+
+
 
     if($('.btntab1submit').length > 0) {
         $('.btntab1submit').click(function() {
@@ -221,7 +221,7 @@ $(".btnupdatePw").click(function() {
     var $this = $(this);
     var error = "";
 
-    
+
     if($('input[name=txt_newpass]').hasClass('has-error') == false && $('input[name=txt_repass]').hasClass('has-error') == false) {
         var newpass = ($('input[name=txt_newpass]').val());
         var repass = ($('input[name=txt_repass]').val());
@@ -281,7 +281,7 @@ $(".btnupdatePw").click(function() {
             data: JSON.stringify({
                 oldpass: $('input[name=txt_oldpass]').val(),
                 newpass: $('input[name=txt_newpass]').val(),
-                // token: cookie.getToken()               
+                // token: cookie.getToken()
             }),
             success: function(data) {
                 console.log(data);
@@ -462,9 +462,11 @@ function getAndFillOutHistory() {
         contentType: "application/json",
         success: function(data) {
             console.log(data.data);
-            var template = $("#history-content-template").html();
-            var contentHtml = Handlebars.compile(template);
-            $("#tbody_history").html(contentHtml(data));
+            if (data.data.length != 0) {
+                var template = $("#history-content-template").html();
+                var contentHtml = Handlebars.compile(template);
+                $("#tbody_history").html(contentHtml(data));
+            }
         },
         error: function(error) {
             console.log(error);
