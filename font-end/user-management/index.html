@@ -92,7 +92,7 @@
         <!-- BEGIN CONTENT -->
         <div class="page-content-wrapper">
             <div class="page-content">
-                <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+                <!-- BEGIN MODAL FORM: Update or Insert user -->
                 <div class="modal fade" id="portlet-user" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -171,19 +171,14 @@
                     </div>
                     <!-- /.modal-dialog -->
                 </div>
-                <!-- /.modal -->
-                <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+
                 <!-- BEGIN PAGE HEADER-->
-                <!-- BEGIN PAGE HEAD -->
                 <div class="page-head">
-                    <!-- BEGIN PAGE TITLE -->
                     <div class="page-title">
                         <h1>Quản lý User <small></small></h1>
                     </div>
-                    <!-- END PAGE TITLE -->
                 </div>
-                <!-- END PAGE HEAD -->
-                <!-- END PAGE HEADER-->
+
                 <!-- BEGIN PAGE CONTENT-->
                 <div class="row">
                     <div class="col-md-12">
@@ -212,19 +207,18 @@
                                         </div>
                                     </div>
                                     <div class="table-scrollable">
-                                        <table id="table_sku" class="table table-hover" style="width:100%">
+                                        <table id="table_sku" class="table table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th style="vertical-align:top;" class="text-left">ID</th>
-                                                    <th style="vertical-align:top;" class="text-left">Username</th>
-                                                    <th style="vertical-align:top;" class="text-left">Password</th>
-                                                    <th style="vertical-align:top;" class="text-left">Lazada Username
-                                                        <br>
-                                                        <th style="vertical-align:top;" class="text-left">Lazada User ID</th>
-                                                        <th style="vertical-align:top;" class="text-left">Lazada API Key</th>
-                                                        <th style="vertical-align:top;" class="text-left">Certain Size</th>
-                                                        <th style="vertical-align:top;" class="text-left">Role</th>
-                                                        <th style="vertical-align:top;" class="text-left">Quản trị</th>
+                                                    <th class="text-left">ID</th>
+                                                    <th class="text-left">Username</th>
+                                                    <th style="display:none" class="text-left">Password</th>
+                                                    <th class="text-left">Lazada Username
+                                                    <th class="text-left">Lazada User ID</th>
+                                                    <th style="display:none" class="text-left">Lazada API Key</th>
+                                                    <th class="text-left">Certain Size</th>
+                                                    <th class="text-left">Role</th>
+                                                    <th class="text-left">Quản trị</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="tbody_sku">
@@ -287,10 +281,10 @@
         <tr data-id="{{id}}" data-user_name={{username}} data-password={{password}} data-lazada_user_name={{lazada_user_name}} data-lazada_user_id={{lazada_user_id}} data-lazada_api_key={{lazada_api_key}} data-role={{role}}, data-certain_size={{certain_size}}>
             <td>{{id}}</td>
             <td class="text-left">{{username}}</td>
-            <td class="text-left">{{password}}</td>
+            <td class="text-left" style="display:none">{{password}}</td>
             <td class="text-left">{{lazada_user_name}}</td>
             <td class="text-left">{{lazada_user_id}}</td>
-            <td class="text-left">{{lazada_api_key}}</td>
+            <td class="text-left" style="display:none">{{lazada_api_key}}</td>
             <td class="text-left">{{certain_size}}</td>
             <td class="text-left">{{role}}</td>
             <td class="text-left">
