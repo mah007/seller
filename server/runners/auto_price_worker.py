@@ -90,30 +90,37 @@ class AutoPriceWorker(threading.Thread):
 	# Get enemies
 	#-----------------------------------------------------------------------------
 	def getEnemies(self, user, sku):
-		enemiesJson = []
-		page = requests.get(sku['link'])
-		tree = html.fromstring(page.content)
+		try:
+			enemiesJson = []
+			page = requests.get(sku['link'])
+			tree = html.fromstring(page.content)
 
-		# Top enemy, will be this user if the user is on the top
-		topEnemyPrice = tree.xpath('//*[@id="special_price_box"]/text()')
-		topEnemyName = tree.xpath('//*[@id="prod_content_wrapper"]/div[2]/div[2]/div[1]/div[1]/a/text()')
-		topEnemyJson = {
-			"name": topEnemyName[0].replace(' ','').replace('\n', ''),
-			"price": int(topEnemyPrice[0].replace('VND', '').replace('.', '').replace(',', ''))
-		}
-		enemiesJson.append(topEnemyJson)
+			# Top enemy, will be this user if the user is on the top
+			topEnemyPrice = tree.xpath('//*[@id="special_price_box"]/text()')
+			topEnemyName = tree.xpath('//*[@id="prod_content_wrapper"]/div[2]/div[2]/div[1]/div[1]/a/text()')
+			if topEnemyName != None and len(topEnemyName) > 0 and topEnemyPrice != None and len(topEnemyPrice) > 0:
+				topEnemyJson = {
+					"name": topEnemyName[0].replace(' ','').replace('\n', ''),
+					"price": int(topEnemyPrice[0].replace('VND', '').replace('.', '').replace(',', ''))
+				}
+				enemiesJson.append(topEnemyJson)
 
-		# List others enemy
-		enemies = tree.xpath('//*[@id="multisource"]/div[2]/table/tr[2]/td[1]/div/div/a/span/text()')
-		enemyPrices = tree.xpath('//*[@id="multisource"]/div[2]/table/tr[2]/td[4]/span/text()')
-		for index, enemy in enumerate(enemies):
-			enemiesJson.append({
-				"name": enemy.replace(' ','').replace('\n', ''),
-				"price": int(enemyPrices[index].replace('VND', '').replace('.', ''))
-				})
+			# List others enemy
+			enemies = tree.xpath('//*[@id="multisource"]/div[2]/table/tr[2]/td[1]/div/div/a/span/text()')
+			enemyPrices = tree.xpath('//*[@id="multisource"]/div[2]/table/tr[2]/td[4]/span/text()')
+			if enemies != None and len(enemies) > 0 and enemyPrices != None and len(enemyPrices) > 0:
+				for index, enemy in enumerate(enemies):
+					if len(enemyPrices) > index:
+						enemiesJson.append({
+							"name": enemy.replace(' ','').replace('\n', ''),
+							"price": int(enemyPrices[index].replace('VND', '').replace('.', ''))
+							})
 
-		print ('''{} ({}) enemies: {}'''.format(sku['sku'], user['lazada_user_name'], enemiesJson))
-		return enemiesJson
+			print ('''{} ({}) enemies: {}'''.format(sku['sku'], user['lazada_user_name'], enemiesJson))
+			return enemiesJson
+		except Exception as ex:
+			print ('''{} ({}) get enemies exception: {}'''.format(sku['sku'], user['lazada_user_name'], str(ex)))
+			return None
 
 	#-----------------------------------------------------------------------------
 	# Sort algorithm
