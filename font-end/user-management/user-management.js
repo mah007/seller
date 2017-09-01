@@ -7,26 +7,28 @@ jQuery(document).ready(function() {
     if (!cookie.validateLocalToken()) {
         window.location.href = "../login";
     }
-    
+
     // Fill user name
     if (cookie.getUsername() === undefined) {
         $('#username-on-header').html("User info");
     } else {
         $('#username-on-header').html(cookie.getUsername());
     }
-    
-    $("#menuContent").load("../order/content.html"); 
+
+    // Load menu left
+    $("#menuContent").load("../menuleft.html");
+
     // Init data
     getAndFillOutAllUser();
 
     if($('.btnnew').length > 0) {
         $(".btnnew").click(function() {
             $('#portlet-user .modal-title').html('Thêm mới');
-            $('#portlet-user').data('type', "insert");       
-            $('input[name=txt_id').prop('disabled', true);  
+            $('#portlet-user').data('type', "insert");
+            $('input[name=txt_id').prop('disabled', true);
             $('input[name=txt_username]').prop('disabled', false);
             $('#portlet-user').modal('show');
-            
+
         });
     }
 
@@ -279,7 +281,7 @@ function getAndFillOutAllUser() {
         error: function(error) {
             console.log(error);
             alert("Sorry! You don't have permission to access this page!");
-            window.location.href = "../sku-management"; 
+            window.location.href = "../sku-management";
         }
     });
 }

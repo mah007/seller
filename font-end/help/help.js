@@ -10,4 +10,7 @@ jQuery(document).ready(function() {
 
     // Fill user name
     $('#username-on-header').html(cookie.getUsername());
+
+    // Load menu left
+    $("#menuContent").load("../menuleft.html");
 });

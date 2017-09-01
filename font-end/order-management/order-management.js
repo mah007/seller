@@ -16,7 +16,8 @@ jQuery(document).ready(function() {
         $('#username-on-header').html(cookie.getUsername());
     }
 
-    $("#menuContent").load("../order/content.html"); 
+    // Load menu left
+    $("#menuContent").load("../menuleft.html");
 
     if ($('.btnrefresh').length > 0) {
         $(".btnrefresh").click(function() {
@@ -100,7 +101,7 @@ function getAndFillOutAllOrder() {
         error: function(error) {
             console.log(error);
             // alert("Sorry! You don't have permission to access this page!");
-            // window.location.href = "../sku-management"; 
+            // window.location.href = "../sku-management";
         }
     });
 }

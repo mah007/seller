@@ -15,12 +15,12 @@ jQuery(document).ready(function() {
         $('#username-on-header').html(cookie.getUsername());
     }
 
-    $("#menuContent").load("../order/content.html");
+    // Load menu left
+    $("#menuContent").load("../menuleft.html");
 
     // Init data
     getAndFillOutAllSku();
     getAndFillOutHistory();
-
 
 
     if($('.btntab1submit').length > 0) {
