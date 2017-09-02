@@ -34,7 +34,7 @@ class HistoryDao(object):
     # --------------------------------------------------------------------------
     def deleteHistories(self, sku, millisecond):
         try:
-            query = '''DELETE FROM sku_history WHERE sku = '{}' and created_at < {} '''.format(StringUtils.toString(sku['sku'], millisecond))
+            query = '''DELETE FROM sku_history WHERE sku = '{}' and created_at < {} '''.format(StringUtils.toString(sku['sku']), millisecond)
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:

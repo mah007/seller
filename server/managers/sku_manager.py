@@ -125,7 +125,7 @@ class SkuManager(object):
 
 		# Delete oldest histories first
 		historyDao = HistoryDao()
-		lastdayMillisecond = currentMillisecond - 1*24*60*60*1000
+		lastdayMillisecond = currentMillisecond - 6*60*60 # Store history only for 6 latest hours
 		historyDao.deleteHistories(sku, lastdayMillisecond)
 
 		# Only take enemies in a limitation
