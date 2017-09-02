@@ -1,0 +1,89 @@
+.table-large {
+    width: 100%;
+    height: auto;
+    background-color: red;
+}
+
+.search-bar {
+    width: 200px;
+    height: 100px;
+    background-color: black;
+}
+
+.search {
+    width: 100%;
+    height: 100px;
+    background-color: gray;
+}
+
+.table-left {
+    width: 80%;
+    height: auto;
+    background-color: black;
+    float: left;
+}
+
+.table-right {
+    width: 10%;
+    height: auto;
+    background-color: yellow;
+    float: right;
+}
+
+.right-hand {
+    width: 27%;
+    height: auto;
+    margin-top: 50px;
+    margin-right: 40px;
+    float: right;
+}
+
+.memo {
+    width: 400px;
+    {
+        display: block;
+        width: 100px;
+        height: 100px;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+        -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+}
+
+.page-header.navbar .page-logo .logo-default {
+    margin-top: 24px;
+}
+
+.tabbable-custom>.nav-tabs>li.active {
+    border-top-color: #5b9bd1;
+}
+
+.has-error {
+    border: 1px solid #FF0000;
+}
+
+.error {
+    color: #F44336;
+}
+
+.imageUpload {
+    width: 150px;
+    height: 150px;
+    background-color: #efeff5;
+
+.red {
+    background-color: red;
+}
+
+.imageDiv {
+    background-color: white;
+    width: 125px;
+    height: 125px;
+}
