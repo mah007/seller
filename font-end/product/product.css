@@ -31,11 +31,22 @@
 }
 
 .right-hand {
-    width: 27%;
+    width: 25%;
     height: auto;
-    margin-top: 50px;
-    margin-right: 40px;
-    float: right;
+    margin-left:20px;
+    float: left;
+}
+
+.left-hand{
+    width:65%;
+    height:auto;
+    float:left;
+}
+
+.detail-table{
+    width: 100%;
+    height:auto;
+    margin-left: 100px;
 }
 
 .memo {
