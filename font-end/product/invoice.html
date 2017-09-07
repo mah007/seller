@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <script src="barcode.js"></script>
+    <style type="text/css">
+    .clearfix:after {
+        content: "";
+        display: table;
+        clear: both;
+        border-bottom: 1px solid #e1e1ea;
+    }
+
+    a {
+        color: #5D6975;
+        text-decoration: underline;
+    }
+
+    body {
+        position: relative;
+        width: 21cm;
+        /*height: 29.7cm;*/
+        height: 27cm;
+        margin: 0 auto;
+        color: #001028;
+        background: #FFFFFF;
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        font-family: Arial;
+            border-width:1px;  
+    border-style:dashed;
+    }
+
+    header {
+        padding: 10px 0;
+        margin-bottom: 15px;
+    }
+
+    h1 {
+        border-top: 1px solid #5D6975;
+        border-bottom: 1px solid #5D6975;
+        color: #0d0d26;
+        font-size: 2.4em;
+        line-height: 1.4em;
+        font-weight: normal;
+        text-align: center;
+        margin: 0 0 10px 0;
+    }
+
+    #project {
+        float: left;
+        padding-left: 5px;
+    }
+
+    #project span {
+        color: #5D6975;
+        text-align: left;
+        width: 52px;
+        margin-right: 30px;
+        margin-top: 7px;
+        display: inline-block;
+        font-size: 0.8em;
+    }
+
+    #company {
+        float: right;
+        text-align: right;
+    }
+
+    #project div,
+    #company div {
+        white-space: nowrap;
+    }
+
+    .detail {
+        border-bottom: 1px solid #262626;
+        height: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+        margin-bottom: 0px;
+    }
+
+    table th{
+        text-align: center;
+        border-top: 1px solid black;        
+    }
+    table td {
+        text-align: center;
+        border-top: 1px solid #C1CED9;        
+    }
+
+    table th {
+        padding: 5px 20px;
+        color: #5D6975;
+        border-bottom: 1px solid #C1CED9;
+        white-space: nowrap;
+        font-weight: normal;
+    }
+
+    table .service,
+    table .desc {
+        text-align: left;
+    }
+
+    table td {
+        padding: 5px;
+        text-align: right;
+    }
+
+    table td.service,
+    table td.desc {
+        vertical-align: top;
+        font-size: 1.3em;
+    }
+
+    table td.total {
+        font-size: 1.2em;
+        text-align: center;
+    }
+
+    table td.count {
+        font-size: 1.2em;
+        text-align: right;
+    }
+
+    table td.grand {
+        border-top: 1px solid #5D6975;
+        ;
+    }
+
+    .note {
+        color: #000000;
+        font-size: 1.2em;
+        text-align: center;
+        border-top: 1px solid black;
+        padding-top: 2px;
+        margin-top: 2px;
+    }
+
+    .note-child {
+        color: #000000;
+        font-size: 1em;
+        text-align: center;
+        padding-top: 2px;
+        margin-top: 2px;
+    }
+
+    footer {
+        color: #5D6975;
+        width: 100%;
+        height: 30px;
+        bottom: 0;
+        padding: 8px 0;
+        text-align: center;
+    }
+
+    .logo-certain {
+        width: 100%;
+        height: auto;
+        float: left;
+        padding-left: 5px;
+    }
+
+    .logo-left {
+        width: 65%;
+        height: 100px;
+        float: left;
+        font-size: 10pt;
+    }
+
+    .logo-right {
+        width: 28%;
+        height: 100px;
+        float: left;
+    }
+
+    .logo-img {
+        text-align: center;
+        width: 250px;
+        height: 75px;
+        position: relative;
+    }
+
+    .order {
+        width: 100%;
+        height: auto;
+        margin-top: 120px;
+        margin-bottom: 15px;
+    }
+    </style>
+</head>
+
+<body>
+    <header class="clearfix">
+        <div class="logo-certain">
+            <div class="logo-left">
+                <img class="logo-img" src="../img/lamino.jpg">
+                <br> 35 Lương Ngọc Quyền, P.13, Q.8, TP.HCM
+                <br> Điện thoại: 0977.574.571 - info@lamino.vn
+            </div>
+            <div class="logo-right">
+                <div>
+                    <img id="barcode" />
+                    <script>
+                    JsBarcode("#barcode", "9780199532179", {
+                        format: "EAN13",
+                        displayValue: true,
+                        fontSize: 15,
+                        height: 75,
+                        width: 2,
+                    });
+                    </script>
+                </div>
+            </div>
+        </div>
+        <div class="order">
+            <h1><strong>HOÁ ĐƠN BÁN LẺ</strong></h1></div>
+        <div id="company" class="clearfix">
+            <div style="text-align: center; font-size: 20pt;"><strong>PHIẾU BẢO HÀNH</strong></div>
+            <div style="text-align: left;">
+                <strong>Xác nhận bảo hành cho hoá đơn:</strong> HD050789 28/08/2017 22:18
+                <br>
+                <strong>Tên sản phẩm:</strong> Theo hoá đơn bán hàng phía trên
+                <br>
+                <strong>Thời gian bảo hành:</strong> Căn cứ hoá đơn và thời hạn bảo hành trên từng sản phẩm
+                <br>
+                <strong>Các điều kiện bảo hành</strong>
+                <br>
+                <strong>1.</strong> Có đẩy đủ tem bảo hành, hoá đơn bảo hành, tem nêm phong sản phẩm còn nguyên vẹn của Lamino
+                <br>
+                <strong>2.</strong> Sản phẩm bị lỗi từ nhà sản xuất
+            </div>
+        </div>
+        <div id="project">
+            <div><span><strong>Kênh bán</strong></span> Lazada </div>
+            <div><span><strong>Ngày</strong></span> 28/08/2017 22:18 </div>
+            <div><span><strong>Số hoá đơn</strong></span> HD050789</div>
+            <div><span><strong>Tên khách hàng</strong></span> Lazada</a>
+            </div>
+            <div><span><strong>Địa chỉ</strong></span> Q8, TP.HCM </div>
+            <div><span><strong>Số điện thoại</strong></tr></span> 0977.574.571</div>
+        </div>
+    </header>
+    <main>
+        <div class="detail">
+            <h2> Thông tin chi tiết đơn hàng</h2>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th class="service"><strong>STT</strong></th>
+                    <th class="desc"><strong>Tên sản phẩm</strong></th>
+                    <th><strong>Số lượng</strong></th>
+                    <th><strong>Thành tiền</strong></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="total">1</td>
+                    <td class="desc">Giá đỡ BI-2031 ghế lớn-HỒNG-KHÔNG BH (Cái)
+                        <br>Đơn giá: 59.000</td>
+                    <td class="total">1</td>
+                    <td class="total">59.000</td>
+                </tr>
+                <tr>
+                    <td class="total">1</td>
+                    <td class="desc">Giá đỡ BI-2031 ghế lớn-HỒNG-KHÔNG BH (Cái)
+                        <br>Đơn giá: 59.000</td>
+                    <td class="total">1</td>
+                    <td class="total">59.000</td>
+                </tr>
+                <tr>
+                    <td class="total">1</td>
+                    <td class="desc">Giá đỡ BI-2031 ghế lớn-HỒNG-KHÔNG BH (Cái)
+                        <br>Đơn giá: 59.000</td>
+                    <td class="total">1</td>
+                    <td class="total">59.000</td>
+                </tr>
+                <tr>
+                    <td class="count" colspan="3">Cộng</td>
+                    <td class="total">59.000</td>
+                </tr>
+                <tr>
+                    <td class="count" colspan="3">Giảm</td>
+                    <td class="total">0.0</td>
+                </tr>
+                <tr>
+                    <td class="count" colspan="3">Tổng cộng</td>
+                    <td class="total">59.000</td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+    <footer>
+        <div class="note">
+            <div class="note-child"><strong>Lưu ý</strong></div>
+            <div style="text-align: center;">
+                Để được bảo hành sản phẩm, quý khách vui lòng giữ cẩn thận phiếu bảo hành sản phẩm và biên nhận giao hàng/ hoá đơn mua hàng</div>
+        </div>
+        <div class="note">
+            <div class="note-child"><strong>Quý khách cần hỗ trợ kĩ thuật để được xử lý nhanh chóng</strong></div>
+            Vui lòng liên hệ hotline: 0977.574.571
+            <br> Hỗ trợ từ thứ 2 đến thứ 6 và từ 09h-12h, 14h-16h
+        </div>
+        <div class="note">
+            <div class="note-child">Quý khách có thể xem thêm các sản phẩm khuyến mãi hấp dẫn khác tại đường dẫn:<strong> lamino.vn</strong> </div>
+            <div class="note-child"><strong> </strong></div>
+            <div class="note-child"><strong>CẢM ƠN ĐÃ CHỌN VÀ MUA SẮM TẠI LAMINO</strong></div>
+        </div>
+    </footer>
+</body>
+
+</html>

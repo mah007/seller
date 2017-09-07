@@ -101,6 +101,11 @@ var EndpointConfig = function() {
       return endpointUrl + '/sku/get-all-history?token=' + $.cookie('token');
   }  
 
+  // PRODUCT
+  EndpointConfig.prototype.generateGetAllProduct = function() {
+      return endpointUrl + '/product/get?token=' + $.cookie('token');
+  }  
+
 }
 
 
