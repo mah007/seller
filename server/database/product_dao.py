@@ -30,10 +30,11 @@ class ProductDao(object):
     # Insert Product
     # --------------------------------------------------------------------------
     def insert(self, product, user):
+        print("Inserting")
         try:
-            query = '''INSERT INTO product(id, name, url, status, sellerSku, shopSku, image,
+            query = '''INSERT INTO product(name, url, status, sellerSku, shopSku, image,
                 width, height, weight, brand, model, primaryCategory, user_id) VALUES ('{}', '{}', '{}', '{}', '{}',
-                '{}', '{}', '{}', '{}', '{}','{}', '{}', '{}', '{}','{}')'''.format(product['Attributes']['name'], 
+                '{}', '{}', '{}', '{}', '{}','{}', '{}', '{}')'''.format(product['Attributes']['name'], 
                 product['Skus']['Url'], product['Skus']['Status'], product['Skus']['SellerSku'], 
                 product['Skus']['ShopSku'], product['Skus']['Images'], product['Skus']['package_width'], 
                 product['Skus']['package_height'], product['Skus']['package_weight'], product['Attributes']['brand'], 

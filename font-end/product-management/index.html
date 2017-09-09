@@ -32,7 +32,7 @@
     <link href="../css/component/layout-md.css" rel="stylesheet" type="text/css" />
     <link href="../css/component/custom-md.css" rel="stylesheet" type="text/css" />
     <link href="../css/theme/light.css" rel="stylesheet" type="text/css" />
-    <link href="../sku-management/sku-management.css" rel="stylesheet" type="text/css" />
+    <!-- <link href="../product-mangement/product.css" rel="stylesheet" type="text/css" /> -->
 </head>
 
 <body>
@@ -53,7 +53,6 @@
                         <li class="dropdown dropdown-user dropdown-dark">
                             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                 <span id="username-on-header" class="username username-hide-on-mobile"></span>
-                                <img alt="" class="img-circle hide" src="assets/admin/layout4/img/avatar9.jpg"/>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-default">
                                 <li>
@@ -110,16 +109,44 @@
                                         <table id="table_sku" class="table table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th style="vertical-align:top;" class="text-left">ID</th>
-                                                    <th style="vertical-align:top;width: 30%;" class="text-left">Name</th>
-                                                    <th style="vertical-align:top;" class="text-left">Seller Sku</th>
-                                                    <th style="vertical-align:top;" class="text-left">Shop Sku</th>
+                                                    <th style="vertical-align:top;" class="text-center">ID</th>
+                                                    <th style="vertical-align:top;width: 15%;" class="text-center">Name</th>
+                                                    <th style="vertical-align:top;width: 10%;" class="text-center">Image</th>
+                                                    <th style="vertical-align:top;width: 10%;" class="text-center">Model</th>
+                                                    <th style="vertical-align:top" class="text-center">Width</th>
+                                                    <th style="vertical-align:top" class="text-center">Height</th>
+                                                    <th style="vertical-align:top" class="text-center">Weight</th>
+                                                    <th style="vertical-align:top;" class="text-center">Seller Sku</th>
+                                                    <th style="vertical-align:top;" class="text-center">Shop Sku</th>
+                                                    <th style="vertical-align:top;width: 10%;" class="text-center">Brand</th>
                                                     <th style="vertical-align:top;" class="text-left">Quantity</th>
                                                     <th style="vertical-align:top;" class="text-left">Original Price</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="tbody_sku">
                                                 <!-- WILL BE FILL DATA IN HERE -->
+                                                <tr>
+                                                    <th class="text-center">1</th>
+                                                    <th class="text-center">Product 01</th>
+                                                    <th class="text-center">Blade&Soul</th>
+                                                    <th class="text-center">Golem</th>
+                                                    <th class="text-center">297cm</th>
+                                                    <th class="text-center">300cm</th>
+                                                    <th class="text-center">1000 pounds</th>
+                                                    <th class="text-center">Pro01</th>
+                                                    <th class="text-center">Lamino</th>
+                                                    <th class="text-center">La01</th>
+                                                    <th class="text-center">
+                                                        <div class="col-xs-6">
+                                                            <input class="form-control input-sm" id="quantityText" type="text" onchange="checkFilled();">
+                                                        </div>
+                                                    </th>
+                                                    <th class="text-center">
+                                                        <div class="col-xs-10">
+                                                            <input class="form-control input-sm" id="priceText" type="text" onchange="checkFilled();">
+                                                        </div>
+                                                    </th>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -131,38 +158,6 @@
                                                 <li class="active"><a href="javascript:;">1</a></li>
                                             </ul>
                                         </div>
-                                    </div>
-                                </div>
-                                <!-- HISTORY TAB -->
-                                <div class="tab-pane " id="tab_1_2">
-                                    <div class="table-toolbar">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <form method="GET">
-                                                    <input type="hidden" name="q" value="" />
-                                                    <input type="hidden" name="p1" value="1" />
-                                                    <input type="hidden" name="tab" value="his" />
-                                                    <select class="form-control input-large sltfiltersku" name="s" data-placeholder="Select...">
-                                                        <option value="0">All</option>
-                                                        <!-- put options here to search -->
-                                                    </select>
-                                                </form>
-                                            </div>
-                                            <div class="col-md-6">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="table-scrollable">
-                                        <table id="table_sku" class="table table-hover">
-                                            <tr>
-                                                <th width="10%">ID</th>
-                                                <th width="50%">Sku</th>
-                                                <th width="40%">Enemy</th>
-                                            </tr>
-                                            <tbody id="tbody_history">
-                                                <!-- DATA HISTORY WILL BE FILL HERE -->
-                                            </tbody>
-                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -204,7 +199,7 @@
     <script src="../js/component/layout.js" type="text/javascript"></script>
     <script src="../js/component/style.js" type="text/javascript"></script>
     <!-- END JAVASCRIPTS -->
-    <script src="../product/product-management.js" type="text/javascript"></script>
+    <script src="../product-management/product-management.js" type="text/javascript"></script>
     <!-- Templates -->
     <script id="tab-content-template" type="text/x-handlebars-template">
         {{#each data}}

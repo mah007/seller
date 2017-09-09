@@ -22,6 +22,7 @@ def getAllProduct():
 
 	productManager = ProductManager()
 	productManager.insertProductFromLazada(request.args.get('token'))
+
 	result = productManager.getAllProduct(request.args.get('token'))
 
 	if 'success' in result:

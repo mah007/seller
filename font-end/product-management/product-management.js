@@ -20,16 +20,32 @@ jQuery(document).ready(function() {
 
     // Init data
     getAndFillOutProduct();
-    
+    checkFilled();
+
 });
 
+function checkFilled() {
+    var inputQuantity = document.getElementById("quantityText");
+    var inputPrice = document.getElementById("priceText");
+    if (inputQuantity.value == "") {
+        inputQuantity.style.backgroundColor = "#efeff5";
+    } else {
+        inputQuantity.style.backgroundColor = "";
+    }
+    if (inputPrice.value == "") {
+        inputPrice.style.backgroundColor = "#efeff5";
+    } else {
+        inputPrice.style.backgroundColor = "";
+    }
+}
 
+checkFilled();
 //-------------------------------------------------------------------------------------
 // Get and fill out all Product
 //-------------------------------------------------------------------------------------
 function getAndFillOutProduct() {
     $.ajax({
-        method:'GET',
+        method: 'GET',
         url: endpoint.generateGetAllProduct(),
         contentType: "application/json",
         success: function(data) {
@@ -43,6 +59,3 @@ function getAndFillOutProduct() {
         }
     });
 };
-
-
-

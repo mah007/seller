@@ -23,16 +23,16 @@ class LazadaProductApi(object):
 		}
 
 		parameters['Signature'] = LazadaApiHelper.generateSignature(parameters, user['lazada_api_key'])
-		url = "{}/?Action={}&Filter={}&Format={}&Timestamp={}&UserID={}&Version={}&Signature={}".format(
+		url = "{}/?Action={}&Format={}&Timestamp={}&UserID={}&Version={}&Signature={}&CreatedBefore={}&Filter={}".format(
 						LazadaAPI.ENDPOINT,
 		 				parameters["Action"],
-		 				parameters["Filter"],
 		 				parameters["Format"],
 		 				LazadaApiHelper.formatTimestamp(parameters["Timestamp"]),
 		 				parameters["UserID"],
 		 				parameters["Version"],
-		 				parameters["Signature"])
-
+		 				parameters["Signature"],
+		 				LazadaApiHelper.formatTimestamp(parameters["CreatedBefore"]),
+		 				parameters["Filter"])
 		print(url)
 		try:
 			resp = requests.get(url)
@@ -41,9 +41,9 @@ class LazadaProductApi(object):
 				if ('ErrorResponse' in response):
 					return ExceptionUtils.error('''Get Products is error: {}'''.format(esponse['ErrorResponse']['Head']['ErrorMessage']))
 
-				print(url)
 				data = response['SuccessResponse']['Body']
 				if (data['Products'] != None):
+					print(data['Products']['PrimaryCategory'])
 					return data['Products']
 
 			return ExceptionUtils.error('''Get Products is error: {}'''.format(resp.status_code))
