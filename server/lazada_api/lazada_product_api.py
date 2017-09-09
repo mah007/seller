@@ -11,7 +11,7 @@ class LazadaProductApi(object):
 	#-----------------------------------------------------------------------------
 	# Get Produts from Lazada
 	#-----------------------------------------------------------------------------
-	def getProducts(self, user):
+	def getProducts(self, user, constant):
 		parameters = {
 		'Action': 'GetProducts',
 		'Format':'JSON',
@@ -19,11 +19,13 @@ class LazadaProductApi(object):
 		'UserID': user['lazada_user_id'],
 		'Version': '1.0',
 		'CreatedBefore': LazadaApiHelper.getCurrentUTCTime(),
-		'Filter': 'all'
+		'Filter': 'all',
+		'Limit': 20,
+		'Offset': constant[0]['offset']
 		}
 
 		parameters['Signature'] = LazadaApiHelper.generateSignature(parameters, user['lazada_api_key'])
-		url = "{}/?Action={}&Format={}&Timestamp={}&UserID={}&Version={}&Signature={}&CreatedBefore={}&Filter={}".format(
+		url = "{}/?Action={}&Format={}&Timestamp={}&UserID={}&Version={}&Signature={}&CreatedBefore={}&Filter={}&Offset={}&Limit={}".format(
 						LazadaAPI.ENDPOINT,
 		 				parameters["Action"],
 		 				parameters["Format"],
@@ -32,8 +34,9 @@ class LazadaProductApi(object):
 		 				parameters["Version"],
 		 				parameters["Signature"],
 		 				LazadaApiHelper.formatTimestamp(parameters["CreatedBefore"]),
-		 				parameters["Filter"])
-		print(url)
+		 				parameters["Filter"],
+		 				parameters["Offset"],
+		 				parameters["Limit"])
 		try:
 			resp = requests.get(url)
 			if resp.status_code == 200:
@@ -42,8 +45,7 @@ class LazadaProductApi(object):
 					return ExceptionUtils.error('''Get Products is error: {}'''.format(esponse['ErrorResponse']['Head']['ErrorMessage']))
 
 				data = response['SuccessResponse']['Body']
-				if (data['Products'] != None):
-					print(data['Products']['PrimaryCategory'])
+				if (data['Products'] != None):		
 					return data['Products']
 
 			return ExceptionUtils.error('''Get Products is error: {}'''.format(resp.status_code))

@@ -30,14 +30,13 @@ class ProductDao(object):
     # Insert Product
     # --------------------------------------------------------------------------
     def insert(self, product, user):
-        print("Inserting")
         try:
             query = '''INSERT INTO product(name, url, status, sellerSku, shopSku, image,
                 width, height, weight, brand, model, primaryCategory, user_id) VALUES ('{}', '{}', '{}', '{}', '{}',
-                '{}', '{}', '{}', '{}', '{}','{}', '{}', '{}')'''.format(product['Attributes']['name'], 
-                product['Skus']['Url'], product['Skus']['Status'], product['Skus']['SellerSku'], 
-                product['Skus']['ShopSku'], product['Skus']['Images'], product['Skus']['package_width'], 
-                product['Skus']['package_height'], product['Skus']['package_weight'], product['Attributes']['brand'], 
+                '{}', '{}', '{}', '{}', '{}','{}', {}, {})'''.format(product['Attributes']['name'], 
+                product['Skus'][0]['Url'], product['Skus'][0]['Status'], product['Skus'][0]['SellerSku'], 
+                product['Skus'][0]['ShopSku'], product['Skus'][0]['Images'][0], product['Skus'][0]['package_width'], 
+                product['Skus'][0]['package_height'], product['Skus'][0]['package_weight'], product['Attributes']['brand'], 
                 product['Attributes']['model'], product['PrimaryCategory'], user['id'])
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
@@ -63,8 +62,10 @@ class ProductDao(object):
                     "name": row[1],
                     "url": row[2],
                     "status": row[3],
+                    "quantity": row[4],
                     "sellerSku": row[5],
                     "shopSku": row[6],
+                    "price": row[7],
                     "image": row[8],
                     "width": row[9],
                     "height": row[10],

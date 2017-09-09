@@ -28,11 +28,11 @@ class ConstantDao(object):
             return ExceptionUtils.error('Error')     
 
     # --------------------------------------------------------------------------
-    # Get constant with Id 
+    # Get constant for get order 
     # --------------------------------------------------------------------------
-    def getConstantWithUserId(self, user_id):
+    def getConstantForOrderWithUserId(self, user_id):
         try:
-            query = '''SELECT * FROM constant WHERE user_id = '{}' '''.format(user_id)
+            query = '''SELECT * FROM constant WHERE user_id = '{}' AND name = 'order' '''.format(user_id)
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)
@@ -48,6 +48,32 @@ class ConstantDao(object):
                     "user_id": row[4]
                 })
 
+            conn.close()
+            return constant
+        except Exception as ex:
+            print(ex)
+            return None
+
+    # --------------------------------------------------------------------------
+    # Get constant for get product
+    # --------------------------------------------------------------------------
+    def getConstantForProductWithUserId(self, user_id):
+        try:
+            query = '''SELECT * FROM constant WHERE user_id = '{}' AND name = 'product' '''.format(user_id)
+            conn = DatabaseHelper.getConnection()
+            cur = conn.cursor()
+            cur.execute(query)
+
+            constant = []
+            rows = cur.fetchall()
+            for row in rows:
+                constant.append({
+                    "id": row[0],
+                    "name": row[1],
+                    "date_time": row[2],
+                    "offset": row[3],
+                    "user_id": row[4]
+                })
             conn.close()
             return constant
         except Exception as ex:
@@ -78,13 +104,21 @@ class ConstantDao(object):
             print(ex)
             return None
 
-    def updateConstantOffset(self, offset, dateTime, user):
+    def updateConstantOffsetForOrder(self, offset, dateTime, user):
         try:
-            query = '''UPDATE constant SET offset = '{}', date_time = '{}' WHERE user_id = '{}' '''.format(offset, dateTime, user['user_id'])
+            query = '''UPDATE constant SET offset = '{}', date_time = '{}' WHERE user_id = '{}' and name='order' '''.format(offset, dateTime, user['user_id'])
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:
-            return ExceptionUtils.error('Error')          
+            return ExceptionUtils.error('Error')    
+
+    def updateConstantOffsetForProduct(self, offset, dateTime, user):
+        try:
+            query = '''UPDATE constant SET offset = '{}', date_time = '{}' WHERE user_id = '{}' and name = 'product' '''.format(offset, dateTime, user['id'])
+            DatabaseHelper.execute(query)
+            return ExceptionUtils.success()
+        except Exception as ex:
+            return ExceptionUtils.error('Error')       
 
 
 

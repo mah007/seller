@@ -142,9 +142,8 @@ class OrderManager(object):
         lazadaOrderApi = LazadaOrderApi()
         flag = 1
         while (flag > 0):
-            constant = constantDao.getConstantWithUserId(user['user_id'])
+            constant = constantDao.getConstantForOrderWithUserId(user['user_id'])
             print(constant[0]['offset'])
-            # print(constant['offset'])
             offset = constant[0]['offset']
             result = lazadaOrderApi.getOrders(user, constant)
             if result:
@@ -155,7 +154,7 @@ class OrderManager(object):
             if(offset % 25 != 0):
                 flag = -1
             # dateTime = LazadaApiHelper.getCurrentUTCTime()
-            constantDao.updateConstantOffset(offset, LazadaApiHelper.getCurrentUTCTime(), user)
+            constantDao.updateConstantOffsetForOrder(offset, LazadaApiHelper.getCurrentUTCTime(), user)
 
         return ResponseHelper.generateSuccessResponse(None)
 
