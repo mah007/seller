@@ -11,7 +11,9 @@ class Database(object):
 
 
 class LazadaAPI(object):
-	ENDPOINT = "https://api.sellercenter.lazada.vn"
+	ENDPOINT = "https://api.sellercenter.lazada.vn",
+    VERSION = "1.0",
+    LIMIT = 50,
 
 
 class RunnerConfig(object):

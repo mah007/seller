@@ -9,46 +9,57 @@ from utils.exception_utils import ExceptionUtils
 class LazadaOrderApi(object):
 
 	#-----------------------------------------------------------------------------
-	# Refresh all orders
+	# Get order with limitation and offset
+	#	Limit: 					limitation
+	# Offset: 				offset
+	# SortBy: 				created_at
+	# SortDirection: 	Ascending (ASC)
 	#-----------------------------------------------------------------------------
-	def refreshAllOrder(self, user):
+	def getOrders(self, user, offset, ):
 		parameters = {
 		'Action': 'GetOrders',
 		'Format':'JSON',
 		'Timestamp': LazadaApiHelper.getCurrentUTCTime(),
 		'UserID': user['lazada_user_id'],
-		'Version': '1.0',
-		'CreatedBefore': LazadaApiHelper.getCurrentUTCTime(),
-		'Status': 'pending'
+		'Version': LazadaAPI.VERSION,
+		'Limit': LazadaAPI.LIMIT,
+		'Offset': offset,
+		'SortBy': 'created_at',
+		'SortDirection': 'ASC',
+		'CreatedAfter': LazadaApiHelper.getFixedCreatedAfterForCronJob()
 		}
 
 		parameters['Signature'] = LazadaApiHelper.generateSignature(parameters, user['lazada_api_key'])
-		url = "{}/?Action={}&CreatedBefore={}&Format={}&Status={}&Timestamp={}&UserID={}&Version={}&Signature={}".format(
+		url = "{}/?Action={}&Format={}&Timestamp={}&UserID={}&Version={}&Limit={}&Offset={}&SortBy={}&SortDirection={}&CreatedAfter={}&Signature={}".format(
 						LazadaAPI.ENDPOINT,
 		 				parameters["Action"],
-		 				LazadaApiHelper.formatTimestamp(parameters["CreatedBefore"]),
 		 				parameters["Format"],
-		 				parameters["Status"],
 		 				LazadaApiHelper.formatTimestamp(parameters["Timestamp"]),
 		 				parameters["UserID"],
 		 				parameters["Version"],
+		 				parameters["Limit"],
+		 				parameters["Offset"],
+		 				parameters["SortBy"],
+		 				parameters["SortDirection"],
+		 				LazadaApiHelper.formatTimestamp(parameters["CreatedAfter"]),
 		 				parameters["Signature"])
 
 		try:
 			resp = requests.get(url)
 			if resp.status_code == 200:
 				response = json.loads(resp.text)
+				# Request API error
 				if ('ErrorResponse' in response):
-					return ExceptionUtils.error('''User: {}-{}, Get Orders is error: {}'''.format(user['id'], user['username'], esponse['ErrorResponse']['Head']['ErrorMessage']))
+					errorMessage = '''User: {}-{}, Get Orders is error: '''.format(user['username'], user['id'])
+					return ExceptionUtils.returnError(errorMessage, response)
 
-				data = response['SuccessResponse']['Body']
-				if (data['Orders'] != None):
-					return data['Orders']
+				# Request API Success
+				return response['SuccessResponse']['Body']['Orders']
 
-			return ExceptionUtils.error('''User: {}-{}, Get Orders is error: {}'''.format(user['id'], user['username'], resp.status_code))
+			# Request error
+			return ExceptionUtils.error('''User: {}-{}, Get Orders is error: {}'''.format(user['username'], user['id'], resp.status_code))
 		except Exception as ex:
-			return ExceptionUtils.error('''User: {}-{}, Get Orders is error: {}'''.format(user['id'], user['username'], str(ex)))
-
+			return ExceptionUtils.error('''User: {}-{}, Get Orders is error: {}'''.format(user['username'], user['id'], str(ex)))
 
 	#-----------------------------------------------------------------------------
 	# Get order item by order id
@@ -169,52 +180,7 @@ class LazadaOrderApi(object):
 			return ExceptionUtils.error('''User: {}-{}, Set Status to Ready-To-Ship is error: {}'''.format(user['id'], user['username'], str(ex)))
 
 
-	#-----------------------------------------------------------------------------
-	# Get Orders
-	#
-	#-----------------------------------------------------------------------------
-	def getOrders(self, user, constant):
-		parameters = {
-		'Action': 'GetOrders',
-		'Format':'JSON',
-		'Timestamp': LazadaApiHelper.getCurrentUTCTime(),
-		'UserID': user['lazada_user_id'],
-		'Version': '1.0',
-		'CreatedBefore': LazadaApiHelper.getCurrentUTCTime(),
-		'UpdateAfter': constant[0]['date_time'],
-		'UpdatedBefore': LazadaApiHelper.getCurrentUTCTime(),
-		'Limit': 25,
-		'Offset': constant[0]['offset']
-		}
 
-		parameters['Signature'] = LazadaApiHelper.generateSignature(parameters, user['lazada_api_key'])
-		url = "{}?Action={}&CreatedBefore={}&UpdatedBefore={}&UpdateAfter={}&Limit=25&Offset={}&Format={}&Timestamp={}&UserID={}&Version={}&Signature={}".format(
-						LazadaAPI.ENDPOINT,
-		 				parameters["Action"],
-		 				LazadaApiHelper.formatTimestamp(parameters['CreatedBefore']),
-		 				LazadaApiHelper.formatTimestamp(parameters['UpdatedBefore']),
-		 				LazadaApiHelper.formatTimestamp(parameters['UpdateAfter']),
-		 				parameters["Offset"],
-		 				parameters["Format"],
-		 				LazadaApiHelper.formatTimestamp(parameters["Timestamp"]),
-		 				parameters["UserID"],
-		 				parameters["Version"],
-		 				parameters["Signature"])
-
-
-		print(url)
-
-		resp = requests.get(url)
-		if resp.status_code == 200:
-			response = json.loads(resp.text)
-			if ('ErrorResponse' in response):
-				return None
-
-			data = response['SuccessResponse']['Body']
-			if (data['Orders'] != None):
-				return data['Orders']
-
-		return None
 
 
 

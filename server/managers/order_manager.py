@@ -17,16 +17,14 @@ class OrderManager(object):
     def initialize(self):
         orderDao = OrderDao()
         orderDao.createTable()
-        failedOrderDao = FailedOrderDao()
-        failedOrderDao.createTable()
 
     def validateToken(self, token):
         userDao = UserDao()
         return userDao.getUser(token)
 
-    #-----------------------------------------------------------------------------
+    #---------------------------------------------------------------------------
     # Scan barcode
-    #-----------------------------------------------------------------------------
+    #---------------------------------------------------------------------------
     def scanBarcode(self, token, barcode):
         user = self.validateToken(token)
         if not user:
@@ -63,42 +61,6 @@ class OrderManager(object):
         return ResponseUtils.generateSuccessResponse("Scane barcode is done", result)
 
     #-----------------------------------------------------------------------------
-    # Refresh all orders
-    #-----------------------------------------------------------------------------
-    def refreshAllOrders(self, token):
-        user = self.validateToken(token)
-        if not user:
-            errorArray = ResponseUtils.convertToArryError("Token is invalid, please logout and login again !")
-            return ResponseUtils.generateErrorResponse(errorArray)
-
-        # Delete all old orders first
-        orderDao = OrderDao()
-        result = orderDao.deleteAllOrders(user)
-        if 'error' in result:
-            errorArray = ResponseUtils.convertToArryError(result['error'])
-            return ResponseUtils.generateErrorResponse(errorArray)
-
-        # Get all orders from lazada
-        lazadaOrderApi = LazadaOrderApi()
-        orders = lazadaOrderApi.refreshAllOrder(user)
-        if 'error' in orders:
-            errorArray = ResponseUtils.convertToArryError(orders['error'])
-            return ResponseUtils.generateErrorResponse(errorArray)
-
-        # insert all orders into our database
-        insertLogs = []
-        for order in orders:
-            insertLog = orderDao.insert(user, OrderHelper.convertLazadaOrderToOrder(order))
-            if 'error' in insertLog:
-                insertLogs.append(insertLog)
-
-        # Check for success
-        if len(insertLogs) > 0:
-            return ResponseUtils.generateErrorResponse(insertLogs)
-        else:
-            return ResponseUtils.generateSuccessResponse("Refresh all Orders is done", None)
-
-    #-----------------------------------------------------------------------------
     # Set order status to Ready-To-Ship
     #-----------------------------------------------------------------------------
     def setStatusToReadyToShip(self, token, orderItemIds, shippingProvider):
@@ -121,56 +83,6 @@ class OrderManager(object):
             return ResponseUtils.generateErrorResponse(errorArray)
 
         return ResponseUtils.generateSuccessResponse("Set status to Ready-To-Ship is done", None)
-
-    #-----------------------------------------------------------------------------
-    # Get Failed orders
-    #-----------------------------------------------------------------------------
-    def getAllFailedOrders(self):
-        failedOrderDao = FailedOrderDao()
-        result = failedOrderDao.getFailedOrders()
-
-        if not result:
-            return ResponseHelper.generateErrorResponse("Can't access to Lazada service")
-
-        return ResponseHelper.generateSuccessResponse(result)
-
-    #--------------------------------------------------------------------------------------------
-    # Insert order from Lazada with specific user
-    #--------------------------------------------------------------------------------------------
-    def insertOrderFromLazadaWithOneUser(self, user):
-        constantDao = ConstantDao()
-        failedOrderDao = FailedOrderDao()
-        lazadaOrderApi = LazadaOrderApi()
-        flag = 1
-        while (flag > 0):
-            constant = constantDao.getConstantWithUserId(user['user_id'])
-            print(constant[0]['offset'])
-            # print(constant['offset'])
-            offset = constant[0]['offset']
-            result = lazadaOrderApi.getOrders(user, constant)
-            if result:
-                for x in result:
-                    offset = offset + 1
-                    print(offset)
-                    failedOrderDao.insert(x, user)
-            if(offset % 25 != 0):
-                flag = -1
-            # dateTime = LazadaApiHelper.getCurrentUTCTime()
-            constantDao.updateConstantOffset(offset, LazadaApiHelper.getCurrentUTCTime(), user)
-
-        return ResponseHelper.generateSuccessResponse(None)
-
-    #-----------------------------------------------------------------------------
-    # Update order state
-    #-----------------------------------------------------------------------------
-    def updateOrderState(self, order, token):
-        user = self.validateToken(token)
-        if 'error' in user:
-            return user
-
-        failedOrderDao = FailedOrderDao()
-        failedOrderDao.updateState(order)
-        return ResponseHelper.generateSuccessResponse(None)
 
 
 

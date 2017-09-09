@@ -65,7 +65,7 @@ class LazadaSkuApi(object):
 		 				parameters["Signature"])
 
 		# Must use xmlBody to update
-		xmlBody = LazadaApiHelper.generateUpdateProductXML(sku, newSpecialPrice)
+		xmlBody = LazadaApiHelper.getUpdateProductSpecialPriceXML(sku, newSpecialPrice)
 
 		try:
 			resp = requests.post(url, data=xmlBody)
