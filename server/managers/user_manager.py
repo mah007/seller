@@ -164,7 +164,7 @@ class UserManager(object):
 		userDB = userDao.getUserByUsername(user['username'])
 		if (userDB != None):
 			return ResponseHelper.generateErrorResponse("Username is already used")
-		
+
 		# Insert new user
 		userDao.insert(user)
 

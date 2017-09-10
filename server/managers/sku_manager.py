@@ -10,7 +10,7 @@ from lazada_api.lazada_sku_api import LazadaSkuApi
 from managers.response_helper import ResponseHelper
 from utils.response_utils import ResponseUtils
 from database.history_dao import HistoryDao
-from config import SkuHistoryConfig
+from config import SkuConfig
 from utils.timestamp_utils import TimestampUtils
 
 
@@ -129,8 +129,8 @@ class SkuManager(object):
 		historyDao.deleteHistories(sku, lastdayMillisecond)
 
 		# Only take enemies in a limitation
-		if len(enemies) > SkuHistoryConfig.HISTORY_SIZE:
-			enemies = enemies[:SkuHistoryConfig.HISTORY_SIZE]
+		if len(enemies) > SkuConfig.HISTORY_ENEMY_LIMIT_SIZE:
+			enemies = enemies[:SkuConfig.HISTORY_ENEMY_LIMIT_SIZE]
 
 		history = {
 			'enemy_json': json.dumps(enemies, ensure_ascii=False),

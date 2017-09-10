@@ -1,6 +1,7 @@
 import psycopg2
 from database.database_helper import DatabaseHelper
 from utils.string_utils import StringUtils
+from utils.exception_utils import ExceptionUtils
 
 # ------------------------------------------------------------------------------
 # TODO: Handle exception
@@ -24,7 +25,10 @@ class UserDao(object):
                     );'''
         DatabaseHelper.execute(query)
 
-
+    # --------------------------------------------------------------------------
+    # Insert User
+    # TODO: refactor
+    # --------------------------------------------------------------------------
     def insert(self, user):
         query = '''INSERT INTO t_user (user_name, password, token, lazada_user_name, lazada_user_id, lazada_api_key, created_at, updated_at, role, certain_size)
                     VALUES ('{}', '{}', 'temptoken', '{}', '{}', '{}', '{}', 0, '{}', '{}')'''.format(
@@ -38,7 +42,45 @@ class UserDao(object):
                     user['certain_size'])
         DatabaseHelper.execute(query)
 
+    # --------------------------------------------------------------------------
+    # Get SuperAdmin
+    # Purpose:
+    # 1. Get all orders, manage orders.
+    # 2. Get all products, manage product.
+    # --------------------------------------------------------------------------
+    def getSuperAdmin(self):
+        query = '''SELECT id, lazada_user_name, lazada_user_id, lazada_api_key
+                    FROM t_user
+                    WHERE lazada_user_name = info@zakos.vn'''
+        try:
+            conn = DatabaseHelper.getConnection()
+            cur = conn.cursor()
+            cur.execute(query)
 
+            rows = cur.fetchall()
+            if not rows:
+                conn.close()
+                return None
+
+            users = []
+            for row in rows:
+                users.append({
+                    'id': row[0],
+                    'username': row[1],  # Using lazada user name instead.
+                    'lazada_user_name': row[1],
+                    'lazada_user_id': row[2],
+                    'lazada_api_key': row[3]
+                })
+
+            conn.close()
+            return user
+        except Exception as ex:
+            return ExceptionUtils.error('''Get super admin exception: {}'''.format(str(ex)))
+
+    # --------------------------------------------------------------------------
+    # Get User
+    # TODO: refactor
+    # --------------------------------------------------------------------------
     def getUser(self, token):
         try:
             query = '''SELECT id, lazada_user_name, lazada_user_id, lazada_api_key FROM t_user WHERE token='{}' '''.format(StringUtils.toString(token))
@@ -46,25 +88,28 @@ class UserDao(object):
             cur = conn.cursor()
             cur.execute(query)
 
-            rows = cur.fetchall()
-            if not rows:
+            row = cur.fetchone()
+            if not row:
                 conn.close()
                 return None
 
-            user = {}
-            for row in rows:
-                user['id'] = row[0]
-                user['username'] = row[1]  # Using lazada user name instead.
-                user['lazada_user_name'] = row[1]
-                user['lazada_user_id'] = row[2]
-                user['lazada_api_key'] = row[3]
-
+            user = {
+                'id': row[0],
+                'username': row[1],  # Using lazada user name instead.
+                'lazada_user_name': row[1],
+                'lazada_user_id': row[2],
+                'lazada_api_key': row[3]
+            }
             conn.close()
             return user
         except Exception as ex:
             print(ex)
             return None
 
+    # --------------------------------------------------------------------------
+    # Get User for update password
+    # TODO: refactor
+    # --------------------------------------------------------------------------
     def getUserUpdatePW(self, token):
         try:
             query = '''SELECT id, user_name, password FROM t_user WHERE token='{}' '''.format(StringUtils.toString(token))
@@ -72,27 +117,26 @@ class UserDao(object):
             cur = conn.cursor()
             cur.execute(query)
 
-            rows = cur.fetchall()
-            if not rows:
+            row = cur.fetchone()
+            if not row:
                 conn.close()
                 return None
 
             user = {
-                "id": "",
-                "user_name": "",
-                "password": "",
+                "id": row[0],
+                "user_name": row[1],
+                "password": row[2],
             }
-            for row in rows:
-                user['id'] = row[0]
-                user['user_name'] = row[1]
-                user['password'] = row[2]
-
             conn.close()
             return user
         except Exception as ex:
             print(ex)
             return None
 
+    # --------------------------------------------------------------------------
+    # Get all users
+    # TODO: refactor
+    # --------------------------------------------------------------------------
     def getAll(self):
         try:
             query = '''SELECT * FROM t_user '''
@@ -137,19 +181,16 @@ class UserDao(object):
             cur = conn.cursor()
             cur.execute(query)
 
-            rows = cur.fetchall()
-            if not rows:
+            row = cur.fetchone()
+            if not row:
                 cur.close()
                 return None
 
-            user = None
-            for row in rows:
-                user = {
-                    "id": row[0],
-                    "username": row[1],
-                    "password": row[2],
-                }
-
+            user = {
+                "id": row[0],
+                "username": row[1],
+                "password": row[2],
+            }
             conn.close()
             return user
         except Exception as ex:
@@ -165,6 +206,7 @@ class UserDao(object):
             print(ex)
             return None
 
+
     # --------------------------------------------------------------------------
     # Delete User
     # --------------------------------------------------------------------------
@@ -172,9 +214,12 @@ class UserDao(object):
         query = '''DELETE from t_user where id = '{}' '''.format(user['id'])
         DatabaseHelper.execute(query)
 
+
     def updateUser(self, user):
-        query = '''UPDATE t_user SET password = '{}', lazada_user_id = '{}', lazada_user_name = '{}', lazada_api_key = '{}', certain_size = '{}' WHERE id = '{}' '''.format(user['password'], user['lazada_userid'], user['lazada_username'], user['lazada_apikey'], user['certain_size'], user['id'])
+        query = '''UPDATE t_user SET password = '{}', lazada_user_id = '{}', lazada_user_name = '{}', lazada_api_key = '{}', certain_size = '{}' WHERE id = '{}' '''.format(
+                    user['password'], user['lazada_userid'], user['lazada_username'], user['lazada_apikey'], user['certain_size'], user['id'])
         DatabaseHelper.execute(query)
+
 
     def updatePw(self, user, token):
         try:
@@ -185,31 +230,34 @@ class UserDao(object):
             print(ex)
             return None
 
+    # --------------------------------------------------------------------------
+    # TODO: change this function to isAdminUser
+    # Return Boolean
+    # --------------------------------------------------------------------------
     def getAdminUser(self, userid):
         try:
-            query = '''SELECT * FROM t_user WHERE id = '{}' AND role = 1  '''.format(userid)
+            query = '''SELECT * FROM t_user WHERE id = '{}' AND role = 1 '''.format(userid)
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)
 
-            rows = cur.fetchone()
-            if not rows:
+            row = cur.fetchone()
+            if not row:
                 cur.close()
                 return None
 
-            user = None
             user = {
-                "id": rows[0],
-                "username": rows[1],
-                "password": rows[2],
+                "id": row[0],
+                "username": row[1],
+                "password": row[2],
             }
 
             conn.close()
             return user
-
         except Exception as ex:
             print(ex)
             return None
+
 
     def getCertainSize(self, id):
         query = ''' SELECT certain_size FROM t_user WHERE id = '{}' '''.format(id)
@@ -219,7 +267,6 @@ class UserDao(object):
 
         count = 0
         row = cur.fetchone()
-
         count = row[0];
 
         conn.close()

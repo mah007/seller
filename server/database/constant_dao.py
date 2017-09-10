@@ -1,5 +1,4 @@
 from database.database_helper import DatabaseHelper
-from utils.string_utils import StringUtils
 from utils.exception_utils import ExceptionUtils
 
 
@@ -7,84 +6,59 @@ class ConstantDao(object):
 
     def createTable(self):
         query = '''CREATE TABLE IF NOT EXISTS constant(
-                id                     INT AUTO_INCREMENT primary key NOT NULL,
-                name                   VARCHAR(50)     NOT NULL,
-                date_time              VARCHAR(50)     NOT NULL,
-                offset                 INTEGER         NOT NULL,
-                user_id                VARCHAR(50)     NOT NULL
+                id                  INT AUTO_INCREMENT primary key NOT NULL,
+                key                 VARCHAR(15)      NOT NULL,
+                value               INTEGER          NOT NULL,
+                user_id             INTEGER          NOT NULL
                 );'''
         DatabaseHelper.execute(query)
-
 
     # --------------------------------------------------------------------------
     # Insert constant
     # --------------------------------------------------------------------------
-    def insert(self, detail):
+    def insertConstant(self, user, key, value):
+        query = '''INSERT INTO constant(key, value, user_id) VALUES ('{}', '{}', '{}') '''.format(
+                    key, value, user['id'])
         try:
-            query = '''INSERT INTO constant(name, value) VALUES ('{}', '{}')'''.format(detail['name'], detail['value'])
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:
-            return ExceptionUtils.error('Error')     
+            return ExceptionUtils.error('''User: {}-{}, Insert Constant exception {}'''.format(user['username'], user['id'], str(ex)))
 
     # --------------------------------------------------------------------------
-    # Get constant with Id 
+    # Get constant
     # --------------------------------------------------------------------------
-    def getConstantWithUserId(self, user_id):
+    def getConstant(self, user, key):
+        query = '''SELECT * FROM constant WHERE user_id = '{}' AND key = {} '''.format(user['id'], key)
         try:
-            query = '''SELECT * FROM constant WHERE user_id = '{}' '''.format(user_id)
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)
 
-            constant = []
-            rows = cur.fetchall()
-            for row in rows:
-                constant.append({
-                    "id": row[0],
-                    "name": row[1],
-                    "date_time": row[2],
-                    "offset": row[3],
-                    "user_id": row[4]
-                })
+            row = cur.fetchone()
+            if not row:
+                conn.close()
+                return ExceptionUtils.error('''User: {}-{}, Get constant not found, key = {}'''.format(user['username'], user['id'], key))
 
+            result = {
+                'value': row[3]
+            }
             conn.close()
-            return constant
+            return result
         except Exception as ex:
-            print(ex)
-            return None
+            return ExceptionUtils.error('''User: {}-{}, Get Constant exception {}'''.format(user['username'], user['id'], str(ex)))
 
-    def getAllConstant(self):
-        try:            
-            query = '''SELECT * FROM constant '''
-            conn = DatabaseHelper.getConnection()
-            cur = conn.cursor()
-            cur.execute(query)
-
-            constant = []
-            rows = cur.fetchall()
-            for row in rows:
-                constant.append({
-                    "id": row[0],
-                    "name": row[1],
-                    "date_time": row[2],
-                    "offset": row[3],
-                    "user_id": row[4]
-                })
-
-            conn.close()
-            return constant
-        except Exception as ex:
-            print(ex)
-            return None
-
-    def updateConstantOffset(self, offset, dateTime, user):
+    # --------------------------------------------------------------------------
+    # Update constant
+    # --------------------------------------------------------------------------
+    def updateConstant(self, user, key, value):
         try:
-            query = '''UPDATE constant SET offset = '{}', date_time = '{}' WHERE user_id = '{}' '''.format(offset, dateTime, user['user_id'])
+            query = '''UPDATE constant SET value = '{}' WHERE key = '{}' AND user_id = '{}' '''.format(value, key, user['id'])
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:
-            return ExceptionUtils.error('Error')          
+            return ExceptionUtils.error('''User: {}-{}, Get Order Constant exception {}'''.format(user['username'], user['id'], str(ex)))
+
 
 
 

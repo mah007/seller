@@ -15,7 +15,7 @@ class LazadaOrderApi(object):
 	# SortBy: 				created_at
 	# SortDirection: 	Ascending (ASC)
 	#-----------------------------------------------------------------------------
-	def getOrders(self, user, offset, ):
+	def getOrders(self, user, offset):
 		parameters = {
 		'Action': 'GetOrders',
 		'Format':'JSON',

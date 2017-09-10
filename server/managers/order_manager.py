@@ -1,7 +1,6 @@
 from database.sku_dao import SkuDao
 from database.user_dao import UserDao
 from database.order_dao import OrderDao
-from database.failed_order_dao import FailedOrderDao
 from database.constant_dao import ConstantDao
 from managers.user_manager import UserManager
 from lazada_api.lazada_order_api import LazadaOrderApi

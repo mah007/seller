@@ -18,7 +18,7 @@ class OrderDao(object):
                 created_at      VARCHAR(30)     NOT NULL,   # 2017-09-08 01:12:04
                 updated_at      VARCHAR(30)     NOT NULL,   # 2017-09-08 01:12:04
                 order_json      TEXT            NOT NULL,
-                user_id         VARCHAR(30)     NOT NULL,
+                user_id         INTEGER         NOT NULL,
                 );'''
         DatabaseHelper.execute(query)
 
@@ -38,9 +38,11 @@ class OrderDao(object):
                             updated_at,
                             order_json,
                             user_id)
-                    VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')'''.format(
-                    order['order_id'], order['order_number'], order['price'], order['customer_name'], order['voucher_code'],
-                    order['voucher_price'], order['status'], order['created_at'], order['updated_at'], order['order_json'], user['id'])
+                    VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')
+                '''.format(order['order_id'], order['order_number'], order['price'],
+                           order['customer_name'], order['voucher_code'],
+                           order['voucher_price'], order['status'], order['created_at'],
+                           order['updated_at'], order['order_json'], user['id'])
         try:
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
@@ -50,14 +52,14 @@ class OrderDao(object):
     # --------------------------------------------------------------------------
     # Check Order exsits
     # --------------------------------------------------------------------------
-    def isOrderExist(self, user, order):
-        query = '''SELECT * FROM order_management WHERE order_id = '{}' AND user_id = '{}'' '''.format(order['order_id'], user['id'])
+    def isOrderExist(self, user, orderId):
+        query = '''SELECT * FROM order_management WHERE order_id = '{}' AND user_id = '{}'' '''.format(orderId, user['id'])
         try:
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)
-            rows = cur.fetchall()
-            result = False if not rows else True;
+            order = cur.fetchone()
+            result = False if not order else True;
             conn.close()
             return result
         except Exception as ex:
@@ -68,32 +70,34 @@ class OrderDao(object):
     # Get order by order number
     # --------------------------------------------------------------------------
     def getOrderByOrderNumber(self, user, orderNumber):
-        query = '''SELECT * from order_management WHERE user_id = '{}' AND order_number = '{}' '''.format(user['id'], orderNumber)
+        query = '''SELECT *
+                    FROM order_management
+                    WHERE user_id = '{}' AND order_number = '{}'
+                '''.format(user['id'], orderNumber)
         try:
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)
 
-            rows = cur.fetchall()
-            if not rows:
+            row = cur.fetchone()
+            if not row:
                 conn.close()
                 return ExceptionUtils.error('''User: {}-{}, Get Order: {} is not found'''.format(user['username'], user['id'], orderNumber))
 
-            order = {}
-            for row in rows:
-                order['id'] = row[0]
-                order['order_id'] = row[1]
-                order['order_number'] = row[2]
-                order['price'] = row[3]
-                order['customer_name'] = row[4]
-                order['voucher_code'] = row[5]
-                order['voucher_price'] = row[6]
-                order['status'] = row[7]
-                order['created_at'] = row[8]
-                order['updated_at'] = row[9]
-                order['order_json'] = row[10]
-                order['user_id'] = row[11]
-
+            order = {
+                'id': row[0],
+                'order_id': row[1],
+                'order_number': row[2],
+                'price': row[3],
+                'customer_name': row[4],
+                'voucher_code': row[5],
+                'voucher_price': row[6],
+                'status': row[7],
+                'created_at': row[8],
+                'updated_at': row[9],
+                'order_json': row[10],
+                'user_id': row[11]
+            }
             conn.close()
             return order
         except Exception as ex:
@@ -103,11 +107,10 @@ class OrderDao(object):
     # Update Order State
     # --------------------------------------------------------------------------
     def updateOrderState(self, user, order):
-        query = '''UPDATE order_management set
-                        status = '{}',
-                        updated_at = '{}',
-                        order_json = {}
-                    WHERE id = '{}' '''.format(order['status'], order['updated_at'], order['order_json'], order['id'])
+        query = '''UPDATE order_management
+                    set status = '{}', updated_at = '{}', order_json = {}
+                    WHERE id = '{}'
+                '''.format(order['status'], order['updated_at'], order['order_json'], order['id'])
         try:
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
