@@ -18,7 +18,7 @@ class OrderDao(object):
                 created_at      VARCHAR(30)     NOT NULL,   # 2017-09-08 01:12:04
                 updated_at      VARCHAR(30)     NOT NULL,   # 2017-09-08 01:12:04
                 order_json      TEXT            NOT NULL,
-                user_id         INTEGER         NOT NULL,
+                user_id         INTEGER         NOT NULL
                 );'''
         DatabaseHelper.execute(query)
 

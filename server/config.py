@@ -34,7 +34,7 @@ class OrderConfig(object):
 
 class ConstantConfig(object):
     ORDER_OFFSET = "order_offset"
-    PRODUCT_OFFSET = "order_offset"
+    PRODUCT_OFFSET = "product_offset"
 
 
 

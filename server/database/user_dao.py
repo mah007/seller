@@ -51,7 +51,7 @@ class UserDao(object):
     def getSuperAdmin(self):
         query = '''SELECT id, lazada_user_name, lazada_user_id, lazada_api_key
                     FROM t_user
-                    WHERE lazada_user_name = info@zakos.vn'''
+                    WHERE lazada_user_id = 'info@zakos.vn' '''
         try:
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
@@ -60,7 +60,7 @@ class UserDao(object):
             rows = cur.fetchall()
             if not rows:
                 conn.close()
-                return None
+                return ExceptionUtils.error('''Dont have any super admins''')
 
             users = []
             for row in rows:
@@ -73,7 +73,7 @@ class UserDao(object):
                 })
 
             conn.close()
-            return user
+            return users
         except Exception as ex:
             return ExceptionUtils.error('''Get super admin exception: {}'''.format(str(ex)))
 
