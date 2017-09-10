@@ -85,24 +85,22 @@
         <!-- BEGIN CONTENT -->
         <div class="page-content-wrapper">
             <div class="page-content">
-                <!-- MODAL FORM: Update or Insert SKU -->
-                <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                <h4 class="modal-title">Tạo mới</h4>
-                            </div>
-                        </div>
-                        <!-- /.modal-content -->
-                    </div>
-                    <!-- /.modal-dialog -->
-                </div>
-                <!-- BEGIN PAGE CONTENT-->
                 <div class="row">
                     <div class="col-md-12">
                         <div class="tabbable-custom tabbable-noborder blue">
                             <div class="tab-content">
+                                <div class="tab-pane active" id="tab_1_1">
+                                    <div class="table-toolbar">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="btn-group pull-right btnUpdate" style="margin-right: 20px;">
+                                                    <button id="sample_editable_1_new" class="btn green"><span class="md-click-circle md-click-animate" style="height: 104px; width: 104px; top: -28px; left: 0px;"></span> Cập nhật <i class="fa fa-refresh"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <!-- SKU MANAGEMENT TAB -->
                                 <div class="tab-pane active" id="tab_1_1">
                                     <div class="table-scrollable">
@@ -120,33 +118,12 @@
                                                     <th style="vertical-align:top;" class="text-center">Shop Sku</th>
                                                     <th style="vertical-align:top;width: 10%;" class="text-center">Brand</th>
                                                     <th style="vertical-align:top;" class="text-left">Quantity</th>
+                                                    <th></th>
                                                     <th style="vertical-align:top;" class="text-left">Original Price</th>
                                                 </tr>
                                             </thead>
-                                            <tbody id="tbody_sku">
+                                            <tbody id="tbody_product">
                                                 <!-- WILL BE FILL DATA IN HERE -->
-                                                <tr>
-                                                    <th class="text-center">1</th>
-                                                    <th class="text-center">Product 01</th>
-                                                    <th class="text-center">Blade&Soul</th>
-                                                    <th class="text-center">Golem</th>
-                                                    <th class="text-center">297cm</th>
-                                                    <th class="text-center">300cm</th>
-                                                    <th class="text-center">1000 pounds</th>
-                                                    <th class="text-center">Pro01</th>
-                                                    <th class="text-center">Lamino</th>
-                                                    <th class="text-center">La01</th>
-                                                    <th class="text-center">
-                                                        <div class="col-xs-6">
-                                                            <input class="form-control input-sm" id="quantityText" type="text" onchange="checkFilled();">
-                                                        </div>
-                                                    </th>
-                                                    <th class="text-center">
-                                                        <div class="col-xs-10">
-                                                            <input class="form-control input-sm" id="priceText" type="text" onchange="checkFilled();">
-                                                        </div>
-                                                    </th>
-                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -208,23 +185,33 @@
             <th><a href="{{link}}" style="color:#3598dc;" target="_blank">{{sku}}</a></th>
             <th class="text-right">Từ <b>old_price</b>
                 <br/>tới <b>new_price</b></th>
-            <th class="text-left">Sản phẩm không online do nhà bán hàng: <b>0</b> đặt giá: <b>0 VNĐ </b>.</th>
+            <th class="text-center">Sản phẩm không online do nhà bán hàng: <b>0</b> đặt giá: <b>0 VNĐ </b>.</th>
         </tr>
         {{/each}}
     </script>
-    <!--     <script id="history-content-template" type="text/x-handlebars-template">
+    <script id="product-content-template" type="text/x-handlebars-template">
         {{#each data}}
-        <tr data-id="{{id}}" data-sku={{sku}} data-enemy_json={{enemy_json}} class="{{#if status}}error{{/if}}">
-            <td class="text-left">{{id}} </td>
-            <td class="text-left">{{sku}} </td>
-            <td class="text-left">
-                {{#each this.enemy_json}}
-                    <p>{{name}} - {{price}}</p>
-                {{/each}}
-            </td>
+        <tr data-id="{{id}}" data-name={{name}} data-image={{image}} data-model={{model}} data-width={{width}} data-height={{height}} data-weight={{weight}} data-sellerSku={{sellerSku}} data-shopSku={{shopSku}} data-branch={{branch}} data-quantity={{quantity}} data-price={{price}}>
+            <td class="text-center">{{id}} </td>
+            <td class="text-center">{{name}} </td>
+            <td class="text-center">{{image}} </td>
+            <td class="text-center">{{model}} </td>
+            <td class="text-center">{{width}} </td>
+            <td class="text-center">{{height}} </td>
+            <td class="text-center">{{weight}} </td>
+            <td class="text-center">{{sellerSku}} </td>
+            <td class="text-center">{{shopSku}} </td>
+            <td class="text-center">{{branch}} </td>
+            <th>
+                <input class="form-control input-sm" style="background-color: #ffe6e6;" />
+            </th>
+            <th></th>
+            <th>
+                <input class="form-control input-sm" style="background-color: #ffe6e6;" />
+            </th>
         </tr>
         {{/each}}
-    </script> -->
+    </script>
     <script type="text/javascript">
     jQuery(document).ready(function() {
         Metronic.init(); // init metronic core components

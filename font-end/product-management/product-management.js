@@ -17,29 +17,19 @@ jQuery(document).ready(function() {
 
     // Load menu left
     $("#menuContent").load("../menuleft.html");
-
     // Init data
     getAndFillOutProduct();
-    checkFilled();
+
+    if($('.btnUpdate').length > 0) {
+        $(".btnUpdate").click(function() {
+            console.log("Update");        
+        });
+    }
 
 });
 
-function checkFilled() {
-    var inputQuantity = document.getElementById("quantityText");
-    var inputPrice = document.getElementById("priceText");
-    if (inputQuantity.value == "") {
-        inputQuantity.style.backgroundColor = "#efeff5";
-    } else {
-        inputQuantity.style.backgroundColor = "";
-    }
-    if (inputPrice.value == "") {
-        inputPrice.style.backgroundColor = "#efeff5";
-    } else {
-        inputPrice.style.backgroundColor = "";
-    }
-}
 
-checkFilled();
+
 //-------------------------------------------------------------------------------------
 // Get and fill out all Product
 //-------------------------------------------------------------------------------------
@@ -50,9 +40,9 @@ function getAndFillOutProduct() {
         contentType: "application/json",
         success: function(data) {
             console.log(data.data);
-            // var template = $("#sku-content-template").html();
-            // var contentHtml = Handlebars.compile(template);
-            // $("#tbody_sku").html(contentHtml(data));
+            var template = $("#product-content-template").html();
+            var contentHtml = Handlebars.compile(template);
+            $("#tbody_product").html(contentHtml(data));
         },
         error: function(error) {
             console.log(error);
