@@ -20,16 +20,103 @@ jQuery(document).ready(function() {
     // Init data
     getAndFillOutProduct();
 
-    if($('.btnUpdate').length > 0) {
+    if ($('.btnUpdate').length > 0) {
         $(".btnUpdate").click(function() {
-            console.log("Update");        
+            var body = document.getElementById("tbody_product");
+            var length = body.rows.length;
+
+            for (var i = 0; i < length; i += 1) {
+                var row = body.rows[i];
+
+                var id = $(row).data("id");
+                var oriQuantity = $(row).data("quantity");
+                var oriPrice = $(row).data("price");
+
+                var quantity = row.cells[10].children[0].value;
+                var price = row.cells[12].children[0].value;
+
+                if (oriQuantity != quantity && oriPrice != price) {
+                    console.log("Should Update Product");
+                    updateProduct(quantity, price, id);
+                }
+                else if (oriPrice != price) {
+                    console.log("Shoud Update Price")
+                } 
+                else if (oriQuantity != quantity) {
+                    console.log("Dont Update");
+                }
+            }
         });
     }
 
 });
 
 
+//-------------------------------------------------------------------------------------
+// Update product for new quantity and new price
+//-------------------------------------------------------------------------------------
+function updateProduct(quantity, price, id) {
+    $.ajax({
+        method: 'POST',
+        url: endpoint.generateUpdateProduct(),
+        contentType: "application/json",
+        data: JSON.stringify({
+            id: id,
+            quantity: quantity,
+            price: price
+        }),
+        success: function(data) {
+            console.log("Update success");
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
 
+//-------------------------------------------------------------------------------------
+// Update price
+//-------------------------------------------------------------------------------------
+function updatePrice(price, id) {
+    $.ajax({
+        method: 'POST',
+        url: endpoint.generateUpdateProduct(),
+        contentType: "application/json",
+        data: JSON.stringify({
+            id: id,
+            quantity: quantity,
+            price: price
+        }),
+        success: function(data) {
+            console.log("Update success");
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+//-------------------------------------------------------------------------------------
+// Update quantity
+//-------------------------------------------------------------------------------------
+function updateQuantity(quantity, id) {
+    $.ajax({
+        method: 'POST',
+        url: endpoint.generateUpdateProduct(),
+        contentType: "application/json",
+        data: JSON.stringify({
+            id: id,
+            quantity: quantity,
+            price: price
+        }),
+        success: function(data) {
+            console.log("Update success");
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
 //-------------------------------------------------------------------------------------
 // Get and fill out all Product
 //-------------------------------------------------------------------------------------

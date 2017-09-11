@@ -30,3 +30,33 @@ def getAllProduct():
 	else:
 		return make_response(jsonify(result), 404)
 
+# ------------------------------------------------------------------------------
+# Update SKU's state
+# ------------------------------------------------------------------------------
+@ProductAPI.route('/product/update', methods=['POST'])
+@cross_origin()
+def updateProduct():
+	if not request.args:
+		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
+	if not request.json:
+		return make_response(jsonify({'error': 'Missing json parameters value'}), 404)
+	if not 'quantity' in request.json:
+		return make_response(jsonify({'error': 'Missing json parameter'}), 404)
+	if not 'price' in request.json:
+		return make_response(jsonify({'error': 'Missing state parameter'}), 404)
+	if not 'id' in request.json:
+		return make_response(jsonify({'error': 'Missing state parameter'}), 404)
+
+	newValue = {
+		"id": request.json['id'],
+		"quantity": request.json['quantity'],
+		"price": request.json['price']
+	}
+
+	productManager = ProductManager()
+	result = productManager.updateProduct(newValue, request.args.get('token'))
+	if 'success' in result:
+		return make_response(jsonify({"success": "done"}), 201)
+	else:
+		return make_response(jsonify(result), 404)
+
