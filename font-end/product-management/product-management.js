@@ -36,14 +36,11 @@ jQuery(document).ready(function() {
                 var price = row.cells[12].children[0].value;
 
                 if (oriQuantity != quantity && oriPrice != price) {
-                    console.log("Should Update Product");
                     updateProduct(quantity, price, id);
-                }
-                else if (oriPrice != price) {
-                    console.log("Shoud Update Price")
-                } 
-                else if (oriQuantity != quantity) {
-                    console.log("Dont Update");
+                } else if (oriPrice != price) {
+                    updateProductPrice(price, id);
+                } else if (oriQuantity != quantity) {
+                    updateProductQuantity(quantity, id);
                 }
             }
         });
@@ -66,7 +63,14 @@ function updateProduct(quantity, price, id) {
             price: price
         }),
         success: function(data) {
-            console.log("Update success");
+            swal({
+                title: "Update Successfully!",
+                text: "",
+                type: "success",
+                confirmButtonText: "OK! Redirect to list",
+            }, function() {
+                window.location.href = "";
+            });
         },
         error: function(error) {
             console.log(error);
@@ -77,18 +81,24 @@ function updateProduct(quantity, price, id) {
 //-------------------------------------------------------------------------------------
 // Update price
 //-------------------------------------------------------------------------------------
-function updatePrice(price, id) {
+function updateProductPrice(price, id) {
     $.ajax({
         method: 'POST',
-        url: endpoint.generateUpdateProduct(),
+        url: endpoint.generateUpdateProductPrice(),
         contentType: "application/json",
         data: JSON.stringify({
             id: id,
-            quantity: quantity,
             price: price
         }),
         success: function(data) {
-            console.log("Update success");
+            swal({
+                title: "Update Successfully!",
+                text: "",
+                type: "success",
+                confirmButtonText: "OK! Redirect to list",
+            }, function() {
+                window.location.href = "";
+            });
         },
         error: function(error) {
             console.log(error);
@@ -99,18 +109,24 @@ function updatePrice(price, id) {
 //-------------------------------------------------------------------------------------
 // Update quantity
 //-------------------------------------------------------------------------------------
-function updateQuantity(quantity, id) {
+function updateProductQuantity(quantity, id) {
     $.ajax({
         method: 'POST',
-        url: endpoint.generateUpdateProduct(),
+        url: endpoint.generateUpdateProductQuantity(),
         contentType: "application/json",
         data: JSON.stringify({
             id: id,
-            quantity: quantity,
-            price: price
+            quantity: quantity
         }),
         success: function(data) {
-            console.log("Update success");
+            swal({
+                title: "Update Successfully!",
+                text: "",
+                type: "success",
+                confirmButtonText: "OK! Redirect to list",
+            }, function() {
+                window.location.href = "";
+            });
         },
         error: function(error) {
             console.log(error);

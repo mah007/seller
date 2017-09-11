@@ -48,7 +48,7 @@ class ProductDao(object):
     # --------------------------------------------------------------------------
     def getAllProduct(self, user):
         try:
-            query = '''SELECT * from product WHERE user_id = '{}' ORDER BY id DESC LIMIT 30 '''.format(user['id'])
+            query = '''SELECT * from product WHERE user_id = '{}' ORDER BY quantity, original_price ASC LIMIT 30 '''.format(user['id'])
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)
@@ -81,11 +81,25 @@ class ProductDao(object):
             return None
 
     # --------------------------------------------------------------------------
-    # Update Product
+    # Update Product (contain quantity and price)
     # --------------------------------------------------------------------------
     def updateProduct(self, product):
         query = '''UPDATE product set quantity = '{}', original_price = '{}' WHERE id = '{}' '''.format(product['quantity'], 
             product['price'], product['id'])
+        DatabaseHelper.execute(query)
+
+    # --------------------------------------------------------------------------
+    # Update Product Quantity
+    # --------------------------------------------------------------------------
+    def updateProductQuantity(self, product):
+        query = '''UPDATE product set quantity = '{}' WHERE id = '{}' '''.format(product['quantity'], product['id'])
+        DatabaseHelper.execute(query)
+
+    # --------------------------------------------------------------------------
+    # Update Product Price
+    # --------------------------------------------------------------------------
+    def updateProductPrice(self, product):
+        query = '''UPDATE product set original_price = '{}' WHERE id = '{}' '''.format(product['price'], product['id'])
         DatabaseHelper.execute(query)
 
 

@@ -118,6 +118,14 @@ var EndpointConfig = function() {
       return endpointUrl + '/product/update?token=' + $.cookie('token');
   }  
 
+  EndpointConfig.prototype.generateUpdateProductQuantity = function() {
+      return endpointUrl + '/product/update-quantity?token=' + $.cookie('token');
+  }  
+
+  EndpointConfig.prototype.generateUpdateProductPrice = function() {
+      return endpointUrl + '/product/update-price?token=' + $.cookie('token');
+  }  
+
 }
 
 

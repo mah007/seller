@@ -64,6 +64,31 @@ class ProductManager(object):
         productDao.updateProduct(product)
         return ResponseHelper.generateSuccessResponse(None)
 
+
+    #-----------------------------------------------------------------------------
+    # Update product with new quantity and price
+    #-----------------------------------------------------------------------------
+    def updateProductQuantity(self, product, token):
+        user = self.validateToken(token)
+        if 'error' in user:
+            return user
+
+        productDao = ProductDao()
+        productDao.updateProductQuantity(product)
+        return ResponseHelper.generateSuccessResponse(None)
+
+
+    #-----------------------------------------------------------------------------
+    # Update product with new quantity and price
+    #-----------------------------------------------------------------------------
+    def updateProductPrice(self, product, token):
+        user = self.validateToken(token)
+        if 'error' in user:
+            return user
+
+        productDao = ProductDao()
+        productDao.updateProductPrice(product)
+        return ResponseHelper.generateSuccessResponse(None)
         
 
 
