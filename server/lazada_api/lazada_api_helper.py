@@ -20,7 +20,7 @@ class LazadaApiHelper:
   # Format: 2014-02-25T23:46:11+00:00
   # ----------------------------------------------------------------------------
   @classmethod
-  def getFixedCreatedAfterForCronJob():
+  def getFixedCreatedAfterForCronJob(self):
     return "1990-02-25T23:46:11+00:00"
 
   # ----------------------------------------------------------------------------

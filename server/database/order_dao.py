@@ -7,18 +7,26 @@ class OrderDao(object):
 
     def createTable(self):
         query = '''CREATE TABLE IF NOT EXISTS order_management(
-                id              INT AUTO_INCREMENT primary key NOT NULL,
-                order_id        VARCHAR(50)     NOT NULL,
-                order_number    VARCHAR(50)     NOT NULL,
-                price           VARCHAR(20)     NOT NULL,   # 113,000.00
-                customer_name   VARCHAR(100)    NOT NULL,
-                voucher_code    VARCHAR(50)     NOT NULL,
-                voucher_price   VARCHAR(50)     NOT NULL,
-                status          VARCHAR(100)    NOT NULL,
-                created_at      VARCHAR(30)     NOT NULL,   # 2017-09-08 01:12:04
-                updated_at      VARCHAR(30)     NOT NULL,   # 2017-09-08 01:12:04
-                order_json      TEXT            NOT NULL,
-                user_id         INTEGER         NOT NULL
+                id                  INT AUTO_INCREMENT primary key NOT NULL,
+                order_id            VARCHAR(50)     NOT NULL,
+                order_number        VARCHAR(50)     NOT NULL,
+                price               VARCHAR(20)     NOT NULL,   # 113,000.00
+                customer_name       VARCHAR(100)    ,
+                customer_phone      VARCHAR(20)     ,
+                customer_email      VARCHAR(50)     ,
+                address_shipping    VARCHAR(200)    ,
+                voucher_code        VARCHAR(20)     ,
+                voucher_price       VARCHAR(20)     ,
+                delivery_info       VARCHAR(200)    ,
+                payment_method      VARCHAR(50)     ,
+                remarks             VARCHAR(200)    ,
+                gift_message        VARCHAR(200)    ,
+                shipping_fee        INTEGER         ,
+                status              VARCHAR(100)    NOT NULL,
+                created_at          VARCHAR(30)     NOT NULL,   # 2017-09-08 01:12:04
+                updated_at          VARCHAR(30)     NOT NULL,   # 2017-09-08 01:12:04
+                order_json          TEXT            NOT NULL,
+                user_id             INTEGER         NOT NULL
                 );'''
         DatabaseHelper.execute(query)
 
@@ -26,22 +34,20 @@ class OrderDao(object):
     # Insert order
     # --------------------------------------------------------------------------
     def insert(self, user, order):
-        query = '''INSERT INTO order_management(
-                            order_id,
-                            order_number,
-                            price,
-                            customer_name,
-                            voucher_code,
-                            voucher_price,
-                            status,
-                            created_at,
-                            updated_at,
-                            order_json,
-                            user_id)
+        query = '''INSERT INTO order_management(order_id, order_number, price,
+                            customer_name, customer_phone, customer_email,
+                            address_shipping, voucher_code, voucher_price,
+                            delivery_info, payment_method, remarks, gift_message,
+                            shipping_fee, status, created_at, updated_at,
+                            order_json, user_id)
                     VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')
                 '''.format(order['order_id'], order['order_number'], order['price'],
-                           order['customer_name'], order['voucher_code'],
-                           order['voucher_price'], order['status'], order['created_at'],
+                           order['customer_name'], order['customer_phone'],
+                           order['customer_email'], order['address_shipping'],
+                           order['voucher_code'], order['voucher_price'],
+                           order['delivery_info'], order['payment_method'],
+                           order['remarks'], order['gift_message'], order['shipping_fee'],
+                           order['status'], order['created_at'],
                            order['updated_at'], order['order_json'], user['id'])
         try:
             DatabaseHelper.execute(query)
@@ -53,7 +59,8 @@ class OrderDao(object):
     # Check Order exsits
     # --------------------------------------------------------------------------
     def isOrderExist(self, user, orderId):
-        query = '''SELECT * FROM order_management WHERE order_id = '{}' AND user_id = '{}'' '''.format(orderId, user['id'])
+        query = '''SELECT id FROM order_management WHERE order_id = '{}' AND user_id = '{}'
+                '''.format(orderId, user['id'])
         try:
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
@@ -90,13 +97,21 @@ class OrderDao(object):
                 'order_number': row[2],
                 'price': row[3],
                 'customer_name': row[4],
-                'voucher_code': row[5],
-                'voucher_price': row[6],
-                'status': row[7],
-                'created_at': row[8],
-                'updated_at': row[9],
-                'order_json': row[10],
-                'user_id': row[11]
+                'customer_phone': row[5],
+                'customer_email': row[6],
+                'address_shipping': row[7],
+                'voucher_code': row[8],
+                'voucher_price': row[9],
+                'delivery_info': row[10],
+                'payment_method': row[11],
+                'remarks': row[12],
+                'gift_message': row[13],
+                'shipping_fee': row[14],
+                'status': row[15],
+                'created_at': row[16],
+                'updated_at': row[17],
+                'order_json': row[18],
+                'user_id': row[19]
             }
             conn.close()
             return order
@@ -106,9 +121,33 @@ class OrderDao(object):
     # --------------------------------------------------------------------------
     # Update Order State
     # --------------------------------------------------------------------------
+    def updateOrder(self, user, order):
+        query = '''UPDATE order_management
+                    set price = '{}', customer_name = '{}', customer_phone = '{}',
+                        customer_email = '{}', address_shipping = '{}',
+                        voucher_code = '{}', voucher_price = '{}',
+                        delivery_info = '{}', payment_method = '{}',
+                        remarks = '{}', gift_message = '{}', shipping_fee = '{}',
+                        status = '{}', updated_at = '{}', order_json = '{}'
+                    WHERE id = '{}'
+                '''.format(order['price'], order['customer_name'], order['customer_phone'],
+                           order['customer_email'], order['address_shipping'],
+                           order['voucher_code'], order['voucher_price'],
+                           order['delivery_info'], order['payment_method'],
+                           order['remarks'], order['gift_message'], order['shipping_fee'],
+                           order['status'], order['updated_at'], order['order_json'])
+        try:
+            DatabaseHelper.execute(query)
+            return ExceptionUtils.success()
+        except Exception as ex:
+            return ExceptionUtils.error('''User: {}-{}, Order-Number: {}, Update-Order-State exception: {}'''.format(user['username'], user['id'], orderNumber, str(ex)))
+
+    # --------------------------------------------------------------------------
+    # Update Order State
+    # --------------------------------------------------------------------------
     def updateOrderState(self, user, order):
         query = '''UPDATE order_management
-                    set status = '{}', updated_at = '{}', order_json = {}
+                    set status = '{}', updated_at = '{}', order_json = '{}'
                     WHERE id = '{}'
                 '''.format(order['status'], order['updated_at'], order['order_json'], order['id'])
         try:

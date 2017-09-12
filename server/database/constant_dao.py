@@ -29,7 +29,7 @@ class ConstantDao(object):
     # Get constant
     # --------------------------------------------------------------------------
     def getConstant(self, user, key):
-        query = '''SELECT * FROM constant WHERE user_id = '{}' AND constant_key = {} '''.format(user['id'], key)
+        query = '''SELECT * FROM constant WHERE user_id = '{}' AND constant_key = '{}' '''.format(user['id'], key)
         try:
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
@@ -41,7 +41,7 @@ class ConstantDao(object):
                 return ExceptionUtils.error('''User: {}-{}, Get constant not found, constant_key = {}'''.format(user['username'], user['id'], key))
 
             result = {
-                'value': row[3]
+                'value': row[2]
             }
             conn.close()
             return result

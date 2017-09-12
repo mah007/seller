@@ -43,7 +43,7 @@ class OrderManager(object):
             errorArray = ResponseUtils.convertToArryError(order['error'])
             return ResponseUtils.generateErrorResponse(errorArray)
 
-        # Parse to ladaza format
+        # Parse to ladaza format: to get full info such as OrderItems
         order = OrderHelper.convertOrderToLazadaOrder(order)
         # Get orderItem by order
         lazadaOrderApi = LazadaOrderApi()

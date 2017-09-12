@@ -19,13 +19,35 @@ class OrderHelper:
 
   @classmethod
   def convertLazadaOrderToOrder(self, lazadaOrder):
-    return {
+    order = {
       "order_id": lazadaOrder['OrderId'],
       "order_number": lazadaOrder['OrderNumber'],
-      "order_json": json.dumps(lazadaOrder, ensure_ascii=False),
-      "created_at": int(round(time.time()))
+      "price": lazadaOrder['Price'],
+      "customer_name": lazadaOrder['CustomerFirstName'],
+      "customer_phone": "",
+      "customer_email": "",
+      "address_shipping": "",
+      "voucher_code": lazadaOrder['VoucherCode'],
+      "voucher_price": lazadaOrder['Voucher'],
+      "delivery_info": lazadaOrder['DeliveryInfo'],
+      "payment_method": lazadaOrder['PaymentMethod'],
+      "remarks": lazadaOrder['Remarks'],
+      "gift_message": lazadaOrder['GiftMessage'],
+      "shipping_fee": lazadaOrder['ShippingFee'],
+      "status": "",
+      "created_at": lazadaOrder['CreatedAt'],
+      "updated_at": lazadaOrder['UpdatedAt'],
+      "order_json": json.dumps(lazadaOrder, ensure_ascii=False)
     }
 
   @classmethod
   def convertOrderToLazadaOrder(self, order):
     return json.loads(order['order_json'])
+
+
+
+
+
+
+
+

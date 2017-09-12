@@ -30,8 +30,8 @@ class GetOrderWorker(threading.Thread):
     orderOffset = orderOffsetConstant['value']
     while(True):
       # Get Lazada orders and insert to our dataBase
-      result = self.getLazadaOrderAndInsertToOurDataBase(orderOffset);
-      if result == False
+      result = self.getLazadaOrderAndInsertToOurDataBase(user, orderOffset);
+      if result == False:
         return
 
       # Addition offset and update to constant: must not error
@@ -45,7 +45,7 @@ class GetOrderWorker(threading.Thread):
   # Get Lazada orders and insert to our dataBase
   # Return Boolean
   #-----------------------------------------------------------------------------
-  def getLazadaOrderAndInsertToOurDataBase(self, orderOffset):
+  def getLazadaOrderAndInsertToOurDataBase(self, user, orderOffset):
     # Get lazada orders by offset
     orders = lazadaOrderApi.getOrders(user, orderOffset)
     if 'error' in orders:
