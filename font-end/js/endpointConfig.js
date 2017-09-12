@@ -126,6 +126,15 @@ var EndpointConfig = function() {
       return endpointUrl + '/product/update-price?token=' + $.cookie('token');
   }  
 
+  // PRICE BALANCER
+  EndpointConfig.prototype.generateInsertPriceBalancer = function() {
+      return endpointUrl + '/price-balancer/insert?token=' + $.cookie('token');
+  }
+
+  EndpointConfig.prototype.generateGetAllPriceBalancer = function() {
+      return endpointUrl + '/price-balancer/get-all?token=' + $.cookie('token');
+  }
+
 }
 
 
