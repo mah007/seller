@@ -9,50 +9,38 @@ class PriceBalancerDao(object):
                     id              INT AUTO_INCREMENT primary key NOT NULL,
                     sku             VARCHAR(100)        NOT NULL,
                     name            VARCHAR(300)        NOT NULL,
-                    link            VARCHAR(300)        NOT NULL,
-                    price_balance   VARCHAR(300)        NOT NULL,
-                    user_id         INTEGER             NOT NULL
+                    url             VARCHAR(300)        NOT NULL,
+                    current_price   INT                 NOT NULL,
+                    price_by_time   INT                 NOT NULL,
+                    user_id         INT                 NOT NULL
                     );'''
         DatabaseHelper.execute(query)
 
     # --------------------------------------------------------------------------
     # Insert price balancer
     # --------------------------------------------------------------------------
-    def insert(self, sku, user):
-        query = '''INSERT INTO price_balancer(sku, name, link, price_balance, user_id)
-                    VALUES ('{}', '{}', '{}', '{}')'''.format(
-                    StringUtils.toString(sku['sku']), StringUtils.toString(sku['name']),
-                    StringUtils.toString(sku['link']), sku['price_balance'], user['id'])
+    def insert(self, pb, user):
+        query = '''INSERT INTO price_balancer(sku, name, url, current_price, price_by_time, user_id)
+                    VALUES ('{}', '{}', '{}', '{}', '{}', '{}')'''.format(
+                    StringUtils.toString(pb['sku']), StringUtils.toString(pb['name']),
+                    StringUtils.toString(pb['url']), pb['current_price'], pb['price_by_time'], user['id'])
         try:
+            print(query)
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:
-            return ExceptionUtils.error('''User: {}-{}, Insert price balancer exception: {}'''.format(user['username'], user['id'], str(ex)))
-
-    # --------------------------------------------------------------------------
-    # Update price balancer
-    # --------------------------------------------------------------------------
-    def update(self, sku, user):
-        query = '''UPDATE price_balancer
-                    set price_balance = '{}'
-                    WHERE id = '{}'
-                '''.format(sku['price_balance'], sku['id'])
-        try:
-            DatabaseHelper.execute(query)
-            return ExceptionUtils.success()
-        except Exception as ex:
-            return ExceptionUtils.error('''User: {}-{}, update price balancer: {}, exception: {}'''.format(user['username'], user['id'], sku['id'], str(ex)))
+            return ExceptionUtils.error('''Insert price balancer exception: {}'''.format(str(ex)))
 
     # --------------------------------------------------------------------------
     # Delete price balancer
     # --------------------------------------------------------------------------
-    def delete(self, sku, user):
-        query = '''DELETE from price_balancer where id = '{}' '''.format(sku['id'])
+    def delete(self, pb):
+        query = '''DELETE from price_balancer where id = '{}' '''.format(pb['id'])
         try:
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:
-            return ExceptionUtils.error('''User: {}-{}, delete price balancer: {}, exception: {}'''.format(user['username'], user['id'], sku['id'], str(ex)))
+            return ExceptionUtils.error('''Delete price balancer: {}, exception: {}'''.format(pb['id'], str(ex)))
 
     # --------------------------------------------------------------------------
     # get price balancers
@@ -71,15 +59,16 @@ class PriceBalancerDao(object):
                     "id": row[0],
                     "sku": row[1],
                     "name": row[2],
-                    "link": row[3],
-                    "price_balance": row[4],
+                    "url": row[3],
+                    "current_price": row[4],
+                    "price_by_time": row[5]
                 })
 
             conn.close()
             return skus
         except Exception as ex:
             print(ex)
-            return ExceptionUtils.error('''User: {}-{}, get balancer skus exception: {}'''.format(user['username'], user['id'], str(ex)))
+            return ExceptionUtils.error('''Get price balancer exception: {}'''.format(str(ex)))
 
 
 
