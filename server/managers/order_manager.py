@@ -1,15 +1,11 @@
-from database.sku_dao import SkuDao
+import time
+import schedule
+from managers.manager_helper import ManagerHelper
 from database.user_dao import UserDao
 from database.order_dao import OrderDao
-from database.constant_dao import ConstantDao
-from managers.user_manager import UserManager
 from lazada_api.lazada_order_api import LazadaOrderApi
 from managers.order_helper import OrderHelper
 from utils.response_utils import ResponseUtils
-from managers.response_helper import ResponseHelper
-from lazada_api.lazada_api_helper import LazadaApiHelper
-import schedule
-import time
 
 
 class OrderManager(object):
@@ -17,15 +13,11 @@ class OrderManager(object):
         orderDao = OrderDao()
         orderDao.createTable()
 
-    def validateToken(self, token):
-        userDao = UserDao()
-        return userDao.getUser(token)
-
     #---------------------------------------------------------------------------
     # Scan barcode
     #---------------------------------------------------------------------------
     def scanBarcode(self, token, barcode):
-        user = self.validateToken(token)
+        user = ManagerHelper.validateToken(token)
         if not user:
             errorArray = ResponseUtils.convertToArryError("Token is invalid, please logout and login again !")
             return ResponseUtils.generateErrorResponse(errorArray)
@@ -63,7 +55,7 @@ class OrderManager(object):
     # Set order status to Ready-To-Ship
     #-----------------------------------------------------------------------------
     def setStatusToReadyToShip(self, token, orderItemIds, shippingProvider):
-        user = self.validateToken(token)
+        user = ManagerHelper.validateToken(token)
         if not user:
             errorArray = ResponseUtils.convertToArryError("Token is invalid, please logout and login again !")
             return ResponseUtils.generateErrorResponse(errorArray)

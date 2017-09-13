@@ -20,7 +20,7 @@ class PriceBalancerDao(object):
     # --------------------------------------------------------------------------
     def insert(self, sku, user):
         query = '''INSERT INTO price_balancer(sku, name, link, price_balance, user_id)
-                    VALUES ('{}', '{}', '{}', '{}')'''.format(
+                    VALUES ('{}', '{}', '{}', '{}', '{}')'''.format(
                     StringUtils.toString(sku['sku']), StringUtils.toString(sku['name']),
                     StringUtils.toString(sku['link']), sku['price_balance'], user['id'])
         try:

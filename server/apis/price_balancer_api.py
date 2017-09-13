@@ -1,18 +1,23 @@
+import simplejson as json
+from flask_cors import CORS, cross_origin
+from flask import Blueprint, render_template, abort, request, make_response, jsonify
 from managers.price_balancer_manager import PriceBalancerManager
 
 
-SkuAPI = Blueprint('price_balancer_api', __name__, template_folder='apis')
+PriceBalancerAPI = Blueprint('price_balancer_api', __name__, template_folder='apis')
 
 # ------------------------------------------------------------------------------
 # Insert price balancer
 # ------------------------------------------------------------------------------
-@SkuAPI.route('/price-balancer/insert', methods=['POST'])
+@PriceBalancerAPI.route('/price-balancer/insert', methods=['POST'])
 @cross_origin()
 def insertPriceBalancer():
   if not request.args:
     return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
   if not 'token' in request.args:
     return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
+  if not request.json:
+    return make_response(jsonify({'error': 'Missing json parameters value'}), 404)
   if not 'sku' in request.json:
     return make_response(jsonify({'error': 'Missing json parameter'}), 404)
   if not 'price_balance' in request.json:
@@ -33,7 +38,7 @@ def insertPriceBalancer():
 # ------------------------------------------------------------------------------
 # Delete a price balancer
 # ------------------------------------------------------------------------------
-@SkuAPI.route('/price-balancer/delete', methods=['POST'])
+@PriceBalancerAPI.route('/price-balancer/delete', methods=['POST'])
 @cross_origin()
 def deletePriceBalancer():
   if not request.args:
@@ -55,7 +60,7 @@ def deletePriceBalancer():
 # ------------------------------------------------------------------------------
 # Update a price balancer
 # ------------------------------------------------------------------------------
-@SkuAPI.route('/price-balancer/update', methods=['GET'])
+@PriceBalancerAPI.route('/price-balancer/update', methods=['POST'])
 @cross_origin()
 def updatePriceBalancer():
   if not request.args:
@@ -82,16 +87,18 @@ def updatePriceBalancer():
 # ------------------------------------------------------------------------------
 # Get all skus of price balancer
 # ------------------------------------------------------------------------------
-@SkuAPI.route('/price-balancer/get-all', methods=['GET'])
+@PriceBalancerAPI.route('/price-balancer/get-all', methods=['GET'])
 @cross_origin()
 def getAllSkuOfPriceBalancer():
   if not request.args:
     return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
   if not 'token' in request.args:
     return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
+  print(request.args.get('token'))
 
   priceBalancerManager = PriceBalancerManager()
   result = priceBalancerManager.getAll(request.args.get('token'))
+  print(result)
   if 'success' in result:
     return make_response(jsonify(result), 201)
   else:

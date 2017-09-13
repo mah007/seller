@@ -47,7 +47,7 @@ class PriceBalancerManager(object):
     if 'error' in result:
       return ResponseUtils.generateErrorResponse(result['error'])
 
-    return ResponseHelper.generateSuccessResponse()
+    return ResponseUtils.generateSuccessResponse()
 
   #-----------------------------------------------------------------------------
   # delete a price balancer
@@ -62,7 +62,7 @@ class PriceBalancerManager(object):
     if 'error' in result:
       return ResponseUtils.generateErrorResponse(result['error'])
 
-    return ResponseHelper.generateSuccessResponse()
+    return ResponseUtils.generateSuccessResponse()
 
   #-----------------------------------------------------------------------------
   # get all price balancers
@@ -73,11 +73,11 @@ class PriceBalancerManager(object):
       return user
 
     priceBalancer = PriceBalancerDao()
-    result = priceBalancer.getAll(sku, user)
+    result = priceBalancer.getAll(user)
     if 'error' in result:
       return ResponseUtils.generateErrorResponse(result['error'])
 
-    return ResponseHelper.generateSuccessResponse(result)
+    return ResponseUtils.generateSuccessResponse(result)
 
 
 
