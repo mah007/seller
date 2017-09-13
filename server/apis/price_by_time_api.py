@@ -1,17 +1,17 @@
 import simplejson as json
 from flask_cors import CORS, cross_origin
 from flask import Blueprint, render_template, abort, request, make_response, jsonify
-from managers.price_balancer_manager import PriceBalancerManager
+from managers.price_by_time_manager import PriceByTimeManager
 
 
-PriceBalancerAPI = Blueprint('price_balancer_api', __name__, template_folder='apis')
+PriceByTimeAPI = Blueprint('price_by_time_api', __name__, template_folder='apis')
 
 # ------------------------------------------------------------------------------
 # Insert price balancer
 # ------------------------------------------------------------------------------
-@PriceBalancerAPI.route('/price-balancer/insert', methods=['POST'])
+@PriceByTimeAPI.route('/price-by-time/insert', methods=['POST'])
 @cross_origin()
-def insertPriceBalancer():
+def insertPriceByTime():
   if not request.args:
     return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
   if not 'token' in request.args:
@@ -28,8 +28,8 @@ def insertPriceBalancer():
     "price_balance": request.json['price_balance']
   }
 
-  priceBalancerManager = PriceBalancerManager()
-  result = priceBalancerManager.insertPriceBalancer(sku, request.args.get('token'))
+  priceByTimeManager = PriceByTimeManager()
+  result = priceByTimeManager.insert(sku, request.args.get('token'))
   if 'success' in result:
     return make_response(jsonify(result), 201)
   else:
@@ -38,9 +38,9 @@ def insertPriceBalancer():
 # ------------------------------------------------------------------------------
 # Delete a price balancer
 # ------------------------------------------------------------------------------
-@PriceBalancerAPI.route('/price-balancer/delete', methods=['POST'])
+@PriceByTimeAPI.route('/price-by-time/delete', methods=['POST'])
 @cross_origin()
-def deletePriceBalancer():
+def deletePriceByTime():
   if not request.args:
     return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
   if not 'token' in request.args:
@@ -50,8 +50,8 @@ def deletePriceBalancer():
 
   sku = {"id": request.json['id']}
 
-  priceBalancerManager = PriceBalancerManager()
-  result = priceBalancerManager.deletePriceBalancer(sku, request.args.get('token'))
+  priceByTimeManager = PriceByTimeManager()
+  result = priceByTimeManager.delete(sku, request.args.get('token'))
   if 'success' in result:
     return make_response(jsonify(result), 201)
   else:
@@ -60,9 +60,9 @@ def deletePriceBalancer():
 # ------------------------------------------------------------------------------
 # Update a price balancer
 # ------------------------------------------------------------------------------
-@PriceBalancerAPI.route('/price-balancer/update', methods=['POST'])
+@PriceByTimeAPI.route('/price-by-time/update', methods=['POST'])
 @cross_origin()
-def updatePriceBalancer():
+def updatePriceByTime():
   if not request.args:
     return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
   if not 'token' in request.args:
@@ -77,8 +77,8 @@ def updatePriceBalancer():
     "price_balance": request.json['price_balance']
   }
 
-  priceBalancerManager = PriceBalancerManager()
-  result = priceBalancerManager.updatePriceBalancer(sku, request.args.get('token'))
+  priceByTimeManager = PriceByTimeManager()
+  result = priceByTimeManager.update(sku, request.args.get('token'))
   if 'success' in result:
     return make_response(jsonify(result), 201)
   else:
@@ -87,17 +87,17 @@ def updatePriceBalancer():
 # ------------------------------------------------------------------------------
 # Get all skus of price balancer
 # ------------------------------------------------------------------------------
-@PriceBalancerAPI.route('/price-balancer/get-all', methods=['GET'])
+@PriceByTimeAPI.route('/price-by-time/get-all', methods=['GET'])
 @cross_origin()
-def getAllSkuOfPriceBalancer():
+def getAllSkuOfPriceByTime():
   if not request.args:
     return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
   if not 'token' in request.args:
     return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
   print(request.args.get('token'))
 
-  priceBalancerManager = PriceBalancerManager()
-  result = priceBalancerManager.getAll(request.args.get('token'))
+  priceByTimeManager = PriceByTimeManager()
+  result = priceByTimeManager.getAll(request.args.get('token'))
   print(result)
   if 'success' in result:
     return make_response(jsonify(result), 201)

@@ -2,63 +2,63 @@ from database.database_helper import DatabaseHelper
 from utils.string_utils import StringUtils
 from utils.exception_utils import ExceptionUtils
 
-class PriceBalancerDao(object):
+class PriceByTimeDao(object):
 
     def createTable(self):
-        query = '''CREATE TABLE IF NOT EXISTS price_balancer(
+        query = '''CREATE TABLE IF NOT EXISTS price_by_time(
                     id              INT AUTO_INCREMENT primary key NOT NULL,
                     sku             VARCHAR(100)        NOT NULL,
                     name            VARCHAR(300)        NOT NULL,
                     link            VARCHAR(300)        NOT NULL,
-                    price_balance   VARCHAR(300)        NOT NULL,
+                    price_by_time   VARCHAR(300)        NOT NULL,
                     user_id         INTEGER             NOT NULL
                     );'''
         DatabaseHelper.execute(query)
 
     # --------------------------------------------------------------------------
-    # Insert price balancer
+    # Insert price by time
     # --------------------------------------------------------------------------
     def insert(self, sku, user):
-        query = '''INSERT INTO price_balancer(sku, name, link, price_balance, user_id)
+        query = '''INSERT INTO price_by_time(sku, name, link, price_by_time, user_id)
                     VALUES ('{}', '{}', '{}', '{}', '{}')'''.format(
                     StringUtils.toString(sku['sku']), StringUtils.toString(sku['name']),
-                    StringUtils.toString(sku['link']), sku['price_balance'], user['id'])
+                    StringUtils.toString(sku['link']), sku['price_by_time'], user['id'])
         try:
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:
-            return ExceptionUtils.error('''User: {}-{}, Insert price balancer exception: {}'''.format(user['username'], user['id'], str(ex)))
+            return ExceptionUtils.error('''User: {}-{}, Insert price by time exception: {}'''.format(user['username'], user['id'], str(ex)))
 
     # --------------------------------------------------------------------------
-    # Update price balancer
+    # Update price by time
     # --------------------------------------------------------------------------
     def update(self, sku, user):
-        query = '''UPDATE price_balancer
-                    set price_balance = '{}'
+        query = '''UPDATE price_by_time
+                    set price_by_time = '{}'
                     WHERE id = '{}'
-                '''.format(sku['price_balance'], sku['id'])
+                '''.format(sku['price_by_time'], sku['id'])
         try:
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:
-            return ExceptionUtils.error('''User: {}-{}, update price balancer: {}, exception: {}'''.format(user['username'], user['id'], sku['id'], str(ex)))
+            return ExceptionUtils.error('''User: {}-{}, update price by time: {}, exception: {}'''.format(user['username'], user['id'], sku['id'], str(ex)))
 
     # --------------------------------------------------------------------------
-    # Delete price balancer
+    # Delete price by time
     # --------------------------------------------------------------------------
     def delete(self, sku, user):
-        query = '''DELETE from price_balancer where id = '{}' '''.format(sku['id'])
+        query = '''DELETE from price_by_time where id = '{}' '''.format(sku['id'])
         try:
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:
-            return ExceptionUtils.error('''User: {}-{}, delete price balancer: {}, exception: {}'''.format(user['username'], user['id'], sku['id'], str(ex)))
+            return ExceptionUtils.error('''User: {}-{}, delete price by time: {}, exception: {}'''.format(user['username'], user['id'], sku['id'], str(ex)))
 
     # --------------------------------------------------------------------------
-    # get price balancers
+    # get price by times
     # --------------------------------------------------------------------------
     def getAll(self, user):
-        query = '''SELECT * from price_balancer WHERE user_id = '{}' '''.format(user['id'])
+        query = '''SELECT * from price_by_time WHERE user_id = '{}' '''.format(user['id'])
         try:
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
@@ -72,13 +72,13 @@ class PriceBalancerDao(object):
                     "sku": row[1],
                     "name": row[2],
                     "link": row[3],
-                    "price_balance": row[4],
+                    "price_by_time": row[4],
                 })
 
             conn.close()
             return skus
         except Exception as ex:
-            return ExceptionUtils.error('''User: {}-{}, get balancer skus exception: {}'''.format(user['username'], user['id'], str(ex)))
+            return ExceptionUtils.error('''User: {}-{}, get by time skus exception: {}'''.format(user['username'], user['id'], str(ex)))
 
 
 

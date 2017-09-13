@@ -1,18 +1,18 @@
-from database.price_balancer_dao import PriceBalancerDao
+from database.price_by_time_dao import PriceByTimeDao
 from managers.manager_helper import ManagerHelper
 from lazada_api.lazada_sku_api import LazadaSkuApi
 from utils.response_utils import ResponseUtils
 
-class PriceBalancerManager(object):
+class PriceByTimeManager(object):
 
   def initialize(self):
-    priceBalancer = PriceBalancerDao()
-    priceBalancer.createTable()
+    priceByTime = PriceByTimeDao()
+    priceByTime.createTable()
 
   #-----------------------------------------------------------------------------
   # insert a new price balancer
   #-----------------------------------------------------------------------------
-  def insertPriceBalancer(self, sku, token):
+  def insert(self, sku, token):
     user = ManagerHelper.validateToken(token)
     if 'error' in user:
       return user
@@ -27,8 +27,8 @@ class PriceBalancerManager(object):
     sku['name'] = lazadaProduct['Attributes']['name'].encode('utf-8')
     sku['link'] = lazadaProduct['Skus'][0]['Url'].encode('utf-8')
 
-    priceBalancer = PriceBalancerDao()
-    result = priceBalancer.insert(sku, user)
+    priceByTime = PriceByTimeDao()
+    result = priceByTime.insert(sku, user)
     if 'error' in result:
       return ResponseUtils.generateErrorResponse(result['error'])
 
@@ -37,13 +37,13 @@ class PriceBalancerManager(object):
   #-----------------------------------------------------------------------------
   # update price balancer's info
   #-----------------------------------------------------------------------------
-  def updatePriceBalancer(self, sku, token):
+  def update(self, sku, token):
     user = ManagerHelper.validateToken(token)
     if 'error' in user:
       return user
 
-    priceBalancer = PriceBalancerDao()
-    result = priceBalancer.update(sku, user)
+    priceByTime = PriceByTimeDao()
+    result = priceByTime.update(sku, user)
     if 'error' in result:
       return ResponseUtils.generateErrorResponse(result['error'])
 
@@ -52,13 +52,13 @@ class PriceBalancerManager(object):
   #-----------------------------------------------------------------------------
   # delete a price balancer
   #-----------------------------------------------------------------------------
-  def deletePriceBalancer(self, sku, token):
+  def delete(self, sku, token):
     user = ManagerHelper.validateToken(token)
     if 'error' in user:
       return user
 
-    priceBalancer = PriceBalancerDao()
-    result = priceBalancer.delete(sku, user)
+    priceByTime = PriceByTimeDao()
+    result = priceByTime.delete(sku, user)
     if 'error' in result:
       return ResponseUtils.generateErrorResponse(result['error'])
 
@@ -72,8 +72,8 @@ class PriceBalancerManager(object):
     if 'error' in user:
       return user
 
-    priceBalancer = PriceBalancerDao()
-    result = priceBalancer.getAll(user)
+    priceByTime = PriceByTimeDao()
+    result = priceByTime.getAll(user)
     if 'error' in result:
       return ResponseUtils.generateErrorResponse(result['error'])
 
