@@ -16,9 +16,9 @@ class ConstantDao(object):
     # --------------------------------------------------------------------------
     # Insert constant
     # --------------------------------------------------------------------------
-    def insertConstant(self, user, key, value):
-        query = '''INSERT INTO constant(constant_key, value, user_id) VALUES ('{}', '{}', '{}') '''.format(
-                    key, value, user['id'])
+    def insertConstant(self, user, constant_key, value):
+        query = '''INSERT INTO constant(constant_key, value, user_id) VALUES ('{}', '{}', '{}')
+                '''.format(constant_key, value, user['id'])
         try:
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
@@ -28,8 +28,9 @@ class ConstantDao(object):
     # --------------------------------------------------------------------------
     # Get constant
     # --------------------------------------------------------------------------
-    def getConstant(self, user, key):
-        query = '''SELECT * FROM constant WHERE user_id = '{}' AND constant_key = '{}' '''.format(user['id'], key)
+    def getConstant(self, user, constant_key):
+        query = '''SELECT * FROM constant WHERE user_id = '{}' AND constant_key = '{}'
+                '''.format(user['id'], constant_key)
         try:
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
@@ -38,7 +39,7 @@ class ConstantDao(object):
             row = cur.fetchone()
             if not row:
                 conn.close()
-                return ExceptionUtils.error('''User: {}-{}, Get constant not found, constant_key = {}'''.format(user['username'], user['id'], key))
+                return ExceptionUtils.error('''User: {}-{}, Get constant not found, constant_key = {}'''.format(user['username'], user['id'], constant_key))
 
             result = {
                 'value': row[2]
@@ -51,9 +52,9 @@ class ConstantDao(object):
     # --------------------------------------------------------------------------
     # check constant exist
     # --------------------------------------------------------------------------
-    def isConstantExist(self, user, key):
+    def isConstantExist(self, user, constant_key):
         query = '''SELECT * FROM constant WHERE user_id = '{}' and constant_key = '{}'
-                '''.format(user['id'], key)
+                '''.format(user['id'], constant_key)
         try:
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
@@ -68,9 +69,10 @@ class ConstantDao(object):
     # --------------------------------------------------------------------------
     # Update constant
     # --------------------------------------------------------------------------
-    def updateConstant(self, user, key, value):
+    def updateConstant(self, user, constant_key, value):
+        query = '''UPDATE constant SET value = '{}' WHERE constant_key = '{}' AND user_id = '{}'
+                '''.format(value, constant_key, user['id'])
         try:
-            query = '''UPDATE constant SET value = '{}' WHERE constant_key = '{}' AND user_id = '{}' '''.format(value, key, user['id'])
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:

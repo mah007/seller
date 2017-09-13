@@ -1,17 +1,15 @@
 import time
-import requests
+import json
 import threading
-from lxml import html
-from config import ConstantConfig, LazadaAPI
-from database.constant_dao import ConstantDao
-from lazada_api.lazada_order_api import LazadaOrderApi
-from database.order_dao import OrderDao
+from lazada_api.lazada_sku_api import LazadaSkuApi
+from database.price_by_time_dao import PriceByTimeDao
+from utils.timestamp_utils import TimestampUtils
 
-constantDao = ConstantDao()
-lazadaOrderApi = LazadaOrderApi()
-orderDao = OrderDao()
+# For caching memory
+lazadaSkuApi = LazadaSkuApi()
+priceByTimeDao = PriceByTimeDao()
 
-class GetOrderWorker(threading.Thread):
+class PriceByTimeWorker(threading.Thread):
 
   def __init__(self, kwargs):
     threading.Thread.__init__(self)
@@ -21,53 +19,83 @@ class GetOrderWorker(threading.Thread):
     user = self.kwargs['user']
     print('''*********** {} is running ***********'''.format(user['lazada_user_name']))
 
-    # Get offset: must not error
-    orderOffsetConstant = constantDao.getConstant(user, ConstantConfig.ORDER_OFFSET)
-    if 'error' in orderOffsetConstant:
-      print(orderOffsetConstant)
+    # Get all skus of price by time
+    priceByTimeSkus = priceByTimeDao.getAll(user);
+    if 'error' in priceByTimeSkus:
+      print(priceByTimeSkus)
       return
 
-    orderOffset = orderOffsetConstant['value']
-    while(True):
-      # Get Lazada orders and insert to our dataBase
-      result = self.getLazadaOrderAndInsertToOurDataBase(user, orderOffset);
-      if result == False:
-        return
+    for priceByTimeSku in priceByTimeSkus:
+      if not priceByTimeSku['price_by_time']:
+        continue
 
-      # Addition offset and update to constant: must not error
-      orderOffset += LazadaAPI.LIMIT
-      result = constantDao.updateConstant(user, ConstantConfig.ORDER_OFFSET, orderOffset)
-      if 'error' in result:
-        print(result)
-        return
+      priceByTimes = json.loads(priceByTimeSku['price_by_time'])
+      self.updateSpcialPriceByPriceByTimes(user, priceByTimeSku, priceByTimes)
 
   #-----------------------------------------------------------------------------
-  # Get Lazada orders and insert to our dataBase
+  # The algorithm
+  #-----------------------------------------------------------------------------
+  def updateSpcialPriceByPriceByTimes(self, user, priceByTimeSku, priceByTimes):
+    if not priceByTimes or len(priceByTimes) <= 0:
+      return
+
+    for priceByTime in priceByTimes:
+      isOnTime = self.isOnTime(priceByTime)
+      if isOnTime == False:
+        continue
+
+      self.updateSpecialPrice(user, priceByTimeSku, priceByTime)
+
+  #-----------------------------------------------------------------------------
+  # Only call this function when the current time is on time of PriceBytime
+  # Todo list:
+  # 1. Update product special price on Lazada.
+  # 2. Update prciceByTime special on local.
+  # Return Void
+  #-----------------------------------------------------------------------------
+  def updateSpecialPrice(self, user, priceByTimeSku, priceByTime):
+    if not priceByTime:                                       # Must not happen
+      return
+    newSpecialPrice = int(priceByTime['price'])
+    if priceByTimeSku['special_price'] == newSpecialPrice:   # That must be updated before
+      return
+
+    # Update lazada special price
+    result = lazadaSkuApi.updateProductSpecialPrice(priceByTimeSku, user, newSpecialPrice)
+    if 'error' in result:
+      print(result)
+      return
+
+    # Update PriceByTime special
+    result = priceByTimeDao.updateSpecialPrice(priceByTimeSku, user, newSpecialPrice)
+    if 'error' in result:
+      print(result)
+
+  #-----------------------------------------------------------------------------
+  # Detemine whether current time is on PriceByTime's period.
+  # PriceByTime format: hour:minute ==> 10:45
   # Return Boolean
   #-----------------------------------------------------------------------------
-  def getLazadaOrderAndInsertToOurDataBase(self, user, orderOffset):
-    # Get lazada orders by offset
-    orders = lazadaOrderApi.getOrders(user, orderOffset)
-    if 'error' in orders:
-      print(orders)
+  def isOnTime(self, priceByTime):
+    if not priceByTime:
       return False
-    if len(orders) <= 0:
-      print('''{} Reach to the end with offset {}'''.format(user['lazada_user_name'], orderOffset))
+    if not 'from' in priceByTime:
       return False
 
-    print('''{} Get lazada orders with offset {} is successful'''.format(user['lazada_user_name'], orderOffset))
+    timeArray = priceByTime['from'].split(':')
+    if len(timeArray) != 2:
+      return False
 
-    # Insert or update to our database
-    for order in orders:
-      isOrderExist = orderDao.isOrderExist(user, order['OrderId'])
-      result = {}
-      if isOrderExist == True:
-        result = orderDao.updateOrder(user, order)
-      else:
-        result = orderDao.insert(user, OrderHelper.convertLazadaOrderToOrder(order))
-      if 'error' in result:
-        print(result)
-        return False
+    hour = int(timeArray[0])
+    minute = int(timeArray[1])
+    currentHour = TimestampUtils.getCurrentHour()
+    currentMinute = TimestampUtils.getCurrentMinute()
+    print(hour, minute, currentHour, currentMinute)
+
+    if currentHour < hour:
+      return False
+    if currentMinute < minute:
+      return False
 
     return True
 

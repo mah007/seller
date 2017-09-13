@@ -26,6 +26,7 @@ class PriceByTimeManager(object):
     # Add missing arguments and insert to our database
     sku['name'] = lazadaProduct['Attributes']['name'].encode('utf-8')
     sku['link'] = lazadaProduct['Skus'][0]['Url'].encode('utf-8')
+    sku['special_price'] = lazadaProduct['Skus'][0]['special_price']
 
     priceByTime = PriceByTimeDao()
     result = priceByTime.insert(sku, user)

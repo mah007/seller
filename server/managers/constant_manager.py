@@ -12,24 +12,23 @@ class ConstantManager(object):
 
     def initDefaultValue(self, constantDao):
         userDao = UserDao()
-        superAdmins = userDao.getSuperAdmin()
-        if 'error' in superAdmins:
-            print(superAdmins)
+        superAdmin = userDao.getSuperAdmin()
+        if 'error' in superAdmin:
+            print(superAdmin)
             return;
 
-        for superAdmin in superAdmins:
-            # Insert Order Offset
-            isOrderOffsetExist = constantDao.isConstantExist(superAdmin, ConstantConfig.ORDER_OFFSET)
-            if isOrderOffsetExist == False:
-                result = constantDao.insertConstant(superAdmin, ConstantConfig.ORDER_OFFSET, 0)
-                if 'error' in result:
-                    print(result)
-            # Insert Product Offset
-            isProductOffsetExist = constantDao.isConstantExist(superAdmin, ConstantConfig.PRODUCT_OFFSET)
-            if isProductOffsetExist == False:
-                result = constantDao.insertConstant(superAdmin, ConstantConfig.PRODUCT_OFFSET, 0)
-                if 'error' in result:
-                    print(result)
+        # Insert Order Offset
+        isOrderOffsetExist = constantDao.isConstantExist(superAdmin, ConstantConfig.ORDER_OFFSET)
+        if isOrderOffsetExist == False:
+            result = constantDao.insertConstant(superAdmin, ConstantConfig.ORDER_OFFSET, 0)
+            if 'error' in result:
+                print(result)
+        # Insert Product Offset
+        isProductOffsetExist = constantDao.isConstantExist(superAdmin, ConstantConfig.PRODUCT_OFFSET)
+        if isProductOffsetExist == False:
+            result = constantDao.insertConstant(superAdmin, ConstantConfig.PRODUCT_OFFSET, 0)
+            if 'error' in result:
+                print(result)
 
 
 

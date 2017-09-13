@@ -20,6 +20,7 @@ class CronJob(object):
     AUTO_PRICE_TIME_INTEVAL = 25            # 25s
     GET_ORDER_TIME_INTEVAL = 5*60           # 5 minutes
     GET_PRODUCT_TIME_INTEVAL = 24*60*60     # 24 hours
+    PRICE_BY_TIME_INTERVAL = 5*60           # 5 minutes
 
 
 class SkuConfig(object):
@@ -35,6 +36,10 @@ class OrderConfig(object):
 class ConstantConfig(object):
     ORDER_OFFSET = "order_offset"
     PRODUCT_OFFSET = "product_offset"
+
+
+class UserConfig(object):
+    SUPER_ADMIN = "info@zakos.vn"
 
 
 

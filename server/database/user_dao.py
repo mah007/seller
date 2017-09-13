@@ -2,6 +2,7 @@ import psycopg2
 from database.database_helper import DatabaseHelper
 from utils.string_utils import StringUtils
 from utils.exception_utils import ExceptionUtils
+from config import UserConfig
 
 # ------------------------------------------------------------------------------
 # TODO: Handle exception
@@ -51,29 +52,27 @@ class UserDao(object):
     def getSuperAdmin(self):
         query = '''SELECT id, lazada_user_name, lazada_user_id, lazada_api_key
                     FROM t_user
-                    WHERE lazada_user_id = 'info@zakos.vn' '''
+                    WHERE lazada_user_id = '{}' '''.format(UserConfig.SUPER_ADMIN)
         try:
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)
 
-            rows = cur.fetchall()
-            if not rows:
+            row = cur.fetchone()
+            if not row:
                 conn.close()
                 return ExceptionUtils.error('''Dont have any super admins''')
 
-            users = []
-            for row in rows:
-                users.append({
-                    'id': row[0],
-                    'username': row[1],  # Using lazada user name instead.
-                    'lazada_user_name': row[1],
-                    'lazada_user_id': row[2],
-                    'lazada_api_key': row[3]
-                })
+            user = {
+                'id': row[0],
+                'username': row[1],  # Using lazada user name instead.
+                'lazada_user_name': row[1],
+                'lazada_user_id': row[2],
+                'lazada_api_key': row[3]
+            }
 
             conn.close()
-            return users
+            return user
         except Exception as ex:
             return ExceptionUtils.error('''Get super admin exception: {}'''.format(str(ex)))
 

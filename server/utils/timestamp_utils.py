@@ -12,3 +12,15 @@ class TimestampUtils:
     now = datetime.utcnow()
     delta = now - epoch
     return int(delta.total_seconds())
+
+  @classmethod
+  def getCurrentHour(sefl):
+    now = datetime.utcnow()
+    delta = now - epoch
+    return int(delta.hour)
+
+  @classmethod
+  def getCurrentMinute(sefl):
+    now = datetime.utcnow()
+    delta = now - epoch
+    return int(delta.minute)

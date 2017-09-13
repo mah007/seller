@@ -272,9 +272,9 @@ function validateAddNewPriceByTimeValues() {
         return false;
     }
 
-    var priceByTime = '[{"from": {0}:{1}, "to": {2}:{3}, "price": {4},' +
-    '{"from": {5}:{6}, "to": {7}:{8}, "price": {9},' +
-    '{"from": {10}:{11}, "to": {12}:{13}, "price": {14}}]';
+    var priceByTime = '[{"from": "{0}:{1}", "to": "{2}:{3}", "price": {4}},' +
+    '{"from": "{5}:{6}", "to": "{7}:{8}", "price": {9}},' +
+    '{"from": "{10}:{11}", "to": "{12}:{13}", "price": {14}}]';
     priceByTime = priceByTime.format(txtFromHour01, txtFromMinute01, txtToHour01, txtToMinute01, txtPrice01,
                                      txtFromHour02, txtFromMinute02, txtToHour02, txtToMinute02, txtPrice02,
                                      txtFromHour03, txtFromMinute03, txtToHour03, txtToMinute03, txtPrice03);

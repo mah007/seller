@@ -8,6 +8,9 @@ from database.sku_dao import SkuDao
 from lazada_api.lazada_sku_api import LazadaSkuApi
 from managers.sku_manager import SkuManager
 
+skudao = SkuDao()
+skuManager = SkuManager()
+lazadaSkuApi = LazadaSkuApi()
 
 class AutoPriceWorker(threading.Thread):
 
@@ -18,8 +21,6 @@ class AutoPriceWorker(threading.Thread):
 	def run(self):
 		user = self.kwargs['user']
 		print('''*********** {}: is running ***********'''.format(user['lazada_user_name']))
-		skudao = SkuDao()
-		skuManager = SkuManager()
 		skus = skudao.getActiveSku(user)
 		if (skus == None):
 			return
@@ -66,12 +67,10 @@ class AutoPriceWorker(threading.Thread):
 	# 3. Add history
 	#-----------------------------------------------------------------------------
 	def doUpdatePriceAndAddHistory(self, sku, user, enemies, newSpecialPrice):
-		skuManager = SkuManager()
 		sku['updated_at'] = int(round(time.time()))
 		sku['special_price'] = newSpecialPrice
 
 		# Update product special price on lazada
-		lazadaSkuApi = LazadaSkuApi()
 		lazadaProduct = lazadaSkuApi.updateProductSpecialPrice(sku, user, newSpecialPrice)
 		if 'error' in lazadaProduct:
 			# Add filed history
@@ -80,7 +79,6 @@ class AutoPriceWorker(threading.Thread):
 			return
 
 		# Update internal product price
-		skuDao = SkuDao()
 		skuDao.updateSpecialPrice(sku)
 		# Add success history
 		skuManager.insertHistory(sku, enemies, user, 0) 		# 0 is marked that we updated special price successful

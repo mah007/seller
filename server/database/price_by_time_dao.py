@@ -8,9 +8,10 @@ class PriceByTimeDao(object):
         query = '''CREATE TABLE IF NOT EXISTS price_by_time(
                     id              INT AUTO_INCREMENT primary key NOT NULL,
                     sku             VARCHAR(100)        NOT NULL,
-                    name            VARCHAR(300)        NOT NULL,
-                    link            VARCHAR(300)        NOT NULL,
-                    price_by_time   VARCHAR(300)        NOT NULL,
+                    name            VARCHAR(300)        ,
+                    link            VARCHAR(300)        ,
+                    price_by_time   VARCHAR(300)        ,
+                    special_price   INTEGER             ,
                     user_id         INTEGER             NOT NULL
                     );'''
         DatabaseHelper.execute(query)
@@ -19,10 +20,11 @@ class PriceByTimeDao(object):
     # Insert price by time
     # --------------------------------------------------------------------------
     def insert(self, sku, user):
-        query = '''INSERT INTO price_by_time(sku, name, link, price_by_time, user_id)
-                    VALUES ('{}', '{}', '{}', '{}', '{}')'''.format(
+        query = '''INSERT INTO price_by_time(sku, name, link, price_by_time, special_price, user_id)
+                    VALUES ('{}', '{}', '{}', '{}', '{}', '{}')'''.format(
                     StringUtils.toString(sku['sku']), StringUtils.toString(sku['name']),
-                    StringUtils.toString(sku['link']), sku['price_by_time'], user['id'])
+                    StringUtils.toString(sku['link']), sku['price_by_time'],
+                    sku['special_price'], user['id'])
         try:
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
@@ -41,7 +43,18 @@ class PriceByTimeDao(object):
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:
-            return ExceptionUtils.error('''User: {}-{}, update price by time: {}, exception: {}'''.format(user['username'], user['id'], sku['id'], str(ex)))
+            return ExceptionUtils.error('''User: {}-{}, update sku: {}, exception: {}'''.format(user['username'], user['id'], sku['id'], str(ex)))
+
+    def updateSpecialPrice(self, sku, user, newSpecialPrice):
+        query = '''UPDATE price_by_time
+                    set special_price = '{}'
+                    WHERE id = '{}'
+                '''.format(newSpecialPrice, sku['id'])
+        try:
+            DatabaseHelper.execute(query)
+            return ExceptionUtils.success()
+        except Exception as ex:
+            return ExceptionUtils.error('''User: {}-{}, update special price of sku: {}, exception: {}'''.format(user['username'], user['id'], sku['id'], str(ex)))
 
     # --------------------------------------------------------------------------
     # Delete price by time
