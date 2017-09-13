@@ -20,12 +20,12 @@ def insertPriceByTime():
     return make_response(jsonify({'error': 'Missing json parameters value'}), 404)
   if not 'sku' in request.json:
     return make_response(jsonify({'error': 'Missing json parameter'}), 404)
-  if not 'price_balance' in request.json:
+  if not 'price_by_time' in request.json:
     return make_response(jsonify({'error': 'Missing json parameter'}), 404)
 
   sku = {
     "sku": request.json['sku'],
-    "price_balance": request.json['price_balance']
+    "price_by_time": request.json['price_by_time']
   }
 
   priceByTimeManager = PriceByTimeManager()
