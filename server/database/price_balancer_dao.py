@@ -78,7 +78,6 @@ class PriceBalancerDao(object):
             conn.close()
             return skus
         except Exception as ex:
-            print(ex)
             return ExceptionUtils.error('''User: {}-{}, get balancer skus exception: {}'''.format(user['username'], user['id'], str(ex)))
 
 

@@ -14,7 +14,7 @@ from time import sleep
 from lazada_api.lazada_order_api import LazadaOrderApi
 
 app = Flask(__name__)
-CORS(app)	# Should allow CORS only for our domain.
+CORS(app) # Should allow CORS only for our domain.
 app.register_blueprint(SkuAPI)
 app.register_blueprint(UserAPI)
 app.register_blueprint(OrderAPI)
