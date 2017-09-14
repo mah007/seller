@@ -27,7 +27,7 @@ pip3 install pymysql
 echo "Install bycrypt"
 pip3 install bcrypt==3.1.0
 
-echo "Install pytz"
+echo "Install python timezone"
 pip3 install pytz
 
 # For bycrypt dependencies
