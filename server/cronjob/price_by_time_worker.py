@@ -39,12 +39,15 @@ class PriceByTimeWorker(threading.Thread):
     if not priceByTimes or len(priceByTimes) <= 0:
       return
 
+    newSpecialPrice = priceByTimeSku['special_price']
     for priceByTime in priceByTimes:
       isOnTime = self.isOnTime(priceByTime)
-      if isOnTime == False:
-        continue
+      if isOnTime == True:
+        newSpecialPrice = priceByTime['price']
 
-      self.updateSpecialPrice(user, priceByTimeSku, priceByTime)
+    print('''newSpecialPrice: {} priceByTimeSku: {} '''.format(newSpecialPrice, priceByTimeSku['special_price']))
+    if newSpecialPrice != priceByTimeSku['special_price']:
+      self.updateSpecialPrice(user, priceByTimeSku, newSpecialPrice)
 
   #-----------------------------------------------------------------------------
   # Only call this function when the current time is on time of PriceBytime
@@ -53,12 +56,8 @@ class PriceByTimeWorker(threading.Thread):
   # 2. Update prciceByTime special on local.
   # Return Void
   #-----------------------------------------------------------------------------
-  def updateSpecialPrice(self, user, priceByTimeSku, priceByTime):
-    if not priceByTime:                                       # Must not happen
-      return
-    newSpecialPrice = int(priceByTime['price'])
-    if priceByTimeSku['special_price'] == newSpecialPrice:   # That must be updated before
-      return
+  def updateSpecialPrice(self, user, priceByTimeSku, newSpecialPrice):
+    print('''Update sku: {} with special price: {} '''.format(priceByTimeSku['sku'], newSpecialPrice))
 
     # Update lazada special price
     result = lazadaSkuApi.updateProductSpecialPrice(priceByTimeSku, user, newSpecialPrice)
@@ -88,16 +87,14 @@ class PriceByTimeWorker(threading.Thread):
 
     hour = int(timeArray[0])
     minute = int(timeArray[1])
-    currentHour = TimestampUtils.getCurrentHour()
-    currentMinute = TimestampUtils.getCurrentMinute()
+    currentHour = TimestampUtils.getVietNamCurrentHour()
+    currentMinute = TimestampUtils.getVietnamCurrentMinute()
     print(hour, minute, currentHour, currentMinute)
 
-    if currentHour < hour:
-      return False
-    if currentMinute < minute:
-      return False
+    if currentHour - hour >= 0 and currentMinute - minute >= 0:
+      return True
 
-    return True
+    return False
 
 
 

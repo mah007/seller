@@ -1,4 +1,3 @@
-import psycopg2
 from database.database_helper import DatabaseHelper
 from utils.string_utils import StringUtils
 from utils.exception_utils import ExceptionUtils

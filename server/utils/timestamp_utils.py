@@ -1,3 +1,4 @@
+import pytz
 from datetime import datetime, timedelta
 
 
@@ -14,13 +15,13 @@ class TimestampUtils:
     return int(delta.total_seconds())
 
   @classmethod
-  def getCurrentHour(sefl):
-    now = datetime.utcnow()
-    delta = now - epoch
-    return int(delta.hour)
+  def getVietNamCurrentHour(sefl):
+    tz = pytz.timezone('Asia/Saigon')
+    vietnam_now = datetime.now(tz)
+    return int(vietnam_now.hour)
 
   @classmethod
-  def getCurrentMinute(sefl):
-    now = datetime.utcnow()
-    delta = now - epoch
-    return int(delta.minute)
+  def getVietnamCurrentMinute(sefl):
+    tz = pytz.timezone('Asia/Saigon')
+    vietnam_now = datetime.now(tz)
+    return int(vietnam_now.minute)
