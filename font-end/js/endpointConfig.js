@@ -131,13 +131,13 @@ var EndpointConfig = function() {
       return endpointUrl + '/price-by-time/insert?token=' + $.cookie('token');
   }
 
-  // EndpointConfig.prototype.generateGetAllPriceBalancer = function() {
-  //     return endpointUrl + '/price-balancer/get-all?token=' + $.cookie('token');
-  // }
+  EndpointConfig.prototype.generateGetAllPriceByTime = function() {
+      return endpointUrl + '/price-by-time/get-all?token=' + $.cookie('token');
+  }
 
-  // EndpointConfig.prototype.generateDeletePriceBalancer = function() {
-  //     return endpointUrl + '/price-balancer/delete?token=' + $.cookie('token');
-  // }
+  EndpointConfig.prototype.generateDeletePriceByTime = function() {
+      return endpointUrl + '/price-by-time/delete?token=' + $.cookie('token');
+  }
 
 }
 

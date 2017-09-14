@@ -94,11 +94,10 @@ def getAllSkuOfPriceByTime():
     return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
   if not 'token' in request.args:
     return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
-  print(request.args.get('token'))
+  
 
   priceByTimeManager = PriceByTimeManager()
   result = priceByTimeManager.getAll(request.args.get('token'))
-  print(result)
   if 'success' in result:
     return make_response(jsonify(result), 201)
   else:

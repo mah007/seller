@@ -74,7 +74,11 @@
         <!-- END HEADER INNER -->
     </div>
     <!-- END HEADER -->
-    <div class="clearfix"></div></br></br></br></br>
+    <div class="clearfix"></div>
+    </br>
+    </br>
+    </br>
+    </br>
     <!-- BEGIN CONTAINER -->
     <div class="page-container">
         <!-- BEGIN SIDEBAR -->
@@ -179,7 +183,8 @@
                         </div>
                         <div class="col-lg-3"></div>
                     </div>
-                </div> <!-- END ADD NEW -->
+                </div>
+                <!-- END ADD NEW -->
                 </br>
                 <div class="row">
                     <p class="error" id="errorLog"></p>
@@ -189,18 +194,21 @@
                     <table id="table_sku" class="table table-hover">
                         <thead>
                             <tr>
-                                <th style="vertical-align:top;" class="text-left">SKU</th>
-                                <th style="vertical-align:top;width: 30%;" class="text-left">Name</th>
-                                <th style="vertical-align:top;" class="text-left">Current Price</th>
+                                <th style="vertical-align:top;" class="text-left">ID</th>
+                                <th style="vertical-align:top;width: 15%;" class="text-left">SKU</th>
+                                <th style="vertical-align:top;width: 20%;" class="text-left">Name</th>
+                                <th style="vertical-align:top;width: 20%;" class="text-left">Link</th>
                                 <th style="vertical-align:top;" class="text-left">Price by time</th>
+                                <th style="vertical-align:top;" class="text-left">Special price</th>
                                 <th style="vertical-align:top;width:180px;" class="text-left">Quản trị</th>
                             </tr>
                         </thead>
-                        <tbody id="tbody_sku">
+                        <tbody id="tbody_price">
                             <!-- WILL BE FILL DATA IN HERE -->
                         </tbody>
                     </table>
-                </div> <!-- END TABLE -->
+                </div>
+                <!-- END TABLE -->
                 <!-- START PAGINATION -->
                 <div class="row">
                     <div class="col-sm-6">
@@ -210,10 +218,13 @@
                             <li class="active"><a href="javascript:;">1</a></li>
                         </ul>
                     </div>
-                </div> <!-- END PAGINATION -->
-            </div> <!-- END CONTENT -->
+                </div>
+                <!-- END PAGINATION -->
+            </div>
+            <!-- END CONTENT -->
         </div>
-    </div> <!-- END CONTAINER -->
+    </div>
+    <!-- END CONTAINER -->
     <!-- BEGIN FOOTER -->
     <div class="page-footer">
         <!-- TO BE DESIGN FOR FOOTER HERE -->
@@ -245,13 +256,29 @@
     <!-- END JAVASCRIPTS -->
     <script src="../price-by-time/price_by_time.js" type="text/javascript"></script>
     <!-- Templates -->
+    <script id="price-content-template" type="text/x-handlebars-template">
+        {{#each data}}
+        <tr data-id="{{id}}" data-sku={{sku}} data-name={{name}} data-link={{link}} data-price_by_time={{price_by_time}} data-special_price={{special_price}}>
+            <td>{{id}}</td>
+            <td class="text-left">{{sku}}</td>
+            <td class="text-left">{{name}}</td>
+            <td class="text-left">{{link}}</td>
+            <td class="text-left"><b>{{price_by_time}}</b> VNĐ</td>
+            <td class="text-left"><b>{{special_price}}</b> VNĐ</td>
+            <td class="text-left">
+                <button type="button" class="btn btn-circle blue btnedt" style="margin: 0 2px 4px;"><i class="fa fa-edit"></i></button>
+                <button type="button" class="btn btn-circle red btndel" style="margin: 0 2px 4px;"><i class="fa fa-close"></i></button>
+            </td>
+        </tr>
+        {{/each}}
+    </script>
     <script type="text/javascript">
-        jQuery(document).ready(function() {
+    jQuery(document).ready(function() {
         Metronic.init(); // init metronic core components
         Layout.init(); // init current layout
         Demo.init(); // init demo features
     });
-</script>
+    </script>
 </body>
 
 </html>
