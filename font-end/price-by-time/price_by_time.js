@@ -22,7 +22,13 @@ jQuery(document).ready(function() {
     // Init data
     getAndFillOutAllPriceByTime();
 
+    // Should focus SKU input
+    focusSKUInput();
 });
+
+function focusSKUInput() {
+    $('input[name=txtSku]').focus();
+}
 
 function validNull(selector) {
     if ($(selector).length > 0) {
@@ -176,6 +182,7 @@ $("#btnAddNew").click(function() {
         }),
         success: function(data) {
             console.log(data);
+            getAndFillOutAllPriceByTime();
         },
         error: function(error) {
             console.log(error);
@@ -203,18 +210,6 @@ function validateAddNewPriceByTimeValues() {
         $('input[name=txtFromMinute01]').addClass('has-error');
         return false;
     }
-    var txtToHour01 = $('input[name=txtToHour01]').val();
-    if (!txtToHour01) {
-        $('input[name=txtToHour01]').addClass('has-error');
-        console.log("txtToHour01");
-        return false;
-    }
-    var txtToMinute01 = $('input[name=txtToMinute01]').val();
-    if (!txtToMinute01) {
-        $('input[name=txtToMinute01]').addClass('has-error');
-        console.log("txtToMinute01");
-        return false;
-    }
     var txtPrice01 = $('input[name=txtPrice01]').val();
     if (!txtPrice01) {
         $('input[name=txtPrice01]').addClass('has-error');
@@ -229,16 +224,6 @@ function validateAddNewPriceByTimeValues() {
     var txtFromMinute02 = $('input[name=txtFromMinute02]').val();
     if (!txtFromMinute02) {
         $('input[name=txtFromMinute02]').addClass('has-error');
-        return false;
-    }
-    var txtToHour02 = $('input[name=txtToHour02]').val();
-    if (!txtToHour02) {
-        $('input[name=txtToHour02]').addClass('has-error');
-        return false;
-    }
-    var txtToMinute02 = $('input[name=txtToMinute02]').val();
-    if (!txtToMinute02) {
-        $('input[name=txtToMinute02]').addClass('has-error');
         return false;
     }
     var txtPrice02 = $('input[name=txtPrice02]').val();
@@ -256,28 +241,18 @@ function validateAddNewPriceByTimeValues() {
         $('input[name=txtFromMinute03]').addClass('has-error');
         return false;
     }
-    var txtToHour03 = $('input[name=txtToHour03]').val();
-    if (!txtToHour03) {
-        $('input[name=txtToHour03]').addClass('has-error');
-        return false;
-    }
-    var txtToMinute03 = $('input[name=txtToMinute03]').val();
-    if (!txtToMinute03) {
-        $('input[name=txtToMinute03]').addClass('has-error');
-        return false;
-    }
     var txtPrice03 = $('input[name=txtPrice03]').val();
     if (!txtPrice03) {
         $('input[name=txtPrice03]').addClass('has-error');
         return false;
     }
 
-    var priceByTime = '[{"from": "{0}:{1}", "to": "{2}:{3}", "price": {4}},' +
-        '{"from": "{5}:{6}", "to": "{7}:{8}", "price": {9}},' +
-        '{"from": "{10}:{11}", "to": "{12}:{13}", "price": {14}}]';
-    priceByTime = priceByTime.format(txtFromHour01, txtFromMinute01, txtToHour01, txtToMinute01, txtPrice01,
-        txtFromHour02, txtFromMinute02, txtToHour02, txtToMinute02, txtPrice02,
-        txtFromHour03, txtFromMinute03, txtToHour03, txtToMinute03, txtPrice03);
+    var priceByTime = '[{"from": "{0}:{1}", "price": {2}},' +
+                        '{"from": "{3}:{4}", "price": {5}},' +
+                        '{"from": "{6}:{7}", "price": {8}}]';
+    priceByTime = priceByTime.format(txtFromHour01, txtFromMinute01, txtPrice01,
+                                    txtFromHour02, txtFromMinute02, txtPrice02,
+                                    txtFromHour03, txtFromMinute03, txtPrice03);
     return priceByTime;
 }
 
@@ -295,6 +270,7 @@ function getAndFillOutAllPriceByTime() {
             var contentHtml = Handlebars.compile(template);
             $("#tbody_price").html(contentHtml(data));
             enableSwitchery();
+            focusSKUInput();
         },
         error: function(error) {
             console.log(error);
