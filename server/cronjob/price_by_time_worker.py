@@ -91,7 +91,9 @@ class PriceByTimeWorker(threading.Thread):
     currentMinute = TimestampUtils.getVietnamCurrentMinute()
     print(hour, minute, currentHour, currentMinute)
 
-    if currentHour - hour >= 0 and currentMinute - minute >= 0:
+    if currentHour - hour > 0:
+      return True
+    if currentHour - hour == 0 and currentMinute - minute >= 0:
       return True
 
     return False
