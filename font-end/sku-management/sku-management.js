@@ -21,6 +21,7 @@ jQuery(document).ready(function() {
     // Init data
     getAndFillOutAllSku();
     getAndFillOutHistory();
+    getAndFillOutAllPriceByTime();
 
 
     if($('.btntab1submit').length > 0) {
@@ -473,7 +474,6 @@ function getAndFillOutHistory() {
         }
     });
 };
-
 
 //-------------------------------------------------------------------------------------
 // Logout

@@ -86,6 +86,7 @@ class PriceByTimeDao(object):
                     "name": row[2],
                     "link": row[3],
                     "price_by_time": row[4],
+                    "special_price": row[5]
                 })
 
             conn.close()

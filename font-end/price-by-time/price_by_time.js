@@ -20,7 +20,7 @@ jQuery(document).ready(function() {
     $("#menuContent").load("../menuleft.html");
 
     // Init data
-    // getAndFillOutAllPriceBalancer();
+    getAndFillOutAllPriceByTime();
 
 });
 
@@ -37,7 +37,7 @@ function validNull(selector) {
 }
 
 if (!String.prototype.format) {
-    String.prototype.format = function () {
+    String.prototype.format = function() {
         var args = arguments;
         var str = this;
 
@@ -45,30 +45,30 @@ if (!String.prototype.format) {
             for (var property in obj)
                 if (obj.hasOwnProperty(property))
                     //replace all instances case-insensitive
-                str = str.replace(new RegExp(escapeRegExp("{" + property + "}"), 'gi'), String(obj[property]));
-            }
+                    str = str.replace(new RegExp(escapeRegExp("{" + property + "}"), 'gi'), String(obj[property]));
+        }
 
-            function escapeRegExp(string) {
-                return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
-            }
+        function escapeRegExp(string) {
+            return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+        }
 
-            function replaceByArray(arrayLike) {
-                for (var i = 0, len = arrayLike.length; i < len; i++)
-                    str = str.replace(new RegExp(escapeRegExp("{" + i + "}"), 'gi'), String(arrayLike[i]));
-            }
+        function replaceByArray(arrayLike) {
+            for (var i = 0, len = arrayLike.length; i < len; i++)
+                str = str.replace(new RegExp(escapeRegExp("{" + i + "}"), 'gi'), String(arrayLike[i]));
+        }
 
-            if (!arguments.length || arguments[0] === null || arguments[0] === undefined)
-                return str;
-            else if (arguments.length == 1 && Array.isArray(arguments[0]))
-                replaceByArray(arguments[0]);
-            else if (arguments.length == 1 && typeof arguments[0] === "object")
-                replaceByObjectProperies(arguments[0]);
-            else
-                replaceByArray(arguments);
-
+        if (!arguments.length || arguments[0] === null || arguments[0] === undefined)
             return str;
-        };
-    }
+        else if (arguments.length == 1 && Array.isArray(arguments[0]))
+            replaceByArray(arguments[0]);
+        else if (arguments.length == 1 && typeof arguments[0] === "object")
+            replaceByObjectProperies(arguments[0]);
+        else
+            replaceByArray(arguments);
+
+        return str;
+    };
+}
 
 //-------------------------------------------------------------------------------------
 // Reload furetures: Edit, Delete, Insert, SwitchSate
@@ -93,7 +93,7 @@ function enableSwitchery() {
             }, function() {
                 $.ajax({
                     method: 'POST',
-                    url: endpoint.generateDeletePriceBalancer(),
+                    url: endpoint.generateDeletePriceByTime(),
                     contentType: "application/json",
                     data: JSON.stringify({
                         id: id
@@ -273,34 +273,31 @@ function validateAddNewPriceByTimeValues() {
     }
 
     var priceByTime = '[{"from": "{0}:{1}", "to": "{2}:{3}", "price": {4}},' +
-    '{"from": "{5}:{6}", "to": "{7}:{8}", "price": {9}},' +
-    '{"from": "{10}:{11}", "to": "{12}:{13}", "price": {14}}]';
+        '{"from": "{5}:{6}", "to": "{7}:{8}", "price": {9}},' +
+        '{"from": "{10}:{11}", "to": "{12}:{13}", "price": {14}}]';
     priceByTime = priceByTime.format(txtFromHour01, txtFromMinute01, txtToHour01, txtToMinute01, txtPrice01,
-                                     txtFromHour02, txtFromMinute02, txtToHour02, txtToMinute02, txtPrice02,
-                                     txtFromHour03, txtFromMinute03, txtToHour03, txtToMinute03, txtPrice03);
+        txtFromHour02, txtFromMinute02, txtToHour02, txtToMinute02, txtPrice02,
+        txtFromHour03, txtFromMinute03, txtToHour03, txtToMinute03, txtPrice03);
     return priceByTime;
 }
 
 //-------------------------------------------------------------------------------------
 // Get and fill out all price balancer
 //-------------------------------------------------------------------------------------
-// function getAndFillOutAllPriceBalancer() {
-//     $.ajax({
-//         method:'GET',
-//         url: endpoint.generateGetAllPriceBalancer(),
-//         contentType: "application/json",
-//         success: function(data) {
-//             console.log(data.data);
-//             var template = $("#price-content-template").html();
-//             var contentHtml = Handlebars.compile(template);
-//             $("#tbody_price").html(contentHtml(data));
-//             enableSwitchery();
-//         },
-//         error: function(error) {
-//             console.log(error);
-//         }
-//     });
-// };
-
-
-
+function getAndFillOutAllPriceByTime() {
+    $.ajax({
+        method: 'GET',
+        url: endpoint.generateGetAllPriceByTime(),
+        contentType: "application/json",
+        success: function(data) {
+            console.log(data);
+            var template = $("#price-content-template").html();
+            var contentHtml = Handlebars.compile(template);
+            $("#tbody_price").html(contentHtml(data));
+            enableSwitchery();
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+};

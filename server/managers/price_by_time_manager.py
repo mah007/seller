@@ -2,6 +2,7 @@ from database.price_by_time_dao import PriceByTimeDao
 from managers.manager_helper import ManagerHelper
 from lazada_api.lazada_sku_api import LazadaSkuApi
 from utils.response_utils import ResponseUtils
+from managers.response_helper import ResponseHelper
 
 class PriceByTimeManager(object):
 
@@ -66,7 +67,7 @@ class PriceByTimeManager(object):
     return ResponseUtils.generateSuccessResponse()
 
   #-----------------------------------------------------------------------------
-  # get all price balancers
+  # get all price by time
   #-----------------------------------------------------------------------------
   def getAll(self, token):
     user = ManagerHelper.validateToken(token)
@@ -75,10 +76,10 @@ class PriceByTimeManager(object):
 
     priceByTime = PriceByTimeDao()
     result = priceByTime.getAll(user)
-    if 'error' in result:
-      return ResponseUtils.generateErrorResponse(result['error'])
-
-    return ResponseUtils.generateSuccessResponse(result)
+    if result:
+      return ResponseHelper.generateSuccessResponse(result)
+    else:
+      return ResponseHelper.generateErrorResponse("Error")
 
 
 
