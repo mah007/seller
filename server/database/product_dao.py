@@ -37,13 +37,18 @@ class ProductDao(object):
                             name, url, status, seller_sku, shop_sku, image,
                             package_width, package_height, package_weight, brand, model, primary_category, 
                             created_time, sku_id, user_id, quantity, original_price)
-                        VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}','{}', '{}', '{}', '{}', '{}')
-                    '''.format(product['Attributes']['name'], product['Skus'][0]['Url'],
-                                product['Skus'][0]['Status'], product['Skus'][0]['SellerSku'],
-                                product['Skus'][0]['ShopSku'], product['Skus'][0]['Images'][0],
-                                product['Skus'][0]['package_width'], product['Skus'][0]['package_height'],
-                                product['Skus'][0]['package_weight'], product['Attributes']['brand'],
-                                product['Attributes']['model'], product['PrimaryCategory'], user['id'], 0, 0)
+                        VALUES ('{}', '{}', '{}', '{}', '{}', '{}', 
+                                '{}', '{}', '{}', '{}', '{}', '{}', 
+                                '{}', '{}', '{}', '{}', '{}', '{}', '{}')
+                    '''.format(product['name'], product['url'], product['status'],
+                           product['seller_sku'], product['shop_sku'],
+                           product['image'], product['package_width'],
+                           product['package_height'], product['package_weight'],
+                           product['brand'], product['model'], 
+                           product['primary_category'],
+                           product['created_time'], product['shop_sku'], user['user_id'],
+                           0, 0)
+            print(query)
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:
@@ -147,9 +152,11 @@ class ProductDao(object):
                         quantity = '{}', original_price = '{}'
                     WHERE shop_sku = '{}'
                 '''.format(product['name'], product['url'], product['status'],
-                           order['seller_sku'],
+                           product['seller_sku'],
                            product['image'], product['package_width'],
-                           product['brand'], product['primary_category'],
+                           product['package_height'], product['package_weight'],
+                           product['brand'], product['model'], 
+                           product['primary_category'],
                            product['created_time'], product['sku_id'], product['user_id'],
                            product['quantity'], product['original_price'], product['shop_sku'])
         try:

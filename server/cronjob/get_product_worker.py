@@ -6,6 +6,7 @@ from config import ConstantConfig, LazadaAPI
 from database.constant_dao import ConstantDao
 from lazada_api.lazada_product_api import LazadaProductApi
 from database.product_dao import ProductDao
+from utils.convert_helper import ConvertHelper
 
 constantDao = ConstantDao()
 lazadaProductApi = LazadaProductApi()
@@ -60,11 +61,12 @@ class GetProductWorker(threading.Thread):
 
     # Insert or update to our database
     for product in products:
-      isProductExist = productDao.isProductExist(user, product['id'])
+      isProductExist = productDao.isProductExist(user, product['Skus'][0]['ShopSku'])
       result = {}
       if isProductExist == True:
         result = productDao.updateProductWithLazadaProduct(user, ConvertHelper.convertLazadaProductToProduct(product))
       else:
+        print("start insert")
         result = productDao.insert(user, ConvertHelper.convertLazadaProductToProduct(product))
       if 'error' in result:
         print(result)
