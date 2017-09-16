@@ -48,10 +48,8 @@ class GetProductWorker(threading.Thread):
   #-----------------------------------------------------------------------------
   def getProductFromLazadaAndInsertToOurDatabase(self, user, productOffset):
     # Get lazada products by offset
-    print("Start get product from lazada")
     products = lazadaProductApi.getProducts(user, productOffset)
     if 'error' in products:
-      print(products)
       return False
     if len(products) <= 0:
       print('''{} Reach to the end with offset {}'''.format(user['lazada_user_name'], productOffset))
@@ -61,15 +59,11 @@ class GetProductWorker(threading.Thread):
 
     # Insert or update to our database
     for product in products:
-      # print(product)
-      print("Name: ")
-      print(product['Attributes']['name'])
       isProductExist = productDao.isProductExist(user, product['Skus'][0]['ShopSku'])
       result = {}
       if isProductExist == True:
         result = productDao.updateProductWithLazadaProduct(user, ConvertHelper.convertLazadaProductToProduct(product))
       else:
-        print("start insert")
         result = productDao.insert(user, ConvertHelper.convertLazadaProductToProduct(product))
       if 'error' in result:
         print(result)

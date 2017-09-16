@@ -11,11 +11,10 @@ if __name__ == "__main__":
   if (superAdmins):
     clone = GetProductWorker({"user": superAdmins})
     try:
-      # clone.daemon = True
       clone.start()
     except Exception as ex:
       clone.join(0)
-      print ("Error: unable to start thread: ", ex)
+      print ("Error: Unable to get products from lazada ", ex)
 
 
 

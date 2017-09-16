@@ -49,7 +49,6 @@ class ProductDao(object):
                            product['primary_category'],
                            product['created_time'], product['shop_sku'], user['id'],
                            0, 0)
-            print(query)
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:
