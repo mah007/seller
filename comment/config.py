@@ -8,3 +8,4 @@ class ExcelInputData(object):
     COLUMN_A = 'A'
     COLUMN_B = 'B'
     COLUMN_C = 'C'
+    SCROLL_PAUSE_TIME = 1.0

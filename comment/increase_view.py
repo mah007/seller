@@ -26,10 +26,10 @@ class IncreaseView:
     def order_product(self, driver):
         submitButton = driver.find_element_by_class_name('btn-checkout col submit_btn mtssel-cart-checkout-button')
         submitButton.click()
-    
+
     def how_to_buy(self, driver):
         submitButton = driver.find_element_by_class_name('txt-howtobuy')
-        submitButton.click()    
+        submitButton.click()
 
     def go_to_store(self, driver):
         submitButton = driver.find_element_by_xpath("//*[@id='prod_content_wrapper']/div[2]/div[3]/div[3]/a")
@@ -55,7 +55,7 @@ class IncreaseView:
             self.scroll_down(driver)
             self.scroll_up(driver)
             self.click_like(driver)
-            
+
             random = randint(0,5)
             print(random)
             if random == 0:
@@ -71,7 +71,7 @@ class IncreaseView:
             elif random == 5:
                 self.click_like(driver)
 
-            
+
 
         except Exception as ex:
             print('''---// Increasing view got exception: {} '''.format(ex))

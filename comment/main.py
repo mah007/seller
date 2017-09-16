@@ -3,6 +3,7 @@ from selenium.webdriver.common.keys import Keys
 from login import Login
 from register import Register
 from comment import Comment
+from increase_view import IncreaseView
 from importer.excel import ImportExcel
 
 if __name__ == "__main__":
@@ -29,6 +30,7 @@ if __name__ == "__main__":
     login = Login()
     register = Register()
     comment = Comment()
+    increaseView = IncreaseView()
 
     j = 0;
     for i in range(13, 25):
@@ -36,10 +38,11 @@ if __name__ == "__main__":
         if resutl is not None:
             resutl = register.performRegister(driver, accounts[i])
             if resutl is None:
-                comment.giveComment(driver, accounts[i], product, comments[j])
+                # comment.giveComment(driver, accounts[i], product, comments[j])
                 j = j + 1
         else:
-            comment.giveComment(driver, accounts[i], product, comments[j])
+            # comment.giveComment(driver, accounts[i], product, comments[j])
+            increaseView.performIncrease(driver, account[i], product)
             j = j + 1
 
         if j == 2:
