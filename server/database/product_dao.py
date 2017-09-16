@@ -23,7 +23,7 @@ class ProductDao(object):
                 model               VARCHAR(50)     NOT NULL,
                 primary_category    INTEGER         NOT NULL,
                 created_time        VARCHAR(30)     NOT NULL,   # Lazada created time
-                sku_id              INTEGER         NOT NULL,
+                sku_id              VARCHAR(30)         NOT NULL,
                 user_id             INTEGER         NOT NULL
                 );'''
         DatabaseHelper.execute(query)
@@ -31,22 +31,23 @@ class ProductDao(object):
     # --------------------------------------------------------------------------
     # Insert Product
     # --------------------------------------------------------------------------
-    def insert(self, product, user):
+    def insert(self, user, product):
         try:
+            print(product)
             query = '''INSERT INTO product(
                             name, url, status, seller_sku, shop_sku, image,
                             package_width, package_height, package_weight, brand, model, primary_category, 
                             created_time, sku_id, user_id, quantity, original_price)
                         VALUES ('{}', '{}', '{}', '{}', '{}', '{}', 
                                 '{}', '{}', '{}', '{}', '{}', '{}', 
-                                '{}', '{}', '{}', '{}', '{}', '{}', '{}')
+                                '{}', '{}', '{}', '{}', '{}')
                     '''.format(product['name'], product['url'], product['status'],
                            product['seller_sku'], product['shop_sku'],
                            product['image'], product['package_width'],
                            product['package_height'], product['package_weight'],
                            product['brand'], product['model'], 
                            product['primary_category'],
-                           product['created_time'], product['shop_sku'], user['user_id'],
+                           product['created_time'], product['shop_sku'], user['id'],
                            0, 0)
             print(query)
             DatabaseHelper.execute(query)

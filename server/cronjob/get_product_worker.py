@@ -61,6 +61,9 @@ class GetProductWorker(threading.Thread):
 
     # Insert or update to our database
     for product in products:
+      # print(product)
+      print("Name: ")
+      print(product['Attributes']['name'])
       isProductExist = productDao.isProductExist(user, product['Skus'][0]['ShopSku'])
       result = {}
       if isProductExist == True:
