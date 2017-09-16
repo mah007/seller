@@ -25,7 +25,7 @@ class PriceByTimeWorker(threading.Thread):
       print(priceByTimeSkus)
       return
 
-    for priceByTimeSku in priceByTimeSkus:
+    for priceByTimeSku in enumerate(priceByTimeSkus):
       if not priceByTimeSku['price_by_time']:
         continue
 
@@ -40,12 +40,17 @@ class PriceByTimeWorker(threading.Thread):
       return
 
     newSpecialPrice = priceByTimeSku['special_price']
-    for priceByTime in priceByTimes:
-      isOnTime = self.isOnTime(priceByTime)
+    for index, priceByTime in priceByTimes:
+      isOnTime = False
+      if len(priceByTimeSkus) < index + 1:
+        isOnTime = self.isOnTime(priceByTime, priceByTimes[index + 1], False)
+      else:
+        isOnTime = self.isOnTime(priceByTime, priceByTimes[0], True)
+
       if isOnTime == True:
         newSpecialPrice = priceByTime['price']
 
-    print('''newSpecialPrice: {} priceByTimeSku: {} '''.format(newSpecialPrice, priceByTimeSku['special_price']))
+    print('''newSpecialPrice: {} currentSpecialPrice: {} '''.format(newSpecialPrice, priceByTimeSku['special_price']))
     if newSpecialPrice != priceByTimeSku['special_price']:
       self.updateSpecialPrice(user, priceByTimeSku, newSpecialPrice)
 
@@ -75,26 +80,30 @@ class PriceByTimeWorker(threading.Thread):
   # PriceByTime format: hour:minute ==> 10:45
   # Return Boolean
   #-----------------------------------------------------------------------------
-  def isOnTime(self, priceByTime):
-    if not priceByTime:
+  def isOnTime(self, priceByTime, nextPriceByTime, isNextDay):
+    if not priceByTime or not nextPriceByTime:
       return False
-    if not 'from' in priceByTime:
+    if not 'from' in priceByTime or not 'from' in nextPriceByTime:
       return False
 
     timeArray = priceByTime['from'].split(':')
-    if len(timeArray) != 2:
+    nextTimeArray = nextPriceByTime['from'].split(':')
+    if len(timeArray) != 2 or len(nextPriceByTime) != 2:
       return False
 
     hour = int(timeArray[0])
     minute = int(timeArray[1])
     currentHour = TimestampUtils.getVietNamCurrentHour()
     currentMinute = TimestampUtils.getVietnamCurrentMinute()
-    print(hour, minute, currentHour, currentMinute)
+    nextPriceByTimeHour = int(nextTimeArray[0])
+    print(hour, minute, currentHour, currentMinute, nextPriceByTimeHour)
 
     if currentHour - hour > 0:
-      return True
+      return True     # Set 3:30 and current time is 4:0
     if currentHour - hour == 0 and currentMinute - minute >= 0:
-      return True
+      return True     # Set 3:30 and current time is 3:40
+    if currentHour < nextPriceByTimeHour and isNextDay == True:
+      return True     # Set 21:30 and current time is 1:0 of next day.
 
     return False
 
