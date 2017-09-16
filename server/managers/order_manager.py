@@ -4,8 +4,8 @@ from managers.manager_helper import ManagerHelper
 from database.user_dao import UserDao
 from database.order_dao import OrderDao
 from lazada_api.lazada_order_api import LazadaOrderApi
-from managers.order_helper import OrderHelper
 from utils.response_utils import ResponseUtils
+from utils.convert_helper import ConvertHelper
 
 
 class OrderManager(object):
@@ -23,7 +23,7 @@ class OrderManager(object):
             return ResponseUtils.generateErrorResponse(errorArray)
 
         # Get orderNumer
-        orderNumber = OrderHelper.getOrderNumberFromBarcode(barcode)
+        orderNumber = ConvertHelper.getOrderNumberFromBarcode(barcode)
         if not orderNumber:
             errorArray = ResponseUtils.convertToArryError("Barcode is invalid !")
             return ResponseUtils.generateErrorResponse(errorArray)
@@ -36,7 +36,7 @@ class OrderManager(object):
             return ResponseUtils.generateErrorResponse(errorArray)
 
         # Parse to ladaza format: to get full info such as OrderItems
-        order = OrderHelper.convertOrderToLazadaOrder(order)
+        order = ConvertHelper.convertOrderToLazadaOrder(order)
         # Get orderItem by order
         lazadaOrderApi = LazadaOrderApi()
         lazadaOrderItems = lazadaOrderApi.getOrderItems(order, user)

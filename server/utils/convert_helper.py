@@ -2,7 +2,7 @@ import time
 import json
 from config import OrderConfig
 
-class OrderHelper:
+class ConvertHelper:
 
   @classmethod
   def getOrderNumberFromBarcode(sefl, barcode):
@@ -43,6 +43,29 @@ class OrderHelper:
   @classmethod
   def convertOrderToLazadaOrder(self, order):
     return json.loads(order['order_json'])
+
+  @classmethod
+  def convertLazadaProductToProduct(self, lazadaProduct):
+    product = {
+      "name": lazadaProduct['Attributes']['name'],
+      "url": lazadaProduct['Skus'][0]['Url'],
+      "status": lazadaProduct['Skus'][0]['Status'],
+      "quantity": 0,
+      "seller_sku": lazadaProduct['Skus'][0]['SellerSku'],
+      "shop_sku": lazadaProduct['Skus'][0]['ShopSku'],
+      "original_price": 0,
+      "image": json.dumps(lazadaProduct['Skus'][0]['Images'], ensure_ascii=False),
+      "package_width": lazadaProduct['Skus'][0]['package_width'],
+      "package_height": lazadaProduct['Skus'][0]['package_height'],
+      "package_weight": lazadaProduct['Skus'][0]['package_weight'],
+      "brand": lazadaProduct['Attributes']['brand'],
+      "model": lazadaProduct['Attributes']['model'],
+      "primary_category": lazadaProduct['PrimaryCategory'],
+      "created_time": "",
+      "sku_id": "",
+      "user_id": ""
+    }
+
 
 
 

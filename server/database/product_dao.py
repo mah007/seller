@@ -34,9 +34,9 @@ class ProductDao(object):
     def insert(self, product, user):
         try:
             query = '''INSERT INTO product(
-                            name, url, status, sellerSku, shopSku, image,
-                            width, height, weight, brand, model, primaryCategory,
-                            user_id, quantity, original_price)
+                            name, url, status, seller_sku, shop_sku, image,
+                            package_width, package_height, package_weight, brand, model, primary_category, 
+                            created_time, sku_id, user_id, quantity, original_price)
                         VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}','{}', '{}', '{}', '{}', '{}')
                     '''.format(product['Attributes']['name'], product['Skus'][0]['Url'],
                                 product['Skus'][0]['Status'], product['Skus'][0]['SellerSku'],
@@ -114,6 +114,50 @@ class ProductDao(object):
                     WHERE id = '{}'
                 '''.format(product['price'], product['id'])
         DatabaseHelper.execute(query)
+
+    # --------------------------------------------------------------------------
+    # Check Product exsits
+    # --------------------------------------------------------------------------
+    def isProductExist(self, user, productId):
+        query = '''SELECT id FROM product WHERE shop_sku = '{}' AND user_id = '{}'
+                '''.format(productId, user['id'])
+        try:
+            conn = DatabaseHelper.getConnection()
+            cur = conn.cursor()
+            cur.execute(query)
+            product = cur.fetchone()
+            result = False if not product else True;
+            conn.close()
+            return result
+        except Exception as ex:
+            print('''User: {}-{}, Check-Exist-Product exception: {}'''.format(user['username'], user['id'], str(ex)))
+            return False
+
+    # --------------------------------------------------------------------------
+    # Update Product with Lazada Product
+    # --------------------------------------------------------------------------
+    def updateProductWithLazadaProduct(self, user, product):
+        query = '''UPDATE product
+                    set name = '{}', url = '{}', status = '{}',
+                        seller_sku = '{}',
+                        image = '{}', package_width = '{}',
+                        package_height = '{}', package_weight = '{}',
+                        brand = '{}', model = '{}', primary_category = '{}',
+                        created_time = '{}', sku_id = '{}', user_id = '{}',
+                        quantity = '{}', original_price = '{}'
+                    WHERE shop_sku = '{}'
+                '''.format(product['name'], product['url'], product['status'],
+                           order['seller_sku'],
+                           product['image'], product['package_width'],
+                           product['brand'], product['primary_category'],
+                           product['created_time'], product['sku_id'], product['user_id'],
+                           product['quantity'], product['original_price'], product['shop_sku'])
+        try:
+            DatabaseHelper.execute(query)
+            return ExceptionUtils.success()
+        except Exception as ex:
+            return ExceptionUtils.error('''User: {}-{}, update Product exception: {}'''.format(user['username'], user['id'], str(ex)))
+
 
 
 

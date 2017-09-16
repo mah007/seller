@@ -2,10 +2,10 @@ from database.user_dao import UserDao
 from database.product_dao import ProductDao
 from database.constant_dao import ConstantDao
 from lazada_api.lazada_product_api import LazadaProductApi
-from managers.order_helper import OrderHelper
 from utils.response_utils import ResponseUtils
 from managers.response_helper import ResponseHelper
 from lazada_api.lazada_api_helper import LazadaApiHelper
+from utils.convert_helper import ConvertHelper
 
 class ProductManager(object):
     def initialize(self):

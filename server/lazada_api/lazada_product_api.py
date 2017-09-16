@@ -20,8 +20,8 @@ class LazadaProductApi(object):
 		'Version': '1.0',
 		'CreatedBefore': LazadaApiHelper.getCurrentUTCTime(),
 		'Filter': 'all',
-		'Limit': 20,
-		'Offset': constant[0]['offset']
+		'Limit': 30,
+		'Offset': constant
 		}
 
 		parameters['Signature'] = LazadaApiHelper.generateSignature(parameters, user['lazada_api_key'])
