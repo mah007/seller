@@ -6,19 +6,19 @@ from utils.response_utils import ResponseUtils
 from managers.response_helper import ResponseHelper
 from lazada_api.lazada_api_helper import LazadaApiHelper
 from utils.convert_helper import ConvertHelper
+from managers.manager_helper import ManagerHelper
 
 class ProductManager(object):
+
     def initialize(self):
         prroductDao = ProductDao()
         prroductDao.createTable()
 
-    def validateToken(self, token):
-        userDao = UserDao()
-        return userDao.getUser(token)
-
-
+    #---------------------------------------------------------------------------
+    # Get all product
+    #---------------------------------------------------------------------------
     def getAllProduct(self, token):
-        user = self.validateToken(token)
+        user = ManagerHelper.validateToken(token)
         if 'error' in user:
             return user
 
@@ -26,20 +26,21 @@ class ProductManager(object):
         products = productDao.getAllProduct(user)
         return ResponseHelper.generateSuccessResponse(products)
 
-    #--------------------------------------------------------------------------------------------
+    #---------------------------------------------------------------------------
     # Insert product from Lazada with specific user
-    #--------------------------------------------------------------------------------------------
+    #---------------------------------------------------------------------------
     def insertProductFromLazada(self, token):
-        user = self.validateToken(token)
+        user = ManagerHelper.validateToken(token)
         if 'error' in user:
             return user
+
         constantDao = ConstantDao()
         productDao = ProductDao()
         lazadaProductApi = LazadaProductApi()
         flag = 1
         while (flag > 0):
             constant = constantDao.getConstantForProductWithUserId(user['id'])
-          
+
             offset = constant[0]['offset']
             result = lazadaProductApi.getProducts(user, constant)
             if result:
@@ -52,11 +53,11 @@ class ProductManager(object):
 
         return ResponseHelper.generateSuccessResponse(None)
 
-    #-----------------------------------------------------------------------------
+    #---------------------------------------------------------------------------
     # Update product with new quantity and price
-    #-----------------------------------------------------------------------------
+    #---------------------------------------------------------------------------
     def updateProduct(self, product, token):
-        user = self.validateToken(token)
+        user = ManagerHelper.validateToken(token)
         if 'error' in user:
             return user
 
@@ -65,11 +66,11 @@ class ProductManager(object):
         return ResponseHelper.generateSuccessResponse(None)
 
 
-    #-----------------------------------------------------------------------------
+    #---------------------------------------------------------------------------
     # Update product with new quantity and price
-    #-----------------------------------------------------------------------------
+    #---------------------------------------------------------------------------
     def updateProductQuantity(self, product, token):
-        user = self.validateToken(token)
+        user = ManagerHelper.validateToken(token)
         if 'error' in user:
             return user
 
@@ -77,19 +78,18 @@ class ProductManager(object):
         productDao.updateProductQuantity(product)
         return ResponseHelper.generateSuccessResponse(None)
 
-
-    #-----------------------------------------------------------------------------
+    #---------------------------------------------------------------------------
     # Update product with new quantity and price
-    #-----------------------------------------------------------------------------
+    #---------------------------------------------------------------------------
     def updateProductPrice(self, product, token):
-        user = self.validateToken(token)
+        user = ManagerHelper.validateToken(token)
         if 'error' in user:
             return user
 
         productDao = ProductDao()
         productDao.updateProductPrice(product)
         return ResponseHelper.generateSuccessResponse(None)
-        
+
 
 
 

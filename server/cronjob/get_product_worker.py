@@ -24,16 +24,19 @@ class GetProductWorker(threading.Thread):
 
     # Get offset: must not error
     productOffsetConstant = constantDao.getConstant(user, ConstantConfig.PRODUCT_OFFSET)
-
     if 'error' in productOffsetConstant:
+      print(productOffsetConstant)
       return
 
     productOffset = productOffsetConstant['value']
     while(True):
       # Get Lazada products and insert to our dataBase
-      result = self.getProductFromLazadaAndInsertToOurDatabase(user, productOffset);
+      result, exception = self.getProductFromLazadaAndInsertToOurDatabase(user, productOffset);
       if result == False:
+        print(exception)
         return
+
+      print('''{} Get lazada products with offset {} is successful'''.format(user['lazada_user_name'], productOffset))
 
       # Addition offset and update to constant: must not error
       productOffset += LazadaAPI.LIMIT
@@ -50,26 +53,31 @@ class GetProductWorker(threading.Thread):
     # Get lazada products by offset
     products = lazadaProductApi.getProducts(user, productOffset)
     if 'error' in products:
-      return False
-    if len(products) <= 0:
-      print('''{} Reach to the end with offset {}'''.format(user['lazada_user_name'], productOffset))
-      return False
+      return False, products
 
-    print('''{} Get lazada products with offset {} is successful'''.format(user['lazada_user_name'], productOffset))
+    # That is finish
+    if len(products) <= 0:
+      result = '''{} Reach to the end with offset {}'''.format(user['lazada_user_name'], productOffset)
+      return False, result
 
     # Insert or update to our database
     for product in products:
-      isProductExist = productDao.isProductExist(user, product['Skus'][0]['ShopSku'])
+      product = ConvertHelper.convertLazadaProductToProduct(product)
+
+      # Do check exist to avoid insert in duplication
+      isProductExist, errorException = productDao.isProductExist(user, product['shop_sku'])
+      if errorException != None:
+        return False, errorException
+
       result = {}
       if isProductExist == True:
-        result = productDao.updateProductWithLazadaProduct(user, ConvertHelper.convertLazadaProductToProduct(product))
+        result = productDao.updateProductWithLazadaProduct(user, product)
       else:
-        result = productDao.insert(user, ConvertHelper.convertLazadaProductToProduct(product))
+        result = productDao.insert(user, product)
       if 'error' in result:
-        print(result)
-        return False
+        return False, result
 
-    return True
+    return True, None
 
 
 
