@@ -33,13 +33,17 @@ class ProductDao(object):
     # --------------------------------------------------------------------------
     def insert(self, product, user):
         try:
-            query = '''INSERT INTO product(name, url, status, sellerSku, shopSku, image,
-                width, height, weight, brand, model, primaryCategory, user_id, quantity, original_price) VALUES ('{}', '{}', '{}', '{}', '{}',
-                '{}', '{}', '{}', '{}', '{}','{}', {}, {}, {}, {})'''.format(product['Attributes']['name'],
-                product['Skus'][0]['Url'], product['Skus'][0]['Status'], product['Skus'][0]['SellerSku'],
-                product['Skus'][0]['ShopSku'], product['Skus'][0]['Images'][0], product['Skus'][0]['package_width'],
-                product['Skus'][0]['package_height'], product['Skus'][0]['package_weight'], product['Attributes']['brand'],
-                product['Attributes']['model'], product['PrimaryCategory'], user['id'], 0, 0)
+            query = '''INSERT INTO product(
+                            name, url, status, sellerSku, shopSku, image,
+                            width, height, weight, brand, model, primaryCategory,
+                            user_id, quantity, original_price)
+                        VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}','{}', '{}', '{}', '{}', '{}')
+                    '''.format(product['Attributes']['name'], product['Skus'][0]['Url'],
+                                product['Skus'][0]['Status'], product['Skus'][0]['SellerSku'],
+                                product['Skus'][0]['ShopSku'], product['Skus'][0]['Images'][0],
+                                product['Skus'][0]['package_width'], product['Skus'][0]['package_height'],
+                                product['Skus'][0]['package_weight'], product['Attributes']['brand'],
+                                product['Attributes']['model'], product['PrimaryCategory'], user['id'], 0, 0)
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
         except Exception as ex:
@@ -79,29 +83,36 @@ class ProductDao(object):
             conn.close()
             return products
         except Exception as ex:
-            print(ex)
             return None
 
     # --------------------------------------------------------------------------
     # Update Product (contain quantity and price)
     # --------------------------------------------------------------------------
     def updateProduct(self, product):
-        query = '''UPDATE product set quantity = '{}', original_price = '{}' WHERE id = '{}' '''.format(product['quantity'],
-            product['price'], product['id'])
+        query = '''UPDATE product
+                    set quantity = '{}', original_price = '{}'
+                    WHERE id = '{}'
+                '''.format(product['quantity'], product['price'], product['id'])
         DatabaseHelper.execute(query)
 
     # --------------------------------------------------------------------------
     # Update Product Quantity
     # --------------------------------------------------------------------------
     def updateProductQuantity(self, product):
-        query = '''UPDATE product set quantity = '{}' WHERE id = '{}' '''.format(product['quantity'], product['id'])
+        query = '''UPDATE product
+                    set quantity = '{}'
+                    WHERE id = '{}'
+                '''.format(product['quantity'], product['id'])
         DatabaseHelper.execute(query)
 
     # --------------------------------------------------------------------------
     # Update Product Price
     # --------------------------------------------------------------------------
     def updateProductPrice(self, product):
-        query = '''UPDATE product set original_price = '{}' WHERE id = '{}' '''.format(product['price'], product['id'])
+        query = '''UPDATE product
+                    set original_price = '{}'
+                    WHERE id = '{}'
+                '''.format(product['price'], product['id'])
         DatabaseHelper.execute(query)
 
 
