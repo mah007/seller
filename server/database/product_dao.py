@@ -7,22 +7,24 @@ class ProductDao(object):
 
     def createTable(self):
         query = '''CREATE TABLE IF NOT EXISTS product(
-                id              INT AUTO_INCREMENT primary key NOT NULL,
-                name            VARCHAR(50)     NOT NULL,
-                url             VARCHAR(50)     NOT NULL,
-                status          TEXT            NOT NULL,
-                quantity        INT,
-                sellerSku       VARCHAR(50)     NOT NULL,
-                shopSku         VARCHAR(50)     NOT NULL,
-                original_price  INT,
-                image           TEXT            NOT NULL,
-                width           INT             NOT NULL,
-                height          INT             NOT NULL,
-                weight          INT             NOT NULL,
-                brand          VARCHAR(50)     NOT NULL,
-                model           VARCHAR(50)     NOT NULL,
-                primaryCategory VARCHAR(50)     NOT NULL,
-                user_id         INT             NOT NULL
+                id                  INT AUTO_INCREMENT primary key NOT NULL,
+                name                VARCHAR(80)     NOT NULL,
+                url                 VARCHAR(150)    NOT NULL,
+                status              VARCHAR(50)     NOT NULL,
+                quantity            INTEGER         ,
+                seller_sku          VARCHAR(50)     NOT NULL,
+                shop_sku            VARCHAR(50)     NOT NULL,
+                original_price      INTEGER         ,
+                image               TEXT            NOT NULL,
+                package_width       INTEGER         NOT NULL,
+                package_height      INTEGER         NOT NULL,
+                package_weight      INTEGER         NOT NULL,
+                brand               VARCHAR(50)     NOT NULL,
+                model               VARCHAR(50)     NOT NULL,
+                primary_category    INTEGER         NOT NULL,
+                created_time        VARCHAR(30)     NOT NULL,   # Lazada created time
+                sku_id              INTEGER         NOT NULL,
+                user_id             INTEGER         NOT NULL
                 );'''
         DatabaseHelper.execute(query)
 
@@ -33,10 +35,10 @@ class ProductDao(object):
         try:
             query = '''INSERT INTO product(name, url, status, sellerSku, shopSku, image,
                 width, height, weight, brand, model, primaryCategory, user_id, quantity, original_price) VALUES ('{}', '{}', '{}', '{}', '{}',
-                '{}', '{}', '{}', '{}', '{}','{}', {}, {}, {}, {})'''.format(product['Attributes']['name'], 
-                product['Skus'][0]['Url'], product['Skus'][0]['Status'], product['Skus'][0]['SellerSku'], 
-                product['Skus'][0]['ShopSku'], product['Skus'][0]['Images'][0], product['Skus'][0]['package_width'], 
-                product['Skus'][0]['package_height'], product['Skus'][0]['package_weight'], product['Attributes']['brand'], 
+                '{}', '{}', '{}', '{}', '{}','{}', {}, {}, {}, {})'''.format(product['Attributes']['name'],
+                product['Skus'][0]['Url'], product['Skus'][0]['Status'], product['Skus'][0]['SellerSku'],
+                product['Skus'][0]['ShopSku'], product['Skus'][0]['Images'][0], product['Skus'][0]['package_width'],
+                product['Skus'][0]['package_height'], product['Skus'][0]['package_weight'], product['Attributes']['brand'],
                 product['Attributes']['model'], product['PrimaryCategory'], user['id'], 0, 0)
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
@@ -84,7 +86,7 @@ class ProductDao(object):
     # Update Product (contain quantity and price)
     # --------------------------------------------------------------------------
     def updateProduct(self, product):
-        query = '''UPDATE product set quantity = '{}', original_price = '{}' WHERE id = '{}' '''.format(product['quantity'], 
+        query = '''UPDATE product set quantity = '{}', original_price = '{}' WHERE id = '{}' '''.format(product['quantity'],
             product['price'], product['id'])
         DatabaseHelper.execute(query)
 
