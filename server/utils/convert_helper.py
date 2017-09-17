@@ -47,8 +47,8 @@ class ConvertHelper:
   @classmethod
   def convertLazadaProductToProduct(self, lazadaProduct):
     product = {
-      "name": str(lazadaProduct['Attributes']['name'],).replace("'", ""),
-      "url": lazadaProduct['Skus'][0]['Url'],
+      "name": str(lazadaProduct['Attributes']['name']).replace("'", ""),
+      "url": str(lazadaProduct['Skus'][0]['Url']).replace("'", ""),
       "status": lazadaProduct['Skus'][0]['Status'],
       "quantity": 0,
       "seller_sku": lazadaProduct['Skus'][0]['SellerSku'],

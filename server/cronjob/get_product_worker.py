@@ -31,15 +31,15 @@ class GetProductWorker(threading.Thread):
     productOffset = productOffsetConstant['value']
     while(True):
       # Get Lazada products and insert to our dataBase
-      result, exception = self.getProductFromLazadaAndInsertToOurDatabase(user, productOffset);
+      result, exceptionOrLength = self.getProductFromLazadaAndInsertToOurDatabase(user, productOffset);
       if result == False:
-        print(exception)
+        print(exceptionOrLength)
         return
 
       print('''{} Get lazada products with offset {} is successful'''.format(user['lazada_user_name'], productOffset))
 
       # Addition offset and update to constant: must not error
-      productOffset += LazadaAPI.LIMIT
+      productOffset += exceptionOrLength
       result = constantDao.updateConstant(user, ConstantConfig.PRODUCT_OFFSET, productOffset)
       if 'error' in result:
         print(result)
@@ -47,20 +47,26 @@ class GetProductWorker(threading.Thread):
 
   #-----------------------------------------------------------------------------
   # Get Lazada products and insert to our dataBase
-  # Return Boolean
+  # Return Boolean, Exception/Length
   #-----------------------------------------------------------------------------
   def getProductFromLazadaAndInsertToOurDatabase(self, user, productOffset):
     # Get lazada products by offset
-    products = lazadaProductApi.getProducts(user, productOffset)
+    products, totalProducts = lazadaProductApi.getProducts(user, productOffset)
     if 'error' in products:
       return False, products
 
+    # This would never happen
+    if productOffset > totalProducts:
+      result = '''{} Something wrong with Offset: {} and totalProducts: {}'''.format(productOffset, totalProducts)
+      return False, result
+
     # That is finish
-    if len(products) <= 0:
+    if len(products) <= 0 or productOffset == totalProducts:
       result = '''{} Reach to the end with offset {}'''.format(user['lazada_user_name'], productOffset)
       return False, result
 
     # Insert or update to our database
+    recordCount = 0
     for product in products:
       product = ConvertHelper.convertLazadaProductToProduct(product)
 
@@ -74,10 +80,11 @@ class GetProductWorker(threading.Thread):
         result = productDao.updateProductWithLazadaProduct(user, product)
       else:
         result = productDao.insert(user, product)
+        recordCount += 1
       if 'error' in result:
         return False, result
 
-    return True, None
+    return True, recordCount
 
 
 

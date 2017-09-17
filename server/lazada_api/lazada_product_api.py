@@ -1,7 +1,7 @@
 import requests
 import json
-from lazada_api.lazada_api_helper import LazadaApiHelper
 from config import LazadaAPI
+from lazada_api.lazada_api_helper import LazadaApiHelper
 from utils.exception_utils import ExceptionUtils
 
 
@@ -20,7 +20,7 @@ class LazadaProductApi(object):
 		'Version': '1.0',
 		'CreatedBefore': LazadaApiHelper.getCurrentUTCTime(),
 		'Filter': 'all',
-		'Limit': 30,
+		'Limit': LazadaAPI.LIMIT,
 		'Offset': constant
 		}
 
@@ -42,15 +42,13 @@ class LazadaProductApi(object):
 			if resp.status_code == 200:
 				response = json.loads(resp.text)
 				if ('ErrorResponse' in response):
-					return ExceptionUtils.error('''Get Products is error: {}'''.format(esponse['ErrorResponse']['Head']['ErrorMessage']))
+					return ExceptionUtils.returnError('''Get Products is error: ''', response)
 
 				data = response['SuccessResponse']['Body']
-				if (data['Products'] != None):		
-					return data['Products']
+				return data['Products'], data['TotalProducts']
 
 			return ExceptionUtils.error('''Get Products is error: {}'''.format(resp.status_code))
 		except Exception as ex:
 			return ExceptionUtils.error('''Get Products is error: {}'''.format(str(ex)))
 
 
-	

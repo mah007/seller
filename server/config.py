@@ -2,7 +2,7 @@
 class Database(object):
     mysql = {
     'user': 'root',
-    'password': '',
+    'password': '1234',
     'host': '',
     'database': 'lazada',
     'use_unicode':True,
@@ -13,7 +13,7 @@ class Database(object):
 class LazadaAPI(object):
     ENDPOINT = "https://api.sellercenter.lazada.vn"
     VERSION = '1.0'
-    LIMIT = 50          # limit 50 datas per request
+    LIMIT = 30          # limit 50 datas per request
 
 
 class CronJob(object):
