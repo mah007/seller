@@ -2,7 +2,6 @@ from database.product_dao import ProductDao
 from database.price_by_time_dao import PriceByTimeDao
 from managers.manager_helper import ManagerHelper
 from utils.response_utils import ResponseUtils
-from managers.response_helper import ResponseHelper
 
 class PriceByTimeManager(object):
 
@@ -77,9 +76,10 @@ class PriceByTimeManager(object):
     priceByTime = PriceByTimeDao()
     result = priceByTime.getAll(user)
     if result:
-      return ResponseHelper.generateSuccessResponse(result)
+      return ResponseUtils.generateSuccessResponse(result)
     else:
-      return ResponseHelper.generateErrorResponse("Error")
+      return ResponseUtils.generateErrorResponse("Error")
+
 
 
 

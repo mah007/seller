@@ -15,7 +15,7 @@ class ProductDao(object):
                 seller_sku          VARCHAR(100)    NOT NULL,
                 shop_sku            VARCHAR(100)    NOT NULL,
                 original_price      INTEGER         ,
-                special_price       INTEGER         ,
+                special_price       INTEGER         ,           # Only using for Prict-By-Time
                 image               VARCHAR(250)    NOT NULL,   # Get first image from Lazada's product
                 package_width       INTEGER         NOT NULL,
                 package_height      INTEGER         NOT NULL,
@@ -34,7 +34,7 @@ class ProductDao(object):
     def insert(self, user, product):
         query = '''INSERT INTO product(name, url, status, seller_sku, shop_sku,
                         image, package_width, package_height, package_weight,
-                        brand, model, primary_category, spu_id, special_pricem,
+                        brand, model, primary_category, spu_id, special_price,
                         user_id, quantity, original_price)
                     VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}',
                             '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')
@@ -76,18 +76,17 @@ class ProductDao(object):
                     "status": row[3],
                     "quantity": row[4],
                     "seller_sku": row[5],
-                    "shopSku": row[6],
+                    "shop_sku": row[6],
                     "original_price": row[7],
-                    "special_price": row[8]
-                    "price": row[9],
-                    "image": row[10],
-                    "width": row[11],
-                    "height": row[12],
-                    "weight": row[13],
-                    "branch": row[14],
-                    "model": row[15],
-                    "primary_category": row[16],
-                    "spu_id": row[17]
+                    "special_price": row[8],
+                    "image": row[9],
+                    "width": row[10],
+                    "height": row[11],
+                    "weight": row[12],
+                    "brand": row[13],
+                    "model": row[14],
+                    "primary_category": row[15],
+                    "spu_id": row[16]
                 }
 
             conn.close()
@@ -120,19 +119,18 @@ class ProductDao(object):
                     "url": row[2],
                     "status": row[3],
                     "quantity": row[4],
-                    "sellerSku": row[5],
-                    "shopSku": row[6],
+                    "seller_sku": row[5],
+                    "shop_sku": row[6],
                     "original_price": row[7],
-                    "special_price": row[8]
-                    "price": row[9],
-                    "image": row[10],
-                    "width": row[11],
-                    "height": row[12],
-                    "weight": row[13],
-                    "branch": row[14],
-                    "model": row[15],
-                    "primaryCategory": row[16],
-                    "spu_id": row[17]
+                    "special_price": row[8],
+                    "image": row[9],
+                    "width": row[10],
+                    "height": row[11],
+                    "weight": row[12],
+                    "brand": row[13],
+                    "model": row[14],
+                    "primary_category": row[15],
+                    "spu_id": row[16]
                 })
 
             conn.close()
@@ -213,6 +211,49 @@ class ProductDao(object):
             return ExceptionUtils.success()
         except Exception as ex:
             return ExceptionUtils.error('''User: {}-{}, update Product exception: {}'''.format(user['username'], user['id'], str(ex)))
+
+    # --------------------------------------------------------------------------
+    # Search Product by name, seller sku, shop sku, brand and model
+    # --------------------------------------------------------------------------
+    def searchProduct(self, user, searchKey):
+        query = '''SELECT *
+                    FROM product
+                    WHERE (name LIKE '%{}%' OR seller_sku LIKE '%{}%'
+                            OR shop_sku LIKE '%{}%' OR brand LIKE '%{}%'
+                            OR model LIKE '%{}%') AND user_id = '{}'
+                '''.format(searchKey, searchKey, searchKey, searchKey, searchKey, user['id'])
+        try:
+            conn = DatabaseHelper.getConnection()
+            cur = conn.cursor()
+            cur.execute(query)
+
+            products = []
+            rows = cur.fetchall()
+            for row in rows:
+                products.append({
+                    "id": row[0],
+                    "name": row[1],
+                    "url": row[2],
+                    "status": row[3],
+                    "quantity": row[4],
+                    "seller_sku": row[5],
+                    "shop_sku": row[6],
+                    "original_price": row[7],
+                    "special_price": row[8],
+                    "image": row[9],
+                    "width": row[10],
+                    "height": row[11],
+                    "weight": row[12],
+                    "brand": row[13],
+                    "model": row[14],
+                    "primary_category": row[15],
+                    "spu_id": row[16]
+                })
+
+            conn.close()
+            return (products, None)
+        except Exception as ex:
+            return (None, ExceptionUtils.error('''Get products exception: {}'''.format(str(ex))))
 
 
 

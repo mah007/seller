@@ -54,7 +54,7 @@ class ConvertHelper:
       "seller_sku": lazadaProduct['Skus'][0]['SellerSku'],
       "shop_sku": lazadaProduct['Skus'][0]['ShopSku'],
       "original_price": 0,
-      "special_price": lazadaProduct['Skus']['special_price'],
+      "special_price": lazadaProduct['Skus'][0]['special_price'],
       "image": lazadaProduct['Skus'][0]['Images'][0],
       "package_width": lazadaProduct['Skus'][0]['package_width'],
       "package_height": lazadaProduct['Skus'][0]['package_height'],

@@ -2,6 +2,7 @@ import simplejson as json
 from flask_cors import CORS, cross_origin
 from flask import Blueprint, render_template, abort, request, make_response, jsonify
 from managers.price_by_time_manager import PriceByTimeManager
+from managers.product_manager import ProductManager
 
 
 PriceByTimeAPI = Blueprint('price_by_time_api', __name__, template_folder='apis')
@@ -14,10 +15,10 @@ PriceByTimeAPI = Blueprint('price_by_time_api', __name__, template_folder='apis'
 def insertPriceByTime():
   if not request.args:
     return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
-  if not 'token' in request.args:
-    return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
   if not request.json:
     return make_response(jsonify({'error': 'Missing json parameters value'}), 404)
+  if not 'token' in request.args:
+    return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
   if not 'sku' in request.json:
     return make_response(jsonify({'error': 'Missing json parameter'}), 404)
   if not 'price_by_time' in request.json:
@@ -43,6 +44,8 @@ def insertPriceByTime():
 def deletePriceByTime():
   if not request.args:
     return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
+  if not request.json:
+    return make_response(jsonify({'error': 'Missing json parameters value'}), 404)
   if not 'token' in request.args:
     return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
   if not 'id' in request.json:
@@ -65,6 +68,8 @@ def deletePriceByTime():
 def updatePriceByTime():
   if not request.args:
     return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
+  if not request.json:
+    return make_response(jsonify({'error': 'Missing json parameters value'}), 404)
   if not 'token' in request.args:
     return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
   if not 'id' in request.json:
@@ -94,7 +99,7 @@ def getAllSkuOfPriceByTime():
     return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
   if not 'token' in request.args:
     return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
-  
+
 
   priceByTimeManager = PriceByTimeManager()
   result = priceByTimeManager.getAll(request.args.get('token'))
@@ -103,6 +108,29 @@ def getAllSkuOfPriceByTime():
   else:
     return make_response(jsonify(result), 404)
 
+# ------------------------------------------------------------------------------
+# Search Product by name, seller sku, shop sku, brand and model
+# ------------------------------------------------------------------------------
+@PriceByTimeAPI.route('/price-by-time/search', methods=['POST'])
+@cross_origin()
+def searchProduct():
+  if not request.args:
+    return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
+  if not request.json:
+    return make_response(jsonify({'error': 'Missing json parameters value'}), 404)
+  if not 'token' in request.args:
+    return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
+  if not 'search_key' in request.json:
+    return make_response(jsonify({'error': 'Missing json parameter'}), 404)
+
+  searchKey = request.json['search_key']
+  token = request.args.get('token')
+  productManager = ProductManager()
+  result = productManager.searchProduct(token, searchKey)
+  if 'success' in result:
+    return make_response(jsonify(result), 201)
+  else:
+    return make_response(jsonify(result), 404)
 
 
 

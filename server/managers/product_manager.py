@@ -90,6 +90,20 @@ class ProductManager(object):
         productDao.updateProductPrice(product)
         return ResponseHelper.generateSuccessResponse(None)
 
+    #-----------------------------------------------------------------------------
+    # Search Product by name, seller sku, shop sku, brand and model
+    #-----------------------------------------------------------------------------
+    def searchProduct(self, token, searchKey):
+        user = ManagerHelper.validateToken(token)
+        if 'error' in user:
+            return user
+
+        productDao = ProductDao()
+        result, exception = productDao.searchProduct(user, searchKey)
+        if exception != None:
+            return ResponseUtils.generateErrorResponse(exception)
+        else:
+            return ResponseUtils.generateSuccessResponse(result)
 
 
 
