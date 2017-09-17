@@ -25,7 +25,7 @@ class PriceByTimeWorker(threading.Thread):
       print(priceByTimeSkus)
       return
 
-    for priceByTimeSku in enumerate(priceByTimeSkus):
+    for index, priceByTimeSku in enumerate(priceByTimeSkus):
       if not priceByTimeSku['price_by_time']:
         continue
 
@@ -40,9 +40,9 @@ class PriceByTimeWorker(threading.Thread):
       return
 
     newSpecialPrice = priceByTimeSku['special_price']
-    for index, priceByTime in priceByTimes:
+    for index, priceByTime in enumerate(priceByTimes):
       isOnTime = False
-      if len(priceByTimeSkus) < index + 1:
+      if len(priceByTimes) < (index + 1):
         isOnTime = self.isOnTime(priceByTime, priceByTimes[index + 1], False)
       else:
         isOnTime = self.isOnTime(priceByTime, priceByTimes[0], True)
