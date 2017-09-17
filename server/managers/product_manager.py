@@ -7,6 +7,7 @@ from managers.response_helper import ResponseHelper
 from lazada_api.lazada_api_helper import LazadaApiHelper
 from utils.convert_helper import ConvertHelper
 from managers.manager_helper import ManagerHelper
+from config import ConstantConfig
 
 class ProductManager(object):
 
@@ -39,7 +40,7 @@ class ProductManager(object):
         lazadaProductApi = LazadaProductApi()
         flag = 1
         while (flag > 0):
-            constant = constantDao.getConstantForProductWithUserId(user['id'])
+            constant = constantDao.getConstant(user['id'], ConstantConfig.PRODUCT_OFFSET)
 
             offset = constant[0]['offset']
             result = lazadaProductApi.getProducts(user, constant)

@@ -21,7 +21,13 @@ jQuery(document).ready(function() {
 
     // Init data
     getAndFillOutAllPriceByTime();
-    AutoCompleteSearch();
+
+    function runScript(e) {
+    if (e.keyCode == 13) {
+        
+        return false;
+    }
+}
 
     // Should focus SKU input
     focusSKUInput();
@@ -118,26 +124,6 @@ $('#portlet-config').on('hidden.bs.modal', function() {
     $('input[name=txtPriceByTime]').val('');
 });
 
-//-------------------------------------------------------------------------------------
-// Search
-//-------------------------------------------------------------------------------------
-$("#btnsearch").click(function() {
-    $.ajax({
-        method: 'POST',
-        url: endpoint.generateSearchPriceByTime(),
-        contentType: "application/json",
-        data: JSON.stringify({
-            search_key: $('input[name=txt_search]').val(),
-        }),
-        success: function(data) {
-            console.log(data);
-        },
-        error: function(error) {
-            console.log(error);
-            errorLog.html(error);
-        }
-    });
-})
 //-------------------------------------------------------------------------------------
 // Add new SKU
 //-------------------------------------------------------------------------------------
@@ -271,21 +257,92 @@ function validNull(selector) {
     }
 }
 
-function AutoCompleteSearch() {
-    $(function() {
-        $('#autocomplete').autoComplete({
-            minChars: 1,
-            source: function(term, suggest) {
-                term = term.toLowerCase();
-                var choices = ['ActionScript', 'AppleScript', 'Asp', 'Assembly', 'BASIC', 'Batch', 'C', 'C++', 'CSS', 'Clojure', 'COBOL', 'ColdFusion', 'Erlang', 'Fortran', 'Groovy', 'Haskell', 'HTML', 'Java', 'JavaScript', 'Lisp', 'Perl', 'PHP', 'PowerShell', 'Python', 'Ruby', 'Scala', 'Scheme', 'SQL', 'TeX', 'XML'];
-                var suggestions = [];
-                for (i = 0; i < choices.length; i++)
-                    if (~choices[i].toLowerCase().indexOf(term)) suggestions.push(choices[i]);
-                suggest(suggestions);
-            }
-        });
-
+function getTheSimilarProducts(search_key) {
+    products = [];
+    $.ajax({
+        method: 'POST',
+        url: endpoint.generateSearchPriceByTime(),
+        async: false,
+        contentType: "application/json",
+        data: JSON.stringify({
+            search_key: search_key
+        }),
+        success: function(data) {
+            products = data.data;
+        },
+        error: function(error) {
+            console.log(error);
+        }
     });
+    return products;
+};
+
+$('input[name=search_key]').on('keydown', function(e) {
+    console.log("Enter");
+    console.log(e.which);
+    if (e.which == 13) {
+        $('#btnsearch').trigger('click');
+    }
+});
+
+$("#btnsearch").click(function() {
+    search_key = $('input[name=search_key]').val();
+    var $project = $('#autocomplete');
+
+    var projects = getTheSimilarProducts(search_key);
+
+    $project.autocomplete({
+        minLength: 0,
+        source: projects,
+        focus: function(event, ui) {
+            $project.val(ui.item.name);
+            return false;
+        }
+    });
+
+    $('input[name=search_key]').val("");
+
+    $('#autocomplete').autoComplete({
+        minChars: 0,
+        source: function(term, suggest) {
+            // term = term.toLowerCase();
+
+            var choices = products;
+            var suggestions = [];
+            for (i = 0; i < choices.length; i++)
+                if (~(choices[i])) suggestions.push(choices[i]);
+            suggest(suggestions);
+        },
+        renderItem: function(item, search) {
+            search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+            // var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
+
+            return '<div class="autocomplete-suggestion" data-seller_sku = "' + item['seller_sku'] +
+                '" data-special_price="' + item['special_price'] +
+                '" data-name="' + item['name'] +
+                '" data-image="' + item['image'] +
+                '"><img style="width: 50px; height:50px;" src="' + item['image'] + '"> ' +
+                item['name'] + '</div>';
+        },
+        onSelect: function(e, term, item) {
+            console.log('Item "' + item.data('name') + '" selected by ' + (e.type == 'keydown' ? 'pressing enter or tab' : 'mouse click') + '.');
+            $('#autocomplete').val(item.data('name'));
+
+            $('input[name=txtSku]').val(item.data('seller_sku'));
+            $('input[name=txtPrice01]').val(item.data('special_price'));
+            $('input[name=txtPrice02]').val(item.data('special_price'));
+            $('input[name=txtPrice03]').val(item.data('special_price'));
+        }
+    });
+});
+
+
+function updateProducts(dat) {
+    products = data;
+}
+
+function updateProducts(data) {
+    products = data.data;
 }
 
 if (!String.prototype.format) {
@@ -321,4 +378,3 @@ if (!String.prototype.format) {
         return str;
     };
 }
-
