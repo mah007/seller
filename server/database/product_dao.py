@@ -15,6 +15,7 @@ class ProductDao(object):
                 seller_sku          VARCHAR(100)    NOT NULL,
                 shop_sku            VARCHAR(100)    NOT NULL,
                 original_price      INTEGER         ,
+                special_price       INTEGER         ,
                 image               VARCHAR(250)    NOT NULL,   # Get first image from Lazada's product
                 package_width       INTEGER         NOT NULL,
                 package_height      INTEGER         NOT NULL,
@@ -33,17 +34,17 @@ class ProductDao(object):
     def insert(self, user, product):
         query = '''INSERT INTO product(name, url, status, seller_sku, shop_sku,
                         image, package_width, package_height, package_weight,
-                        brand, model, primary_category, spu_id, user_id,
-                        quantity, original_price)
+                        brand, model, primary_category, spu_id, special_pricem,
+                        user_id, quantity, original_price)
                     VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}',
-                            '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')
+                            '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')
                 '''.format(product['name'], product['url'], product['status'],
                            product['seller_sku'], product['shop_sku'],
                            product['image'], product['package_width'],
                            product['package_height'], product['package_weight'],
                            product['brand'], product['model'],
                            product['primary_category'], product['spu_id'],
-                           user['id'], 0, 0)
+                           product['special_price'], user['id'], 0, 0)
         try:
             DatabaseHelper.execute(query)
             return ExceptionUtils.success()
@@ -77,15 +78,16 @@ class ProductDao(object):
                     "seller_sku": row[5],
                     "shopSku": row[6],
                     "original_price": row[7],
-                    "price": row[8],
-                    "image": row[9],
-                    "width": row[10],
-                    "height": row[11],
-                    "weight": row[12],
-                    "branch": row[13],
-                    "model": row[14],
-                    "primary_category": row[15],
-                    "spu_id": row[16]
+                    "special_price": row[8]
+                    "price": row[9],
+                    "image": row[10],
+                    "width": row[11],
+                    "height": row[12],
+                    "weight": row[13],
+                    "branch": row[14],
+                    "model": row[15],
+                    "primary_category": row[16],
+                    "spu_id": row[17]
                 }
 
             conn.close()
@@ -121,15 +123,16 @@ class ProductDao(object):
                     "sellerSku": row[5],
                     "shopSku": row[6],
                     "original_price": row[7],
-                    "price": row[8],
-                    "image": row[9],
-                    "width": row[10],
-                    "height": row[11],
-                    "weight": row[12],
-                    "branch": row[13],
-                    "model": row[14],
-                    "primaryCategory": row[15],
-                    "spu_id": row[16]
+                    "special_price": row[8]
+                    "price": row[9],
+                    "image": row[10],
+                    "width": row[11],
+                    "height": row[12],
+                    "weight": row[13],
+                    "branch": row[14],
+                    "model": row[15],
+                    "primaryCategory": row[16],
+                    "spu_id": row[17]
                 })
 
             conn.close()
@@ -196,14 +199,14 @@ class ProductDao(object):
                         image = '{}', package_width = '{}',
                         package_height = '{}', package_weight = '{}',
                         brand = '{}', model = '{}', primary_category = '{}',
-                        spu_id = '{}', user_id = '{}'
+                        spu_id = '{}', special_price = '{}'
                     WHERE shop_sku = '{}'
                 '''.format(product['name'], product['url'], product['status'],
                            product['seller_sku'], product['image'],
                            product['package_width'], product['package_height'],
                            product['package_weight'], product['brand'],
                            product['model'], product['primary_category'],
-                           product['spu_id'], user['id'],
+                           product['spu_id'], product['special_price'],
                            product['shop_sku'])
         try:
             DatabaseHelper.execute(query)
