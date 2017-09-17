@@ -19,7 +19,7 @@ class LazadaAPI(object):
 class CronJob(object):
     AUTO_PRICE_TIME_INTEVAL = 25            # 25s
     GET_ORDER_TIME_INTEVAL = 5*60           # 5 minutes
-    GET_PRODUCT_TIME_INTEVAL = 24*60*60     # 24 hours
+    GET_PRODUCT_TIME_INTEVAL = 5*60     # 5 minutes
     PRICE_BY_TIME_INTERVAL = 5*60           # 5 minutes
 
 

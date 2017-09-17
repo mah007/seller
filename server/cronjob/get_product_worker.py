@@ -61,6 +61,7 @@ class GetProductWorker(threading.Thread):
       return False, result
 
     # That is finish
+    print('''totalProducts: {} '''.format(totalProducts))
     if len(products) <= 0 or productOffset == totalProducts:
       result = '''{} Reach to the end with offset {}'''.format(user['lazada_user_name'], productOffset)
       return False, result
