@@ -51,6 +51,50 @@ class ProductDao(object):
             return ExceptionUtils.error('''Insert product exception: {}'''.format(str(ex)))
 
     # --------------------------------------------------------------------------
+    # Get Product by seller SKU
+    # --------------------------------------------------------------------------
+    def getProductBySellerSku(self, user, sku):
+        query = '''SELECT *
+                    from product
+                    WHERE user_id = '{}' and seller_sku = '{}'
+                '''.format(user['id'], sku)
+        try:
+            conn = DatabaseHelper.getConnection()
+            cur = conn.cursor()
+            cur.execute(query)
+
+            row = cur.fetchone()
+            if not row:
+                conn.close()
+                return None, ExceptionUtils.error('''User: {}-{}, Product by SKU: {} is not found'''.format(user['username'], user['id'], sku))
+
+            product = {
+                    "id": row[0],
+                    "name": row[1],
+                    "url": row[2],
+                    "status": row[3],
+                    "quantity": row[4],
+                    "seller_sku": row[5],
+                    "shopSku": row[6],
+                    "original_price": row[7],
+                    "price": row[8],
+                    "image": row[9],
+                    "width": row[10],
+                    "height": row[11],
+                    "weight": row[12],
+                    "branch": row[13],
+                    "model": row[14],
+                    "primary_category": row[15],
+                    "spu_id": row[16]
+                }
+
+            conn.close()
+            return product, None
+        except Exception as ex:
+            return None, ExceptionUtils.error('''Get Product by SKU {}, exception: {}'''.format(sku, str(ex)))
+
+
+    # --------------------------------------------------------------------------
     # Get All Product
     # --------------------------------------------------------------------------
     def getAllProduct(self, user):

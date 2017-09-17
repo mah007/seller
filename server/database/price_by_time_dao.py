@@ -71,7 +71,8 @@ class PriceByTimeDao(object):
     # get price by times
     # --------------------------------------------------------------------------
     def getAll(self, user):
-        query = '''SELECT * from price_by_time WHERE user_id = '{}' '''.format(user['id'])
+        query = '''SELECT * from price_by_time WHERE user_id = '{}'
+                '''.format(user['id'])
         try:
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()

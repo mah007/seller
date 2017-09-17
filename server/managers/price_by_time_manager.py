@@ -1,6 +1,6 @@
+from database.product_dao import ProductDao
 from database.price_by_time_dao import PriceByTimeDao
 from managers.manager_helper import ManagerHelper
-from lazada_api.lazada_sku_api import LazadaSkuApi
 from utils.response_utils import ResponseUtils
 from managers.response_helper import ResponseHelper
 
@@ -18,23 +18,23 @@ class PriceByTimeManager(object):
     if 'error' in user:
       return user
 
-    # Validate SKU by lazada API
-    lazadaSkuApi = LazadaSkuApi()
-    lazadaProduct = lazadaSkuApi.getSku(sku, user)
-    if 'error' in lazadaProduct:
-      return ResponseUtils.generateErrorResponse(lazadaProduct['error'])
+    #Valide product by Sku
+    productDao = ProductDao()
+    product, exception = productDao.getProductBySellerSku(user, sku);
+    if exception != None:
+      return ResponseUtils.generateErrorResponse(exception)
 
     # Add missing arguments and insert to our database
-    sku['name'] = lazadaProduct['Attributes']['name'].encode('utf-8')
-    sku['link'] = lazadaProduct['Skus'][0]['Url'].encode('utf-8')
-    sku['special_price'] = lazadaProduct['Skus'][0]['special_price']
+    sku['name'] = product['name'].encode('utf-8')
+    sku['link'] = product['url'].encode('utf-8')
+    sku['special_price'] = 0 #product['special_price']
 
     priceByTime = PriceByTimeDao()
     result = priceByTime.insert(sku, user)
     if 'error' in result:
       return ResponseUtils.generateErrorResponse(result['error'])
-
-    return ResponseUtils.generateSuccessResponse()
+    else:
+      return ResponseUtils.generateSuccessResponse()
 
   #-----------------------------------------------------------------------------
   # update price balancer's info
@@ -48,8 +48,8 @@ class PriceByTimeManager(object):
     result = priceByTime.update(sku, user)
     if 'error' in result:
       return ResponseUtils.generateErrorResponse(result['error'])
-
-    return ResponseUtils.generateSuccessResponse()
+    else:
+      return ResponseUtils.generateSuccessResponse()
 
   #-----------------------------------------------------------------------------
   # delete a price balancer
@@ -63,8 +63,8 @@ class PriceByTimeManager(object):
     result = priceByTime.delete(sku, user)
     if 'error' in result:
       return ResponseUtils.generateErrorResponse(result['error'])
-
-    return ResponseUtils.generateSuccessResponse()
+    else:
+      return ResponseUtils.generateSuccessResponse()
 
   #-----------------------------------------------------------------------------
   # get all price by time
