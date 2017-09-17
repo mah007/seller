@@ -21,6 +21,7 @@ jQuery(document).ready(function() {
 
     // Init data
     getAndFillOutAllPriceByTime();
+    AutoCompleteSearch();
 
     // Should focus SKU input
     focusSKUInput();
@@ -162,6 +163,27 @@ $('#portlet-config').on('hidden.bs.modal', function() {
 });
 
 //-------------------------------------------------------------------------------------
+// Search
+//-------------------------------------------------------------------------------------
+$("#btnsearch").click(function() {
+    $.ajax({
+        method: 'POST',
+        url: endpoint.generateSearchPriceByTime(),
+        contentType: "application/json",
+        data: JSON.stringify({
+            txt_search: $('input[name=txt_search]').val(),
+        }),
+        success: function(data) {
+            console.log(data);
+            getAndFillOutAllPriceByTime();
+        },
+        error: function(error) {
+            console.log(error);
+            errorLog.html(error);
+        }
+    });
+})
+//-------------------------------------------------------------------------------------
 // Add new SKU
 //-------------------------------------------------------------------------------------
 $("#btnAddNew").click(function() {
@@ -248,11 +270,11 @@ function validateAddNewPriceByTimeValues() {
     }
 
     var priceByTime = '[{"from": "{0}:{1}", "price": {2}},' +
-                        '{"from": "{3}:{4}", "price": {5}},' +
-                        '{"from": "{6}:{7}", "price": {8}}]';
+        '{"from": "{3}:{4}", "price": {5}},' +
+        '{"from": "{6}:{7}", "price": {8}}]';
     priceByTime = priceByTime.format(txtFromHour01, txtFromMinute01, txtPrice01,
-                                    txtFromHour02, txtFromMinute02, txtPrice02,
-                                    txtFromHour03, txtFromMinute03, txtPrice03);
+        txtFromHour02, txtFromMinute02, txtPrice02,
+        txtFromHour03, txtFromMinute03, txtPrice03);
     return priceByTime;
 }
 
@@ -277,3 +299,21 @@ function getAndFillOutAllPriceByTime() {
         }
     });
 };
+
+function AutoCompleteSearch() {
+    $(function() {
+        $('#autocomplete').autoComplete({
+            minChars: 1,
+            source: function(term, suggest) {
+                term = term.toLowerCase();
+                var choices = ['ActionScript', 'AppleScript', 'Asp', 'Assembly', 'BASIC', 'Batch', 'C', 'C++', 'CSS', 'Clojure', 'COBOL', 'ColdFusion', 'Erlang', 'Fortran', 'Groovy', 'Haskell', 'HTML', 'Java', 'JavaScript', 'Lisp', 'Perl', 'PHP', 'PowerShell', 'Python', 'Ruby', 'Scala', 'Scheme', 'SQL', 'TeX', 'XML'];
+                var suggestions = [];
+                for (i = 0; i < choices.length; i++)
+                    if (~choices[i].toLowerCase().indexOf(term)) suggestions.push(choices[i]);
+                suggest(suggestions);
+            }
+        });
+
+    });
+}
+

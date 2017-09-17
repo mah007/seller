@@ -21,3 +21,10 @@
 .col-lg-1.float-right {
     text-align: right;
 }
+
+.search-bar{
+  width: 200px;
+  height: 100px;
+  float: left;
+  margin-top: 20px;
+}

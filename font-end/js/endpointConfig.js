@@ -139,6 +139,10 @@ var EndpointConfig = function() {
       return endpointUrl + '/price-by-time/delete?token=' + $.cookie('token');
   }
 
+  EndpointConfig.prototype.generateSearchPriceByTime = function() {
+      return endpointUrl + '/price-by-time/search?token=' + $.cookie('token');
+  }
+
   // PRODUCT
   EndpointConfig.prototype.generateGetAllProduct = function() {
       return endpointUrl + '/product/get?token=' + $.cookie('token');
@@ -163,15 +167,6 @@ var EndpointConfig = function() {
   EndpointConfig.prototype.generateUpdateProductPrice = function() {
       return endpointUrl + '/product/update-price?token=' + $.cookie('token');
   }  
-
-  // PRICE BALANCER
-  EndpointConfig.prototype.generateInsertPriceBalancer = function() {
-      return endpointUrl + '/price-balancer/insert?token=' + $.cookie('token');
-  }
-
-  EndpointConfig.prototype.generateGetAllPriceBalancer = function() {
-      return endpointUrl + '/price-balancer/get-all?token=' + $.cookie('token');
-  }
 
 }
 
