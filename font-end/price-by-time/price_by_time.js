@@ -31,51 +31,7 @@ function focusSKUInput() {
     $('input[name=txtSku]').focus();
 }
 
-function validNull(selector) {
-    if ($(selector).length > 0) {
-        if ($(selector).prop("tagName").toLowerCase() == "select") {
-            return ($(selector).val() > 0) ? true : false;
-        } else {
-            return ($(selector).val().length > 0) ? true : false;
-        }
-    } else {
-        return false;
-    }
-}
 
-if (!String.prototype.format) {
-    String.prototype.format = function() {
-        var args = arguments;
-        var str = this;
-
-        function replaceByObjectProperies(obj) {
-            for (var property in obj)
-                if (obj.hasOwnProperty(property))
-                    //replace all instances case-insensitive
-                    str = str.replace(new RegExp(escapeRegExp("{" + property + "}"), 'gi'), String(obj[property]));
-        }
-
-        function escapeRegExp(string) {
-            return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
-        }
-
-        function replaceByArray(arrayLike) {
-            for (var i = 0, len = arrayLike.length; i < len; i++)
-                str = str.replace(new RegExp(escapeRegExp("{" + i + "}"), 'gi'), String(arrayLike[i]));
-        }
-
-        if (!arguments.length || arguments[0] === null || arguments[0] === undefined)
-            return str;
-        else if (arguments.length == 1 && Array.isArray(arguments[0]))
-            replaceByArray(arguments[0]);
-        else if (arguments.length == 1 && typeof arguments[0] === "object")
-            replaceByObjectProperies(arguments[0]);
-        else
-            replaceByArray(arguments);
-
-        return str;
-    };
-}
 
 //-------------------------------------------------------------------------------------
 // Reload furetures: Edit, Delete, Insert, SwitchSate
@@ -171,11 +127,10 @@ $("#btnsearch").click(function() {
         url: endpoint.generateSearchPriceByTime(),
         contentType: "application/json",
         data: JSON.stringify({
-            txt_search: $('input[name=txt_search]').val(),
+            search_key: $('input[name=txt_search]').val(),
         }),
         success: function(data) {
             console.log(data);
-            getAndFillOutAllPriceByTime();
         },
         error: function(error) {
             console.log(error);
@@ -278,9 +233,9 @@ function validateAddNewPriceByTimeValues() {
     return priceByTime;
 }
 
-//-------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Get and fill out all price balancer
-//-------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 function getAndFillOutAllPriceByTime() {
     $.ajax({
         method: 'GET',
@@ -300,6 +255,22 @@ function getAndFillOutAllPriceByTime() {
     });
 };
 
+//------------------------------------------------------------------------------
+// Additional functions
+//------------------------------------------------------------------------------
+
+function validNull(selector) {
+    if ($(selector).length > 0) {
+        if ($(selector).prop("tagName").toLowerCase() == "select") {
+            return ($(selector).val() > 0) ? true : false;
+        } else {
+            return ($(selector).val().length > 0) ? true : false;
+        }
+    } else {
+        return false;
+    }
+}
+
 function AutoCompleteSearch() {
     $(function() {
         $('#autocomplete').autoComplete({
@@ -315,5 +286,39 @@ function AutoCompleteSearch() {
         });
 
     });
+}
+
+if (!String.prototype.format) {
+    String.prototype.format = function() {
+        var args = arguments;
+        var str = this;
+
+        function replaceByObjectProperies(obj) {
+            for (var property in obj)
+                if (obj.hasOwnProperty(property))
+                    //replace all instances case-insensitive
+                    str = str.replace(new RegExp(escapeRegExp("{" + property + "}"), 'gi'), String(obj[property]));
+        }
+
+        function escapeRegExp(string) {
+            return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+        }
+
+        function replaceByArray(arrayLike) {
+            for (var i = 0, len = arrayLike.length; i < len; i++)
+                str = str.replace(new RegExp(escapeRegExp("{" + i + "}"), 'gi'), String(arrayLike[i]));
+        }
+
+        if (!arguments.length || arguments[0] === null || arguments[0] === undefined)
+            return str;
+        else if (arguments.length == 1 && Array.isArray(arguments[0]))
+            replaceByArray(arguments[0]);
+        else if (arguments.length == 1 && typeof arguments[0] === "object")
+            replaceByObjectProperies(arguments[0]);
+        else
+            replaceByArray(arguments);
+
+        return str;
+    };
 }
 
