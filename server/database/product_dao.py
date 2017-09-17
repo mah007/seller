@@ -58,7 +58,7 @@ class ProductDao(object):
         query = '''SELECT *
                     from product
                     WHERE user_id = '{}' and seller_sku = '{}'
-                '''.format(user['id'], sku)
+                '''.format(user['id'], sku['sku'])
         try:
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
@@ -67,7 +67,7 @@ class ProductDao(object):
             row = cur.fetchone()
             if not row:
                 conn.close()
-                return None, ExceptionUtils.error('''User: {}-{}, Product by SKU: {} is not found'''.format(user['username'], user['id'], sku))
+                return None, ExceptionUtils.error('''User: {}-{}, Product by SKU: {} is not found'''.format(user['username'], user['id'], sku['sku']))
 
             product = {
                     "id": row[0],

@@ -26,7 +26,7 @@ class PriceByTimeManager(object):
     # Add missing arguments and insert to our database
     sku['name'] = product['name'].encode('utf-8')
     sku['link'] = product['url'].encode('utf-8')
-    sku['special_price'] = 0 #product['special_price']
+    sku['special_price'] = product['special_price']
 
     priceByTime = PriceByTimeDao()
     result = priceByTime.insert(sku, user)

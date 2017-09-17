@@ -96,12 +96,16 @@ var EndpointConfig = function() {
   }
 
 
-  // ENEMY
+  //----------------------------------------------------------------------------
+  // Enemy section
+  //----------------------------------------------------------------------------
   EndpointConfig.prototype.generateGetHistory = function() {
       return endpointUrl + '/sku/get-all-history?token=' + $.cookie('token');
   }
 
-  // PRODUCT
+  //----------------------------------------------------------------------------
+  // Product section
+  //----------------------------------------------------------------------------
   EndpointConfig.prototype.generateGetAllProduct = function() {
       return endpointUrl + '/product/get?token=' + $.cookie('token');
   }
@@ -126,7 +130,9 @@ var EndpointConfig = function() {
       return endpointUrl + '/product/update-price?token=' + $.cookie('token');
   }
 
-  // PRICE BALANCER
+  //----------------------------------------------------------------------------
+  // Price by time section
+  //----------------------------------------------------------------------------
   EndpointConfig.prototype.generateInsertPriceByTime = function() {
       return endpointUrl + '/price-by-time/insert?token=' + $.cookie('token');
   }
@@ -143,30 +149,32 @@ var EndpointConfig = function() {
       return endpointUrl + '/price-by-time/search?token=' + $.cookie('token');
   }
 
-  // PRODUCT
+  //----------------------------------------------------------------------------
+  // Product management section
+  //----------------------------------------------------------------------------
   EndpointConfig.prototype.generateGetAllProduct = function() {
       return endpointUrl + '/product/get?token=' + $.cookie('token');
-  }  
+  }
 
   EndpointConfig.prototype.generateUpdateProduct = function() {
       return endpointUrl + '/product/update?token=' + $.cookie('token');
-  }  
+  }
 
   EndpointConfig.prototype.generateUpdateProduct = function() {
       return endpointUrl + '/product/update?token=' + $.cookie('token');
-  }  
+  }
 
   EndpointConfig.prototype.generateUpdateProduct = function() {
       return endpointUrl + '/product/update?token=' + $.cookie('token');
-  }  
+  }
 
   EndpointConfig.prototype.generateUpdateProductQuantity = function() {
       return endpointUrl + '/product/update-quantity?token=' + $.cookie('token');
-  }  
+  }
 
   EndpointConfig.prototype.generateUpdateProductPrice = function() {
       return endpointUrl + '/product/update-price?token=' + $.cookie('token');
-  }  
+  }
 
 }
 
