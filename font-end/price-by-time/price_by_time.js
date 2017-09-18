@@ -65,7 +65,7 @@ function enableSwitchery() {
                         });
                     },
                     error: function(error) {
-                        console.log(error);
+                        showErrorLog(error);
                     }
                 });
             });
@@ -115,6 +115,8 @@ $('#portlet-config').on('hidden.bs.modal', function() {
 // Add new SKU
 //-------------------------------------------------------------------------------------
 $("#btnAddNew").click(function() {
+    clearErrorLog();
+
     var priceByTime = validateAddNewPriceByTimeValues();
     console.log(priceByTime);
     if (!priceByTime) {
@@ -135,8 +137,7 @@ $("#btnAddNew").click(function() {
             clearAllAndFocusSearchInput();
         },
         error: function(error) {
-            console.log(error);
-            errorLog.html(error);
+            showErrorLog(error);
         }
     });
 })
@@ -223,7 +224,7 @@ function getAndFillOutAllPriceByTime() {
             focusSearchInput();
         },
         error: function(error) {
-            console.log(error);
+            showErrorLog(error);
         }
     });
 };
@@ -243,6 +244,16 @@ function clearAllAndFocusSearchInput() {
     $('input[name=txtPrice02]').val("");
     $('input[name=txtPrice03]').val("");
     $('input[name=search_key]').focus();
+}
+
+function showErrorLog(error) {
+    console.log(error);
+    var exception = JSON.parse(error.responseText);
+    errorLog.html(exception.error);
+}
+
+function clearErrorLog() {
+    errorLog.html("");
 }
 
 function validNull(selector) {

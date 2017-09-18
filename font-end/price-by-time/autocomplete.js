@@ -67,13 +67,23 @@ $autocomplete.on('keydown', function(e) {
 // Search prodcuts
 //------------------------------------------------------------------------------
 $("#btnsearch").click(function() {
+    clearErrorLog();
+    var searchKey = $searchInput.val();
+    if (searchKey == '' || searchKey == null) {
+        return;
+    }
+    var temp = searchKey.replace(/\ /g, "");
+    if (temp == '' || temp == null) {
+        return;
+    }
+
     $.ajax({
         method: 'POST',
         url: endpoint.generateSearchPriceByTime(),
         async: false,
         contentType: "application/json",
         data: JSON.stringify({
-            search_key: $searchInput.val()
+            search_key: searchKey
         }),
         success: function(data) {
             console.log(data);
@@ -114,7 +124,9 @@ function fillAutocompleteSourceAndShowUp(products) {
     $autocomplete.data("uiAutocomplete").search($autocomplete.val());
 }
 
-
+function clearErrorLog() {
+    $("#errorLog").html("");
+}
 
 
 
