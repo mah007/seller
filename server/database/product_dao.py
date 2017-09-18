@@ -67,7 +67,8 @@ class ProductDao(object):
             row = cur.fetchone()
             if not row:
                 conn.close()
-                return None, ExceptionUtils.error('''User: {}-{}, Product by SKU: {} is not found'''.format(user['username'], user['id'], sku['sku']))
+                errorMessage = '''User: {}-{}, Get-Product-By-SKU: {} is not found'''.format(user['username'], user['id'], sku['sku'])
+                return None, errorMessage
 
             product = {
                     "id": row[0],
@@ -92,7 +93,8 @@ class ProductDao(object):
             conn.close()
             return product, None
         except Exception as ex:
-            return None, ExceptionUtils.error('''Get Product by SKU {}, exception: {}'''.format(sku, str(ex)))
+            errorMessage = '''Get-Product-By-SKU {}, exception: {}'''.format(sku, str(ex))
+            return None, errorMessage
 
 
     # --------------------------------------------------------------------------
