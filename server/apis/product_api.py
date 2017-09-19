@@ -116,4 +116,28 @@ def updateProductPrice():
 	else:
 		return make_response(jsonify(result), 404)
 
+# ------------------------------------------------------------------------------
+# Search Product by name, seller sku, shop sku, brand and model
+# ------------------------------------------------------------------------------
+@ProductAPI.route('/product/search', methods=['POST'])
+@cross_origin()
+def searchProduct():
+  if not request.args:
+    return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
+  if not request.json:
+    return make_response(jsonify({'error': 'Missing json parameters value'}), 404)
+  if not 'token' in request.args:
+    return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
+  if not 'search_key' in request.json:
+    return make_response(jsonify({'error': 'Missing json parameter'}), 404)
+
+  searchKey = request.json['search_key']
+  token = request.args.get('token')
+  productManager = ProductManager()
+  result = productManager.searchProduct(token, searchKey)
+  if 'success' in result:
+    return make_response(jsonify(result), 201)
+  else:
+    return make_response(jsonify(result), 404)
+
 

@@ -152,3 +152,7 @@ function getAndFillOutProduct() {
         }
     });
 };
+
+function focusSearchInput() {
+    $('input[name=search_key]').focus();
+}

@@ -42,7 +42,7 @@ if __name__ == "__main__":
                 j = j + 1
         else:
             # comment.giveComment(driver, accounts[i], product, comments[j])
-            increaseView.performIncrease(driver, account[i], product)
+            increaseView.performIncrease(driver, accounts[i], product)
             j = j + 1
 
         if j == 2:

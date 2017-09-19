@@ -130,6 +130,10 @@ var EndpointConfig = function() {
       return endpointUrl + '/product/update-price?token=' + $.cookie('token');
   }
 
+  EndpointConfig.prototype.generateSearchProduct = function() {
+      return endpointUrl + '/product/search?token=' + $.cookie('token');
+  }
+
   //----------------------------------------------------------------------------
   // Price by time section
   //----------------------------------------------------------------------------

@@ -20,7 +20,7 @@ class IncreaseView:
         time.sleep(3)
 
     def close_popup(self, driver):
-        submitButton = driver.find_element_by_class_name('nyroModalClose nyroModalCloseButton nmReposition')
+        submitButton = driver.find_element_by_xpath("/html/body/div[7]/div/a")
         submitButton.click()
 
     def order_product(self, driver):
@@ -39,7 +39,7 @@ class IncreaseView:
         submitButton = driver.find_element_by_xpath("//*[@id='prodinfo']/div[1]/div/div[2]/div[1]/div/div/span[1]")
         submitButton.click()
 
-    # Multiple action to do in page
+    s Multiple action to do in page
     def action_order_complete(self, driver):
         self.add_to_cart(driver)
         self.order_product(driver)
@@ -54,7 +54,6 @@ class IncreaseView:
             time.sleep(3)
             self.scroll_down(driver)
             self.scroll_up(driver)
-            self.click_like(driver)
 
             random = randint(0,5)
             print(random)
