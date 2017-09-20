@@ -21,7 +21,7 @@ jQuery(document).ready(function() {
     // Init data
     getAndFillOutAllSku();
     getAndFillOutHistory();
-    getAndFillOutAllPriceByTime();
+    // getAndFillOutAllPriceByTime();
 
 
     if($('.btntab1submit').length > 0) {
@@ -473,16 +473,6 @@ function getAndFillOutHistory() {
         }
     });
 };
-
-//-------------------------------------------------------------------------------------
-// Logout
-//-------------------------------------------------------------------------------------
-$('#logoutButton').click(function() {
-    cookie.clearToken('token');
-    cookie.clearToken('myUser');
-    cookie.clearToken('username');
-    window.location.href = "../login";
-});
 
 //-------------------------------------------------------------------------------------
 // Update Password
