@@ -123,19 +123,18 @@ class ProductDao(object):
                     "url": row[2],
                     "status": row[3],
                     "quantity": row[4],
-                    "available_quantity": row[5],
-                    "seller_sku": row[6],
-                    "shop_sku": row[7],
-                    "original_price": row[8],
-                    "special_price": row[9],
-                    "image": row[10],
-                    "width": row[11],
-                    "height": row[12],
-                    "weight": row[13],
-                    "brand": row[14],
-                    "model": row[15],
-                    "primary_category": row[16],
-                    "spu_id": row[17]
+                    "seller_sku": row[5],
+                    "shop_sku": row[6],
+                    "original_price": row[7],
+                    "special_price": row[8],
+                    "image": row[9],
+                    "width": row[10],
+                    "height": row[11],
+                    "weight": row[12],
+                    "brand": row[13],
+                    "model": row[14],
+                    "primary_category": row[15],
+                    "spu_id": row[16]
                 })
 
             conn.close()
@@ -151,7 +150,11 @@ class ProductDao(object):
                     set quantity = '{}', original_price = '{}'
                     WHERE id = '{}'
                 '''.format(product['quantity'], product['price'], product['id'])
-        DatabaseHelper.execute(query)
+        try:
+            DatabaseHelper.execute(query)
+            return ExceptionUtils.success()
+        except Exception as ex:
+            return ExceptionUtils.error('''Update product got exception: {}'''.format(str(ex)))
 
     # --------------------------------------------------------------------------
     # Update Product Quantity
@@ -161,7 +164,11 @@ class ProductDao(object):
                     set quantity = '{}'
                     WHERE id = '{}'
                 '''.format(product['quantity'], product['id'])
-        DatabaseHelper.execute(query)
+        try:
+            DatabaseHelper.execute(query)
+            return ExceptionUtils.success()
+        except Exception as ex:
+            return ExceptionUtils.error('''Update product's quantity got exception: {}'''.format(str(ex)))
 
     # --------------------------------------------------------------------------
     # Update Product Price
@@ -171,7 +178,12 @@ class ProductDao(object):
                     set original_price = '{}'
                     WHERE id = '{}'
                 '''.format(product['price'], product['id'])
-        DatabaseHelper.execute(query)
+        try:
+            DatabaseHelper.execute(query)
+            conn.close()
+            return ExceptionUtils.success()
+        except Exception as ex:
+            return ExceptionUtils.error('''Update product's price got exception: {}'''.format(str(ex)))
 
     # --------------------------------------------------------------------------
     # Check Product exsits

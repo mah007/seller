@@ -25,7 +25,7 @@ class ProductManager(object):
 
         productDao = ProductDao()
         products = productDao.getAllProduct(user)
-        return ResponseHelper.generateSuccessResponse(products)
+        return ResponseUtils.generateSuccessResponse(products)
 
     #---------------------------------------------------------------------------
     # Insert product from Lazada with specific user
@@ -52,7 +52,7 @@ class ProductManager(object):
             if(offset % 20 != 0):
                 flag = -1
 
-        return ResponseHelper.generateSuccessResponse(None)
+        return ResponseUtils.generateSuccessResponse(None)
 
     #---------------------------------------------------------------------------
     # Update product with new quantity and price
@@ -64,7 +64,7 @@ class ProductManager(object):
 
         productDao = ProductDao()
         productDao.updateProduct(product)
-        return ResponseHelper.generateSuccessResponse(None)
+        return ResponseUtils.generateSuccessResponse(None)
 
 
     #---------------------------------------------------------------------------
@@ -77,7 +77,7 @@ class ProductManager(object):
 
         productDao = ProductDao()
         productDao.updateProductQuantity(product)
-        return ResponseHelper.generateSuccessResponse(None)
+        return ResponseUtils.generateSuccessResponse(None)
 
     #---------------------------------------------------------------------------
     # Update product with new quantity and price
@@ -89,7 +89,7 @@ class ProductManager(object):
 
         productDao = ProductDao()
         productDao.updateProductPrice(product)
-        return ResponseHelper.generateSuccessResponse(None)
+        return ResponseUtils.generateSuccessResponse(None)
 
     #-----------------------------------------------------------------------------
     # Search Product by name, seller sku, shop sku, brand and model

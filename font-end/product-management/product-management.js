@@ -27,27 +27,75 @@ jQuery(document).ready(function() {
 
             for (var i = 0; i < length; i += 1) {
                 var row = body.rows[i];
+                console.log(row);
 
                 var id = $(row).data("id");
                 var oriQuantity = $(row).data("quantity");
                 var oriPrice = $(row).data("price");
 
-                var quantity = row.cells[10].children[0].value;
-                var price = row.cells[12].children[0].value;
+                var quantity = row.cells[4].children[0].value;
+                var price = row.cells[5].children[0].value;
 
                 if (oriQuantity != quantity && oriPrice != price) {
+                    console.log("Ori and Pri")
                     updateProduct(quantity, price, id);
                 } else if (oriPrice != price) {
+                    console.log("Pri")
                     updateProductPrice(price, id);
                 } else if (oriQuantity != quantity) {
+                    console.log("Ori")
                     updateProductQuantity(quantity, id);
                 }
             }
         });
     }
 
+    $('#autocomplete').on('keydown', function(e) {
+        if (e.which == 13) {
+            $('#btnsearch').trigger('click');
+        }
+    });
+
+    //------------------------------------------------------------------------------
+    // Search products and fill out products into product template
+    //------------------------------------------------------------------------------
+    $("#btnsearch").click(function() {
+        clearErrorLog();
+        var searchKey = $('input[name=search_key]').val();
+        if (searchKey == '' || searchKey == null) {
+            return;
+        }
+        var temp = searchKey.replace(/\ /g, "");
+        if (temp == '' || temp == null) {
+            return;
+        }
+
+        $.ajax({
+            method: 'POST',
+            url: endpoint.generateSearchProduct(),
+            async: false,
+            contentType: "application/json",
+            data: JSON.stringify({
+                search_key: searchKey
+            }),
+            success: function(data) {
+                console.log(data.data);
+                $('#tbody_product').empty();
+                var template = $("#product-content-template").html();
+                var contentHtml = Handlebars.compile(template);
+                $("#tbody_product").html(contentHtml(data));
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+
 });
 
+function clearErrorLog() {
+    $("#errorLog").html("");
+}
 
 //-------------------------------------------------------------------------------------
 // Update product for new quantity and new price
