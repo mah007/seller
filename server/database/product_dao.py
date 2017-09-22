@@ -123,18 +123,19 @@ class ProductDao(object):
                     "url": row[2],
                     "status": row[3],
                     "quantity": row[4],
-                    "seller_sku": row[5],
-                    "shop_sku": row[6],
-                    "original_price": row[7],
-                    "special_price": row[8],
-                    "image": row[9],
-                    "width": row[10],
-                    "height": row[11],
-                    "weight": row[12],
-                    "brand": row[13],
-                    "model": row[14],
-                    "primary_category": row[15],
-                    "spu_id": row[16]
+                    "available_quantity": row[5],
+                    "seller_sku": row[6],
+                    "shop_sku": row[7],
+                    "original_price": row[8],
+                    "special_price": row[9],
+                    "image": row[10],
+                    "width": row[11],
+                    "height": row[12],
+                    "weight": row[13],
+                    "brand": row[14],
+                    "model": row[15],
+                    "primary_category": row[16],
+                    "spu_id": row[17]
                 })
 
             conn.close()

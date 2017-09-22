@@ -27,7 +27,6 @@ jQuery(document).ready(function() {
 
             for (var i = 0; i < length; i += 1) {
                 var row = body.rows[i];
-                console.log(row);
 
                 var id = $(row).data("id");
                 var oriQuantity = $(row).data("quantity");
