@@ -37,20 +37,17 @@ jQuery(document).ready(function() {
                 var price = row.cells[5].children[0].value;
 
                 if (oriQuantity != quantity && oriPrice != price) {
-                    console.log("Ori and Pri")
                     updateProduct(quantity, price, id);
                 } else if (oriPrice != price) {
-                    console.log("Pri")
                     updateProductPrice(price, id);
                 } else if (oriQuantity != quantity) {
-                    console.log("Ori")
                     updateProductQuantity(quantity, id);
                 }
             }
         });
     }
 
-    $('#autocomplete').on('keydown', function(e) {
+    $('#search').on('keydown', function(e) {
         if (e.which == 13) {
             $('#btnsearch').trigger('click');
         }
@@ -84,6 +81,7 @@ jQuery(document).ready(function() {
                 var template = $("#product-content-template").html();
                 var contentHtml = Handlebars.compile(template);
                 $("#tbody_product").html(contentHtml(data));
+                $('input[name=search_key]').val("");
             },
             error: function(error) {
                 console.log(error);
