@@ -11,7 +11,7 @@ class LazadaProductApi(object):
 	#-----------------------------------------------------------------------------
 	# Get Produts from Lazada
 	#-----------------------------------------------------------------------------
-	def getProducts(self, user, timestamp):
+	def getProducts(self, user, constant):
 		parameters = {
 		'Action': 'GetProducts',
 		'Format':'JSON',
@@ -67,7 +67,7 @@ class LazadaProductApi(object):
 		}
 
 		parameters['Signature'] = LazadaApiHelper.generateSignature(parameters, user['lazada_api_key'])
-		url = "{}/?Action={}&Format={}&Timestamp={}&UserID={}&Version={}&Signature={}&CreatedBefore={}&Filter={}&Offset={}&Limit={}".format(
+		url = "{}/?Action={}&Format={}&Timestamp={}&UserID={}&Version={}&Signature={}&CreatedAfter={}&Filter={}&Limit={}".format(
 						LazadaAPI.ENDPOINT,
 		 				parameters["Action"],
 		 				parameters["Format"],
@@ -86,7 +86,11 @@ class LazadaProductApi(object):
 					return ExceptionUtils.returnError('''Get Products is error: ''', response), 0
 
 				data = response['SuccessResponse']['Body']
-				return data['Products'], data['TotalProducts']
+				products = data['Products']
+				if (len(products) > 0):
+					return data['Products'], data['TotalProducts']
+				else:
+					return products, 0
 
 			return ExceptionUtils.error('''Get Products is error: {}'''.format(resp.status_code)), 0
 		except Exception as ex:

@@ -9,9 +9,10 @@ if __name__ == "__main__":
   userDao = UserDao()
   superAdmin = userDao.getSuperAdmin()
 
+  isFirstTime = True;
   while True:
     if (superAdmin):
-      clone = GetProductWorker({"user": superAdmin})
+      clone = GetProductWorker({"user": superAdmin, "isFirstTime": isFirstTime})
       try:
         clone.daemon = True
         clone.start()
@@ -19,6 +20,7 @@ if __name__ == "__main__":
         clone.join(0)
         print ("Error: Unable to get products from lazada ", ex)
 
+    isFirstTime = False
     time.sleep(CronJob.GET_PRODUCT_TIME_INTEVAL)
 
 

@@ -20,8 +20,57 @@ class GetProductWorker(threading.Thread):
 
   def run(self):
     user = self.kwargs['user']
+    isFirstTime = self.kwargs['isFirstTime']
     print('''*********** '{}' is running ***********'''.format(user['lazada_user_name']))
 
+    if (isFirstTime == True):
+      self.getAllProducts(user)
+    else:
+      self.getNewProducts(user)
+
+  #-----------------------------------------------------------------------------
+  # Get Lazada products have created recently by lazadaProductApi.getProductsWithCreatedAfter(user)
+  # and insert to our dataBase
+  #-----------------------------------------------------------------------------
+  def getNewProducts(self, user):
+
+    # TODO:
+    # Handle product can be creating more than LIMIT (LazadaAPI.LIMIT)
+    # within delay time (CronJob.GET_PRODUCT_TIME_INTEVAL).
+
+    # Get lazada products by offset
+    products, totalProducts = lazadaProductApi.getProductsWithCreatedAfter(user)
+    if 'error' in products:
+      print(products)
+      return
+
+    # There is no new products exist
+    if len(products) <= 0:
+      return
+
+    # Insert or update to our database
+    for product in products:
+      product = ConvertHelper.convertLazadaProductToProduct(product)
+
+      # Do check exist to avoid insert in duplication
+      isProductExist, errorException = productDao.isProductExist(user, product['shop_sku'])
+      if errorException != None:
+        print(errorException)
+        return
+
+      result = {}
+      if isProductExist == True:
+        result = productDao.updateProductWithLazadaProduct(user, product)
+      else:
+        result = productDao.insert(user, product)
+      if 'error' in result:
+        print(result)
+        return
+
+  #-----------------------------------------------------------------------------
+  # Get All Lazada products have created before by Offset
+  #-----------------------------------------------------------------------------
+  def getAllProducts(self, user):
     # Get offset: must not error
     productOffsetConstant = constantDao.getConstant(user, ConstantConfig.PRODUCT_OFFSET)
     if 'error' in productOffsetConstant:
