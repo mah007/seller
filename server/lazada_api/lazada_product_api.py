@@ -42,19 +42,19 @@ class LazadaProductApi(object):
 			if resp.status_code == 200:
 				response = json.loads(resp.text)
 				if ('ErrorResponse' in response):
-					return ExceptionUtils.returnError('''Get Products is error: ''', response)
+					return ExceptionUtils.returnError('''Get Products is error: ''', response), 0
 
 				data = response['SuccessResponse']['Body']
 				return data['Products'], data['TotalProducts']
 
-			return ExceptionUtils.error('''Get Products is error: {}'''.format(resp.status_code))
+			return ExceptionUtils.error('''Get Products is error: {}'''.format(resp.status_code)), 0
 		except Exception as ex:
-			return ExceptionUtils.error('''Get Products is error: {}'''.format(str(ex)))
+			return ExceptionUtils.error('''Get Products is error: {}'''.format(str(ex))), 0
 
 	#-----------------------------------------------------------------------------
 	# Get Produts by CreatedAfter
 	#-----------------------------------------------------------------------------
-	def getProductsWithCreatedAfter(self, user, constant):
+	def getProductsWithCreatedAfter(self, user):
 		parameters = {
 		'Action': 'GetProducts',
 		'Format':'JSON',
@@ -83,14 +83,14 @@ class LazadaProductApi(object):
 			if resp.status_code == 200:
 				response = json.loads(resp.text)
 				if ('ErrorResponse' in response):
-					return ExceptionUtils.returnError('''Get Products is error: ''', response)
+					return ExceptionUtils.returnError('''Get Products is error: ''', response), 0
 
 				data = response['SuccessResponse']['Body']
 				return data['Products'], data['TotalProducts']
 
-			return ExceptionUtils.error('''Get Products is error: {}'''.format(resp.status_code))
+			return ExceptionUtils.error('''Get Products is error: {}'''.format(resp.status_code)), 0
 		except Exception as ex:
-			return ExceptionUtils.error('''Get Products is error: {}'''.format(str(ex)))
+			return ExceptionUtils.error('''Get Products is error: {}'''.format(str(ex))), 0
 
 
 
