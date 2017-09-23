@@ -53,7 +53,6 @@ class SkuManager(object):
 		# Validate SKU by product's data in database
 		productDao = ProductDao()
 		product, exception = productDao.getProductBySellerSku(user, sku)
-		print(product)
 		if exception != None:
 			return ResponseUtils.generateErrorResponse("Product doesn't exists!")
 
