@@ -420,7 +420,6 @@ $(".btnmodalsubmit").click(function() {
                 state: $('select[name=txt_stt]').val() == "active" ? 1 : 0
             }),
             success: function(data) {
-                swal("Success", "", "success");
                 $('#portlet-config').modal('hide');
                 getAndFillOutAllSku();
             },
