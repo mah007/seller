@@ -46,6 +46,7 @@ class GetProductWorker(threading.Thread):
 
     # There is no new products exist
     if len(products) <= 0:
+      print("Have no new product")
       return
 
     # Insert or update to our database
@@ -61,8 +62,10 @@ class GetProductWorker(threading.Thread):
       result = {}
       if isProductExist == True:
         result = productDao.updateProductWithLazadaProduct(user, product)
+        print("Update a product")
       else:
         result = productDao.insert(user, product)
+        print("Insert new product")
       if 'error' in result:
         print(result)
         return

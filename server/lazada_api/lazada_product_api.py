@@ -45,7 +45,11 @@ class LazadaProductApi(object):
 					return ExceptionUtils.returnError('''Get Products is error: ''', response), 0
 
 				data = response['SuccessResponse']['Body']
-				return data['Products'], data['TotalProducts']
+				products = data['Products']
+				if (len(products) > 0):
+					return data['Products'], data['TotalProducts']
+				else:
+					return products, 0
 
 			return ExceptionUtils.error('''Get Products is error: {}'''.format(resp.status_code)), 0
 		except Exception as ex:

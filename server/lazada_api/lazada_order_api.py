@@ -50,28 +50,28 @@ class LazadaOrderApi(object):
 				response = json.loads(resp.text)
 				# Request API error
 				if ('ErrorResponse' in response):
-					errorMessage = '''User: {}-{}, Get Orders is error: '''.format(user['username'], user['id'])
-					return ExceptionUtils.returnError(errorMessage, response)
+					errorMessage = ExceptionUtils.getBodyMessage(response)
+					return None, '''User: {}-{}, Get-Orders: {}'''.format(user['username'], user['id'], errorMessage)
 
 				# Request API Success
-				return response['SuccessResponse']['Body']['Orders']
+				return response['SuccessResponse']['Body']['Orders'], None
 
 			# Request error
-			return ExceptionUtils.error('''User: {}-{}, Get Orders is error: {}'''.format(user['username'], user['id'], resp.status_code))
+			return None, '''User: {}-{}, Get-Orders: {}'''.format(user['username'], user['id'], resp.status_code)
 		except Exception as ex:
-			return ExceptionUtils.error('''User: {}-{}, Get Orders is error: {}'''.format(user['username'], user['id'], str(ex)))
+			return None, '''User: {}-{}, Get-Orders: {}'''.format(user['username'], user['id'], str(ex))
 
 	#-----------------------------------------------------------------------------
 	# Get order item by order id
 	#-----------------------------------------------------------------------------
-	def getOrderItems(self, order, user):
+	def getOrderItems(self, user, orderId):
 		parameters = {
 		'Action': 'GetOrderItems',
 		'Format':'json',
 		'Timestamp': LazadaApiHelper.getCurrentUTCTime(),
 		'UserID': user['lazada_user_id'],
 		'Version': '1.0',
-		'OrderId': str(order['OrderId'])
+		'OrderId': str(orderId)
 		}
 
 		parameters['Signature'] = LazadaApiHelper.generateSignature(parameters, user['lazada_api_key'])
@@ -89,16 +89,17 @@ class LazadaOrderApi(object):
 			resp = requests.get(url)
 			if resp.status_code == 200:
 				response = json.loads(resp.text)
-				if 'ErrorResponse' in response:
-					return ExceptionUtils.error('''User: {}-{}, Get OrderItem: {} is error: {}'''.format(user['id'], user['username'], order['OrderNumber'], response['ErrorResponse']['Head']['ErrorMessage']))
+				if ('ErrorResponse' in response):
+					errorMessage = ExceptionUtils.getBodyMessage(response)
+					return None, '''User: {}-{}, Get-OrderItem: {}'''.format(user['username'], user['id'], errorMessage)
 
-				return response['SuccessResponse']['Body']['OrderItems']
+				# Request API Success
+				return response['SuccessResponse']['Body']['OrderItems'], None
 
-			# Request except
-			return ExceptionUtils.error('''User: {}-{}, Get OrderItem: {} is error: {}'''.format(user['id'], user['username'], order['OrderNumber'], resp.status_code))
+			# Request error
+			return None, '''User: {}-{}, Get-OrderItems: {}'''.format(user['username'], user['id'], resp.status_code)
 		except Exception as ex:
-			return ExceptionUtils.error('''User: {}-{}, Get OrderItem: {} is error: {}'''.format(user['id'], user['username'], order['OrderNumber'], str(ex)))
-
+			return None, '''User: {}-{}, Get-OrderItems: {}'''.format(user['username'], user['id'], str(ex))
 
 	#-----------------------------------------------------------------------------
 	# Set Status: Ready to ship
@@ -178,6 +179,14 @@ class LazadaOrderApi(object):
 			return ExceptionUtils.error('''User: {}-{}, Set Status to Ready-To-Ship is error: {}'''.format(user['id'], user['username'], resp.status_code))
 		except Exception as ex:
 			return ExceptionUtils.error('''User: {}-{}, Set Status to Ready-To-Ship is error: {}'''.format(user['id'], user['username'], str(ex)))
+
+
+
+
+
+
+
+
 
 
 
