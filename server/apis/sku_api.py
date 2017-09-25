@@ -3,7 +3,7 @@ import simplejson as json
 from flask_cors import CORS, cross_origin
 from flask import Blueprint, render_template, abort, request, make_response, jsonify
 from managers.sku_manager import SkuManager
-
+from managers.product_manager import ProductManager
 
 SkuAPI = Blueprint('sku_api', __name__, template_folder='apis')
 
@@ -159,8 +159,6 @@ def update():
 		return make_response(jsonify({'error': 'Missing compete_price parameter'}), 404)
 	if not 'state' in request.json:
 		return make_response(jsonify({'error': 'Missing state parameter'}), 404)
-	# if not 'repeat_time' in request.json:
-	# 	return make_response(jsonify({'error': 'Missing repeat_time parameter'}), 404)
 
 	sku = {
 		"id": request.json['id'],
@@ -168,7 +166,6 @@ def update():
 		"max_price": int(request.json['max_price']),
 		"compete_price": int(request.json['compete_price']),
 		"state": int(request.json['state']),
-		# "repeat_time": int(request.json['repeat_time']),
 		"updated_at": int(round(time.time()))
 	}
 
@@ -179,8 +176,29 @@ def update():
 	else:
 		return make_response(jsonify(result), 404)
 
+# ------------------------------------------------------------------------------
+# Search sku by seller sku
+# ------------------------------------------------------------------------------
+@SkuAPI.route('/sku/search', methods=['POST'])
+@cross_origin()
+def searchProduct():
+  if not request.args:
+    return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
+  if not request.json:
+    return make_response(jsonify({'error': 'Missing json parameters value'}), 404)
+  if not 'token' in request.args:
+    return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
+  if not 'search_key' in request.json:
+    return make_response(jsonify({'error': 'Missing json parameter'}), 404)
 
-
+  searchKey = request.json['search_key']
+  token = request.args.get('token')
+  productManager = ProductManager()
+  result = productManager.searchProduct(token, searchKey)
+  if 'success' in result:
+    return make_response(jsonify(result), 201)
+  else:
+    return make_response(jsonify(result), 404)
 
 
 

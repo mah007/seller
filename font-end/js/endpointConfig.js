@@ -37,6 +37,10 @@ var EndpointConfig = function() {
     return endpointUrl + '/sku/update-state?token=' + $.cookie('token');
   }
 
+  EndpointConfig.prototype.generateSearchSku = function() {
+    return endpointUrl + '/sku/search?token=' + $.cookie('token');
+  }
+
   //----------------------------------------------------------------------------
   // User management section
   //----------------------------------------------------------------------------
