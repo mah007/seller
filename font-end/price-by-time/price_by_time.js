@@ -55,14 +55,9 @@ function enableSwitchery() {
                         id: id
                     }),
                     success: function(data) {
-                        swal({
-                            title: "Deleted!",
-                            text: "",
-                            type: "success",
-                            confirmButtonText: "OK! Redirect to list",
-                        }, function() {
-                            window.location.href = "";
-                        });
+                        swal.close();
+                        getAndFillOutAllPriceByTime();
+                        clearAllAndFocusSearchInput();
                     },
                     error: function(error) {
                         showErrorLog(error);
@@ -268,6 +263,7 @@ function validNull(selector) {
     }
 }
 
+// String format: "TEST {}".format(value)
 if (!String.prototype.format) {
     String.prototype.format = function() {
         var args = arguments;
