@@ -18,13 +18,13 @@ class ProductManager(object):
     #---------------------------------------------------------------------------
     # Get all product
     #---------------------------------------------------------------------------
-    def getAllProduct(self, token):
+    def getProducts(self, token):
         user = ManagerHelper.validateToken(token)
         if 'error' in user:
             return user
 
         productDao = ProductDao()
-        products = productDao.getAllProduct(user)
+        products = productDao.getProducts(user)
         return ResponseUtils.generateSuccessResponse(products)
 
     #---------------------------------------------------------------------------

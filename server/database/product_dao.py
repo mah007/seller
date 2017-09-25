@@ -2,6 +2,9 @@ from database.database_helper import DatabaseHelper
 from utils.string_utils import StringUtils
 from utils.exception_utils import ExceptionUtils
 
+# ------------------------------------------------------------------------------
+GET_PRODUCT_LIMIT = 10
+
 
 class ProductDao(object):
 
@@ -102,13 +105,13 @@ class ProductDao(object):
     # --------------------------------------------------------------------------
     # Get All Product
     # --------------------------------------------------------------------------
-    def getAllProduct(self, user):
+    def getProducts(self, user):
         query = '''SELECT *
                     from product
                     WHERE user_id = '{}'
                     ORDER BY quantity, original_price
-                    ASC LIMIT 30
-                '''.format(user['id'])
+                    ASC LIMIT {}
+                '''.format(user['id'], GET_PRODUCT_LIMIT)
         try:
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()

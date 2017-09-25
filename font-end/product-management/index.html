@@ -99,9 +99,9 @@
                                 <div class="tab-pane active" id="tab_1_1">
                                     <div class="table-toolbar">
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-12">
                                                 <div class="btn-group pull-right btnUpdate" style="margin-right: 20px;">
-                                                    <button id="sample_editable_1_new" class="btn green"><span class="md-click-circle md-click-animate" style="height: 104px; width: 104px; top: -28px; left: 0px;"></span> Cập nhật <i class="fa fa-refresh"></i>
+                                                    <button id="sample_editable_1_new" class="btn green"><span class="md-click-circle md-click-animate" style="height: 104px; width: 104px; top: -28px; left: 0px;"></span> Update <i class="fa fa-refresh"></i>
                                                     </button>
                                                 </div>
                                             </div>
@@ -114,12 +114,11 @@
                                         <table id="table_product" class="table table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-center" style="width: 25%;">Name</th>
-                                                    <th class="text-center" style="width: 20%;">Seller Sku</th>
-                                                    <th class="text-center" style="width: 15%;">Shop Sku</th>
-                                                    <th class="text-center" style="width: 20%;">Image</th>
-                                                    <th class="text-left" style="width: 10%;">Quantity</th>
-                                                    <th class="text-left" style="width: 10%;">Original Price</th>
+                                                    <th class="text-center" style="width: 15%;">Image</th>
+                                                    <th class="text-left" style="width: 25%;">Name</th>
+                                                    <th class="text-left" style="width: 20%;">Sku</th>
+                                                    <th class="text-left" style="width: 10%;">Số lượng</th>
+                                                    <th class="text-left" style="width: 10%;">Giá nhập</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="tbody_product">
@@ -182,15 +181,14 @@
     <script id="product-content-template" type="text/x-handlebars-template">
         {{#each data}}
         <tr data-id="{{id}}" data-name={{name}} data-image={{image}} data-model={{model}} data-width={{width}} data-height={{height}} data-weight={{weight}} data-sellerSku={{seller_sku}} data-shopSku={{shop_sku}} data-branch={{brand}} data-quantity={{quantity}} data-original_price={{original_price}}>
-            <td class="text-center">{{name}}</td>
-            <td class="text-center">{{seller_sku}}</td>
-            <td class="text-center">{{shop_sku}}</td>
             <td class="text-center"><img src="{{image}}" width="70px" /> </td>
+            <td class="text-left"><a href="{{url}}" target="_blank">{{name}}</a></td>
+            <td class="text-left">{{seller_sku}}</td>
             <th>
-                <input type="number" class="form-control input-sm" style="background-color: #ffe6e6;" value={{quantity}} />
+                <input type="number" min="0" class="form-control input-sm" style="background-color: #ffe6e6;" value={{quantity}} />
             </th>
             <th>
-                <input type="number" class="form-control input-sm" style="background-color: #ffe6e6;" value={{original_price}} />
+                <input type="number" min="0" class="form-control input-sm" style="background-color: #ffe6e6;" value={{original_price}} />
             </th>
         </tr>
         {{/each}}

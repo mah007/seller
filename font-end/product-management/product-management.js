@@ -32,8 +32,8 @@ jQuery(document).ready(function() {
                 var oriQuantity = $(row).data("quantity");
                 var oriPrice = $(row).data("price");
 
-                var quantity = row.cells[4].children[0].value;
-                var price = row.cells[5].children[0].value;
+                var quantity = row.cells[3].children[0].value;
+                var price = row.cells[4].children[0].value;
 
                 if (oriQuantity != quantity && oriPrice != price) {
                     updateProduct(quantity, price, id);
