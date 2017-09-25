@@ -56,7 +56,7 @@ class OrderItemDao(object):
         query = '''INSERT INTO order_item(order_item_id, shop_id, order_id, name,
                         seller_sku, shop_sku, shipping_type, item_price, paid_price,
                         currency, wallet_credit, tax_amount, shipping_service_cost,
-                        voucher_amount, voucher_code, status, shipment_provider,
+                        shipping_amount, voucher_amount, voucher_code, status, shipment_provider,
                         is_digital, digital_delivery_info, tracking_code, tracking_code_pre,
                         reason, reason_detail, purchase_order_id, purchase_order_number,
                         package_id, promised_shipping_time, extra_attributes,
@@ -66,7 +66,7 @@ class OrderItemDao(object):
                     VALUES ('{}', '{}', '{}', "{}", "{}", '{}', '{}', '{}', '{}', '{}',
                             '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}',
                             '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}',
-                            '{}', '{}', '{}', '{}', '{}', '{}', '{}')
+                            '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')
                 '''.format(orderItem['order_item_id'], orderItem['shop_id'], orderItem['order_id'],
                            orderItem['name'], orderItem['seller_sku'], orderItem['shop_sku'],
                            orderItem['shipping_type'], orderItem['item_price'], orderItem['paid_price'],
@@ -107,66 +107,78 @@ class OrderItemDao(object):
             return False, '''User: {}-{}, Check-OrderItem-Exist: {}'''.format(user['username'], user['id'], str(ex))
 
     # --------------------------------------------------------------------------
-    # Get order by order number
+    # Get OrderItem by OrderId
+    # --------------------------------------------------------------------------
+    def getOrderItemByOrderId(self, user, orderId):
+        query = '''SELECT *
+                    FROM order_item
+                    WHERE user_id = '{}' AND order_id = '{}'
+                '''.format(user['id'], orderId)
+        return self.getOrderItems(user, query)
+
+    # --------------------------------------------------------------------------
+    # Get OrderItem by OrderItemId
     # --------------------------------------------------------------------------
     def getOrderItemByOrderItemId(self, user, orderItemId):
         query = '''SELECT *
                     FROM order_item
                     WHERE user_id = '{}' AND order_item_id = '{}'
-                '''.format(user['id'], orderNumber)
+                '''.format(user['id'], orderItemId)
+        return self.getOrderItems(user, query)
+
+    def getOrderItems(self, user, query):
         try:
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)
 
-            row = cur.fetchone()
-            if not row:
-                conn.close()
-                return None, '''User: {}-{}, Get-Order-Item: {} is not found'''.format(user['username'], user['id'], orderItemId)
-
-            orderItem = {
-                'id': row[0],
-                'order_item_id': row[1],
-                'shop_id': row[2],
-                'order_id': row[3],
-                'name': row[4],
-                'seller_sku': row[5],
-                'shop_sku': row[6],
-                'shipping_type': row[7],
-                'item_price': row[8],
-                'paid_price': row[9],
-                'currency': row[10],
-                'wallet_credit': row[11],
-                'tax_amount': row[12],
-                'shipping_service_cost': row[13],
-                'voucher_amount': row[14],
-                'voucher_code': row[15],
-                'status': row[16],
-                'shipment_provider': row[17],
-                'is_digital': row[18],
-                'digital_delivery_info': row[19],
-                'tracking_code': row[20],
-                'tracking_code_pre': row[21],
-                'reason': row[22],
-                'reason_detail': row[23],
-                'purchase_order_id': row[24],
-                'purchase_order_number': row[25],
-                'package_id': row[26],
-                'promised_shipping_time': row[27],
-                'extra_attributes': row[28],
-                'shipping_provider_type': row[29],
-                'created_at': row[30],
-                'updated_at': row[31],
-                'return_status': row[32],
-                'product_main_image': row[33],
-                'variation': row[34],
-                'product_detail_url': row[35],
-                'invoice_number': row[36]
-            }
+            orderItems = []
+            rows = cur.fetchall()
+            for row in rows:
+                orderItems.append({
+                    'id': row[0],
+                    'order_item_id': row[1],
+                    'shop_id': row[2],
+                    'order_id': row[3],
+                    'name': row[4],
+                    'seller_sku': row[5],
+                    'shop_sku': row[6],
+                    'shipping_type': row[7],
+                    'item_price': row[8],
+                    'paid_price': row[9],
+                    'currency': row[10],
+                    'wallet_credit': row[11],
+                    'tax_amount': row[12],
+                    'shipping_amount': row[13],
+                    'shipping_service_cost': row[14],
+                    'voucher_amount': row[15],
+                    'voucher_code': row[16],
+                    'status': row[17],
+                    'shipment_provider': row[18],
+                    'is_digital': row[19],
+                    'digital_delivery_info': row[20],
+                    'tracking_code': row[21],
+                    'tracking_code_pre': row[22],
+                    'reason': row[23],
+                    'reason_detail': row[24],
+                    'purchase_order_id': row[25],
+                    'purchase_order_number': row[26],
+                    'package_id': row[27],
+                    'promised_shipping_time': row[28],
+                    'extra_attributes': row[29],
+                    'shipping_provider_type': row[30],
+                    'created_at': row[31],
+                    'updated_at': row[32],
+                    'return_status': row[33],
+                    'product_main_image': row[34],
+                    'variation': row[35],
+                    'product_detail_url': row[36],
+                    'invoice_number': row[37]
+                })
             conn.close()
-            return order, None
+            return orderItems, None
         except Exception as ex:
-            return None, '''User: {}-{}, Order-Number: {}, Get-Order-By-Order-Number exception {}'''.format(user['username'], user['id'], orderNumber, str(ex))
+            return None, '''User: {}-{}, Query: {}, Get-Order-By-Order-Number exception {}'''.format(user['username'], user['id'], query, str(ex))
 
     # --------------------------------------------------------------------------
     # Update Order State

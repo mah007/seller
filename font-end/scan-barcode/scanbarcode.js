@@ -74,10 +74,6 @@ $(document).bind('keydown', '2', function() {
     console.log("ok 2");
     changeShowOrderDetailCheckbox();
 })
-$(document).bind('keydown', '3', function() {
-    console.log("ok 3");
-    performRefreshAllOrders();
-})
 $(document).bind('keydown', '4', function() {
     console.log("ok 4");
     performSetStatusToReadyToShip();
@@ -92,10 +88,6 @@ $("#barcodeInput").keyup(function() {
     }
     if (text == '2') {
         changeShowOrderDetailCheckbox();
-        $this.val("");
-    }
-    if (text == '3') {
-        performRefreshAllOrders();
         $this.val("");
     }
     if (text == '4') {
@@ -129,37 +121,6 @@ function changeShowOrderDetailCheckbox() {
         $("#orderDetailSection").show();
     }
 }
-
-
-//------------------------------------------------------------------------------
-// Refesh all orders
-//------------------------------------------------------------------------------
-$("#getAllOrdersButton").click(function() {
-    performRefreshAllOrders();
-})
-
-function performRefreshAllOrders() {
-    var $btn = $("#getAllOrdersButton").button('loading');
-    clearAndFocusBarcodeInput();
-    refreshLogAndOrder();
-
-    $.ajax({
-        method:'GET',
-        url: endpoint.generateRefreshAllOrdersEndPoint(),
-        contentType: "application/json",
-        success: function(data) {
-            console.log(data);
-            $btn.button('reset');
-            fillSuccessLog(data.success);
-        },
-        error: function(error) {
-            $btn.button('reset');
-            console.log(error);
-            fillErrorLog(JSON.parse(error.responseText));
-        }
-    });
-}
-
 
 //------------------------------------------------------------------------------
 // Scan barcode section

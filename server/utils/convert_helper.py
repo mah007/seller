@@ -41,8 +41,8 @@ class ConvertHelper:
   def convertLazadaOrderToOrder(self, lazadaOrder):
     return {
       "order_id": lazadaOrder['OrderId'],
-      "customer_first_name": lazadaOrder['CustomerFirstName'].replace("'", ""),
-      "customer_lastName": lazadaOrder['CustomerLastName'].replace("'", ""),
+      "customer_first_name": lazadaOrder['CustomerFirstName'],
+      "customer_lastName": lazadaOrder['CustomerLastName'],
       "order_number": lazadaOrder['OrderNumber'],
       "payment_method": lazadaOrder['PaymentMethod'],
       "remarks": lazadaOrder['Remarks'],
@@ -53,8 +53,8 @@ class ConvertHelper:
       "voucher_code": lazadaOrder['VoucherCode'],
       "created_at": lazadaOrder['CreatedAt'],
       "updated_at": lazadaOrder['UpdatedAt'],
-      "address_billing": json.dumps(lazadaOrder['AddressBilling'], ensure_ascii=False).replace("'", "").replace("\\", ""),
-      "address_shipping": json.dumps(lazadaOrder['AddressShipping'], ensure_ascii=False).replace("'", "").replace("\\", ""),
+      "address_billing": json.dumps(lazadaOrder['AddressBilling'], ensure_ascii=False),
+      "address_shipping": json.dumps(lazadaOrder['AddressShipping'], ensure_ascii=False),
       "national_registration_number": lazadaOrder['NationalRegistrationNumber'],
       "items_count": lazadaOrder['ItemsCount'],
       "promised_shipping_times": lazadaOrder['PromisedShippingTimes'],

@@ -33,26 +33,24 @@ class OrderManager(object):
 
         # Get order by orderNumber
         orderDao = OrderDao()
-        order = orderDao.getOrderByOrderNumber(user, orderNumber)
-        if 'error' in order:
-            errorArray = ResponseUtils.convertToArryError(order['error'])
+        order, exception = orderDao.getOrderByOrderNumber(user, orderNumber)
+        if exception != None:
+            errorArray = ResponseUtils.convertToArryError(exception)
             return ResponseUtils.generateErrorResponse(errorArray)
 
-        # Parse to ladaza format: to get full info such as OrderItems
-        order = ConvertHelper.convertOrderToLazadaOrder(order)
         # Get orderItem by order
-        lazadaOrderApi = LazadaOrderApi()
-        lazadaOrderItems = lazadaOrderApi.getOrderItems(order, user)
-        if 'error' in lazadaOrderItems:
-            errorArray = ResponseUtils.convertToArryError(lazadaOrderItems['error'])
+        orderItemDao = OrderItemDao()
+        orderItems, exception = orderItemDao.getOrderItemByOrderId(user, order['order_id'])
+        if exception != None:
+            errorArray = ResponseUtils.convertToArryError(exception)
             return ResponseUtils.generateErrorResponse(errorArray)
 
         # Return success response
         result = {
-        "order": order,
-        "orderItems": lazadaOrderItems
+            "order": order,
+            "orderItems": orderItems
         }
-        return ResponseUtils.generateSuccessResponse("Scane barcode is done", result)
+        return ResponseUtils.generateSuccessResponse(result)
 
     #-----------------------------------------------------------------------------
     # Set order status to Ready-To-Ship

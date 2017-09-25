@@ -24,7 +24,7 @@ class LazadaOrderApi(object):
 		'Version': LazadaAPI.VERSION,
 		'Limit': LazadaAPI.LIMIT,
 		'Offset': offset,
-		'SortBy': 'created_at',
+		'SortBy': 'updated_at',
 		'SortDirection': 'ASC',
 		'CreatedAfter': LazadaApiHelper.getFixedCreatedAfterForCronJob()
 		}

@@ -1,6 +1,5 @@
 from database.database_helper import DatabaseHelper
 from utils.string_utils import StringUtils
-from utils.exception_utils import ExceptionUtils
 
 
 class OrderDao(object):
@@ -45,29 +44,28 @@ class OrderDao(object):
                             address_billing, address_shipping, national_registration_number,
                             items_count, promised_shipping_times, extra_attributes,
                             statuses, voucher, shipping_fee, user_id)
-                    VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}',
-                            '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}',
-                            '{}', '{}', '{}')
-                '''.format(order['order_id'], order['customer_first_name'],
-                           order['customer_lastName'],
-                           order['order_number'], order['payment_method'],
-                           order['remarks'], order['delivery_info'],
-                           order['price'], order['gift_option'],
-                           order['gift_message'], order['voucher_code'],
-                           order['created_at'], order['updated_at'],
-                           order['address_billing'], order['address_shipping'],
-                           order['national_registration_number'], order['items_count'],
-                           order['promised_shipping_times'], order['extra_attributes'],
-                           order['statuses'], order['voucher'], order['shipping_fee'],
-                           user['id'])
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
+        conn = DatabaseHelper.getConnection()
+        cur = conn.cursor()
         try:
-            result, ex = DatabaseHelper.execute(query)
-            if (result == True):
-                return None, None
-            else:
-                return None, '''User: {}-{}, Insert-Order: {}'''.format(user['username'], user['id'], str(ex))
-            return ExceptionUtils.success()
+            cur.execute(query, (order['order_id'], order['customer_first_name'],
+                           order['customer_lastName'],order['order_number'],
+                           order['payment_method'], order['remarks'],
+                           order['delivery_info'], order['price'],
+                           order['gift_option'], order['gift_message'],
+                           order['voucher_code'], order['created_at'],
+                           order['updated_at'], order['address_billing'],
+                           order['address_shipping'], order['national_registration_number'],
+                           order['items_count'], order['promised_shipping_times'],
+                           order['extra_attributes'], order['statuses'],
+                           order['voucher'], order['shipping_fee'], user['id']))
+            conn.commit()
+            conn.close()
+            return None, None
         except Exception as ex:
+            conn.rollback()
+            conn.close()
             return None, '''User: {}-{}, Insert-Order: {}'''.format(user['username'], user['id'], str(ex))
 
     # --------------------------------------------------------------------------
@@ -89,47 +87,50 @@ class OrderDao(object):
     # # --------------------------------------------------------------------------
     # # Get order by order number
     # # --------------------------------------------------------------------------
-    # def getOrderByOrderNumber(self, user, orderNumber):
-    #     query = '''SELECT *
-    #                 FROM order
-    #                 WHERE user_id = '{}' AND order_number = '{}'
-    #             '''.format(user['id'], orderNumber)
-    #     try:
-    #         conn = DatabaseHelper.getConnection()
-    #         cur = conn.cursor()
-    #         cur.execute(query)
+    def getOrderByOrderNumber(self, user, orderNumber):
+        query = '''SELECT *
+                    FROM `order`
+                    WHERE user_id = '{}' AND order_number = '{}'
+                '''.format(user['id'], orderNumber)
+        try:
+            conn = DatabaseHelper.getConnection()
+            cur = conn.cursor()
+            cur.execute(query)
 
-    #         row = cur.fetchone()
-    #         if not row:
-    #             conn.close()
-    #             return ExceptionUtils.error('''User: {}-{}, Get Order: {} is not found'''.format(user['username'], user['id'], orderNumber))
+            row = cur.fetchone()
+            if not row:
+                conn.close()
+                return None, '''User: {}-{}, Get Order: {} is not found'''.format(user['username'], user['id'], orderNumber)
 
-    #         order = {
-    #             'id': row[0],
-    #             'order_id': row[1],
-    #             'order_number': row[2],
-    #             'price': row[3],
-    #             'customer_name': row[4],
-    #             'customer_phone': row[5],
-    #             'customer_email': row[6],
-    #             'address_shipping': row[7],
-    #             'voucher_code': row[8],
-    #             'voucher_price': row[9],
-    #             'delivery_info': row[10],
-    #             'payment_method': row[11],
-    #             'remarks': row[12],
-    #             'gift_message': row[13],
-    #             'shipping_fee': row[14],
-    #             'status': row[15],
-    #             'created_at': row[16],
-    #             'updated_at': row[17],
-    #             'order_json': row[18],
-    #             'user_id': row[19]
-    #         }
-    #         conn.close()
-    #         return order
-    #     except Exception as ex:
-    #         return ExceptionUtils.error('''User: {}-{}, Order-Number: {}, Get-Order-By-Order-Number exception {}'''.format(user['username'], user['id'], orderNumber, str(ex)))
+            order = {
+                "id": row[0],
+                "order_id": row[1],
+                "customer_first_name": row[2],
+                "customer_lastName": row[3],
+                "order_number": row[4],
+                "payment_method": row[5],
+                "remarks": row[6],
+                "delivery_info": row[7],
+                "price": row[8],
+                "gift_option": row[9],
+                "gift_message": row[10],
+                "voucher_code": row[11],
+                "created_at": row[12],
+                "updated_at": row[13],
+                "address_billing": row[14],
+                "address_shipping": row[15],
+                "national_registration_number": row[16],
+                "items_count": row[17],
+                "promised_shipping_times": row[18],
+                "extra_attributes": row[19],
+                "statuses": row[20],
+                "voucher": row[21],
+                "shipping_fee": row[22]
+            }
+            conn.close()
+            return order, None
+        except Exception as ex:
+            return None, '''User: {}-{}, Order-Number: {}, Get-Order-By-Order-Number exception {}'''.format(user['username'], user['id'], orderNumber, str(ex))
 
     # # --------------------------------------------------------------------------
     # # Update Order State

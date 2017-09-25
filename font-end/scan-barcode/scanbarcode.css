@@ -25,12 +25,6 @@ body {
     width: auto;
     display: -webkit-box;
 }
-.scaning-section .process-log {
-    border-top: 1px solid #ccc;
-    position: relative;
-    min-height: 50px;
-    padding: 15px 15px 5px 15px;
-}
 
 .ul-left, .ul-right {
     list-style: none;
