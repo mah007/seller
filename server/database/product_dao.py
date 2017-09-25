@@ -40,19 +40,24 @@ class ProductDao(object):
                         image, package_width, package_height, package_weight,
                         brand, model, primary_category, spu_id, special_price,
                         user_id, available_quantity, quantity, original_price)
-                    VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}',
-                            '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')
-                '''.format(product['name'], product['url'], product['status'],
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s,
+                            %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
+        conn = DatabaseHelper.getConnection()
+        cur = conn.cursor()
+        try:
+            cur.execute(query, (product['name'], product['url'], product['status'],
                            product['seller_sku'], product['shop_sku'],
                            product['image'], product['package_width'],
                            product['package_height'], product['package_weight'],
                            product['brand'], product['model'],
                            product['primary_category'], product['spu_id'],
-                           product['special_price'], user['id'], 0, 0, 0)
-        try:
-            DatabaseHelper.execute(query)
+                           product['special_price'], user['id'], 0, 0, 0))
+            conn.commit()
+            conn.close()
             return ExceptionUtils.success()
         except Exception as ex:
+            conn.rollback()
+            conn.close()
             return ExceptionUtils.error('''Insert product exception: {}'''.format(str(ex)))
 
     # --------------------------------------------------------------------------
@@ -214,23 +219,28 @@ class ProductDao(object):
     # --------------------------------------------------------------------------
     def updateProductWithLazadaProduct(self, user, product):
         query = '''UPDATE product
-                    set name = '{}', url = '{}', status = '{}', seller_sku = '{}',
-                        image = '{}', package_width = '{}',
-                        package_height = '{}', package_weight = '{}',
-                        brand = '{}', model = '{}', primary_category = '{}',
-                        spu_id = '{}', special_price = '{}'
-                    WHERE shop_sku = '{}'
-                '''.format(product['name'], product['url'], product['status'],
+                    set name = %s, url = %s, status = %s, seller_sku = %s,
+                        image = %s, package_width = %s,
+                        package_height = %s, package_weight = %s,
+                        brand = %s, model = %s, primary_category = %s,
+                        spu_id = %s, special_price = %s
+                    WHERE shop_sku = %s '''
+        conn = DatabaseHelper.getConnection()
+        cur = conn.cursor()
+        try:
+            cur.execute(query, (product['name'], product['url'], product['status'],
                            product['seller_sku'], product['image'],
                            product['package_width'], product['package_height'],
                            product['package_weight'], product['brand'],
                            product['model'], product['primary_category'],
                            product['spu_id'], product['special_price'],
-                           product['shop_sku'])
-        try:
-            DatabaseHelper.execute(query)
+                           product['shop_sku']))
+            conn.commit()
+            conn.close()
             return ExceptionUtils.success()
         except Exception as ex:
+            conn.rollback()
+            conn.close()
             return ExceptionUtils.error('''User: {}-{}, update Product exception: {}'''.format(user['username'], user['id'], str(ex)))
 
     # --------------------------------------------------------------------------

@@ -115,31 +115,33 @@ class ConvertHelper:
   @classmethod
   def convertLazadaProductToProduct(self, lazadaProduct):
     product = {
-      "name": str(lazadaProduct['Attributes']['name']).replace("'", ""),
-      "url": str(lazadaProduct['Skus'][0]['Url']).replace("'", ""),
+      "name": lazadaProduct['Attributes']['name'],
       "status": lazadaProduct['Skus'][0]['Status'],
       "quantity": 0,
       "seller_sku": lazadaProduct['Skus'][0]['SellerSku'],
-      "shop_sku": lazadaProduct['Skus'][0]['ShopSku'],
       "original_price": 0,
       "special_price": lazadaProduct['Skus'][0]['special_price'],
       "image": lazadaProduct['Skus'][0]['Images'][0],
       "package_width": lazadaProduct['Skus'][0]['package_width'],
       "package_height": lazadaProduct['Skus'][0]['package_height'],
       "package_weight": lazadaProduct['Skus'][0]['package_weight'],
-      "brand": str(lazadaProduct['Attributes']['brand']).replace("'", ""),
+      "brand": lazadaProduct['Attributes']['brand'],
       "model": lazadaProduct['Attributes']['model'],
       "primary_category": lazadaProduct['PrimaryCategory'],
-      "spu_id": 0
+      "spu_id": 0,      # Default value
+      "url": "",        # Default value
+      "shop_sku": ""   # Default value
     }
 
     # Some products doesn't have this field
     if 'spu_id' in lazadaProduct:
       product['spu_id'] = lazadaProduct['SPUId']
+    if 'Url' in lazadaProduct['Skus'][0]:
+      product['url'] = lazadaProduct['Skus'][0]['Url']
+    if 'ShopSku' in lazadaProduct['Skus'][0]:
+      product['shop_sku'] = lazadaProduct['Skus'][0]['ShopSku']
 
     return product
-
-
 
 
 
