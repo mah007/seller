@@ -4,6 +4,9 @@ from config import OrderConfig
 
 class ConvertHelper:
 
+  # --------------------------------------------------------------------------
+  # Get OrderNumber from barcode
+  # --------------------------------------------------------------------------
   @classmethod
   def getOrderNumberFromBarcode(sefl, barcode):
     if not barcode:
@@ -17,33 +20,98 @@ class ConvertHelper:
 
     return None
 
-  @classmethod
-  def convertLazadaOrderToOrder(self, lazadaOrder):
-    order = {
-      "order_id": lazadaOrder['OrderId'],
-      "order_number": lazadaOrder['OrderNumber'],
-      "price": lazadaOrder['Price'],
-      "customer_name": lazadaOrder['CustomerFirstName'],
-      "customer_phone": "",
-      "customer_email": "",
-      "address_shipping": "",
-      "voucher_code": lazadaOrder['VoucherCode'],
-      "voucher_price": lazadaOrder['Voucher'],
-      "delivery_info": lazadaOrder['DeliveryInfo'],
-      "payment_method": lazadaOrder['PaymentMethod'],
-      "remarks": lazadaOrder['Remarks'],
-      "gift_message": lazadaOrder['GiftMessage'],
-      "shipping_fee": lazadaOrder['ShippingFee'],
-      "status": "",
-      "created_at": lazadaOrder['CreatedAt'],
-      "updated_at": lazadaOrder['UpdatedAt'],
-      "order_json": json.dumps(lazadaOrder, ensure_ascii=False)
-    }
-
+  # --------------------------------------------------------------------------
+  # Parse LazadaOrderJson to LazadaOrder
+  # --------------------------------------------------------------------------
   @classmethod
   def convertOrderToLazadaOrder(self, order):
     return json.loads(order['order_json'])
 
+  # --------------------------------------------------------------------------
+  # Convert string to boolean
+  # --------------------------------------------------------------------------
+  @classmethod
+  def str2bool(self, value):
+    return {"True": True, "true": True}.get(value, False)
+
+  # --------------------------------------------------------------------------
+  # Convert lazadaOrder to Order
+  # --------------------------------------------------------------------------
+  @classmethod
+  def convertLazadaOrderToOrder(self, lazadaOrder):
+    return {
+      "order_id": lazadaOrder['OrderId'],
+      "customer_first_name": lazadaOrder['CustomerFirstName'].replace("'", ""),
+      "customer_lastName": lazadaOrder['CustomerLastName'].replace("'", ""),
+      "order_number": lazadaOrder['OrderNumber'],
+      "payment_method": lazadaOrder['PaymentMethod'],
+      "remarks": lazadaOrder['Remarks'],
+      "delivery_info": lazadaOrder['DeliveryInfo'],
+      "price": float(lazadaOrder['Price'].replace(",", "")),
+      "gift_option": int(bool(self.str2bool(lazadaOrder['GiftOption']))),
+      "gift_message": lazadaOrder['GiftMessage'],
+      "voucher_code": lazadaOrder['VoucherCode'],
+      "created_at": lazadaOrder['CreatedAt'],
+      "updated_at": lazadaOrder['UpdatedAt'],
+      "address_billing": json.dumps(lazadaOrder['AddressBilling'], ensure_ascii=False).replace("'", "").replace("\\", ""),
+      "address_shipping": json.dumps(lazadaOrder['AddressShipping'], ensure_ascii=False).replace("'", "").replace("\\", ""),
+      "national_registration_number": lazadaOrder['NationalRegistrationNumber'],
+      "items_count": lazadaOrder['ItemsCount'],
+      "promised_shipping_times": lazadaOrder['PromisedShippingTimes'],
+      "extra_attributes": lazadaOrder['ExtraAttributes'],
+      "statuses": json.dumps(lazadaOrder['Statuses'], ensure_ascii=False),
+      "voucher": lazadaOrder['Voucher'],
+      "shipping_fee": lazadaOrder['ShippingFee'],
+    }
+
+  # --------------------------------------------------------------------------
+  # Convert lazadaOrderItem to OrderItem
+  # --------------------------------------------------------------------------
+  @classmethod
+  def convertLazadaOrderItemToOrderItem(self, lazadaOrderItem):
+    return {
+      "order_item_id": lazadaOrderItem["OrderItemId"],
+      "shop_id": lazadaOrderItem["ShopId"],
+      "order_id": lazadaOrderItem["OrderId"],
+      "name": lazadaOrderItem["Name"],
+      "seller_sku": lazadaOrderItem["Sku"],
+      "shop_sku": lazadaOrderItem["ShopSku"],
+      "shipping_type": lazadaOrderItem["ShippingType"],
+      "item_price": lazadaOrderItem["ItemPrice"],
+      "paid_price": lazadaOrderItem["PaidPrice"],
+      "currency": lazadaOrderItem["Currency"],
+      "wallet_credit": lazadaOrderItem["WalletCredits"],
+      "tax_amount": lazadaOrderItem["TaxAmount"],
+      "shipping_amount": lazadaOrderItem["ShippingAmount"],
+      "shipping_service_cost": lazadaOrderItem["ShippingServiceCost"],
+      "voucher_amount": lazadaOrderItem["VoucherAmount"],
+      "voucher_code": lazadaOrderItem["VoucherCode"],
+      "status": lazadaOrderItem["Status"],
+      "shipment_provider": lazadaOrderItem["ShipmentProvider"],
+      "is_digital": lazadaOrderItem["IsDigital"],
+      "digital_delivery_info": lazadaOrderItem["DigitalDeliveryInfo"],
+      "tracking_code": lazadaOrderItem["TrackingCode"],
+      "tracking_code_pre": lazadaOrderItem["TrackingCodePre"],
+      "reason": lazadaOrderItem["Reason"],
+      "reason_detail": lazadaOrderItem["ReasonDetail"],
+      "purchase_order_id": lazadaOrderItem["PurchaseOrderId"],
+      "purchase_order_number": lazadaOrderItem["PurchaseOrderNumber"],
+      "package_id": lazadaOrderItem["PackageId"],
+      "promised_shipping_time": lazadaOrderItem["PromisedShippingTime"],
+      "extra_attributes": lazadaOrderItem["ExtraAttributes"],
+      "shipping_provider_type": lazadaOrderItem["ShippingProviderType"],
+      "created_at": lazadaOrderItem["CreatedAt"],
+      "updated_at": lazadaOrderItem["UpdatedAt"],
+      "return_status": lazadaOrderItem["ReturnStatus"],
+      "product_main_image": lazadaOrderItem["productMainImage"],
+      "variation": lazadaOrderItem["Variation"],
+      "product_detail_url": lazadaOrderItem["ProductDetailUrl"],
+      "invoice_number": lazadaOrderItem["invoiceNumber"]
+    }
+
+  # --------------------------------------------------------------------------
+  # Convert LazadaProduct to Product
+  # --------------------------------------------------------------------------
   @classmethod
   def convertLazadaProductToProduct(self, lazadaProduct):
     product = {

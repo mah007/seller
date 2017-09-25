@@ -3,6 +3,7 @@ import schedule
 from managers.manager_helper import ManagerHelper
 from database.user_dao import UserDao
 from database.order_dao import OrderDao
+from database.order_item_dao import OrderItemDao
 from lazada_api.lazada_order_api import LazadaOrderApi
 from utils.response_utils import ResponseUtils
 from utils.convert_helper import ConvertHelper
@@ -12,6 +13,8 @@ class OrderManager(object):
     def initialize(self):
         orderDao = OrderDao()
         orderDao.createTable()
+        orderItemDao = OrderItemDao()
+        orderItemDao.createTable()
 
     #---------------------------------------------------------------------------
     # Scan barcode

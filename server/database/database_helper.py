@@ -18,11 +18,11 @@ class DatabaseHelper:
 			conn.commit()
 		except Exception as ex:
 			conn.rollback()
-			print(ex)
-			return False
+			print(query)
+			return False, str(ex)
 
 		conn.close()
-		return True
+		return True, None
 
 
 

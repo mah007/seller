@@ -6,10 +6,13 @@ from config import ConstantConfig, LazadaAPI
 from database.constant_dao import ConstantDao
 from lazada_api.lazada_order_api import LazadaOrderApi
 from database.order_dao import OrderDao
+from database.order_item_dao import OrderItemDao
+from utils.convert_helper import ConvertHelper
 
 constantDao = ConstantDao()
 lazadaOrderApi = LazadaOrderApi()
 orderDao = OrderDao()
+orderItemDao = OrderItemDao()
 
 class GetOrderWorker(threading.Thread):
 
@@ -19,7 +22,7 @@ class GetOrderWorker(threading.Thread):
 
   def run(self):
     user = self.kwargs['user']
-    print('''*********** {} is running ***********'''.format(user['lazada_user_name']))
+    print('''*********** {} is running ***********'''.format(user['username']))
 
     # Get offset: must not error
     orderOffsetConstant = constantDao.getConstant(user, ConstantConfig.ORDER_OFFSET)
@@ -30,8 +33,9 @@ class GetOrderWorker(threading.Thread):
     orderOffset = orderOffsetConstant['value']
     while(True):
       # Get Lazada orders and insert to our dataBase
-      result = self.getLazadaOrderAndInsertToOurDataBase(user, orderOffset);
+      result, exception = self.performGetOrders(user, orderOffset);
       if result == False:
+        print(exception)
         return
 
       # Addition offset and update to constant: must not error
@@ -45,31 +49,43 @@ class GetOrderWorker(threading.Thread):
   # Get Lazada orders and insert to our dataBase
   # Return Boolean
   #-----------------------------------------------------------------------------
-  def getLazadaOrderAndInsertToOurDataBase(self, user, orderOffset):
+  def performGetOrders(self, user, orderOffset):
     # Get lazada orders by offset
-    orders = lazadaOrderApi.getOrders(user, orderOffset)
-    if 'error' in orders:
-      print(orders)
-      return False
+    orders, exception = lazadaOrderApi.getOrders(user, orderOffset)
+    if exception != None:
+      return False, exception
     if len(orders) <= 0:
-      print('''{} Reach to the end with offset {}'''.format(user['lazada_user_name'], orderOffset))
-      return False
+      return False, '''{}: Reach to the end with offset {}'''.format(user['username'], orderOffset)
 
-    print('''{} Get lazada orders with offset {} is successful'''.format(user['lazada_user_name'], orderOffset))
+    print('''{}: Get lazada orders with offset {} is successful'''.format(user['username'], orderOffset))
 
     # Insert or update to our database
     for order in orders:
-      isOrderExist = orderDao.isOrderExist(user, order['OrderId'])
-      result = {}
-      if isOrderExist == True:
-        result = orderDao.updateOrder(user, order)
-      else:
-        result = orderDao.insert(user, OrderHelper.convertLazadaOrderToOrder(order))
-      if 'error' in result:
-        print(result)
-        return False
+      isOrderExist, exception = orderDao.isOrderExist(user, order['OrderId'])
+      if (exception != None):
+        return False, exception
 
-    return True
+      # Insert Order
+      if isOrderExist == False:
+        result, exception = orderDao.insert(user, ConvertHelper.convertLazadaOrderToOrder(order))
+        if (exception != None):
+          return False, exception
+
+      # Get OrderItems
+      orderItems, exception = lazadaOrderApi.getOrderItems(user, order['OrderId'])
+      if (exception != None):
+        return False, exception
+
+      # Insert OrderItems
+      for orderItem in orderItems:
+        isOrderItemExist, exception = orderItemDao.isOrderItemExist(user, orderItem['OrderItemId'])
+        if (exception != None):
+          return False, exception
+        result, exception = orderItemDao.insert(user, ConvertHelper.convertLazadaOrderItemToOrderItem(orderItem))
+        if (exception != None):
+          return False, exception
+
+    return True, None
 
 
 
