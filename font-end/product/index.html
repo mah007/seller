@@ -172,11 +172,11 @@
     <script src="../js/component/layout.js" type="text/javascript"></script>
     <script src="../js/component/style.js" type="text/javascript"></script>
     <!-- INTERNAL CORE PLUGINS -->
-    <script src="../js/logout.js" type="text/javascript"></script>
+    <script src="../js/additional.js" type="text/javascript"></script>
     <script src="../js/cookieConfig.js" type="text/javascript"></script>
     <script src="../js/endpointConfig.js" type="text/javascript"></script>
     <!-- PRODUCT JAVASCRIPTS -->
-    <script src="../product-management/product-management.js" type="text/javascript"></script>
+    <script src="../product/product-management.js" type="text/javascript"></script>
     <!-- Templates -->
     <script id="product-content-template" type="text/x-handlebars-template">
         {{#each data}}
@@ -185,10 +185,10 @@
             <td class="text-left"><a href="{{url}}" target="_blank">{{name}}</a></td>
             <td class="text-left">{{seller_sku}}</td>
             <th>
-                <input type="number" min="0" class="form-control input-sm" style="background-color: #ffe6e6;" value={{quantity}} />
+                <input type="text" min="0" class="form-control input-sm input-money" style="background-color: #ffe6e6;" value={{quantity}} />
             </th>
             <th>
-                <input type="number" min="0" class="form-control input-sm" style="background-color: #ffe6e6;" value={{original_price}} />
+                <input type="text" min="0" class="form-control input-sm input-money" style="background-color: #ffe6e6;" value={{original_price}} />
             </th>
         </tr>
         {{/each}}

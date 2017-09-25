@@ -1,5 +1,6 @@
 var endpoint = new EndpointConfig();
 var cookie = new CookieConfig();
+var additional = new Additional();
 
 jQuery(document).ready(function() {
 
@@ -32,8 +33,8 @@ jQuery(document).ready(function() {
                 var oriQuantity = $(row).data("quantity");
                 var oriPrice = $(row).data("price");
 
-                var quantity = row.cells[3].children[0].value;
-                var price = row.cells[4].children[0].value;
+                var quantity = row.cells[3].children[0].value.replace(/\,/g, '');
+                var price = row.cells[4].children[0].value.replace(/\,/g, '');
 
                 if (oriQuantity != quantity && oriPrice != price) {
                     updateProduct(quantity, price, id);
@@ -81,6 +82,7 @@ jQuery(document).ready(function() {
                 var contentHtml = Handlebars.compile(template);
                 $("#tbody_product").html(contentHtml(data));
                 $('input[name=search_key]').val("");
+                additional.initMoneyInput();
             },
             error: function(error) {
                 console.log(error);
@@ -191,6 +193,7 @@ function getAndFillOutProduct() {
             var template = $("#product-content-template").html();
             var contentHtml = Handlebars.compile(template);
             $("#tbody_product").html(contentHtml(data));
+            additional.initMoneyInput();
         },
         error: function(error) {
             console.log(error);
@@ -201,3 +204,6 @@ function getAndFillOutProduct() {
 function focusSearchInput() {
     $('input[name=search_key]').focus();
 }
+
+
+

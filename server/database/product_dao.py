@@ -18,8 +18,8 @@ class ProductDao(object):
                 available_quantity  INTEGER         ,
                 seller_sku          VARCHAR(100)    NOT NULL,
                 shop_sku            VARCHAR(100)    NOT NULL,
-                original_price      INTEGER         ,
-                special_price       INTEGER         ,           # Only using for Prict-By-Time
+                original_price      DECIMAL(10,2),
+                special_price       DECIMAL(10,2),              # Only using for Prict-By-Time
                 image               VARCHAR(250)    NOT NULL,   # Get first image from Lazada's product
                 package_width       INTEGER         NOT NULL,
                 package_height      INTEGER         NOT NULL,
