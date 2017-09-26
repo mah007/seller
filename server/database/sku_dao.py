@@ -98,19 +98,27 @@ class SkuDao(object):
         query = '''DELETE from sku_management where id = '{}' '''.format(sku['id'])
         DatabaseHelper.execute(query)
 
-
     # --------------------------------------------------------------------------
     # Insert KSU
     # --------------------------------------------------------------------------
     def insert(self, sku, user):
         query = '''INSERT INTO sku_management (sku, name, link, min_price, max_price,
                     compete_price, special_price, state, created_at, updated_at, user_id)
-                    VALUES ('{}', '{}', '{}', {}, {}, {}, {}, {}, {}, 0, {})'''.format(
-                    StringUtils.toString(sku['sku']), StringUtils.toString(sku['name']), StringUtils.toString(sku['link']),
-                    sku['min_price'], sku['max_price'], sku['compete_price'], sku['special_price'], sku['state'], sku['created_at'],
-                    user['id'])
-        DatabaseHelper.execute(query)
-
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, 0, %s)'''
+        conn = DatabaseHelper.getConnection()
+        cur = conn.cursor()
+        try:
+            cur.execute(query, (StringUtils.toString(sku['sku']), StringUtils.toString(sku['name']),
+                    StringUtils.toString(sku['link']), sku['min_price'], sku['max_price'],
+                    sku['compete_price'], sku['special_price'], sku['state'],
+                    sku['created_at'], user['id']))
+            conn.commit()
+            conn.close()
+            return None, None
+        except Exception as ex:
+            conn.rollback()
+            conn.close()
+            return None, '''User: {}-{}, Insert-Sku: {}'''.format(user['username'], user['id'], str(ex))
 
     # --------------------------------------------------------------------------
     # Update KSU

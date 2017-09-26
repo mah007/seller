@@ -6,7 +6,7 @@ from lxml import html
 from database.sku_dao import SkuDao
 from database.user_dao import UserDao
 from managers.user_manager import UserManager
-from lazada_api.lazada_sku_api import LazadaSkuApi
+from database.product_dao import ProductDao
 from managers.response_helper import ResponseHelper
 from utils.response_utils import ResponseUtils
 from database.history_dao import HistoryDao
@@ -50,16 +50,16 @@ class SkuManager(object):
 		if (addedSize >= certainSize):
 			return ResponseUtils.generateErrorResponse("You cannot add more SKU, please contact admin to improve your account!")
 
-		# Validate SKU by lazada API
-		lazadaSkuApi = LazadaSkuApi()
-		lazadaProduct = lazadaSkuApi.getSku(sku, user)
-		if 'error' in lazadaProduct:
-			return ResponseUtils.generateErrorResponse(lazadaProduct['error'])
+		# Validate SKU by product's data in database
+		productDao = ProductDao()
+		product, exception = productDao.getProductBySellerSku(user, sku)
+		if exception != None:
+			return ResponseUtils.generateErrorResponse(exception)
 
 		# Add missing arguments and insert to our database
-		sku['name'] = lazadaProduct['Attributes']['name'].encode('utf-8')
-		sku['link'] = lazadaProduct['Skus'][0]['Url'].encode('utf-8')
-		sku['special_price'] = lazadaProduct['Skus'][0]['special_price']
+		sku['name'] = product['name']
+		sku['link'] = product['url']
+		sku['special_price'] = product['special_price']
 
 		skudao.insert(sku, user)
 		return ResponseUtils.generateSuccessResponse()
