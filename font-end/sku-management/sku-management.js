@@ -167,7 +167,7 @@ function enableSwitchery() {
 
             $('input[name=txt_id]').val(id);
             $('input[name=txt_sku]').val(sku).prop('disabled', true);
-            $('input[name=txt_min]').val(min_price);
+            $('input[name=txt_min]').val(min_price).select().focus();
             $('input[name=txt_max]').val(max_price);
             $('input[name=txt_stp]').val(compete_price);
         });
@@ -423,6 +423,7 @@ $("#btnUpdate").click(function() {
             state: $('select[name=txt_stt]').val() == "active" ? 1 : 0
         }),
         success: function(data) {
+            $('input[name=txt_sku]').prop('disabled', false);
             getAndFillOutAllSku();
             clearFormAndFocusSearchText();
         },
