@@ -81,9 +81,10 @@ class GetOrderWorker(threading.Thread):
         isOrderItemExist, exception = orderItemDao.isOrderItemExist(user, orderItem['OrderItemId'])
         if (exception != None):
           return False, exception
-        result, exception = orderItemDao.insert(user, ConvertHelper.convertLazadaOrderItemToOrderItem(orderItem))
-        if (exception != None):
-          return False, exception
+        if (isOrderItemExist == False):
+          result, exception = orderItemDao.insert(user, ConvertHelper.convertLazadaOrderItemToOrderItem(orderItem))
+          if (exception != None):
+            return False, exception
 
     return True, None
 
