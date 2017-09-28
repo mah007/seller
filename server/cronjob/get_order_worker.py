@@ -22,7 +22,7 @@ class GetOrderWorker(threading.Thread):
 
   def run(self):
     user = self.kwargs['user']
-    print('''*********** {} is running ***********'''.format(user['username']))
+    #print('''*********** {} is running ***********'''.format(user['username']))
 
     orderOffset = 0
     updatedAfter, exception = orderDao.getMaxUpdatedAt(user)
@@ -51,7 +51,7 @@ class GetOrderWorker(threading.Thread):
     if (len(orders) <= 0):
       return '''{}: Reach to the end with updatedAfter: {}, offset: {}'''.format(user['username'], updatedAfter, orderOffset)
 
-    print('''{}: Get lazada orders with updatedAfter: {} and Offset: {} is successful'''.format(user['username'], updatedAfter, orderOffset))
+    #print('''{}: Get lazada orders with updatedAfter: {} and Offset: {} is successful'''.format(user['username'], updatedAfter, orderOffset))
 
     # Process data
     for order in orders:

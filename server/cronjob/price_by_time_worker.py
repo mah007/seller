@@ -17,7 +17,7 @@ class PriceByTimeWorker(threading.Thread):
 
   def run(self):
     user = self.kwargs['user']
-    print('''*********** {} is running ***********'''.format(user['lazada_user_name']))
+    #print('''*********** {} is running ***********'''.format(user['lazada_user_name']))
 
     # Get all skus of price by time
     priceByTimeSkus = priceByTimeDao.getAll(user);
@@ -50,7 +50,7 @@ class PriceByTimeWorker(threading.Thread):
       if isOnTime == True:
         newSpecialPrice = priceByTime['price']
 
-    print('''newSpecialPrice: {} currentSpecialPrice: {} '''.format(newSpecialPrice, priceByTimeSku['special_price']))
+    #print('''newSpecialPrice: {} currentSpecialPrice: {} '''.format(newSpecialPrice, priceByTimeSku['special_price']))
     if newSpecialPrice != priceByTimeSku['special_price']:
       self.updateSpecialPrice(user, priceByTimeSku, newSpecialPrice)
 
@@ -96,7 +96,7 @@ class PriceByTimeWorker(threading.Thread):
     currentHour = TimestampUtils.getVietNamCurrentHour()
     currentMinute = TimestampUtils.getVietnamCurrentMinute()
     nextPriceByTimeHour = int(nextTimeArray[0])
-    print(hour, minute, currentHour, currentMinute, nextPriceByTimeHour)
+    #print(hour, minute, currentHour, currentMinute, nextPriceByTimeHour)
 
     if currentHour - hour > 0:
       return True     # Set 3:30 and current time is 4:0
