@@ -8,14 +8,43 @@ from utils.exception_utils import ExceptionUtils
 
 class LazadaOrderApi(object):
 
+	def getOrdersByUpdatedAfter(self, user, offset, updatedAfter):
+		parameters = {
+		'Action': 'GetOrders',
+		'Format':'JSON',
+		'Timestamp': LazadaApiHelper.getCurrentUTCTime(),
+		'UserID': user['lazada_user_id'],
+		'Version': LazadaAPI.VERSION,
+		'Limit': LazadaAPI.LIMIT,
+		'Offset': offset,
+		'UpdatedAfter': LazadaApiHelper.formatToLazadaTimestamp(updatedAfter),
+		'SortBy': 'updated_at',
+		'SortDirection': 'ASC'
+		}
+
+		parameters['Signature'] = LazadaApiHelper.generateSignature(parameters, user['lazada_api_key'])
+		url = "{}/?Action={}&Format={}&Timestamp={}&UserID={}&Version={}&Limit={}&Offset={}&UpdatedAfter={}&SortBy={}&SortDirection={}&Signature={}".format(
+						LazadaAPI.ENDPOINT,
+		 				parameters["Action"],
+		 				parameters["Format"],
+		 				LazadaApiHelper.formatTimestamp(parameters["Timestamp"]),
+		 				parameters["UserID"],
+		 				parameters["Version"],
+		 				parameters["Limit"],
+		 				parameters["Offset"],
+		 				LazadaApiHelper.formatTimestamp(parameters["UpdatedAfter"]),
+		 				parameters["SortBy"],
+		 				parameters["SortDirection"],
+		 				parameters["Signature"])
+
+		return self.getOrders(user, url)
+
 	#-----------------------------------------------------------------------------
-	# Get order with limitation and offset
-	#	Limit: 					limitation
-	# Offset: 				offset
+	# Get order by CreatedAfter with limitation and offset
 	# SortBy: 				created_at
 	# SortDirection: 	Ascending (ASC)
 	#-----------------------------------------------------------------------------
-	def getOrders(self, user, offset):
+	def getOrdersByCreatedAdter(self, user, offset):
 		parameters = {
 		'Action': 'GetOrders',
 		'Format':'JSON',
@@ -44,6 +73,12 @@ class LazadaOrderApi(object):
 		 				LazadaApiHelper.formatTimestamp(parameters["CreatedAfter"]),
 		 				parameters["Signature"])
 
+		return self.getOrders(user, url)
+
+	#-----------------------------------------------------------------------------
+	# Get order with by specific url
+	#-----------------------------------------------------------------------------
+	def getOrders(self, user, url):
 		try:
 			resp = requests.get(url)
 			if resp.status_code == 200:

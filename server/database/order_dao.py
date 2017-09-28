@@ -1,5 +1,6 @@
 from database.database_helper import DatabaseHelper
 from utils.string_utils import StringUtils
+from lazada_api.lazada_api_helper import LazadaApiHelper
 
 
 class OrderDao(object):
@@ -132,29 +133,61 @@ class OrderDao(object):
         except Exception as ex:
             return None, '''User: {}-{}, Order-Number: {}, Get-Order-By-Order-Number exception {}'''.format(user['username'], user['id'], orderNumber, str(ex))
 
-    # # --------------------------------------------------------------------------
-    # # Update Order State
-    # # --------------------------------------------------------------------------
-    # def updateOrder(self, user, order):
-    #     query = '''UPDATE order
-    #                 set price = '{}', customer_name = '{}', customer_phone = '{}',
-    #                     customer_email = '{}', address_shipping = '{}',
-    #                     voucher_code = '{}', voucher_price = '{}',
-    #                     delivery_info = '{}', payment_method = '{}',
-    #                     remarks = '{}', gift_message = '{}', shipping_fee = '{}',
-    #                     status = '{}', updated_at = '{}', order_json = '{}'
-    #                 WHERE id = '{}'
-    #             '''.format(order['price'], order['customer_name'], order['customer_phone'],
-    #                        order['customer_email'], order['address_shipping'],
-    #                        order['voucher_code'], order['voucher_price'],
-    #                        order['delivery_info'], order['payment_method'],
-    #                        order['remarks'], order['gift_message'], order['shipping_fee'],
-    #                        order['status'], order['updated_at'], order['order_json'])
-    #     try:
-    #         DatabaseHelper.execute(query)
-    #         return ExceptionUtils.success()
-    #     except Exception as ex:
-    #         return ExceptionUtils.error('''User: {}-{}, Order-Number: {}, Update-Order-State exception: {}'''.format(user['username'], user['id'], orderNumber, str(ex)))
+    # --------------------------------------------------------------------------
+    # Get max updated at for Get order cronjob
+    # --------------------------------------------------------------------------
+    def getMaxUpdatedAt(self, user):
+        query = '''SELECT MAX(updated_at) as maxUpdatedAt
+                    FROM `order`
+                    WHERE user_id = {} '''.format(user['id'])
+        try:
+            conn = DatabaseHelper.getConnection()
+            cur = conn.cursor()
+            cur.execute(query)
+            result = cur.fetchone()
+            if (not result):
+                conn.close()
+                return LazadaApiHelper.getFixedCreatedAfterForCronJob(), None;
+
+            maxUpdatedAt = result['maxUpdatedAt']
+            conn.close()
+            return maxUpdatedAt, None
+        except Exception as ex:
+            return None, '''User: {}-{}, Get-Max-Updated-At: {}'''.format(user['username'], user['id'], str(ex))
+
+    # --------------------------------------------------------------------------
+    # Update Order
+    # --------------------------------------------------------------------------
+    def updateOrder(self, user, order):
+        query = '''UPDATE order
+                    SET customer_first_name = %s, customer_lastName = %s,
+                        payment_method = %s, remarks = %s, delivery_info = %s,
+                        price = %s, gift_option = %s, gift_message = %s,
+                        voucher_code = %s, created_at = %s, updated_at = %s,
+                        address_billing = %s, address_shipping = %s,
+                        national_registration_number = %s, items_count = %s,
+                        promised_shipping_times = %s, extra_attributes = %s,
+                        statuses = %s, voucher = %s, shipping_fee = %s,
+                    WHERE order_id = %s AND user_id = %s'''
+        conn = DatabaseHelper.getConnection()
+        cur = conn.cursor()
+        try:
+            cur.execute(query, (order['customer_first_name'], order['customer_lastName'],
+                                order['payment_method'], order['remarks'], order['delivery_info'],
+                                order['price'], order['gift_option'], order['gift_message'],
+                                order['voucher_code'], order['created_at'], order['updated_at'],
+                                order['address_billing'], order['address_shipping'],
+                                order['national_registration_number'], order['items_count'],
+                                order['promised_shipping_times'], order['extra_attributes'],
+                                order['statuses'], order['voucher'], order['shipping_fee'],
+                                order['order_id'], user['id']))
+            conn.commit()
+            conn.close()
+            return None, None
+        except Exception as ex:
+            conn.rollback()
+            conn.close()
+            return None, '''User: {}-{}, update Product exception: {}'''.format(user['username'], user['id'], str(ex))
 
     # # --------------------------------------------------------------------------
     # # Update Order State

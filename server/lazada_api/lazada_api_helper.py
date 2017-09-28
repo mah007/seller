@@ -24,6 +24,16 @@ class LazadaApiHelper:
     return "1990-02-25T23:46:11+00:00"
 
   # ----------------------------------------------------------------------------
+  # Format to lazada timestamp: example: 2017-09-25T23:17:10+00:00
+  #
+  # Before Timestamp: 2017-09-25 23:17:10
+  # After Timestamp: 2017-09-25T23:17:10+00:00
+  # ----------------------------------------------------------------------------
+  @classmethod
+  def formatToLazadaTimestamp(self, timestamp):
+    return timestamp.replace(" ", "T").append("+00:00")
+
+  # ----------------------------------------------------------------------------
   # Format Timestamp: format timestamp to using HTML character codes
   # ----------------------------------------------------------------------------
   @classmethod

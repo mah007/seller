@@ -51,7 +51,7 @@ class GetOrderWorker(threading.Thread):
   #-----------------------------------------------------------------------------
   def performGetOrders(self, user, orderOffset):
     # Get lazada orders by offset
-    orders, exception = lazadaOrderApi.getOrders(user, orderOffset)
+    orders, exception = lazadaOrderApi.getOrdersByCreatedAdter(user, orderOffset)
     if exception != None:
       return False, exception
     if len(orders) <= 0:
