@@ -4,9 +4,11 @@ from managers.manager_helper import ManagerHelper
 from database.user_dao import UserDao
 from database.order_dao import OrderDao
 from database.order_item_dao import OrderItemDao
+from database.product_dao import ProductDao
 from lazada_api.lazada_order_api import LazadaOrderApi
 from utils.response_utils import ResponseUtils
 from utils.convert_helper import ConvertHelper
+from importer import ImportExcel
 
 
 class OrderManager(object):
@@ -75,6 +77,98 @@ class OrderManager(object):
             return ResponseUtils.generateErrorResponse(errorArray)
 
         return ResponseUtils.generateSuccessResponse("Set status to Ready-To-Ship is done", None)
+
+    # Order       1--> order_number
+    # Order       N--> Order item
+    # Order item  N--> Sku
+    def calculateEarning(self):
+        user = ManagerHelper.validateToken(token)
+        if not user:
+            errorArray = ResponseUtils.convertToArryError("Token is invalid, please logout and login again !")
+
+        orderDao = OrderDao()
+        orderItemDao = OrderItemDao()
+        productDao = ProductDao()
+        importExcel = ImportExcel()
+
+        earning = 0
+        ordersmismatch = []
+
+        datas = importExcel.getGeneralExchange()
+        for data in datas:
+            order, orderException = orderDao.getOrderByOrderNumber(user, data['order_number'])
+            item, itemException = orderItemDao.getOrderItemByShopSku(user, data['sku'])
+
+            # Check whether order is exist or not
+            if(orderException != None):
+                reason = ("Order with number: {} doesn't exists").format(data['order_number'])
+                ordersmismatch.append({
+                        'order': order,
+                        'reason': reason
+                    })
+
+            # Check whether order item is exist or not
+            if(itemException != None):
+                reason = ("Order item: {} doesn't exists").format(data['sku'])
+                ordersmismatch.append({
+                        'order': order,
+                        'reason': reason
+                    })
+
+            # Check whether item paid_price and sales_deliver is the same or not
+            if(item['paid_price'] != data['sales_deliver']):
+                reason = ("Order item price: '{}' doesn't match with sale deliver '{}' ").format(item['paid_price'], data['sales_deliver'])
+                ordersmismatch.append({
+                        'order': order,
+                        'reason': reason
+                    })
+
+            # Check whether order had been delivered or not 
+            if(order['statuses'] != 'delivered'):
+                reason = ("Order with number: {} isn't delevired").format(order['order_number'])
+                ordersmismatch.append({
+                        'order': order,
+                        reason: reason
+                    })
+
+            # Get original_price
+            product, productException = productDao.getProductBySellerSku(user, data)
+            if(productException != None):
+                reason = "Cannot get product by sku: '{}'".format(data['sku'])
+                ordersmismatch.append({
+                        'order': order,
+                        'reason': reason
+                    })
+
+            earning = earning + (item['paid_price'] - (data['sum_of_fee'] + product['original_price']))
+
+            # Check whether order had been update to calculated or not
+            updateOrderCalculated, exceptionUpdate = orderDao.setCalculated(user, order)
+            if(exceptionUpdate != None):
+                reason = ("Order with number: {} update failed").format(order['order_number'])
+                ordersmismatch.append({
+                        'order': order,
+                        'reason': reason
+                    })
+
+            # Check whether order had been update to calculated or not
+            updateItemEarned, exceptionUpdate = orderItemDao.setEarned(user, item)
+            if(exceptionUpdate != None):
+                reason = ("Order item: {} update failed").format(item['shop_sku'])
+                ordersmismatch.append({
+                        'order': order,
+                        'reason': reason
+                    })
+
+            result = [earn, ordersmismatch]
+            return result
+
+
+
+
+
+
+
 
 
 

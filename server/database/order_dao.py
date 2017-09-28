@@ -29,7 +29,8 @@ class OrderDao(object):
                 statuses                        JSON DEFAULT NULL,
                 voucher                         INTEGER,
                 shipping_fee                    DECIMAL(10,2),
-                user_id                         INTEGER
+                user_id                         INTEGER,
+                calculated                      INTEGER DEFAULT 0
                 );'''
         DatabaseHelper.execute(query)
 
@@ -132,6 +133,21 @@ class OrderDao(object):
         except Exception as ex:
             return None, '''User: {}-{}, Order-Number: {}, Get-Order-By-Order-Number exception {}'''.format(user['username'], user['id'], orderNumber, str(ex))
 
+
+    def setCalculated(self, user, order):
+        query = ''' UPDATE order
+                    SET calculated = 1  
+                    WHERE user_id = {}
+                    AND id = {}
+                '''.format(user['id'], order['id'])
+        try:
+            result, ex = DatabaseHelper.execute(query)
+            if (ex != None):
+                return False, ex
+            else:
+                return True, None
+        except Exception as ex:
+            return False, ''' User {}-{}, Update-Order: {} '''.format(user['username'], user['id'], str(ex))
     # # --------------------------------------------------------------------------
     # # Update Order State
     # # --------------------------------------------------------------------------
