@@ -17,13 +17,6 @@ class ConstantManager(object):
             print(superAdmin)
             return;
 
-        # Insert Order Offset
-        isOrderOffsetExist = constantDao.isConstantExist(superAdmin, ConstantConfig.ORDER_OFFSET)
-        if isOrderOffsetExist == False:
-            result = constantDao.insertConstant(superAdmin, ConstantConfig.ORDER_OFFSET, 0)
-            if 'error' in result:
-                print(result)
-
         # Insert Product Offset
         isProductOffsetExist = constantDao.isConstantExist(superAdmin, ConstantConfig.PRODUCT_OFFSET)
         if isProductOffsetExist == False:
