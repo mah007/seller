@@ -35,8 +35,8 @@ if __name__ == "__main__":
   priceByTimeManager.initialize()
   productManager.initialize()
 
-  app.run(debug=True, threaded=True)
-  # app.run(host='0.0.0.0', debug=True, port=5000, threaded=True)
+  # app.run(debug=True, threaded=True)
+  app.run(host='0.0.0.0', debug=True, port=5000, threaded=True)
 
 
 
