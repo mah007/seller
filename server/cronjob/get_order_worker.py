@@ -24,70 +24,101 @@ class GetOrderWorker(threading.Thread):
     user = self.kwargs['user']
     print('''*********** {} is running ***********'''.format(user['username']))
 
-    # Get offset: must not error
-    orderOffsetConstant = constantDao.getConstant(user, ConstantConfig.ORDER_OFFSET)
-    if 'error' in orderOffsetConstant:
-      print(orderOffsetConstant)
+    orderOffset = 0
+    updatedAfter, exception = orderDao.getMaxUpdatedAt(user)
+    if (exception != None):
+      print(exception)
       return
 
-    orderOffset = orderOffsetConstant['value']
     while(True):
       # Get Lazada orders and insert to our dataBase
-      result, exception = self.performGetOrders(user, orderOffset);
-      if result == False:
+      exception = self.performGetOrders(user, orderOffset, updatedAfter);
+      if exception != None:
         print(exception)
         return
 
-      # Addition offset and update to constant: must not error
       orderOffset += LazadaAPI.LIMIT
-      result = constantDao.updateConstant(user, ConstantConfig.ORDER_OFFSET, orderOffset)
-      if 'error' in result:
-        print(result)
-        return
 
   #-----------------------------------------------------------------------------
   # Get Lazada orders and insert to our dataBase
   # Return Boolean
   #-----------------------------------------------------------------------------
-  def performGetOrders(self, user, orderOffset):
+  def performGetOrders(self, user, orderOffset, updatedAfter):
     # Get lazada orders by offset
-    orders, exception = lazadaOrderApi.getOrdersByCreatedAdter(user, orderOffset)
-    if exception != None:
-      return False, exception
-    if len(orders) <= 0:
-      return False, '''{}: Reach to the end with offset {}'''.format(user['username'], orderOffset)
+    orders, exception = lazadaOrderApi.getOrdersByUpdatedAfter(user, orderOffset, updatedAfter)
+    if (exception != None):
+      return exception
+    if (len(orders) <= 0):
+      return '''{}: Reach to the end with updatedAfter: {}, offset: {}'''.format(user['username'], updatedAfter, orderOffset)
 
-    print('''{}: Get lazada orders with offset {} is successful'''.format(user['username'], orderOffset))
+    print('''{}: Get lazada orders with updatedAfter: {} and Offset: {} is successful'''.format(user['username'], updatedAfter, orderOffset))
 
-    # Insert or update to our database
+    # Process data
     for order in orders:
       isOrderExist, exception = orderDao.isOrderExist(user, order['OrderId'])
       if (exception != None):
-        return False, exception
+        return exception
 
-      # Insert Order
-      if isOrderExist == False:
+      # Insert or update Order
+      if (isOrderExist == False):
         result, exception = orderDao.insert(user, ConvertHelper.convertLazadaOrderToOrder(order))
         if (exception != None):
-          return False, exception
+          return exception
+      else:
+        result, exception = orderDao.updateOrder(user, ConvertHelper.convertLazadaOrderToOrder(order))
+        if (exception != None):
+          return exception
 
       # Get OrderItems
       orderItems, exception = lazadaOrderApi.getOrderItems(user, order['OrderId'])
       if (exception != None):
-        return False, exception
-
+        return exception
+      # Get current OrderItems
+      currentOrderItems, exception = orderItemDao.getOrderItemByOrderId(user, order['OrderId'])
+      if (exception != None):
+        return exception
       # Insert OrderItems
-      for orderItem in orderItems:
-        isOrderItemExist, exception = orderItemDao.isOrderItemExist(user, orderItem['OrderItemId'])
+      exception = self.performInsertOrderItems(user, order, currentOrderItems, orderItems)
+      if (exception != None):
+        return exception
+
+    return None
+
+  #-----------------------------------------------------------------------------
+  # Insert new if not exist in database else should update
+  # Return Boolean, Exception
+  #-----------------------------------------------------------------------------
+  def performInsertOrderItems(self, user, order, currentOrderItems, orderItems):
+    if (orderItems == None or len(orderItems) <= 0):
+      return '''Lazada orderItems is empty or null, check order_id: {}'''.format(order['OrderId'])
+
+    # Get current orderItem
+    for orderItem in orderItems:
+      isExist = self.isMatched(orderItem['OrderItemId'], currentOrderItems)
+      if (isExist == True):
+        result, exception = orderItemDao.update(user, ConvertHelper.convertLazadaOrderItemToOrderItem(orderItem))
         if (exception != None):
-          return False, exception
-        if (isOrderItemExist == False):
-          result, exception = orderItemDao.insert(user, ConvertHelper.convertLazadaOrderItemToOrderItem(orderItem))
-          if (exception != None):
-            return False, exception
+          return exception
+      else:
+        result, exception = orderItemDao.insert(user, ConvertHelper.convertLazadaOrderItemToOrderItem(orderItem))
+        if (exception != None):
+          return exception
 
-    return True, None
+    return None
 
+  #-----------------------------------------------------------------------------
+  # Checking orderItem is exist in our database (currentOrderItems)
+  # Return Boolean
+  #-----------------------------------------------------------------------------
+  def isMatched(self, orderItemId, currentOrderItems):
+    if (currentOrderItems == None or len(currentOrderItems) <= 0):
+      return False
+
+    for orderItem in currentOrderItems:
+      if (orderItem['order_item_id'] == orderItemId):
+        return True
+
+    return False
 
 
 

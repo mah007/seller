@@ -47,7 +47,7 @@ class ConvertHelper:
       "payment_method": lazadaOrder['PaymentMethod'],
       "remarks": lazadaOrder['Remarks'],
       "delivery_info": lazadaOrder['DeliveryInfo'],
-      "price": float(lazadaOrder['Price'].replace(",", "")),
+      "price": float(str(lazadaOrder['Price']).replace(",", "")),
       "gift_option": int(bool(self.str2bool(lazadaOrder['GiftOption']))),
       "gift_message": lazadaOrder['GiftMessage'],
       "voucher_code": lazadaOrder['VoucherCode'],

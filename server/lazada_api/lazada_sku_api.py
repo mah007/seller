@@ -1,7 +1,7 @@
 import requests
 import json
 from config import LazadaAPI
-from lazada_api.lazada_api_helper import LazadaApiHelper
+from utils.lazada_api_helper import LazadaApiHelper
 from utils.exception_utils import ExceptionUtils
 
 class LazadaSkuApi(object):

@@ -1,6 +1,6 @@
 from database.database_helper import DatabaseHelper
 from utils.string_utils import StringUtils
-from lazada_api.lazada_api_helper import LazadaApiHelper
+from utils.lazada_api_helper import LazadaApiHelper
 
 
 class OrderDao(object):
@@ -134,10 +134,11 @@ class OrderDao(object):
             return None, '''User: {}-{}, Order-Number: {}, Get-Order-By-Order-Number exception {}'''.format(user['username'], user['id'], orderNumber, str(ex))
 
     # --------------------------------------------------------------------------
-    # Get max updated at for Get order cronjob
+    # Get max-updated-at for Get order cronjob
+    # Default value: LazadaApiHelper.getFixedCreatedAfterForCronJob()
     # --------------------------------------------------------------------------
     def getMaxUpdatedAt(self, user):
-        query = '''SELECT MAX(updated_at) as maxUpdatedAt
+        query = '''SELECT MAX(updated_at)
                     FROM `order`
                     WHERE user_id = {} '''.format(user['id'])
         try:
@@ -145,12 +146,11 @@ class OrderDao(object):
             cur = conn.cursor()
             cur.execute(query)
             result = cur.fetchone()
-            if (not result):
-                conn.close()
-                return LazadaApiHelper.getFixedCreatedAfterForCronJob(), None;
-
-            maxUpdatedAt = result['maxUpdatedAt']
+            maxUpdatedAt = result[0]
             conn.close()
+
+            if (maxUpdatedAt == None):
+                return LazadaApiHelper.getFixedUpdatedAfterForCronJob(), None;
             return maxUpdatedAt, None
         except Exception as ex:
             return None, '''User: {}-{}, Get-Max-Updated-At: {}'''.format(user['username'], user['id'], str(ex))
@@ -159,7 +159,7 @@ class OrderDao(object):
     # Update Order
     # --------------------------------------------------------------------------
     def updateOrder(self, user, order):
-        query = '''UPDATE order
+        query = '''UPDATE `order`
                     SET customer_first_name = %s, customer_lastName = %s,
                         payment_method = %s, remarks = %s, delivery_info = %s,
                         price = %s, gift_option = %s, gift_message = %s,
@@ -167,7 +167,7 @@ class OrderDao(object):
                         address_billing = %s, address_shipping = %s,
                         national_registration_number = %s, items_count = %s,
                         promised_shipping_times = %s, extra_attributes = %s,
-                        statuses = %s, voucher = %s, shipping_fee = %s,
+                        statuses = %s, voucher = %s, shipping_fee = %s
                     WHERE order_id = %s AND user_id = %s'''
         conn = DatabaseHelper.getConnection()
         cur = conn.cursor()
@@ -187,7 +187,7 @@ class OrderDao(object):
         except Exception as ex:
             conn.rollback()
             conn.close()
-            return None, '''User: {}-{}, update Product exception: {}'''.format(user['username'], user['id'], str(ex))
+            return None, '''User: {}-{}, Update-Order: {}, Query: {}'''.format(user['username'], user['id'], str(ex), query)
 
     # # --------------------------------------------------------------------------
     # # Update Order State

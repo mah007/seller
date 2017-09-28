@@ -50,7 +50,7 @@ class OrderItemDao(object):
         DatabaseHelper.execute(query)
 
     # --------------------------------------------------------------------------
-    # Insert order
+    # Insert OrderItem
     # --------------------------------------------------------------------------
     def insert(self, user, orderItem):
         query = '''INSERT INTO order_item(order_item_id, shop_id, order_id, name,
@@ -71,7 +71,8 @@ class OrderItemDao(object):
                            orderItem['name'], orderItem['seller_sku'], orderItem['shop_sku'],
                            orderItem['shipping_type'], orderItem['item_price'], orderItem['paid_price'],
                            orderItem['currency'], orderItem['wallet_credit'], orderItem['tax_amount'],
-                           orderItem['shipping_service_cost'], orderItem['voucher_amount'], orderItem['voucher_code'],
+                           orderItem['shipping_service_cost'], orderItem['shipping_amount'],
+                           orderItem['voucher_amount'], orderItem['voucher_code'],
                            orderItem['status'], orderItem['shipment_provider'], orderItem['is_digital'],
                            orderItem['digital_delivery_info'], orderItem['tracking_code'], orderItem['tracking_code_pre'],
                            orderItem['reason'], orderItem['reason_detail'], orderItem['purchase_order_id'],
@@ -87,7 +88,57 @@ class OrderItemDao(object):
             else:
                 return None, '''User: {}-{}, Insert-Order-Item: {}'''.format(user['username'], user['id'], str(ex))
         except Exception as ex:
-            return '''User: {}-{}, Insert-Order: {}'''.format(user['username'], user['id'], str(ex))
+            return '''User: {}-{}, Insert-Order-Item: {}'''.format(user['username'], user['id'], str(ex))
+
+    # --------------------------------------------------------------------------
+    # Update OrderItem
+    # --------------------------------------------------------------------------
+    def update(self, user, orderItem):
+        query = '''UPDATE order_item
+                    SET shop_id = %s, name = %s, seller_sku = %s, shop_sku = %s,
+                        shipping_type = %s, item_price = %s, paid_price = %s,
+                        currency = %s, wallet_credit = %s, tax_amount = %s,
+                        shipping_service_cost = %s, shipping_amount = %s,
+                        voucher_amount = %s, voucher_code = %s, status = %s,
+                        shipment_provider = %s, is_digital = %s,
+                        digital_delivery_info = %s, tracking_code = %s,
+                        tracking_code_pre = %s, reason = %s, reason_detail = %s,
+                        purchase_order_id = %s, purchase_order_number = %s,
+                        package_id = %s, promised_shipping_time = %s,
+                        extra_attributes = %s, shipping_provider_type = %s,
+                        created_at = %s, updated_at = %s, return_status = %s,
+                        product_main_image = %s, variation = %s,
+                        product_detail_url = %s, invoice_number = %s
+                    WHERE user_id = %s AND order_item_id = %s'''
+
+        conn = DatabaseHelper.getConnection()
+        cur = conn.cursor()
+        try:
+            cur.execute(query, (orderItem['shop_id'], orderItem['name'], orderItem['seller_sku'],
+                                orderItem['shop_sku'], orderItem['shipping_type'],
+                                orderItem['item_price'], orderItem['paid_price'],
+                                orderItem['currency'], orderItem['wallet_credit'],
+                                orderItem['tax_amount'], orderItem['shipping_service_cost'],
+                                orderItem['shipping_amount'], orderItem['voucher_amount'],
+                                orderItem['voucher_code'], orderItem['status'],
+                                orderItem['shipment_provider'], orderItem['is_digital'],
+                                orderItem['digital_delivery_info'], orderItem['tracking_code'],
+                                orderItem['tracking_code_pre'], orderItem['reason'],
+                                orderItem['reason_detail'], orderItem['purchase_order_id'],
+                                orderItem['purchase_order_number'], orderItem['package_id'],
+                                orderItem['promised_shipping_time'], orderItem['extra_attributes'],
+                                orderItem['shipping_provider_type'], orderItem['created_at'],
+                                orderItem['updated_at'], orderItem['return_status'],
+                                orderItem['product_main_image'], orderItem['variation'],
+                                orderItem['product_detail_url'], orderItem['invoice_number'],
+                                user['id'], orderItem['order_item_id']))
+            conn.commit()
+            conn.close()
+            return None, None
+        except Exception as ex:
+            conn.rollback()
+            conn.close()
+            return None, '''User: {}-{}, Update-Order-Item: {}, Query: {}'''.format(user['username'], user['id'], str(ex), query)
 
     # --------------------------------------------------------------------------
     # Check Order exsits
@@ -178,10 +229,10 @@ class OrderItemDao(object):
             conn.close()
             return orderItems, None
         except Exception as ex:
-            return None, '''User: {}-{}, Query: {}, Get-Order-By-Order-Number exception {}'''.format(user['username'], user['id'], query, str(ex))
+            return None, '''User: {}-{}, Query: {}, Get-Order-Item-By-Order-Item-Id: {}'''.format(user['username'], user['id'], query, str(ex))
 
     # --------------------------------------------------------------------------
-    # Update Order State
+    # Delete OrderItem by order id
     # --------------------------------------------------------------------------
     def deleteOrderItemByOrderId(self, user, orderId):
         query = '''DELETE from order_item WHERE order_id = '{}' and user_id = '{}'

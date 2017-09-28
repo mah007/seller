@@ -4,7 +4,7 @@ from database.constant_dao import ConstantDao
 from lazada_api.lazada_product_api import LazadaProductApi
 from utils.response_utils import ResponseUtils
 from managers.response_helper import ResponseHelper
-from lazada_api.lazada_api_helper import LazadaApiHelper
+from utils.lazada_api_helper import LazadaApiHelper
 from utils.convert_helper import ConvertHelper
 from managers.manager_helper import ManagerHelper
 from config import ConstantConfig

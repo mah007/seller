@@ -41,15 +41,22 @@ class ExceptionUtils:
   def getBodyMessage(self, errorResponse):
     if errorResponse == None:
       return "Response is null"
-    if 'ErrorResponse' not in errorResponse:
+    if ('ErrorResponse' not in errorResponse):
       return "Dont have ErrorResponse"
 
     error = errorResponse['ErrorResponse']
+
+    # Get error message from Head
+    errorMessageStr = "Empty error message string"
+    if ('Head' in error and 'ErrorMessage' in error['Head']):
+      errorMessageStr = error['Head']['ErrorMessage']
+
+    # Get error message from Body
     if 'Body' not in error:
-      return "Dont have ErrorResponse >> Body"
+      return errorMessageStr
     errorBody = error['Body']
     if 'Errors' not in errorBody:
-      return "Dont have Errors in Body"
+      return errorMessageStr
     if len(errorBody['Errors']) == 0:
       return "No error message found"
     errorMessage = errorBody['Errors'][0]

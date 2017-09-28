@@ -1,5 +1,10 @@
-body {
+html, body {
     color: #333;
+    height: 100%;
+    background-color: #fff;
+}
+body.page-md.page-header-fixed.page-sidebar-closed-hide-logo {
+    background-color: #fff;
 }
 
 .none_padding {
@@ -15,7 +20,7 @@ body {
     float: right;
 }
 .row-error {
-    background-color: #f7abab;
+    background-color: rgb(255, 210, 210);
 }
 
 .scaning-section .scan-content {
@@ -52,7 +57,7 @@ body {
     font-size: 2rem;
 }
 .cart-page-content {
-    margin-top: 75px;
+    padding-top: 75px;
 }
 
 

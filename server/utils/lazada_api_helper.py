@@ -31,7 +31,13 @@ class LazadaApiHelper:
   # ----------------------------------------------------------------------------
   @classmethod
   def formatToLazadaTimestamp(self, timestamp):
-    return timestamp.replace(" ", "T").append("+00:00")
+    myDatatime = datetime.datetime.strptime(str(timestamp), "%Y-%m-%d %H:%M:%S")
+    timestamp = myDatatime - datetime.timedelta(hours=7)
+    return "{}+00:00".format(str(timestamp).replace(" ", "T"))
+
+  @classmethod
+  def getFixedUpdatedAfterForCronJob(self):
+    return "1990-02-25 23:46:11"
 
   # ----------------------------------------------------------------------------
   # Format Timestamp: format timestamp to using HTML character codes
