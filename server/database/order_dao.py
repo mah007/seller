@@ -20,13 +20,13 @@ class OrderDao(object):
                 voucher_code                    VARCHAR(100),
                 created_at                      DATETIME,
                 updated_at                      DATETIME,
-                address_billing                 JSON DEFAULT NULL,
-                address_shipping                JSON DEFAULT NULL,
+                address_billing                 TEXT DEFAULT NULL,
+                address_shipping                TEXT DEFAULT NULL,
                 national_registration_number    VARCHAR(300),
                 items_count                     INTEGER,
                 promised_shipping_times         VARCHAR(300),
                 extra_attributes                VARCHAR(300),
-                statuses                        JSON DEFAULT NULL,
+                statuses                        TEXT DEFAULT NULL,
                 voucher                         INTEGER,
                 shipping_fee                    DECIMAL(10,2),
                 user_id                         INTEGER,
@@ -143,11 +143,11 @@ class OrderDao(object):
         try:
             result, ex = DatabaseHelper.execute(query)
             if (ex != None):
-                return False, ex
+                return ex
             else:
-                return True, None
+                return None
         except Exception as ex:
-            return False, ''' User {}-{}, Update-Order: {} '''.format(user['username'], user['id'], str(ex))
+            return ''' User {}-{}, Update-Order: {} '''.format(user['username'], user['id'], str(ex))
     # # --------------------------------------------------------------------------
     # # Update Order State
     # # --------------------------------------------------------------------------

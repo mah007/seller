@@ -101,18 +101,16 @@ class OrderManager(object):
 
             # Check whether order is exist or not
             if(orderException != None):
-                reason = ("Order with number: {} doesn't exists").format(data['order_number'])
                 ordersmismatch.append({
                         'order': order,
-                        'reason': reason
+                        'reason': orderException
                     })
 
             # Check whether order item is exist or not
             if(itemException != None):
-                reason = ("Order item: {} doesn't exists").format(data['sku'])
                 ordersmismatch.append({
                         'order': order,
-                        'reason': reason
+                        'reason': itemException
                     })
 
             # Check whether item paid_price and sales_deliver is the same or not
@@ -132,36 +130,38 @@ class OrderManager(object):
                     })
 
             # Get original_price
-            product, productException = productDao.getProductBySellerSku(user, data)
+            product, productException = productDao.getProductByShopSku(user, data)
             if(productException != None):
-                reason = "Cannot get product by sku: '{}'".format(data['sku'])
                 ordersmismatch.append({
                         'order': order,
-                        'reason': reason
+                        'reason': productException
                     })
 
+            # Calculate earning then sum with the previous value
             earning = earning + (item['paid_price'] - (data['sum_of_fee'] + product['original_price']))
 
             # Check whether order had been update to calculated or not
-            updateOrderCalculated, exceptionUpdate = orderDao.setCalculated(user, order)
+            exceptionUpdate = orderDao.setCalculated(user, order)
             if(exceptionUpdate != None):
-                reason = ("Order with number: {} update failed").format(order['order_number'])
                 ordersmismatch.append({
                         'order': order,
-                        'reason': reason
+                        'reason': exceptionUpdate
                     })
 
             # Check whether order had been update to calculated or not
-            updateItemEarned, exceptionUpdate = orderItemDao.setEarned(user, item)
+            uexceptionUpdate = orderItemDao.setEarned(user, item)
             if(exceptionUpdate != None):
-                reason = ("Order item: {} update failed").format(item['shop_sku'])
                 ordersmismatch.append({
                         'order': order,
-                        'reason': reason
+                        'reason': exceptionUpdate
                     })
 
-            result = [earn, ordersmismatch]
-            return result
+        result = []
+        result.append({
+            'earning': earning,
+            'ordersmismatch': ordersmismatch
+            })
+        return result
 
 
 

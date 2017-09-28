@@ -262,11 +262,11 @@ class OrderItemDao(object):
         try:
             result, ex = DatabaseHelper.execute(query)
             if (ex != None):
-                return False, ex
+                return ex
             else:
-                return True, None
+                return None
         except Exception as ex:
-            return False, ''' User {}-{}, Update-Order-Items: {} '''.format(user['username'], user['id'], str(ex))
+            return ''' User {}-{}, Update-Order-Items: {} '''.format(user['username'], user['id'], str(ex))
 
 
 
