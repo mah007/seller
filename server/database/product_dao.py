@@ -109,11 +109,11 @@ class ProductDao(object):
     # --------------------------------------------------------------------------
     # Get Product by shop SKU
     # --------------------------------------------------------------------------
-    def getProductByShopSku(self, user, sku):
+    def getProductByShopSku(self, user, shopSku):
         query = '''SELECT *
                     from product
                     WHERE user_id = '{}' and shop_sku = '{}'
-                '''.format(user['id'], sku['sku'])
+                '''.format(user['id'], shopSku)
         try:
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()

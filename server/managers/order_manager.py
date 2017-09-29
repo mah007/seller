@@ -78,9 +78,9 @@ class OrderManager(object):
 
         return ResponseUtils.generateSuccessResponse("Set status to Ready-To-Ship is done", None)
 
-    # Order       1--> order_number
-    # Order       N--> Order item
-    # Order item  N--> Sku
+    #-----------------------------------------------------------------------------
+    # Calculate earning
+    #-----------------------------------------------------------------------------
     def calculateEarning(self):
         user = ManagerHelper.validateToken(token)
         if not user:
@@ -102,16 +102,17 @@ class OrderManager(object):
             # Check whether order is exist or not
             if(orderException != None):
                 ordersmismatch.append({
-                        'order': order,
+                        'order': None,
                         'reason': orderException
                     })
 
-            # Check whether order item is exist or not
+            # Check whether order item is exist or not. Continue if order item isn't exists
             if(itemException != None):
                 ordersmismatch.append({
                         'order': order,
                         'reason': itemException
                     })
+                continue
 
             # Check whether item paid_price and sales_deliver is the same or not
             if(item['paid_price'] != data['sales_deliver']):
@@ -122,7 +123,7 @@ class OrderManager(object):
                     })
 
             # Check whether order had been delivered or not 
-            if(order['statuses'] != 'delivered'):
+            if(order['statuses'] != ["delivered"]):
                 reason = ("Order with number: {} isn't delevired").format(order['order_number'])
                 ordersmismatch.append({
                         'order': order,
@@ -130,7 +131,7 @@ class OrderManager(object):
                     })
 
             # Get original_price
-            product, productException = productDao.getProductByShopSku(user, data)
+            product, productException = productDao.getProductByShopSku(user, data['sku'])
             if(productException != None):
                 ordersmismatch.append({
                         'order': order,
