@@ -30,7 +30,9 @@ class OrderDao(object):
                 statuses                        JSON DEFAULT NULL,
                 voucher                         INTEGER,
                 shipping_fee                    DECIMAL(10,2),
-                user_id                         INTEGER
+                user_id                         INTEGER,
+                calculated                      INTEGER DEFAULT 0,
+                invoice_id                      INTEGER
                 );'''
         DatabaseHelper.execute(query)
 
@@ -189,19 +191,23 @@ class OrderDao(object):
             conn.close()
             return None, '''User: {}-{}, Update-Order: {}, Query: {}'''.format(user['username'], user['id'], str(ex), query)
 
-    # # --------------------------------------------------------------------------
-    # # Update Order State
-    # # --------------------------------------------------------------------------
-    # def updateOrderState(self, user, order):
-    #     query = '''UPDATE order
-    #                 set status = '{}', updated_at = '{}', order_json = '{}'
-    #                 WHERE id = '{}'
-    #             '''.format(order['status'], order['updated_at'], order['order_json'], order['id'])
-    #     try:
-    #         DatabaseHelper.execute(query)
-    #         return ExceptionUtils.success()
-    #     except Exception as ex:
-    #         return ExceptionUtils.error('''User: {}-{}, Order-Number: {}, Update-Order-State exception: {}'''.format(user['username'], user['id'], orderNumber, str(ex)))
+    # --------------------------------------------------------------------------
+    # Mark order that is calculated for an invoice
+    # --------------------------------------------------------------------------
+    def setCalculated(self, user, order):
+        query = ''' UPDATE order
+                    SET calculated = 1
+                    WHERE user_id = {}
+                    AND id = {}
+                '''.format(user['id'], order['id'])
+        try:
+            result, ex = DatabaseHelper.execute(query)
+            if (ex != None):
+                return ex
+            else:
+                return None
+        except Exception as ex:
+            return ''' User {}-{}, Update-Order: {} '''.format(user['username'], user['id'], str(ex))
 
 
 

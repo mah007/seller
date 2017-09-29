@@ -40,6 +40,28 @@ class ConstantConfig(object):
 class UserConfig(object):
     SUPER_ADMIN = "info@zakos.vn"
 
+class ExcelImporter(object):
+    FILE_PATH = "../../VN10VI4 2017-08-01-14.xlsx"
+    GENERAL_EXCHANGE = "2. Tổng quan giao dịch"
+    MAX_RETRY_TIME = 3
+    COLUMN_ORDER_NUMBER = 'A'
+    COLUMN_SKU = 'C'
+    COLUMN_ITEM_STATUS = 'E'
+    COLUMN_TRACKING_NUMBER = 'G'
+    COLUMN_SHIPMENT_TYPE = 'H'
+    COLUMN_PAYMENT_METHOD = 'I'
+    COLUMN_SALES_DELIVER = 'J'
+    COLUMN_SALES_RETURN = 'K'
+    COLUMN_WRONG_STATUS = 'L'
+    COLUMN_WRONG_STATUS = 'L'
+    COLUMN_SELLER_DELIVERY = 'M'
+    COLUMN_PRODUCT_BUNDING = 'N'
+    COLUMN_SUBSIDY = 'O'
+    COLUMN_COMISSION = 'P'
+    COLUMN_SUM_OF_FEE = 'AD'
+    SCROLL_PAUSE_TIME = 1.0
+
+
 
 
 

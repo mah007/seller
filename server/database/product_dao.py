@@ -106,6 +106,51 @@ class ProductDao(object):
             errorMessage = '''Get-Product-By-SKU {}, exception: {}'''.format(sku, str(ex))
             return None, errorMessage
 
+    # --------------------------------------------------------------------------
+    # Get Product by shop SKU
+    # --------------------------------------------------------------------------
+    def getProductByShopSku(self, user, shopSku):
+        query = '''SELECT *
+                    from product
+                    WHERE user_id = '{}' and shop_sku = '{}'
+                '''.format(user['id'], shopSku)
+        try:
+            conn = DatabaseHelper.getConnection()
+            cur = conn.cursor()
+            cur.execute(query)
+
+            row = cur.fetchone()
+            if not row:
+                conn.close()
+                errorMessage = '''User: {}-{}, Get-Product-By-SKU: {} is not found'''.format(user['username'], user['id'], sku['sku'])
+                return None, errorMessage
+
+            product = {
+                    "id": row[0],
+                    "name": row[1],
+                    "url": row[2],
+                    "status": row[3],
+                    "quantity": row[4],
+                    "available_quantity": row[5],
+                    "seller_sku": row[6],
+                    "shop_sku": row[7],
+                    "original_price": row[8],
+                    "special_price": row[9],
+                    "image": row[10],
+                    "width": row[11],
+                    "height": row[12],
+                    "weight": row[13],
+                    "brand": row[14],
+                    "model": row[15],
+                    "primary_category": row[16],
+                    "spu_id": row[17]
+                }
+
+            conn.close()
+            return product, None
+        except Exception as ex:
+            errorMessage = '''Get-Product-By-SKU {}, exception: {}'''.format(sku, str(ex))
+            return None, errorMessage
 
     # --------------------------------------------------------------------------
     # Get All Product

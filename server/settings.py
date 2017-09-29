@@ -7,7 +7,7 @@ DOMAIN = {
 # Database configuration.
 class Database(object):
 	DATABASE = "lazada"
-	USER = "root"
+	USER = ""
 	PASSWORD = ""
 	HOST = "localhost"
 	PORT = "8000"
