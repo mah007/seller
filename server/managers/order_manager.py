@@ -5,7 +5,7 @@ from database.user_dao import UserDao
 from database.order_dao import OrderDao
 from database.order_item_dao import OrderItemDao
 from database.product_dao import ProductDao
-from database.invoice_dao import InvoiceDao
+from database.account_statement_dao import AccountStatementDao
 from lazada_api.lazada_order_api import LazadaOrderApi
 from utils.response_utils import ResponseUtils
 from utils.convert_helper import ConvertHelper
@@ -133,7 +133,7 @@ class OrderManager(object):
                         'reason': reason
                     })
 
-            # Check whether order had been delivered or not 
+            # Check whether order had been delivered or not
             if(order['statuses'] != ["delivered"]):
                 reason = ("Order with number: {} isn't delevired").format(order['order_number'])
                 ordersmismatch.append({

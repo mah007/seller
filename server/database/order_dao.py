@@ -32,7 +32,7 @@ class OrderDao(object):
                 shipping_fee                    DECIMAL(10,2),
                 user_id                         INTEGER,
                 calculated                      INTEGER DEFAULT 0,
-                invoice_id                      INTEGER
+                account_statement_id            INTEGER
                 );'''
         DatabaseHelper.execute(query)
 
@@ -128,7 +128,9 @@ class OrderDao(object):
                 "extra_attributes": row[19],
                 "statuses": row[20],
                 "voucher": row[21],
-                "shipping_fee": row[22]
+                "shipping_fee": row[22],
+                "calculated": row[24],      # row[23] is user_id, dont need it.
+                "account_statement_id": row[25]
             }
             conn.close()
             return order, None
@@ -197,9 +199,25 @@ class OrderDao(object):
     def setCalculated(self, user, order):
         query = ''' UPDATE order
                     SET calculated = 1
-                    WHERE user_id = {}
-                    AND id = {}
-                '''.format(user['id'], order['id'])
+                    WHERE user_id = {} AND order_number = {}
+                '''.format(user['id'], order['order_number'])
+        try:
+            result, ex = DatabaseHelper.execute(query)
+            if (ex != None):
+                return ex
+            else:
+                return None
+        except Exception as ex:
+            return ''' User {}-{}, Update-Order: {} '''.format(user['username'], user['id'], str(ex))
+
+    # --------------------------------------------------------------------------
+    # Set that order belong to a specific Account Statement
+    # --------------------------------------------------------------------------
+    def setAccountStatmentId(self, user, order, accountStatementId):
+        query = ''' UPDATE order
+                    SET account_statement_id = {}
+                    WHERE user_id = {} AND order_number = {}
+                '''.format(accountStatementId, user['id'], order['order_number'])
         try:
             result, ex = DatabaseHelper.execute(query)
             if (ex != None):
