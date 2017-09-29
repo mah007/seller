@@ -142,7 +142,7 @@ class OrderManager(object):
             earning = earning + (item['paid_price'] - (data['sum_of_fee'] + product['original_price']))
 
             # Check whether order had been update to calculated or not
-            exceptionUpdate = orderDao.setCalculated(user, order)
+            uexceptionUpdate = orderItemDao.setEarned(user, item)
             if(exceptionUpdate != None):
                 ordersmismatch.append({
                         'order': order,
@@ -150,7 +150,7 @@ class OrderManager(object):
                     })
 
             # Check whether order had been update to calculated or not
-            uexceptionUpdate = orderItemDao.setEarned(user, item)
+            exceptionUpdate = orderDao.setCalculated(user, order)
             if(exceptionUpdate != None):
                 ordersmismatch.append({
                         'order': order,
