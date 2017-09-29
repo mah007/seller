@@ -30,7 +30,8 @@ class OrderDao(object):
                 voucher                         INTEGER,
                 shipping_fee                    DECIMAL(10,2),
                 user_id                         INTEGER,
-                calculated                      INTEGER DEFAULT 0
+                calculated                      INTEGER DEFAULT 0,
+                invoice_id                      INTEGER
                 );'''
         DatabaseHelper.execute(query)
 

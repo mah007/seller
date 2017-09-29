@@ -5,6 +5,7 @@ from database.user_dao import UserDao
 from database.order_dao import OrderDao
 from database.order_item_dao import OrderItemDao
 from database.product_dao import ProductDao
+from database.invoice_dao import InvoiceDao
 from lazada_api.lazada_order_api import LazadaOrderApi
 from utils.response_utils import ResponseUtils
 from utils.convert_helper import ConvertHelper
@@ -17,6 +18,8 @@ class OrderManager(object):
         orderDao.createTable()
         orderItemDao = OrderItemDao()
         orderItemDao.createTable()
+        invoiceDao = InvoiceDao()
+        invoiceDao.createTable()
 
     #---------------------------------------------------------------------------
     # Scan barcode
@@ -89,6 +92,7 @@ class OrderManager(object):
         orderDao = OrderDao()
         orderItemDao = OrderItemDao()
         productDao = ProductDao()
+        invoiceDao = InvoiceDao()
         importExcel = ImportExcel()
 
         earning = 0
@@ -105,6 +109,13 @@ class OrderManager(object):
                         'order': None,
                         'reason': orderException
                     })
+            else:
+                invoice, invoiceException = invoiceDao.isInvoiceExist(user, order['invoice_id'])
+                if(invoiceException != None):
+                    ordersmismatch.append({
+                            'order': order,
+                            'reason': invoiceException
+                        })
 
             # Check whether order item is exist or not. Continue if order item isn't exists
             if(itemException != None):
@@ -139,10 +150,11 @@ class OrderManager(object):
                     })
 
             # Calculate earning then sum with the previous value
-            earning = earning + (item['paid_price'] - (data['sum_of_fee'] + product['original_price']))
+            earningItem = (item['paid_price'] - (data['sum_of_fee'] + product['original_price']))
+            earning = earning + earningItem
 
             # Check whether order had been update to calculated or not
-            uexceptionUpdate = orderItemDao.setEarned(user, item)
+            exceptionUpdate = orderItemDao.setEarned(user, item)
             if(exceptionUpdate != None):
                 ordersmismatch.append({
                         'order': order,
@@ -156,6 +168,10 @@ class OrderManager(object):
                         'order': order,
                         'reason': exceptionUpdate
                     })
+            if(invoiceException == None):
+                updateInvoice = invoiceDao.updateInvoice(user, order['invoice_id'], earningItem, )
+
+
 
         result = []
         result.append({
