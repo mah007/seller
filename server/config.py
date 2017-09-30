@@ -40,9 +40,10 @@ class ConstantConfig(object):
 class UserConfig(object):
     SUPER_ADMIN = "info@zakos.vn"
 
-class ExcelImporter(object):
+class AccountStatementConfig(object):
     FILE_PATH = "../../VN10VI4 2017-08-01-14.xlsx"
-    GENERAL_EXCHANGE = "2. Tổng quan giao dịch"
+    ACCOUNT_STATEMENT = "1. Sao kê tài khoản"
+    TRANSACTION_OVERVIEW = "2. Tổng quan giao dịch"
     MAX_RETRY_TIME = 3
     COLUMN_ORDER_NUMBER = 'A'
     COLUMN_SKU = 'C'

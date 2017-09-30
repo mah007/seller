@@ -194,13 +194,13 @@ class OrderDao(object):
             return None, '''User: {}-{}, Update-Order: {}, Query: {}'''.format(user['username'], user['id'], str(ex), query)
 
     # --------------------------------------------------------------------------
-    # Mark order that is calculated for an invoice
+    # Mark order that is calculated for an Account Statement
     # --------------------------------------------------------------------------
-    def setCalculated(self, user, order):
+    def markComputed(self, user, orderId, accountStatementId):
         query = ''' UPDATE order
-                    SET calculated = 1
-                    WHERE user_id = {} AND order_number = {}
-                '''.format(user['id'], order['order_number'])
+                    SET calculated = 1, account_statement_id = {}
+                    WHERE user_id = {} AND order_id = {}
+                '''.format(accountStatementId, user['id'], orderId)
         try:
             result, ex = DatabaseHelper.execute(query)
             if (ex != None):
@@ -208,24 +208,13 @@ class OrderDao(object):
             else:
                 return None
         except Exception as ex:
-            return ''' User {}-{}, Update-Order: {} '''.format(user['username'], user['id'], str(ex))
+            return ''' User {}-{}, Mark-Computed: Order-Id: {}, Exception: {} '''.format(user['username'], user['id'], orderId, str(ex))
 
-    # --------------------------------------------------------------------------
-    # Set that order belong to a specific Account Statement
-    # --------------------------------------------------------------------------
-    def setAccountStatmentId(self, user, order, accountStatementId):
-        query = ''' UPDATE order
-                    SET account_statement_id = {}
-                    WHERE user_id = {} AND order_number = {}
-                '''.format(accountStatementId, user['id'], order['order_number'])
-        try:
-            result, ex = DatabaseHelper.execute(query)
-            if (ex != None):
-                return ex
-            else:
-                return None
-        except Exception as ex:
-            return ''' User {}-{}, Update-Order: {} '''.format(user['username'], user['id'], str(ex))
+
+
+
+
+
 
 
 

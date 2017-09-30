@@ -18,7 +18,6 @@ class AccountStatementDao(object):
                 end_date                        DATETIME,
                 sales_revenue                   DECIMAL(10,2),
                 income                          DECIMAL(10,2) DEFAULT 0,
-                exception                       JSON DEFAULT NULL,
                 created_at                      DATETIME,
                 updated_at                      DATETIME,
                 user_id                         BIGINT
@@ -31,17 +30,16 @@ class AccountStatementDao(object):
     # --------------------------------------------------------------------------
     def insert(self, user, invoice):
         query = '''INSERT INTO `account_statement`(excel_url, start_date,
-                            end_date, sales_revenue, income, exception,
+                            end_date, sales_revenue, income,
                             created_at, updated_at, user_id)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %S)'''
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'''
         conn = DatabaseHelper.getConnection()
         cur = conn.cursor()
         try:
             cur.execute(query, (invoice['excel_url'], invoice['start_date'],
                            invoice['end_date'],invoice['sales_revenue'],
-                           invoice['income'], invoice['exception'],
-                           invoice['created_at'], invoice['created_at'],
-                           invoice['user_id']))
+                           invoice['income'], invoice['created_at'],
+                           invoice['created_at'], invoice['user_id']))
             conn.commit()
             conn.close()
             return None

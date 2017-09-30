@@ -111,7 +111,7 @@ class ProductDao(object):
     # --------------------------------------------------------------------------
     def getProductByShopSku(self, user, shopSku):
         query = '''SELECT *
-                    from product
+                    FROM product
                     WHERE user_id = '{}' and shop_sku = '{}'
                 '''.format(user['id'], shopSku)
         try:
@@ -122,7 +122,7 @@ class ProductDao(object):
             row = cur.fetchone()
             if not row:
                 conn.close()
-                errorMessage = '''User: {}-{}, Get-Product-By-SKU: {} is not found'''.format(user['username'], user['id'], sku['sku'])
+                errorMessage = '''User: {}-{}, Get-Product-By-SKU: {} is not found'''.format(user['username'], user['id'], shopSku)
                 return None, errorMessage
 
             product = {
@@ -149,7 +149,7 @@ class ProductDao(object):
             conn.close()
             return product, None
         except Exception as ex:
-            errorMessage = '''Get-Product-By-SKU {}, exception: {}'''.format(sku, str(ex))
+            errorMessage = '''Get-Product-By-SKU {}, exception: {}'''.format(shopSku, str(ex))
             return None, errorMessage
 
     # --------------------------------------------------------------------------

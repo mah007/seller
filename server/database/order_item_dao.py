@@ -178,63 +178,19 @@ class OrderItemDao(object):
                 '''.format(user['id'], orderItemId)
         return self.getOrderItems(user, query)
 
-    def getOrderItemByShopSku(self, user, shopSku):
+    # --------------------------------------------------------------------------
+    # Get OrderItem by OrderId and ShopSku
+    # --------------------------------------------------------------------------
+    def getOrderItemByShopSku(self, user, orderId, shopSku):
         query = ''' SELECT *
                     FROM order_item
-                    WHERE user_id = '{}' AND shop_sku = '{}' AND earned = 0
+                    WHERE order_id = {} AND user_id = '{}' AND shop_sku = '{}'
                 '''.format(user['id'], shopSku)
-        try:
-            conn = DatabaseHelper.getConnection()
-            cur = conn.cursor()
-            cur.execute(query)
-            rows = cur.fetchone()
-            orderItem = []
-            for row in rows:
-                orderItem.append({
-                        'id': row[0],
-                        'order_item_id': row[1],
-                        'shop_id': row[2],
-                        'order_id': row[3],
-                        'name': row[4],
-                        'seller_sku': row[5],
-                        'shop_sku': row[6],
-                        'shipping_type': row[7],
-                        'item_price': row[8],
-                        'paid_price': row[9],
-                        'currency': row[10],
-                        'wallet_credit': row[11],
-                        'tax_amount': row[12],
-                        'shipping_amount': row[13],
-                        'shipping_service_cost': row[14],
-                        'voucher_amount': row[15],
-                        'voucher_code': row[16],
-                        'status': row[17],
-                        'shipment_provider': row[18],
-                        'is_digital': row[19],
-                        'digital_delivery_info': row[20],
-                        'tracking_code': row[21],
-                        'tracking_code_pre': row[22],
-                        'reason': row[23],
-                        'reason_detail': row[24],
-                        'purchase_order_id': row[25],
-                        'purchase_order_number': row[26],
-                        'package_id': row[27],
-                        'promised_shipping_time': row[28],
-                        'extra_attributes': row[29],
-                        'shipping_provider_type': row[30],
-                        'created_at': row[31],
-                        'updated_at': row[32],
-                        'return_status': row[33],
-                        'product_main_image': row[34],
-                        'variation': row[35],
-                        'product_detail_url': row[36],
-                        'invoice_number': row[37]
-                    })
-                conn.close()
-                return orderItem, None
-        except Exception as ex:
-            return None, '''User: {}-{}, Query: {}, Get-Order-By-Order-Number exception {}'''.format(user['username'], user['id'], query, str(ex))
+        return self.getOrderItems(user, query)
 
+    # --------------------------------------------------------------------------
+    # Get OrderItem by query for thoese functions above
+    # --------------------------------------------------------------------------
     def getOrderItems(self, user, query):
         try:
             conn = DatabaseHelper.getConnection()
@@ -304,20 +260,72 @@ class OrderItemDao(object):
         except Exception as ex:
             return False, '''User: {}-{}, Delete-Order-Items: {}'''.format(user['username'], user['id'], str(ex))
 
-    def setEarned(self, user, item):
-        query = ''' UPDATE order_item 
-                    SET earned = 1  
-                    WHERE user_id = {}
-                    AND id = {}
-                '''.format(user['id'], item['id'])
+
         try:
-            result, ex = DatabaseHelper.execute(query)
-            if (ex != None):
-                return ex
-            else:
-                return None
+            conn = DatabaseHelper.getConnection()
+            cur = conn.cursor()
+            cur.execute(query)
+            rows = cur.fetchone()
+            orderItem = []
+            for row in rows:
+                orderItem.append({
+                        'id': row[0],
+                        'order_item_id': row[1],
+                        'shop_id': row[2],
+                        'order_id': row[3],
+                        'name': row[4],
+                        'seller_sku': row[5],
+                        'shop_sku': row[6],
+                        'shipping_type': row[7],
+                        'item_price': row[8],
+                        'paid_price': row[9],
+                        'currency': row[10],
+                        'wallet_credit': row[11],
+                        'tax_amount': row[12],
+                        'shipping_amount': row[13],
+                        'shipping_service_cost': row[14],
+                        'voucher_amount': row[15],
+                        'voucher_code': row[16],
+                        'status': row[17],
+                        'shipment_provider': row[18],
+                        'is_digital': row[19],
+                        'digital_delivery_info': row[20],
+                        'tracking_code': row[21],
+                        'tracking_code_pre': row[22],
+                        'reason': row[23],
+                        'reason_detail': row[24],
+                        'purchase_order_id': row[25],
+                        'purchase_order_number': row[26],
+                        'package_id': row[27],
+                        'promised_shipping_time': row[28],
+                        'extra_attributes': row[29],
+                        'shipping_provider_type': row[30],
+                        'created_at': row[31],
+                        'updated_at': row[32],
+                        'return_status': row[33],
+                        'product_main_image': row[34],
+                        'variation': row[35],
+                        'product_detail_url': row[36],
+                        'invoice_number': row[37]
+                    })
+                conn.close()
+                return orderItem, None
         except Exception as ex:
-            return ''' User {}-{}, Update-Order-Items: {} '''.format(user['username'], user['id'], str(ex))
+            return None, '''User: {}-{}, Query: {}, Get-Order-By-Order-Number exception {}'''.format(user['username'], user['id'], query, str(ex))
+
+    # --------------------------------------------------------------------------
+    # Set Income for an OrderItem
+    # --------------------------------------------------------------------------
+    def setIncome(self, user, orderId, shopSku, income):
+        query = ''' UPDATE order_item
+                    SET earned = {}
+                    WHERE order_id = {} AND user_id = '{}' AND shop_sku = '{}'
+                '''.format(income, orderId, user['id'], shopSku)
+        try:
+            result, exception = DatabaseHelper.execute(query)
+            return exception # Exception will be null if not have any exception
+        except Exception as ex:
+            return '''User {}-{}, Set-Order-Item-Income: Order-Item-Id {}, Exception: {} '''.format(user['username'], user['id'], itemItemId, str(ex))
 
 
 
