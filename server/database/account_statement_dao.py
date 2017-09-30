@@ -28,7 +28,7 @@ class AccountStatementDao(object):
     # Insert an Account Statement
     # NOTE: UpdatedAt always have the same value with createdAt for the first time.
     # --------------------------------------------------------------------------
-    def insert(self, user, invoice):
+    def insert(self, user, accountStatement):
         query = '''INSERT INTO `account_statement`(excel_url, start_date,
                             end_date, sales_revenue, income,
                             created_at, updated_at, user_id)
@@ -36,10 +36,10 @@ class AccountStatementDao(object):
         conn = DatabaseHelper.getConnection()
         cur = conn.cursor()
         try:
-            cur.execute(query, (invoice['excel_url'], invoice['start_date'],
-                           invoice['end_date'],invoice['sales_revenue'],
-                           invoice['income'], invoice['created_at'],
-                           invoice['created_at'], invoice['user_id']))
+            cur.execute(query, (accountStatement['excel_url'], accountStatement['start_date'],
+                           accountStatement['end_date'],accountStatement['sales_revenue'],
+                           accountStatement['income'], accountStatement['created_at'],
+                           accountStatement['created_at'], user['id']))
             conn.commit()
             conn.close()
             return None
@@ -52,7 +52,7 @@ class AccountStatementDao(object):
     # Update an Account Statement
     # --------------------------------------------------------------------------
     def update(self, user, accountStatementId, income, updatedAt):
-        query = ''' UPDATE invoice
+        query = ''' UPDATE account_statement
                     SET income = {}, updated_at = '{}'
                     WHERE user_id = {} AND id = {}
                 '''.format(income, updatedAt, user['id'], accountStatementId)
@@ -60,7 +60,41 @@ class AccountStatementDao(object):
             result, exception = DatabaseHelper.execute(query)
             return exception
         except Exception as ex:
-            return ''' User {}-{}, Update-Invoice: {} '''.format(user['username'], user['id'], str(ex))
+            return ''' User {}-{}, Update-Account-Statement: {} '''.format(user['username'], user['id'], str(ex))
+
+    # --------------------------------------------------------------------------
+    # Get an Account Statement
+    # --------------------------------------------------------------------------
+    def getFirstAccountStatementForTest(self, user):
+        query = ''' SELECT *
+                    FROM account_statement
+                    WHERE user_id = {}
+                '''.format(user['id'])
+        try:
+            conn = DatabaseHelper.getConnection()
+            cur = conn.cursor()
+            cur.execute(query)
+
+            row = cur.fetchone()
+            if not row:
+                conn.close()
+                return '''User: {}-{}, Dont have any account statement data'''.format(user['username'], user['id'])
+
+            result = {
+                "id": row[0],
+                "excel_url": row[1],
+                "start_date": row[2],
+                "end_date": row[3],
+                "sales_revenue": row[4],
+                "income": row[5],
+                "created_at": row[6],
+                "updated_at": row[7]
+            }
+
+            conn.close()
+            return result
+        except Exception as ex:
+            return '''User: {}-{}, Get-Account-Statement: {}'''.format(user['username'], user['id'], str(ex))
 
 
 

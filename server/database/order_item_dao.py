@@ -185,7 +185,7 @@ class OrderItemDao(object):
         query = ''' SELECT *
                     FROM order_item
                     WHERE order_id = {} AND user_id = '{}' AND shop_sku = '{}'
-                '''.format(user['id'], shopSku)
+                '''.format(orderId, user['id'], shopSku)
         return self.getOrderItems(user, query)
 
     # --------------------------------------------------------------------------
@@ -238,7 +238,8 @@ class OrderItemDao(object):
                     'product_main_image': row[34],
                     'variation': row[35],
                     'product_detail_url': row[36],
-                    'invoice_number': row[37]
+                    'invoice_number': row[37],
+                    'earned': row[39] # row[38] is user_id, don't need it
                 })
             conn.close()
             return orderItems, None

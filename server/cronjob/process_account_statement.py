@@ -1,3 +1,4 @@
+import threading
 from utils.excel_utils import ExcelUitls
 from utils.timestamp_utils import TimestampUtils
 from database.product_dao import ProductDao
@@ -25,25 +26,21 @@ class ProcessAccountStatement(threading.Thread):
     accountStatement = self.kwargs['account_statement']
     print('''*********** Process Account Statement for {} ***********'''.format(user['lazada_user_name']))
 
-    accountStatementIncome, exceptions = process(user, accountStatement)
+    # Compute income
+    income, exceptions = self.process(user, accountStatement)
 
     # Update Account Statement income
-    updateException = accountStatementExceptionDao.update(user,
-                                        accountStatement['id'],
-                                        accountStatementIncome,
-                                        TimestampUtils.getCurrentDatatime())
+    datetimeStr = TimestampUtils.getCurrentDatatime()
+    updateException = accountStatementDao.update(user, accountStatement['id'], income, datetimeStr)
     if (updateException != None):
         print(updateException)
 
     # Add Account Statement exceptions
-    if (len(exceptions) > 0):
-      for (exception in exceptions):
-        insertException = accountStatementExceptionDao.insert(user,
-                                            accountStatement['id'],
-                                            exception['reason'],
-                                            TimestampUtils.getCurrentDatatime())
-        if (insertException != None):
-          print(insertException)
+    print(exceptions)
+    for exception in exceptions:
+      insertException = accountStatementExceptionDao.insert(user, exception['order_number'], accountStatement['id'], exception['reason'], datetimeStr)
+      if (insertException != None):
+        print(insertException)
 
 
   #---------------------------------------------------------------------------
@@ -74,12 +71,12 @@ class ProcessAccountStatement(threading.Thread):
 
       # Check OrderItem >> paid_price and Lazada >> sales_deliver
       if (orderItem['paid_price'] != data['sales_deliver']):
-        reason = ("Order-Item price: {} doesn't match with Lazada-Sale-Deliver {} ").format(orderItem['paid_price'], data['sales_deliver'])
+        reason = ("Order-Item-Price: {} doesn't match with Lazada-Sale-Deliver {} ").format(orderItem['paid_price'], data['sales_deliver'])
         exceptions.append({'order_number': order['order_number'], 'reason': reason})
       # Check whether order had been delivered or not
       if ('delivered' not in order['statuses']):
-        reason = ("Order-Number: {} isn't delevired, real status: {}").format(order['order_number'], order['statuses'])
-        ordersmismatch.append({'order_number': order['order_number'], reason: reason})
+        reason = ("Order-Number: {} status is: {}").format(order['order_number'], order['statuses'])
+        exceptions.append({'order_number': order['order_number'], 'reason': reason})
 
       # Calculate OrderItem income:
       # Default value: orderItem['earned'] >> This OrderItem income has been computed
@@ -88,7 +85,7 @@ class ProcessAccountStatement(threading.Thread):
       if (incomeOfAnOrderItem == 0):
         product, exception = productDao.getProductByShopSku(user, data['sku'])
         if (exception != None):
-          ordersmismatch.append({'order_number': order['order_number'], 'reason': exception})
+          exceptions.append({'order_number': order['order_number'], 'reason': exception})
           incomeOfAnOrderItem = data['sales_deliver'] - data['sum_of_fee']
         else:
           incomeOfAnOrderItem = orderItem['paid_price'] - (data['sum_of_fee'] + product['original_price'])
@@ -97,7 +94,7 @@ class ProcessAccountStatement(threading.Thread):
 
       # Set OrderItem income
       if (orderItem['earned'] == 0):
-        exception = orderItemDao.setIncome(user, user, order['order_id'], data['sku'], incomeOfAnOrderItem)
+        exception = orderItemDao.setIncome(user, order['order_id'], data['sku'], incomeOfAnOrderItem)
         if(exception != None):
           exceptions.append({'order_number': order['order_number'], 'reason': exception})
       # Mark Order as Computed

@@ -28,4 +28,4 @@ class TimestampUtils:
 
   @classmethod
   def getCurrentDatatime(self):
-    datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    return datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")

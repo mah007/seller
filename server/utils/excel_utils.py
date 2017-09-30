@@ -4,11 +4,13 @@ from config import AccountStatementConfig
 
 class ExcelUitls(object):
 
+    @classmethod
     def open_work_sheet(self, filePath, sheet_name):
         work_book = openpyxl.load_workbook(filePath, data_only=True)
         work_sheet = work_book.get_sheet_by_name(sheet_name)
         return work_sheet
 
+    @classmethod
     def get_column_by_letter(self, letter):
         return openpyxl.utils.cell.column_index_from_string(letter) - 1
 
@@ -19,7 +21,7 @@ class ExcelUitls(object):
         try:
             work_sheet = self.open_work_sheet(excelUrl, sheet_name)
             for index, current_row in enumerate(work_sheet.rows):
-                if index > 3:   # Data start from row number 3.
+                if index > 4:   # Data start from row number 3.
                     order_number = current_row[self.get_column_by_letter(AccountStatementConfig.COLUMN_ORDER_NUMBER)].value
                     sku = current_row[self.get_column_by_letter(AccountStatementConfig.COLUMN_SKU)].value
                     item_status = current_row[self.get_column_by_letter(AccountStatementConfig.COLUMN_ITEM_STATUS)].value
@@ -43,14 +45,14 @@ class ExcelUitls(object):
                             'tracking_number': tracking_number,
                             'shipment_type': shipment_type,
                             'payment_method': payment_method,
-                            'sales_deliver': sales_deliver,
-                            'sales_return': sales_return,
+                            'sales_deliver': int(str(sales_deliver).replace(",", "")),
+                            'sales_return': int(str(sales_return).replace("(", "").replace(")", "").replace(",", "")),
                             'wrong_status': wrong_status,
                             'seller_delivery': seller_delivery,
                             'product_bundling': product_bundling,
                             'subsidy': subsidy,
                             'commission': commission,
-                            'sum_of_fee': sum_of_fee
+                            'sum_of_fee': int(str(sum_of_fee).replace("(", "").replace(")", "").replace(",", ""))
                         })
 
             return datas

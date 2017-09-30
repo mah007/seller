@@ -197,7 +197,7 @@ class OrderDao(object):
     # Mark order that is calculated for an Account Statement
     # --------------------------------------------------------------------------
     def markComputed(self, user, orderId, accountStatementId):
-        query = ''' UPDATE order
+        query = ''' UPDATE `order`
                     SET calculated = 1, account_statement_id = {}
                     WHERE user_id = {} AND order_id = {}
                 '''.format(accountStatementId, user['id'], orderId)

@@ -17,21 +17,21 @@ class AccountStatementExceptionDao(object):
     # --------------------------------------------------------------------------
     # Insert an exception
     # --------------------------------------------------------------------------
-    def insert(self, user, accountStatementId, reason, createdAt):
+    def insert(self, user, orderNumber, accountStatementId, reason, createdAt):
         query = '''INSERT INTO `account_statement_exception`(order_number, reason,
                             created_at, account_statement_id, user_id)
                     VALUES (%s, %s, %s, %s, %s)'''
         conn = DatabaseHelper.getConnection()
         cur = conn.cursor()
         try:
-            cur.execute(query, (reason, createdAt, accountStatementId, user['id']))
+            cur.execute(query, (orderNumber, reason, createdAt, accountStatementId, user['id']))
             conn.commit()
             conn.close()
             return None
         except Exception as ex:
             conn.rollback()
             conn.close()
-            return '''User: {}-{}, Insert-invoice: {}'''.format(user['username'], user['id'], str(ex))
+            return '''User: {}-{}, Insert-Account-Statement-Exception: {}'''.format(user['username'], user['id'], str(ex))
 
 
 
