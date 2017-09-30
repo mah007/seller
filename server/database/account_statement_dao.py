@@ -51,11 +51,11 @@ class AccountStatementDao(object):
     # --------------------------------------------------------------------------
     # Update an Account Statement
     # --------------------------------------------------------------------------
-    def update(self, user, accountStatementId, income, exception, updatedAt):
+    def update(self, user, accountStatementId, income, updatedAt):
         query = ''' UPDATE invoice
-                    SET income = {}, exception = '{}', updated_at = '{}'
+                    SET income = {}, updated_at = '{}'
                     WHERE user_id = {} AND id = {}
-                '''.format(income, exception, updatedAt, user['id'], accountStatementId)
+                '''.format(income, updatedAt, user['id'], accountStatementId)
         try:
             result, exception = DatabaseHelper.execute(query)
             return exception

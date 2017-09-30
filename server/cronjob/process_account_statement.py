@@ -1,8 +1,9 @@
-from database.account_statement_dao import AccountStatementDao
 from utils.excel_utils import ExcelUitls
+from utils.timestamp_utils import TimestampUtils
 from database.product_dao import ProductDao
 from database.order_dao import OrderDao
 from database.order_item_dao import OrderItemDao
+from database.account_statement_dao import AccountStatementDao
 from database.account_statement_exception_dao import AccountStatementExceptionDao
 
 
@@ -10,6 +11,8 @@ from database.account_statement_exception_dao import AccountStatementExceptionDa
 orderDao = OrderDao()
 orderItemDao = OrderItemDao()
 productDao = ProductDao()
+accountStatementDao = AccountStatementDao();
+accountStatementExceptionDao = AccountStatementExceptionDao();
 
 class ProcessAccountStatement(threading.Thread):
 
@@ -22,6 +25,31 @@ class ProcessAccountStatement(threading.Thread):
     accountStatement = self.kwargs['account_statement']
     print('''*********** Process Account Statement for {} ***********'''.format(user['lazada_user_name']))
 
+    accountStatementIncome, exceptions = process(user, accountStatement)
+
+    # Update Account Statement income
+    updateException = accountStatementExceptionDao.update(user,
+                                        accountStatement['id'],
+                                        accountStatementIncome,
+                                        TimestampUtils.getCurrentDatatime())
+    if (updateException != None):
+        print(updateException)
+
+    # Add Account Statement exceptions
+    if (len(exceptions) > 0):
+      for (exception in exceptions):
+        insertException = accountStatementExceptionDao.insert(user,
+                                            accountStatement['id'],
+                                            exception['reason'],
+                                            TimestampUtils.getCurrentDatatime())
+        if (insertException != None):
+          print(insertException)
+
+
+  #---------------------------------------------------------------------------
+  # Calculate earning
+  #---------------------------------------------------------------------------
+  def process(self, user, accountStatement):
     earning = 0
     exceptions = []
 
@@ -79,11 +107,6 @@ class ProcessAccountStatement(threading.Thread):
           exceptions.append({'order_number': order['order_number'], 'reason': exception})
 
     return earning, exceptions
-
-  #---------------------------------------------------------------------------
-  # Calculate earning
-  #---------------------------------------------------------------------------
-  def computeAccountStatement(self, accountStatement):
 
 
 
