@@ -1,6 +1,22 @@
 from database.database_helper import DatabaseHelper
 
 
+# NOTE: add priority for exception
+
+# Error: UI => light red color, add message to user should check order/product, if there is any issue please contact developer
+# 1. Not found Order
+# 2. Not found OrderItem.
+# 3. Not found Product.
+
+# Warning: UI => light yellow color
+# 4. OrderItem >> item_price not equal with OrderItem >> paid_price
+# 5. OrderItem >> paid_price not equal wiht Lazada >> sales_deliver
+# 6. Order status not equal delivered
+
+# Issue: UI => contact developer
+# 7. Set OrderItem income
+# 8. Mark order as calculated
+
 class AccountStatementExceptionDao(object):
 
     def createTable(self):

@@ -57,7 +57,6 @@ class ProcessAccountStatement(threading.Thread):
       if (exception != None):
         exceptions.append({'order_number': data['order_number'], 'reason': orderException})
         income = income + (data['sales_deliver'] - data['sum_of_fee'])
-        print("not found Order")
         continue
 
       # Get OrderItem
@@ -65,7 +64,6 @@ class ProcessAccountStatement(threading.Thread):
       if (exception or len(orderItems) <= 0):
         exceptions.append({'order_number': data['order_number'], 'reason': orderException})
         income = income + (data['sales_deliver'] - data['sum_of_fee'])
-        print("not found OrderItem")
         continue
 
       # Compute for only first OrderItem and update imcome for all
@@ -92,19 +90,20 @@ class ProcessAccountStatement(threading.Thread):
       # Default value: orderItem['earned'] >> This OrderItem income has been computed
       # If not: calculate by formula: orderItem['paid_price'] - (data['sum_of_fee'] + product['original_price'])
       incomeOfAnOrderItem = orderItem['earned']
+      getProductException = None
       if (incomeOfAnOrderItem == 0):
-        product, exception = productDao.getProductByShopSku(user, data['sku'])
+        product, getProductException = productDao.getProductByShopSku(user, data['sku'])
         if (exception != None):
           exceptions.append({'order_number': order['order_number'], 'reason': exception})
           incomeOfAnOrderItem = data['sales_deliver'] - data['sum_of_fee']
-          print("not found Poduct")
         else:
           incomeOfAnOrderItem = data['sales_deliver'] - (data['sum_of_fee'] + product['original_price'])
 
       income = income + incomeOfAnOrderItem
 
-      # Set OrderItem income
-      if (orderItem['earned'] == 0):
+      # Set OrderItem income:
+      # NOTE: Not do set if Product is not found => will calculate again next time
+      if (orderItem['earned'] == 0 and getProductException == None):
         exception = orderItemDao.setIncome(user, order['order_id'], data['sku'], incomeOfAnOrderItem)
         if(exception != None):
           exceptions.append({'order_number': order['order_number'], 'reason': exception})
