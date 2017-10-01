@@ -47,7 +47,7 @@ class ProcessAccountStatement(threading.Thread):
   # Calculate earning
   #---------------------------------------------------------------------------
   def process(self, user, accountStatement):
-    earning = 0
+    income = 0
     exceptions = []
 
     datas = ExcelUitls.getAccountStatement(accountStatement['excel_url'])
@@ -56,14 +56,16 @@ class ProcessAccountStatement(threading.Thread):
       order, exception = orderDao.getOrderByOrderNumber(user, data['order_number'])
       if (exception != None):
         exceptions.append({'order_number': data['order_number'], 'reason': orderException})
-        earning = earning + (data['sales_deliver'] - data['sum_of_fee'])
+        income = income + (data['sales_deliver'] - data['sum_of_fee'])
+        print("not found Order")
         continue
 
       # Get OrderItem
       orderItems, exception = orderItemDao.getOrderItemByShopSku(user, order['order_id'], data['sku'])
       if (exception or len(orderItems) <= 0):
         exceptions.append({'order_number': data['order_number'], 'reason': orderException})
-        earning = earning + (data['sales_deliver'] - data['sum_of_fee'])
+        income = income + (data['sales_deliver'] - data['sum_of_fee'])
+        print("not found OrderItem")
         continue
 
       # Compute for only first OrderItem and update imcome for all
@@ -71,12 +73,20 @@ class ProcessAccountStatement(threading.Thread):
 
       # Check OrderItem >> paid_price and Lazada >> sales_deliver
       if (orderItem['paid_price'] != data['sales_deliver']):
-        reason = ("Order-Item-Price: {} doesn't match with Lazada-Sale-Deliver {} ").format(orderItem['paid_price'], data['sales_deliver'])
+        reason = ("Order-Item-Paid-Price: {} doesn't match with Lazada-Sale-Deliver {} ").format(orderItem['paid_price'], data['sales_deliver'])
         exceptions.append({'order_number': order['order_number'], 'reason': reason})
       # Check whether order had been delivered or not
       if ('delivered' not in order['statuses']):
-        reason = ("Order-Number: {} status is: {}").format(order['order_number'], order['statuses'])
+        reason = ("Status is: {}").format(order['statuses'])
         exceptions.append({'order_number': order['order_number'], 'reason': reason})
+      # Check item_price and paid_price
+      if (orderItem['item_price'] != orderItem['paid_price']):
+        reason = ("Item-Price: {} doesn't matched with Paid-Price: {}").format(orderItem['item_price'], orderItem['paid_price'])
+        exceptions.append({'order_number': order['order_number'], 'reason': reason})
+
+      # Don't compute order have returned
+      if (data['sales_return'] != 0):
+        continue
 
       # Calculate OrderItem income:
       # Default value: orderItem['earned'] >> This OrderItem income has been computed
@@ -87,10 +97,11 @@ class ProcessAccountStatement(threading.Thread):
         if (exception != None):
           exceptions.append({'order_number': order['order_number'], 'reason': exception})
           incomeOfAnOrderItem = data['sales_deliver'] - data['sum_of_fee']
+          print("not found Poduct")
         else:
-          incomeOfAnOrderItem = orderItem['paid_price'] - (data['sum_of_fee'] + product['original_price'])
+          incomeOfAnOrderItem = data['sales_deliver'] - (data['sum_of_fee'] + product['original_price'])
 
-      earning = earning + incomeOfAnOrderItem
+      income = income + incomeOfAnOrderItem
 
       # Set OrderItem income
       if (orderItem['earned'] == 0):
@@ -103,7 +114,7 @@ class ProcessAccountStatement(threading.Thread):
         if (exception != None):
           exceptions.append({'order_number': order['order_number'], 'reason': exception})
 
-    return earning, exceptions
+    return income, exceptions
 
 
 

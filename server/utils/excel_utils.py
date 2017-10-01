@@ -21,7 +21,7 @@ class ExcelUitls(object):
         try:
             work_sheet = self.open_work_sheet(excelUrl, sheet_name)
             for index, current_row in enumerate(work_sheet.rows):
-                if index > 4:   # Data start from row number 3.
+                if index > 4:   # Data start from row number 6.
                     order_number = current_row[self.get_column_by_letter(AccountStatementConfig.COLUMN_ORDER_NUMBER)].value
                     sku = current_row[self.get_column_by_letter(AccountStatementConfig.COLUMN_SKU)].value
                     item_status = current_row[self.get_column_by_letter(AccountStatementConfig.COLUMN_ITEM_STATUS)].value
@@ -52,12 +52,12 @@ class ExcelUitls(object):
                             'product_bundling': product_bundling,
                             'subsidy': subsidy,
                             'commission': commission,
-                            'sum_of_fee': int(str(sum_of_fee).replace("(", "").replace(")", "").replace(",", ""))
+                            'sum_of_fee': abs(int(str(sum_of_fee).replace("(", "").replace(")", "").replace(",", "")))
                         })
 
             return datas
         except Exception as ex:
-            raise ex
+            print(ex)
             return datas
 
 
