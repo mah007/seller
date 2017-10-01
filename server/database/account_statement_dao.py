@@ -96,6 +96,41 @@ class AccountStatementDao(object):
         except Exception as ex:
             return '''User: {}-{}, Get-Account-Statement: {}'''.format(user['username'], user['id'], str(ex))
 
+    # --------------------------------------------------------------------------
+    # Get account statement with inner join clause
+    # --------------------------------------------------------------------------
+    def getAllAccountStatement(self, user):
+        query = ''' SELECT i.id, product_main_image, name, shop_sku, item_price, paid_price
+                    FROM `account_statement` a
+                    INNER JOIN `order` o
+                    ON a.id = o.account_statement_id
+                    INNER JOIN `order_item` i 
+                    ON o.order_id = i.order_id
+                    WHERE a.user_id = {}
+                '''.format(user['id'])
+        try:
+            conn = DatabaseHelper.getConnection()
+            cur = conn.cursor()
+            cur.execute(query)
 
+            rows = cur.fetchall()
+            result = []
+            if not rows:
+                conn.close()
+                return '''User: {}-{}, Dont have any account statement data'''.format(user['username'], user['id'])
+            for row in rows:
+                result.append({
+                    "id": row[0],
+                    "image": row[1],
+                    "name": row[2],
+                    "shop_sku": row[3],
+                    "item_price": row[4],
+                    "paid_price": row[5]
+                })
+
+            conn.close()
+            return result, None
+        except Exception as ex:
+            return None, '''User: {}-{}, Get-Account-Statement: {}'''.format(user['username'], user['id'], str(ex))
 
 

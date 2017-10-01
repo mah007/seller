@@ -55,14 +55,14 @@ class ProcessAccountStatement(threading.Thread):
       # Get order
       order, exception = orderDao.getOrderByOrderNumber(user, data['order_number'])
       if (exception != None):
-        exceptions.append({'order_number': data['order_number'], 'reason': orderException})
+        exceptions.append({'order_number': data['order_number'], 'reason': exception})
         income = income + (data['sales_deliver'] - data['sum_of_fee'])
         continue
 
       # Get OrderItem
       orderItems, exception = orderItemDao.getOrderItemByShopSku(user, order['order_id'], data['sku'])
       if (exception or len(orderItems) <= 0):
-        exceptions.append({'order_number': data['order_number'], 'reason': orderException})
+        exceptions.append({'order_number': data['order_number'], 'reason': exception})
         income = income + (data['sales_deliver'] - data['sum_of_fee'])
         continue
 
