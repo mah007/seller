@@ -52,6 +52,10 @@ class ProcessAccountStatement(threading.Thread):
 
     datas = ExcelUitls.getAccountStatement(accountStatement['excel_url'])
     for data in datas:
+      # Don't compute order have returned
+      if (data['sales_return'] != 0):
+        continue
+
       # Get order
       order, exception = orderDao.getOrderByOrderNumber(user, data['order_number'])
       if (exception != None):
@@ -82,15 +86,10 @@ class ProcessAccountStatement(threading.Thread):
         reason = ("Item-Price: {} doesn't matched with Paid-Price: {}").format(orderItem['item_price'], orderItem['paid_price'])
         exceptions.append({'order_number': order['order_number'], 'reason': reason})
 
-      # Don't compute order have returned
-      if (data['sales_return'] != 0):
-        continue
-
       # Calculate OrderItem income:
       # Default value: orderItem['earned'] >> This OrderItem income has been computed
       # If not: calculate by formula: orderItem['paid_price'] - (data['sum_of_fee'] + product['original_price'])
       incomeOfAnOrderItem = orderItem['earned']
-      getProductException = None
       if (incomeOfAnOrderItem == 0):
         product, getProductException = productDao.getProductByShopSku(user, data['sku'])
         if (exception != None):
@@ -99,13 +98,13 @@ class ProcessAccountStatement(threading.Thread):
         else:
           incomeOfAnOrderItem = data['sales_deliver'] - (data['sum_of_fee'] + product['original_price'])
 
+      # Actual income
       income = income + incomeOfAnOrderItem
 
       # Set OrderItem income:
-      # NOTE: Not do set if Product is not found => will calculate again next time
-      if (orderItem['earned'] == 0 and getProductException == None):
+      if (orderItem['earned'] == 0):
         exception = orderItemDao.setIncome(user, order['order_id'], data['sku'], incomeOfAnOrderItem)
-        if(exception != None):
+        if (exception != None):
           exceptions.append({'order_number': order['order_number'], 'reason': exception})
       # Mark Order as Computed
       if (order['calculated'] == 0):
