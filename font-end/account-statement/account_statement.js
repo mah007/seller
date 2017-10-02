@@ -30,14 +30,15 @@ jQuery(document).ready(function() {
                 var row = body.rows[i];
 
                 var id = $(row).data("id");
-                var oriPrice = $(row).data("item_price");
                 var shop_sku = $(row).data("shop_sku");
+                var oriPrice = $(row).data("item_price");
+                var excel_url = $(row).data("excel_url");
 
                 var price = row.cells[5].children[0].value.replace(/\,/g, '');
 
-                if (oriPirce != price) {
-                    updateAccountStatement(price, id, shop_sku);
-                }
+                if (oriPrice != price) {
+                    updateAccountStatement(price, id, shop_sku, excel_url);
+                } 
             }
         });
     }
@@ -45,9 +46,10 @@ jQuery(document).ready(function() {
 });
 
 //-------------------------------------------------------------------------------------
-// Update Sku
+// Update price
 //-------------------------------------------------------------------------------------
-function updateAccountStatement(price, id, shop_sku) {
+function updateAccountStatement(price, id, shop_sku, excel_url) {
+
     $.ajax({
         method: 'POST',
         url: endpoint.generateUpdateAccountStatementPrice(),
@@ -55,7 +57,8 @@ function updateAccountStatement(price, id, shop_sku) {
         data: JSON.stringify({
             id: id,
             price: price,
-            shop_sku: shop_sku
+            shop_sku: shop_sku,
+            excel_url: excel_url,
         }),
         success: function(data) {
             swal({

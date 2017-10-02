@@ -40,12 +40,13 @@ def getAllAccountStatementException():
 
 	accountStatementManager = AccountStatementManager()
 	result = accountStatementManager.getAllAccountStatementException(request.args.get('token'))
+	print(result)
 	if 'success' in result:
 		return make_response(jsonify(result), 201)
 	else:
 		return make_response(jsonify(result), 404)
 
-@AccountStatementAPI.route('/account-statement/update-account-statement', methods=['POST'])
+@AccountStatementAPI.route('/account-statement/update-account-statement-price', methods=['POST'])
 @cross_origin()
 def updateAccountStatement():
 	if not request.args:
@@ -56,15 +57,21 @@ def updateAccountStatement():
 		return make_response(jsonify({'error': 'Missing id parameter'}), 404)
 	if not 'price' in request.json:
 		return make_response(jsonify({'error': 'Missing price parameter'}), 404)
+	if not 'shop_sku' in request.json:
+		return make_response(jsonify({'error': 'Missing id parameter'}), 404)
+	if not 'excel_url' in request.json:
+		return make_response(jsonify({'error': 'Missing price parameter'}), 404)
 
 	accountStatement = {
 		"id": request.json['id'],
 		"price": request.json['price'],
-		"shop_sku": request.json['shop_sku']
+		"shop_sku": request.json['shop_sku'],
+		"excel_url": request.json['excel_url']
 	}	
 
-	# Re-calculate item
 	# Update original_price of product if it's 0
+	# Re-calculate item earned
+	
 	accountStatementDao = AccountStatementDao()
 	result, exception = accountStatementDao.updateAccountStatement(accountStatement)
 

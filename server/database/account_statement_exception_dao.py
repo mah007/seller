@@ -56,7 +56,7 @@ class AccountStatementExceptionDao(object):
     def getAllAccountStatementException(self, user):
         query = ''' SELECT *
                     FROM account_statement_exception
-                    WHERE user_id = {}
+                    WHERE user_id = {} limit 10
                 '''.format(user['id'])
         try:
             conn = DatabaseHelper.getConnection()

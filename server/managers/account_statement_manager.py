@@ -64,8 +64,25 @@ class AccountStatementManager(object):
 		orderItemDao = OrderItemDao()
 
 		# Update original price
-		result = productDao.updateProductPrice(accountStatement)
+		product, productException = productDao.getProductByShopSku(user, accountStatement['shop_sku'])
+		if(productException != None):
+			print("Product doesn't exists")
+		else:
+			result = productDao.updateProductPrice(accountStatement)
+
 		orderItemDao.updateItemPrice(accountStatement)
+		# Set OrderItem income:
+      	# NOTE: Not do set if Product is not found => will calculate again next time
+      	if (orderItem['earned'] == 0 and getProductException == None):
+        	exception = orderItemDao.setIncome(user, order['order_id'], data['sku'], incomeOfAnOrderItem)
+        if(exception != None):
+          exceptions.append({'order_number': order['order_number'], 'reason': exception})
+      	# Mark Order as Computed
+      	if (order['calculated'] == 0):
+        	exception = orderDao.markComputed(user, order['order_id'], accountStatement['id'])
+        if (exception != None):
+          exceptions.append({'order_number': order['order_number'], 'reason': exception})
+
 		return ResponseUtils.generateSuccessResponse(None)
 
 

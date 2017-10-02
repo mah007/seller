@@ -100,15 +100,13 @@ class AccountStatementDao(object):
     # Get account statement with inner join clause
     # --------------------------------------------------------------------------
     def getAllAccountStatement(self, user):
-        query = ''' SELECT i.id, product_main_image, i.name, i.shop_sku, p.original_price, paid_price, a.excel_url, a.id
+        query = ''' SELECT i.id, product_main_image, i.name, i.shop_sku, i.item_price, paid_price, a.excel_url, a.id 
                     FROM `account_statement` a
                     INNER JOIN `order` o
                     ON a.id = o.account_statement_id
                     INNER JOIN `order_item` i 
                     ON o.order_id = i.order_id
-                    INNER JOIN `product` p
-                    ON i.shop_sku = p.shop_sku
-                    WHERE a.user_id = {}
+                    WHERE a.user_id = {} limit 10
                 '''.format(user['id'])
         try:
             conn = DatabaseHelper.getConnection()
@@ -124,14 +122,13 @@ class AccountStatementDao(object):
                 result.append({
                     "number": row[0],
                     "image": row[1],
-                    "name": row[2],
+                    "name": row[2].replace('"',''),
                     "shop_sku": row[3],
-                    "original_price": row[4],
+                    "item_price": row[4],
                     "paid_price": row[5],
                     "excel_url": row[6],
                     "id": row[7]
                 })
-            print(result)
             conn.close()
             return result, None
         except Exception as ex:

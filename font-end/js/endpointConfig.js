@@ -193,6 +193,9 @@ var EndpointConfig = function() {
   EndpointConfig.prototype.generateGetAllAccountStatementException = function() {
       return endpointUrl + '/account-statement/get-all-account-statement-exception?token=' + $.cookie('token');
   } 
+  EndpointConfig.prototype.generateUpdateAccountStatementPrice = function() {
+      return endpointUrl + '/account-statement/update-account-statement-price?token=' + $.cookie('token');
+  } 
 }
 
 
