@@ -35,9 +35,18 @@ class LazadaApiHelper:
     timestamp = myDatatime - datetime.timedelta(hours=7)
     return "{}+00:00".format(str(timestamp).replace(" ", "T"))
 
+  # ----------------------------------------------------------------------------
+  # Fixed updated after using for cronjob only
+  #
+  # This time is using for get all products and orders before this one.
+  # Format: 2016-01-01 00:00:00
+  #
+  # NOTE: we dont using format "1990-02-25T23:46:11+00:00" for this because
+  # Order updated_at is different format, check getOrderWorker for more detail
+  # ----------------------------------------------------------------------------
   @classmethod
   def getFixedUpdatedAfterForCronJob(self):
-    return "1990-02-25 23:46:11"
+    return "2016-01-01 00:00:00"
 
   # ----------------------------------------------------------------------------
   # Format Timestamp: format timestamp to using HTML character codes

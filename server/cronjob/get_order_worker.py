@@ -1,8 +1,5 @@
-import time
-import requests
 import threading
-from lxml import html
-from config import ConstantConfig, LazadaAPI
+from config import LazadaAPI
 from database.constant_dao import ConstantDao
 from lazada_api.lazada_order_api import LazadaOrderApi
 from database.order_dao import OrderDao

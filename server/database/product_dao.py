@@ -54,11 +54,11 @@ class ProductDao(object):
                            product['special_price'], user['id'], 0, 0, 0))
             conn.commit()
             conn.close()
-            return ExceptionUtils.success()
+            return None
         except Exception as ex:
             conn.rollback()
             conn.close()
-            return ExceptionUtils.error('''Insert product exception: {}'''.format(str(ex)))
+            return '''Insert product exception: {}'''.format(str(ex))
 
     # --------------------------------------------------------------------------
     # Get Product by seller SKU
@@ -154,6 +154,7 @@ class ProductDao(object):
 
     # --------------------------------------------------------------------------
     # Get All Product
+    # TODO: Need to refactor
     # --------------------------------------------------------------------------
     def getProducts(self, user):
         query = '''SELECT *
@@ -198,6 +199,7 @@ class ProductDao(object):
 
     # --------------------------------------------------------------------------
     # Update Product (contain quantity and price)
+    # TODO: need to refactor
     # --------------------------------------------------------------------------
     def updateProduct(self, product):
         query = '''UPDATE product
@@ -212,6 +214,7 @@ class ProductDao(object):
 
     # --------------------------------------------------------------------------
     # Update Product Quantity
+    # TODO: need to refactor
     # --------------------------------------------------------------------------
     def updateProductQuantity(self, product):
         query = '''UPDATE product
@@ -226,6 +229,7 @@ class ProductDao(object):
 
     # --------------------------------------------------------------------------
     # Update Product Price
+    # TODO: need to refactor
     # --------------------------------------------------------------------------
     def updateProductPrice(self, product):
         query = '''UPDATE product
@@ -282,11 +286,11 @@ class ProductDao(object):
                            product['shop_sku']))
             conn.commit()
             conn.close()
-            return ExceptionUtils.success()
+            return None
         except Exception as ex:
             conn.rollback()
             conn.close()
-            return ExceptionUtils.error('''User: {}-{}, update Product exception: {}'''.format(user['username'], user['id'], str(ex)))
+            return '''User: {}-{}, update Product exception: {}'''.format(user['username'], user['id'], str(ex))
 
     # --------------------------------------------------------------------------
     # Search Product by name, seller sku, shop sku, brand and model
@@ -331,7 +335,6 @@ class ProductDao(object):
             return (products, None)
         except Exception as ex:
             return (None, ExceptionUtils.error('''Get products exception: {}'''.format(str(ex))))
-
 
 
 

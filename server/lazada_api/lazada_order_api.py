@@ -39,63 +39,6 @@ class LazadaOrderApi(object):
 		return self.getOrders(user, url)
 
 	#-----------------------------------------------------------------------------
-	# Get order by CreatedAfter with limitation and offset
-	# SortBy: 				created_at
-	# SortDirection: 	Ascending (ASC)
-	#-----------------------------------------------------------------------------
-	def getOrdersByCreatedAdter(self, user, offset):
-		parameters = {
-		'Action': 'GetOrders',
-		'Format':'JSON',
-		'Timestamp': LazadaApiHelper.getCurrentUTCTime(),
-		'UserID': user['lazada_user_id'],
-		'Version': LazadaAPI.VERSION,
-		'Limit': LazadaAPI.LIMIT,
-		'Offset': offset,
-		'SortBy': 'created_at',
-		'SortDirection': 'ASC',
-		'CreatedAfter': LazadaApiHelper.getFixedCreatedAfterForCronJob()
-		}
-
-		parameters['Signature'] = LazadaApiHelper.generateSignature(parameters, user['lazada_api_key'])
-		url = "{}/?Action={}&Format={}&Timestamp={}&UserID={}&Version={}&Limit={}&Offset={}&SortBy={}&SortDirection={}&CreatedAfter={}&Signature={}".format(
-						LazadaAPI.ENDPOINT,
-		 				parameters["Action"],
-		 				parameters["Format"],
-		 				LazadaApiHelper.formatTimestamp(parameters["Timestamp"]),
-		 				parameters["UserID"],
-		 				parameters["Version"],
-		 				parameters["Limit"],
-		 				parameters["Offset"],
-		 				parameters["SortBy"],
-		 				parameters["SortDirection"],
-		 				LazadaApiHelper.formatTimestamp(parameters["CreatedAfter"]),
-		 				parameters["Signature"])
-
-		return self.getOrders(user, url)
-
-	#-----------------------------------------------------------------------------
-	# Get order with by specific url
-	#-----------------------------------------------------------------------------
-	def getOrders(self, user, url):
-		try:
-			resp = requests.get(url)
-			if resp.status_code == 200:
-				response = json.loads(resp.text)
-				# Request API error
-				if ('ErrorResponse' in response):
-					errorMessage = ExceptionUtils.getBodyMessage(response)
-					return None, '''User: {}-{}, Get-Orders: {}'''.format(user['username'], user['id'], errorMessage)
-
-				# Request API Success
-				return response['SuccessResponse']['Body']['Orders'], None
-
-			# Request error
-			return None, '''User: {}-{}, Get-Orders: {}'''.format(user['username'], user['id'], resp.status_code)
-		except Exception as ex:
-			return None, '''User: {}-{}, Get-Orders: {}'''.format(user['username'], user['id'], str(ex))
-
-	#-----------------------------------------------------------------------------
 	# Get order item by order id
 	#-----------------------------------------------------------------------------
 	def getOrderItems(self, user, orderId):

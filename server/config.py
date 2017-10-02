@@ -34,7 +34,7 @@ class OrderConfig(object):
 
 
 class ConstantConfig(object):
-    PRODUCT_OFFSET = "product_offset"
+    PRODUCT_LAST_REQUEST = "product_last_request"   # Last request to get products from GetProductCronjob
 
 
 class UserConfig(object):

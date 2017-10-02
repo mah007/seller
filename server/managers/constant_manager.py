@@ -2,6 +2,13 @@ from database.user_dao import UserDao
 from database.constant_dao import ConstantDao
 from managers.response_helper import ResponseHelper
 from config import ConstantConfig
+from utils.lazada_api_helper import LazadaApiHelper
+
+
+# TODO
+# 1. Insert constant for all user in first time.
+# 2. Insert constant for new user when sign up.
+
 
 class ConstantManager(object):
 
@@ -18,11 +25,14 @@ class ConstantManager(object):
             return;
 
         # Insert Product Offset
-        isProductOffsetExist = constantDao.isConstantExist(superAdmin, ConstantConfig.PRODUCT_OFFSET)
-        if isProductOffsetExist == False:
-            result = constantDao.insertConstant(superAdmin, ConstantConfig.PRODUCT_OFFSET, 0)
-            if 'error' in result:
-                print(result)
+        isProductOffsetExist, exception = constantDao.isConstantExist(superAdmin, ConstantConfig.PRODUCT_LAST_REQUEST)
+        if (exception != None):
+            print(exception)
+        elif (isProductOffsetExist == False):
+            fixStartDatetime = LazadaApiHelper.getFixedUpdatedAfterForCronJob()
+            exception = constantDao.insertConstant(superAdmin, ConstantConfig.PRODUCT_LAST_REQUEST, fixStartDatetime)
+            if (exception != None):
+                print(exception)
 
 
 

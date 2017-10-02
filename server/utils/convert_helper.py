@@ -122,11 +122,11 @@ class ConvertHelper:
       "original_price": 0,
       "special_price": lazadaProduct['Skus'][0]['special_price'],
       "image": lazadaProduct['Skus'][0]['Images'][0],
-      "package_width": lazadaProduct['Skus'][0]['package_width'],
-      "package_height": lazadaProduct['Skus'][0]['package_height'],
-      "package_weight": lazadaProduct['Skus'][0]['package_weight'],
-      "brand": lazadaProduct['Attributes']['brand'],
-      "model": lazadaProduct['Attributes']['model'],
+      "package_width": 0,
+      "package_height": 0,
+      "package_weight": 0,
+      "brand": "",
+      "model": "",
       "primary_category": lazadaProduct['PrimaryCategory'],
       "spu_id": 0,      # Default value
       "url": "",        # Default value
@@ -134,12 +134,30 @@ class ConvertHelper:
     }
 
     # Some products doesn't have this field
+    # Spu Id
     if 'spu_id' in lazadaProduct:
       product['spu_id'] = lazadaProduct['SPUId']
+    # URL
     if 'Url' in lazadaProduct['Skus'][0]:
       product['url'] = lazadaProduct['Skus'][0]['Url']
+    # Shop SKU
     if 'ShopSku' in lazadaProduct['Skus'][0]:
       product['shop_sku'] = lazadaProduct['Skus'][0]['ShopSku']
+    # Package width
+    if 'package_width' in lazadaProduct['Skus'][0]:
+      product['package_width'] = lazadaProduct['Skus'][0]['package_width']
+    # Package height
+    if 'package_height' in lazadaProduct['Skus'][0]:
+      product['package_height'] = lazadaProduct['Skus'][0]['package_height']
+    # Package Weight
+    if 'package_weight' in lazadaProduct['Skus'][0]:
+      product['package_weight'] = lazadaProduct['Skus'][0]['package_weight']
+    # Brand
+    if 'brand' in lazadaProduct['Attributes']:
+      product['model'] = lazadaProduct['Attributes']['brand'],
+    # Model
+    if 'model' in lazadaProduct['Attributes']:
+      product['model'] = lazadaProduct['Attributes']['model'],
 
     return product
 
