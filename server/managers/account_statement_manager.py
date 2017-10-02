@@ -1,6 +1,8 @@
 from database.user_dao import UserDao
 from database.account_statement_dao import AccountStatementDao
 from database.account_statement_exception_dao import AccountStatementExceptionDao
+from database.order_item_dao import OrderItemDao
+from database.product_dao import ProductDao
 from utils.timestamp_utils import TimestampUtils
 from utils.response_utils import ResponseUtils
 
@@ -49,6 +51,22 @@ class AccountStatementManager(object):
 		if(exception != None):
 			return ResponseUtils.generateErrorResponse(exception)
 		return ResponseUtils.generateSuccessResponse(result)
+
+	#-----------------------------------------------------------------------------
+	# Update account statement
+	#-----------------------------------------------------------------------------
+	def updateAccountStatement(self, accountStatement, token):
+		user = self.validateToken(token)
+		if 'error' in user:
+			return user
+
+		productDao = ProductDao()
+		orderItemDao = OrderItemDao()
+
+		# Update original price
+		result = productDao.updateProductPrice(accountStatement)
+		orderItemDao.updateItemPrice(accountStatement)
+		return ResponseUtils.generateSuccessResponse(None)
 
 
 

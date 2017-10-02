@@ -100,12 +100,14 @@ class AccountStatementDao(object):
     # Get account statement with inner join clause
     # --------------------------------------------------------------------------
     def getAllAccountStatement(self, user):
-        query = ''' SELECT i.id, product_main_image, name, shop_sku, item_price, paid_price
+        query = ''' SELECT i.id, product_main_image, i.name, i.shop_sku, p.original_price, paid_price, a.excel_url, a.id
                     FROM `account_statement` a
                     INNER JOIN `order` o
                     ON a.id = o.account_statement_id
                     INNER JOIN `order_item` i 
                     ON o.order_id = i.order_id
+                    INNER JOIN `product` p
+                    ON i.shop_sku = p.shop_sku
                     WHERE a.user_id = {}
                 '''.format(user['id'])
         try:
@@ -120,14 +122,16 @@ class AccountStatementDao(object):
                 return '''User: {}-{}, Dont have any account statement data'''.format(user['username'], user['id'])
             for row in rows:
                 result.append({
-                    "id": row[0],
+                    "number": row[0],
                     "image": row[1],
                     "name": row[2],
                     "shop_sku": row[3],
-                    "item_price": row[4],
-                    "paid_price": row[5]
+                    "original_price": row[4],
+                    "paid_price": row[5],
+                    "excel_url": row[6],
+                    "id": row[7]
                 })
-
+            print(result)
             conn.close()
             return result, None
         except Exception as ex:

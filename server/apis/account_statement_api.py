@@ -45,5 +45,33 @@ def getAllAccountStatementException():
 	else:
 		return make_response(jsonify(result), 404)
 
+@AccountStatementAPI.route('/account-statement/update-account-statement', methods=['POST'])
+@cross_origin()
+def updateAccountStatement():
+	if not request.args:
+		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
+	if not request.json:
+		return make_response(jsonify({'error': 'Missing json parameters value'}), 404)
+	if not 'id' in request.json:
+		return make_response(jsonify({'error': 'Missing id parameter'}), 404)
+	if not 'price' in request.json:
+		return make_response(jsonify({'error': 'Missing price parameter'}), 404)
+
+	accountStatement = {
+		"id": request.json['id'],
+		"price": request.json['price'],
+		"shop_sku": request.json['shop_sku']
+	}	
+
+	# Re-calculate item
+	# Update original_price of product if it's 0
+	accountStatementDao = AccountStatementDao()
+	result, exception = accountStatementDao.updateAccountStatement(accountStatement)
+
+	if 'success' in result:
+		return make_response(jsonify({"success": "done"}))
+	else:
+		return make_response(jsonify(result))
+
 
 

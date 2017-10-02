@@ -46,7 +46,7 @@ class OrderItemDao(object):
                 product_detail_url      VARCHAR(500),
                 invoice_number          VARCHAR(100),
                 user_id                 INTEGER,
-                earned                  INTEGER DEFAULT 0
+                earned                  DECIMAL(10,2) DEFAULT 0
                 );'''
         DatabaseHelper.execute(query)
 

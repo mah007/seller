@@ -29,54 +29,54 @@ app.register_blueprint(ProductAPI)
 app.register_blueprint(AccountStatementAPI)
 
 if __name__ == "__main__":
-  skuManager = SkuManager()
-  userManager = UserManager()
-  orderManager = OrderManager()
-  constantManager = ConstantManager()
-  priceByTimeManager = PriceByTimeManager()
-  productManager = ProductManager()
-  accountStatementManager = AccountStatementManager()
-  skuManager.initialize()
-  userManager.initialize()
-  orderManager.initialize()
-  constantManager.initialize()
-  priceByTimeManager.initialize()
-  productManager.initialize()
-  accountStatementManager.initialize()
+  # skuManager = SkuManager()
+  # userManager = UserManager()
+  # orderManager = OrderManager()
+  # constantManager = ConstantManager()
+  # priceByTimeManager = PriceByTimeManager()
+  # productManager = ProductManager()
+  # accountStatementManager = AccountStatementManager()
+  # skuManager.initialize()
+  # userManager.initialize()
+  # orderManager.initialize()
+  # constantManager.initialize()
+  # priceByTimeManager.initialize()
+  # productManager.initialize()
+  # accountStatementManager.initialize()
 
-  # Process Account Statement for test
-  userDao = UserDao()
-  superAdmin = userDao.getSuperAdmin()
+  # # Process Account Statement for test
+  # userDao = UserDao()
+  # superAdmin = userDao.getSuperAdmin()
 
-  # Insert Account Statement
-  accountStatement = {
-    "excel_url": "./resources/VN10VI4 2017-08-01-14.xlsx",
-    "start_date": "2017-08-01 00:00:00",
-    "end_date": "2017-08-014 00:00:00",
-    "sales_revenue": 13780000,
-    "income": 0,
-    "created_at": TimestampUtils.getCurrentDatatime(),
-  }
-  userDao = UserDao()
-  superAdmin = userDao.getSuperAdmin()
-  if 'error' in superAdmin:
-    print(superAdmin)
-  else:
-    accountStatementDao = AccountStatementDao()
-    accountStatementDao.insert(superAdmin, accountStatement)
+  # # Insert Account Statement
+  # accountStatement = {
+  #   "excel_url": "./resources/VN10VI4 2017-08-01-14.xlsx",
+  #   "start_date": "2017-08-01 00:00:00",
+  #   "end_date": "2017-08-014 00:00:00",
+  #   "sales_revenue": 13780000,
+  #   "income": 0,
+  #   "created_at": TimestampUtils.getCurrentDatatime(),
+  # }
+  # userDao = UserDao()
+  # superAdmin = userDao.getSuperAdmin()
+  # if 'error' in superAdmin:
+  #   print(superAdmin)
+  # else:
+  #   accountStatementDao = AccountStatementDao()
+  #   accountStatementDao.insert(superAdmin, accountStatement)
 
-  # Run account statement process
-  accountStatementDao = AccountStatementDao()
-  accountStatement = accountStatementDao.getFirstAccountStatementForTest(superAdmin)
-  if (superAdmin != None and accountStatement != None):
-    clone = ProcessAccountStatement({"user": superAdmin, "account_statement": accountStatement})
-    try:
-      clone.start()
-    except Exception as ex:
-      clone.join(0)
-      print ("Error: unable to start thread: ", ex)
-  else:
-    print(superAdmin, accountStatement)
+  # # Run account statement process
+  # accountStatementDao = AccountStatementDao()
+  # accountStatement = accountStatementDao.getFirstAccountStatementForTest(superAdmin)
+  # if (superAdmin != None and accountStatement != None):
+  #   clone = ProcessAccountStatement({"user": superAdmin, "account_statement": accountStatement})
+  #   try:
+  #     clone.start()
+  #   except Exception as ex:
+  #     clone.join(0)
+  #     print ("Error: unable to start thread: ", ex)
+  # else:
+    # print(superAdmin, accountStatement)
 
   # app.run(debug=True, threaded=True)
   app.run(host='0.0.0.0', debug=True, port=5000, threaded=True)

@@ -30,12 +30,13 @@ jQuery(document).ready(function() {
                 var row = body.rows[i];
 
                 var id = $(row).data("id");
-                var oriPrice = $(row).data("seller_price");
+                var oriPrice = $(row).data("item_price");
+                var shop_sku = $(row).data("shop_sku");
 
                 var price = row.cells[5].children[0].value.replace(/\,/g, '');
 
                 if (oriPirce != price) {
-                    updateAccountStatement(price, id);
+                    updateAccountStatement(price, id, shop_sku);
                 }
             }
         });
@@ -46,14 +47,15 @@ jQuery(document).ready(function() {
 //-------------------------------------------------------------------------------------
 // Update Sku
 //-------------------------------------------------------------------------------------
-function updateProduct(price, id) {
+function updateAccountStatement(price, id, shop_sku) {
     $.ajax({
         method: 'POST',
         url: endpoint.generateUpdateAccountStatementPrice(),
         contentType: "application/json",
         data: JSON.stringify({
             id: id,
-            price: price
+            price: price,
+            shop_sku: shop_sku
         }),
         success: function(data) {
             swal({

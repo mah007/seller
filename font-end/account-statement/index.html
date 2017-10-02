@@ -232,8 +232,8 @@
     <!-- Templates -->
     <script id="account-content-template" type="text/x-handlebars-template">
         {{#each data}}
-        <tr data-id="{{id}}" data-image={{image}} data-name={{name}} data-shop_sku={{shop_sku}} data-item_price={{item_price}} data-paid_price={{paid_price}}>
-            <td>{{id}}</td>
+        <tr data-id={{id}} data-image={{image}} data-name={{name}} data-shop_sku={{shop_sku}} data-item_price={{item_price}} data-paid_price={{paid_price}} data-number={{number}} data-excel_url={{excel_url}} />
+            <td>{{number}}</td>
             <td class="text-center"><img src={{image}} width="70px" /> </td>
             <td class="text-left">{{name}}</td>
             <td class="text-left">{{shop_sku}}</td>
