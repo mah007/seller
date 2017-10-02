@@ -21,8 +21,6 @@ def getAllProduct():
 		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
 
 	productManager = ProductManager()
-	# productManager.insertProductFromLazada(request.args.get('token'))
-
 	result = productManager.getProducts(request.args.get('token'))
 
 	if 'success' in result:

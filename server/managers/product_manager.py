@@ -28,33 +28,6 @@ class ProductManager(object):
         return ResponseUtils.generateSuccessResponse(products)
 
     #---------------------------------------------------------------------------
-    # Insert product from Lazada with specific user
-    #---------------------------------------------------------------------------
-    def insertProductFromLazada(self, token):
-        user = ManagerHelper.validateToken(token)
-        if 'error' in user:
-            return user
-
-        constantDao = ConstantDao()
-        productDao = ProductDao()
-        lazadaProductApi = LazadaProductApi()
-        flag = 1
-        while (flag > 0):
-            constant = constantDao.getConstant(user['id'], ConstantConfig.PRODUCT_OFFSET)
-
-            offset = constant[0]['offset']
-            result = lazadaProductApi.getProducts(user, constant)
-            if result:
-                for x in result:
-                    offset = offset + 1
-                    productDao.insert(x, user)
-                    update = constantDao.updateConstantOffsetForProduct(offset, LazadaApiHelper.getCurrentUTCTime(), user)
-            if(offset % 20 != 0):
-                flag = -1
-
-        return ResponseUtils.generateSuccessResponse(None)
-
-    #---------------------------------------------------------------------------
     # Update product with new quantity and price
     #---------------------------------------------------------------------------
     def updateProduct(self, product, token):
@@ -65,7 +38,6 @@ class ProductManager(object):
         productDao = ProductDao()
         productDao.updateProduct(product)
         return ResponseUtils.generateSuccessResponse(None)
-
 
     #---------------------------------------------------------------------------
     # Update product with new quantity and price
@@ -91,9 +63,9 @@ class ProductManager(object):
         productDao.updateProductPrice(product)
         return ResponseUtils.generateSuccessResponse(None)
 
-    #-----------------------------------------------------------------------------
+    #---------------------------------------------------------------------------
     # Search Product by name, seller sku, shop sku, brand and model
-    #-----------------------------------------------------------------------------
+    #---------------------------------------------------------------------------
     def searchProduct(self, token, searchKey):
         user = ManagerHelper.validateToken(token)
         if 'error' in user:
