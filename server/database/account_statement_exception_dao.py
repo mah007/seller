@@ -50,7 +50,38 @@ class AccountStatementExceptionDao(object):
             return '''User: {}-{}, Insert-Account-Statement-Exception: {}'''.format(user['username'], user['id'], str(ex))
 
 
+    # --------------------------------------------------------------------------
+    # Get an Account Exception
+    # --------------------------------------------------------------------------
+    def getAllAccountStatementException(self, user):
+        query = ''' SELECT *
+                    FROM account_statement_exception
+                    WHERE user_id = {} limit 10
+                '''.format(user['id'])
+        try:
+            conn = DatabaseHelper.getConnection()
+            cur = conn.cursor()
+            cur.execute(query)
 
+            rows = cur.fetchall()
+            result = []
+            if not rows:
+                conn.close()
+                return '''User: {}-{}, Dont have any account statement exception data'''.format(user['username'], user['id'])
+            for row in rows:
+                result.append({
+                    "id": row[0],
+                    "order_number": row[1],
+                    "reason": row[2],
+                    "created_at": row[3],
+                    "account_statement_id": row[4],
+                    "user_id": row[5]
+                })
+
+            conn.close()
+            return result, None
+        except Exception as ex:
+            return None, '''User: {}-{}, Get-Account-Statement-Exception: {}'''.format(user['username'], user['id'], str(ex))
 
 
 

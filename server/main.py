@@ -10,6 +10,7 @@ from apis.user_api import UserAPI
 from apis.order_api import OrderAPI
 from apis.price_by_time_api import PriceByTimeAPI
 from apis.product_api import ProductAPI
+from apis.account_statement_api import AccountStatementAPI
 from flask import Flask, jsonify, request, make_response
 from flask_cors import CORS, cross_origin
 
@@ -25,6 +26,7 @@ app.register_blueprint(UserAPI)
 app.register_blueprint(OrderAPI)
 app.register_blueprint(PriceByTimeAPI)
 app.register_blueprint(ProductAPI)
+app.register_blueprint(AccountStatementAPI)
 
 if __name__ == "__main__":
   skuManager = SkuManager()
@@ -59,7 +61,7 @@ if __name__ == "__main__":
   #   print(superAdmin, accountStatement)
 
   # app.run(debug=True, threaded=True)
-  # app.run(host='0.0.0.0', debug=True, port=5000, threaded=True)
+  app.run(host='0.0.0.0', debug=True, port=5000, threaded=True)
 
 
 

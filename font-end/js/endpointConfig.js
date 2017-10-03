@@ -184,6 +184,18 @@ var EndpointConfig = function() {
       return endpointUrl + '/product/update-price?token=' + $.cookie('token');
   }
 
+  //----------------------------------------------------------------------------
+  // Account statemnt section
+  //----------------------------------------------------------------------------
+  EndpointConfig.prototype.generateGetAllAccountStatement = function() {
+      return endpointUrl + '/account-statement/get-all-account-statement?token=' + $.cookie('token');
+  } 
+  EndpointConfig.prototype.generateGetAllAccountStatementException = function() {
+      return endpointUrl + '/account-statement/get-all-account-statement-exception?token=' + $.cookie('token');
+  } 
+  EndpointConfig.prototype.generateUpdateAccountStatementPrice = function() {
+      return endpointUrl + '/account-statement/update-account-statement-price?token=' + $.cookie('token');
+  } 
 }
 
 
