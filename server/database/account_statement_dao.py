@@ -99,14 +99,8 @@ class AccountStatementDao(object):
     # --------------------------------------------------------------------------
     # Get account statement with inner join clause
     # --------------------------------------------------------------------------
-    def getAllAccountStatement(self, user):
-        query = ''' SELECT i.id, product_main_image, i.name, i.shop_sku, i.item_price, paid_price, a.excel_url, a.id 
-                    FROM `account_statement` a
-                    INNER JOIN `order` o
-                    ON a.id = o.account_statement_id
-                    INNER JOIN `order_item` i 
-                    ON o.order_id = i.order_id
-                    WHERE a.user_id = {} limit 10
+    def getAll(self, user):
+        query = ''' SELECT * FROM `account_statement` WHERE user_id = {}
                 '''.format(user['id'])
         try:
             conn = DatabaseHelper.getConnection()
@@ -115,19 +109,16 @@ class AccountStatementDao(object):
 
             rows = cur.fetchall()
             result = []
-            if not rows:
-                conn.close()
-                return '''User: {}-{}, Dont have any account statement data'''.format(user['username'], user['id'])
             for row in rows:
                 result.append({
-                    "number": row[0],
-                    "image": row[1],
-                    "name": row[2].replace('"',''),
-                    "shop_sku": row[3],
-                    "item_price": row[4],
-                    "paid_price": row[5],
-                    "excel_url": row[6],
-                    "id": row[7]
+                    "id": row[0],
+                    "excel_url": row[1],
+                    "start_date": row[2],
+                    "end_date": row[3],
+                    "sales_revenue": row[4],
+                    "income": row[5],
+                    "created_at": row[6],
+                    "updated_at": row[7]
                 })
             conn.close()
             return result, None

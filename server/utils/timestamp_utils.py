@@ -27,5 +27,9 @@ class TimestampUtils:
     return int(vietnam_now.minute)
 
   @classmethod
-  def getCurrentDatatime(self):
+  def getCurrentDatetime(self):
     return datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+
+  @classmethod
+  def getDateFromDatetime(self, datetime):
+    return datetime.strftime("%d-%m-%Y")

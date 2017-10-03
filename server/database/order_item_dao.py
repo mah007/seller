@@ -46,7 +46,8 @@ class OrderItemDao(object):
                 product_detail_url      VARCHAR(500),
                 invoice_number          VARCHAR(100),
                 user_id                 INTEGER,
-                earned                  DECIMAL(10,2) DEFAULT 0
+                earned                  DECIMAL(10,2) DEFAULT 0,
+                purchase_price          DECIMAL(10,2) DEFAULT 0
                 );'''
         DatabaseHelper.execute(query)
 
@@ -239,7 +240,8 @@ class OrderItemDao(object):
                     'variation': row[35],
                     'product_detail_url': row[36],
                     'invoice_number': row[37],
-                    'earned': row[39] # row[38] is user_id, don't need it
+                    'earned': row[39], # row[38] is user_id, don't need it
+                    'purchase_price': row[40]
                 })
             conn.close()
             return orderItems, None
@@ -261,59 +263,6 @@ class OrderItemDao(object):
         except Exception as ex:
             return False, '''User: {}-{}, Delete-Order-Items: {}'''.format(user['username'], user['id'], str(ex))
 
-
-        try:
-            conn = DatabaseHelper.getConnection()
-            cur = conn.cursor()
-            cur.execute(query)
-            rows = cur.fetchone()
-            orderItem = []
-            for row in rows:
-                orderItem.append({
-                        'id': row[0],
-                        'order_item_id': row[1],
-                        'shop_id': row[2],
-                        'order_id': row[3],
-                        'name': row[4],
-                        'seller_sku': row[5],
-                        'shop_sku': row[6],
-                        'shipping_type': row[7],
-                        'item_price': row[8],
-                        'paid_price': row[9],
-                        'currency': row[10],
-                        'wallet_credit': row[11],
-                        'tax_amount': row[12],
-                        'shipping_amount': row[13],
-                        'shipping_service_cost': row[14],
-                        'voucher_amount': row[15],
-                        'voucher_code': row[16],
-                        'status': row[17],
-                        'shipment_provider': row[18],
-                        'is_digital': row[19],
-                        'digital_delivery_info': row[20],
-                        'tracking_code': row[21],
-                        'tracking_code_pre': row[22],
-                        'reason': row[23],
-                        'reason_detail': row[24],
-                        'purchase_order_id': row[25],
-                        'purchase_order_number': row[26],
-                        'package_id': row[27],
-                        'promised_shipping_time': row[28],
-                        'extra_attributes': row[29],
-                        'shipping_provider_type': row[30],
-                        'created_at': row[31],
-                        'updated_at': row[32],
-                        'return_status': row[33],
-                        'product_main_image': row[34],
-                        'variation': row[35],
-                        'product_detail_url': row[36],
-                        'invoice_number': row[37]
-                    })
-                conn.close()
-                return orderItem, None
-        except Exception as ex:
-            return None, '''User: {}-{}, Query: {}, Get-Order-By-Order-Number exception {}'''.format(user['username'], user['id'], query, str(ex))
-
     # --------------------------------------------------------------------------
     # Set Income for an OrderItem
     # --------------------------------------------------------------------------
@@ -328,6 +277,43 @@ class OrderItemDao(object):
         except Exception as ex:
             return '''User {}-{}, Set-Order-Item-Income: Order-Item-Id {}, Exception: {} '''.format(user['username'], user['id'], itemItemId, str(ex))
 
+    # --------------------------------------------------------------------------
+    # Mark order that is calculated for an Account Statement
+    # --------------------------------------------------------------------------
+    def getOrderItemByAccountStatement(self, user, accountStatementId):
+        query = '''SELECT order.order_id, order_item.order_item_id, order.order_number,
+                        order_item.name, order_item.seller_sku, order_item.product_main_image,
+                        order_item.item_price, order_item.purchase_price, order_item.earned,
+                        order_item.shop_sku
+                    FROM `order`
+                    INNER JOIN `order_item` ON order.order_id = order_item.order_id
+                    WHERE order.user_id = {} AND order.account_statement_id = {}
+                    LIMIT 10
+                '''.format(user['id'], accountStatementId)
+        try:
+            conn = DatabaseHelper.getConnection()
+            cur = conn.cursor()
+            cur.execute(query)
+
+            orderItems = []
+            rows = cur.fetchall()
+            for row in rows:
+                orderItems.append({
+                    "order_id": row[0],
+                    "order_item_id": row[1],
+                    "order_number": row[2],
+                    "name": row[3],
+                    "seller_sku": row[4],
+                    "product_main_image": row[5],
+                    "item_price": row[6],
+                    "purchase_price": row[7],
+                    "earned": row[8],
+                    "shop_sku": row[9]
+                })
+            conn.close()
+            return orderItems, None
+        except Exception as ex:
+            return None, '''User: {}-{}, GetOrderItemByAccountStatement: {} '''.format(user['username'], user['id'], str(ex))
 
 
 

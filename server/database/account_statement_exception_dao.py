@@ -53,29 +53,25 @@ class AccountStatementExceptionDao(object):
     # --------------------------------------------------------------------------
     # Get an Account Exception
     # --------------------------------------------------------------------------
-    def getAllAccountStatementException(self, user):
+    def getAll(self, user, accountStatementId):
         query = ''' SELECT *
                     FROM account_statement_exception
-                    WHERE user_id = {} limit 10
-                '''.format(user['id'])
+                    WHERE user_id = {} AND account_statement_id = {}
+                    LIMIT 5
+                '''.format(user['id'], accountStatementId)
         try:
             conn = DatabaseHelper.getConnection()
             cur = conn.cursor()
             cur.execute(query)
 
-            rows = cur.fetchall()
             result = []
-            if not rows:
-                conn.close()
-                return '''User: {}-{}, Dont have any account statement exception data'''.format(user['username'], user['id'])
+            rows = cur.fetchall()
             for row in rows:
                 result.append({
                     "id": row[0],
                     "order_number": row[1],
                     "reason": row[2],
-                    "created_at": row[3],
-                    "account_statement_id": row[4],
-                    "user_id": row[5]
+                    "created_at": row[3]
                 })
 
             conn.close()

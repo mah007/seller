@@ -30,7 +30,7 @@ class ProcessAccountStatement(threading.Thread):
     income, exceptions = self.process(user, accountStatement)
 
     # Update Account Statement income
-    datetimeStr = TimestampUtils.getCurrentDatatime()
+    datetimeStr = TimestampUtils.getCurrentDatetime()
     updateException = accountStatementDao.update(user, accountStatement['id'], income, datetimeStr)
     if (updateException != None):
         print(updateException)

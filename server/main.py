@@ -4,7 +4,7 @@ from managers.order_manager import OrderManager
 from managers.constant_manager import ConstantManager
 from managers.price_by_time_manager import PriceByTimeManager
 from managers.product_manager import ProductManager
-from managers.account_statement_manager import AccountStatementManager
+from controllers.database_controller import DatabaseController
 from apis.sku_api import SkuAPI
 from apis.user_api import UserAPI
 from apis.order_api import OrderAPI
@@ -13,6 +13,7 @@ from apis.product_api import ProductAPI
 from apis.account_statement_api import AccountStatementAPI
 from flask import Flask, jsonify, request, make_response
 from flask_cors import CORS, cross_origin
+
 
 from utils.timestamp_utils import TimestampUtils
 from database.user_dao import UserDao
@@ -29,20 +30,21 @@ app.register_blueprint(ProductAPI)
 app.register_blueprint(AccountStatementAPI)
 
 if __name__ == "__main__":
+  databaseController = DatabaseController()
+  databaseController.initDatabase()
+
   skuManager = SkuManager()
   userManager = UserManager()
   orderManager = OrderManager()
   constantManager = ConstantManager()
   priceByTimeManager = PriceByTimeManager()
   productManager = ProductManager()
-  accountStatementManager = AccountStatementManager()
   skuManager.initialize()
   userManager.initialize()
   orderManager.initialize()
   constantManager.initialize()
   priceByTimeManager.initialize()
   productManager.initialize()
-  accountStatementManager.initialize()
 
   # Process Account Statement for test
   # userDao = UserDao()

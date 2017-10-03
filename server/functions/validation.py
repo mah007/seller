@@ -1,17 +1,19 @@
 from database.user_dao import UserDao
 from managers.response_helper import ResponseHelper
 
+# Instances
+userDao = UserDao()
 
-class ManagerHelper(object):
+
+class Validation(object):
 
   @classmethod
   def validateToken(self, token):
-    userDao = UserDao()
     try:
       user = userDao.getUser(token)
       if user == None:
-        return ResponseHelper.generateErrorResponse("Invalid token")
+        return None, "Invalid token"
 
-      return user
+      return user, None
     except Exception as ex:
-      return ResponseHelper.generateErrorResponse('''Valid user exception: {}'''.format(str(ex)))
+      return None, '''Valid user exception: {}'''.format(str(ex))

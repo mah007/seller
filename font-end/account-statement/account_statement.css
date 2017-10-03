@@ -1,3 +1,10 @@
+.table-default {
+  background-color: #fff;
+}
+.default-margin {
+  margin: 10px 0px;
+}
+
 .page-header.navbar .page-logo .logo-default {
 	margin-top:24px;
 }
@@ -53,3 +60,55 @@
 	border-top: 1px solid #d2d2e0;
 	padding-left: 300px;
 }
+
+.div-title-content {
+  width: 100%;
+  float: left;
+}
+
+.text-align-right {
+  text-align: right;
+}
+.text-align-left {
+  text-align: left;
+}
+.ul-left, .ul-right {
+  list-style: none;
+  float: left;
+}
+.ul-left li, .ul-right li {
+  padding: 10px 0px;
+}
+.ul-left {
+
+}
+.ul-right {
+
+}
+
+.account-statement-order-item {
+  margin: 0px 15px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

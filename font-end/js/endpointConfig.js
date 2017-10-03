@@ -187,15 +187,18 @@ var EndpointConfig = function() {
   //----------------------------------------------------------------------------
   // Account statemnt section
   //----------------------------------------------------------------------------
-  EndpointConfig.prototype.generateGetAllAccountStatement = function() {
-      return endpointUrl + '/account-statement/get-all-account-statement?token=' + $.cookie('token');
-  } 
-  EndpointConfig.prototype.generateGetAllAccountStatementException = function() {
-      return endpointUrl + '/account-statement/get-all-account-statement-exception?token=' + $.cookie('token');
-  } 
-  EndpointConfig.prototype.generateUpdateAccountStatementPrice = function() {
-      return endpointUrl + '/account-statement/update-account-statement-price?token=' + $.cookie('token');
-  } 
+  EndpointConfig.prototype.generateGetAccountStatements = function() {
+      return endpointUrl + '/account-statement/get-all?token=' + $.cookie('token');
+  }
+
+  EndpointConfig.prototype.generateGetAccountStatementInfo = function() {
+      return endpointUrl + '/account-statement/get-info?token=' + $.cookie('token');
+  }
+
+  EndpointConfig.prototype.generateUpdateProductOriginPrice = function() {
+      return endpointUrl + '/account-statement/update-product-orginal-prices?token=' + $.cookie('token');
+  }
+
 }
 
 

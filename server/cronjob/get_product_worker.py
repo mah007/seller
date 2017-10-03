@@ -49,7 +49,7 @@ class GetProductWorker(threading.Thread):
   # Update new request time to constant
   #-----------------------------------------------------------------------------
   def updateConstant(self, user):
-    newResquestDatetime = TimestampUtils.getCurrentDatatime()
+    newResquestDatetime = TimestampUtils.getCurrentDatetime()
     exception = constantDao.updateConstant(user, ConstantConfig.PRODUCT_LAST_REQUEST, newResquestDatetime)
     if (exception != None):
       print(exception)
