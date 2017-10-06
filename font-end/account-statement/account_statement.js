@@ -38,6 +38,17 @@ function getAndFillOutAllAccountStatement() {
 }
 
 //------------------------------------------------------------------------------
+// Show/hide statement error info
+//------------------------------------------------------------------------------
+$("#checkbox_statement_errors").change(function() {
+    if($(this).is(":checked")) {
+        $("#account_statement_error").hide()
+    } else {
+        $("#account_statement_error").show()
+    }
+})
+
+//------------------------------------------------------------------------------
 // Get data from Account Statement dropdown selected changed
 //------------------------------------------------------------------------------
 $("#account_statement_datetime").change(function() {
@@ -82,7 +93,6 @@ function getAccountStatementInfo(accountStatementId) {
 $(".btnUpdate").click(function() {
     var body = document.getElementById("tbody_account_statement");
     var length = body.rows.length;
-
     for (var i = 0; i < length; i += 1) {
         var row = body.rows[i];
 
@@ -100,7 +110,6 @@ $(".btnUpdate").click(function() {
 });
 
 function updateAccountStatement(price, id, shop_sku, excel_url) {
-
     $.ajax({
         method: 'POST',
         url: endpoint.generateUpdateAccountStatementPrice(),

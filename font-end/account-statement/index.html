@@ -21,7 +21,6 @@
     <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="../css/simple-line-icons.min.css" rel="stylesheet" type="text/css">
     <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link href="../css/uniform.default.css" rel="stylesheet" type="text/css">
     <link href="../css/select2.css" rel="stylesheet" type="text/css" />
     <link href="../css/sweetalert.css" rel="stylesheet" type="text/css" />
     <link href="../css/switchery.min.css" rel="stylesheet" type="text/css" />
@@ -32,6 +31,7 @@
     <link href="../css/component/layout-md.css" rel="stylesheet" type="text/css" />
     <link href="../css/component/custom-md.css" rel="stylesheet" type="text/css" />
     <link href="../css/theme/light.css" rel="stylesheet" type="text/css" />
+    <link href="../css/main.css" rel="stylesheet" type="text/css" />
     <link href="../account-statement/account_statement.css" rel="stylesheet" type="text/css" />
 </head>
 
@@ -49,29 +49,37 @@
             <div class="page-content">
                 <!-- BEGIN CONTENT -->
                 <div class="row">
-                    <div class="col-md-4">
-                        <div>
-                            <h3 class="h3-title">Sao kê tài khoản</h3>
-                        </div>
-                        <ul class="ul-left text-align-right">
-                            <li>Ngày tháng:</li>
-                            <li>Doanh thu:</li>
-                            <li>Lợi nhuận:</li>
-                        </ul>
-                        <ul class="ul-right ul-left text-align-left">
-                            <li>
+                    <div class="col-md-4 div-title-content">
+                        <h3 class="h3-title">Sao kê tài khoản</h3>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="account-statement-info">
+                            <div class="col-md-3 font-medium">
+                                <span>Ngày tháng: </span>
                                 <select id="account_statement_datetime">
                                     <!-- Fill datetime into here -->
                                 </select>
-                            </li>
-                            <li><span id="sales_revenue">24,2424.00 VND</span></li>
-                            <li><span id="income">24,2424.00 VND</span></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="div-title-content">
-                            <h3 class="h3-title">Đơn hàng bị lỗi</h3>
+                            </div>
+                            <div class="col-md-3 font-medium">
+                                <span>Doanh thu: </span>
+                                <span class="font-medium-bold" id="sales_revenue">24,2424.00 VND</span>
+                            </div>
+                            <div class="col-md-3 font-medium">
+                                <span>Lợi nhuận: </span>
+                                <span class="font-medium-bold" id="income">24,2424.00 VND</span>
+                            </div>
+                            <div class="col-md-3 font-medium">
+                                <span class="float-left margin-right-15px">Ẩn đơn hàng lỗi: </span>
+                                <input class="float-left" id="checkbox_statement_errors" type="checkbox">
+                            </div>
                         </div>
+                    </div>
+                </div>
+                <div class="row" id="account_statement_error">
+                    <div class="col-md-4 div-title-content">
+                        <h3 class="h3-title">Đơn hàng bị lỗi</h3>
+                    </div>
+                    <div class="col-md-12">
                         <div class="table-scrollable">
                             <table id="table_exception" class="table table-hover">
                                 <thead>
@@ -107,94 +115,79 @@
                                     <th style="vertical-align:top; width: 100px;" class="text-left">Giá nhập</th>
                                 </tr>
                             </thead>
-                            <tbody id="tbody_product">
-                                <!-- WILL BE FILL DATA IN HERE -->
-                            </tbody>
+                            <tbody id="tbody_product"> <!-- WILL BE FILL DATA IN HERE --> </tbody>
                         </table>
                     </div>
                     <br>
-                    <!-- START PAGINATION -->
-                        <!-- <div class="row">
-                            <div class="col-sm-6">
-                            </div>
-                            <div class="col-sm-6 ">
-                                <ul class="pagination pull-right">
-                                    <li class="active"><a href="javascript:;">1</a></li>
-                                </ul>
-                            </div>
-                        </div> -->
-                        <!-- END PAGINATION -->
-                    </div>
-                    <!-- END ADD NEW -->
-                </div>
-                <!-- END CONTENT -->
-            </div>
+                </div> <!-- END ADD NEW -->
+            </div> <!-- END CONTENT -->
         </div>
-        <!-- END CONTAINER -->
-        <!-- BEGIN FOOTER -->
-        <div class="page-footer">
-            <!-- TO BE DESIGN FOR FOOTER HERE -->
-        </div>
-        <!-- END FOOTER -->
-        <!-- JAVASCRIPTS -->
-        <script src="../js/plugin/jquery.min.js" type="text/javascript"></script>
-        <script src="../js/plugin/jquery-ui.min.js" type="text/javascript"></script>
-        <script src="../js/plugin/jquery-migrate.min.js" type="text/javascript"></script>
-        <script src="../js/plugin/handlebars-v4.0.8.js" type="text/javascript"></script>
-        <script src="../js/plugin/jquery.cookie.js" type="text/javascript"></script>
-        <script src="../js/plugin/bootstrap.min.js" type="text/javascript"></script>
-        <script src="../js/plugin/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
-        <script src="../js/plugin/jquery.slimscroll.min.js" type="text/javascript"></script>
-        <script src="../js/plugin/jquery.blockui.min.js" type="text/javascript"></script>
-        <script src="../js/plugin/jquery.cokie.min.js" type="text/javascript"></script>
-        <script src="../js/plugin/jquery.uniform.min.js" type="text/javascript"></script>
-        <script src="../js/plugin/select2.min.js" type="text/javascript"></script>
-        <script src="../js/plugin/sweetalert.min.js" type="text/javascript"></script>
-        <script src="../js/plugin/switchery.min.js" type="text/javascript"></script>
-        <script src="../js/plugin/bootstrap-switch.min.js" type="text/javascript"></script>
-        <script src="../js/component/metronic.js" type="text/javascript"></script>
-        <script src="../js/component/layout.js" type="text/javascript"></script>
-        <script src="../js/component/style.js" type="text/javascript"></script>
-        <!-- AUTO COMPLETE PLUGIN -->
-        <script src="../js/plugin/jquery.auto-complete.min.js"></script>
-        <script src="../js/plugin/jquery.auto-complete.js"></script>
-        <!-- INTERNAL PLUGINS -->
-        <script src="../js/additional.js" type="text/javascript"></script>
-        <script src="../js/cookieConfig.js" type="text/javascript"></script>
-        <script src="../js/endpointConfig.js" type="text/javascript"></script>
-        <script src="../js/handlebarConfig.js" type="text/javascript"></script>
-        <!-- PRICE BY TIME JAVASCRIPTS -->
-        <script src="../account-statement/account_statement.js" type="text/javascript"></script>
-        <!-- Templates -->
-        <script id="product-template" type="text/x-handlebars-template">
-            {{#each orderItems}}
-            <tr data-order-id={{order_id}} data-order-item-id={{order_item_id}} data-shop-sku={{shop_sku}} data-paid-price={{item_price}} data-purchase-price={{purchase_price}}/>
-            <td class="text-center"><img src={{product_main_image}} width="70px" /> </td>
-            <td class="text-left">{{name}}</td>
-            <td class="text-left">{{shop_sku}}</td>
-            <td class="text-left">{{formatCurrency earned}}</td>
-            <td class="text-left">{{formatCurrency item_price}}</td>
-            <th>
-                <input type="text" min="0" class="form-control input-sm input-money" style="background-color: #ffe6e6;" value={{formatCurrency purchase_price}} />
-            </th>
-        </tr>
-        {{/each}}
-    </script>
-    <script id="exception-content-template" type="text/x-handlebars-template">
-        {{#each exceptions}}
-        <tr data-order_number="{{order_number}}" data-reason={{reason}}>
-            <td class="text-center">{{order_number}}</td>
-            <td class="text-center">{{reason}} </td>
-        </tr>
-        {{/each}}
-    </script>
-    <script id="datetime-template" type="text/x-handlebars-template">
-        {{#each data}}
-        <option data-income={{income}} data-sales-revenue={{sales_revenue}} value="{{id}}">{{start_date}} - {{end_date}}</option>
-        {{/each}}
-    </script>
-    <script type="text/javascript">
-        jQuery(document).ready(function() {
+    </div>
+    <!-- END CONTAINER -->
+    <!-- BEGIN FOOTER -->
+    <div class="page-footer">
+        <!-- TO BE DESIGN FOR FOOTER HERE -->
+    </div>
+    <!-- END FOOTER -->
+    <!-- JAVASCRIPTS -->
+    <script src="../js/plugin/jquery.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/jquery-migrate.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/handlebars-v4.0.8.js" type="text/javascript"></script>
+    <script src="../js/plugin/jquery.cookie.js" type="text/javascript"></script>
+    <script src="../js/plugin/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/jquery.slimscroll.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/jquery.blockui.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/jquery.cokie.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/jquery.uniform.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/select2.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/sweetalert.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/switchery.min.js" type="text/javascript"></script>
+    <script src="../js/plugin/bootstrap-switch.min.js" type="text/javascript"></script>
+    <script src="../js/component/metronic.js" type="text/javascript"></script>
+    <script src="../js/component/layout.js" type="text/javascript"></script>
+    <script src="../js/component/style.js" type="text/javascript"></script>
+    <!-- AUTO COMPLETE PLUGIN -->
+    <script src="../js/plugin/jquery.auto-complete.min.js"></script>
+    <script src="../js/plugin/jquery.auto-complete.js"></script>
+    <!-- INTERNAL PLUGINS -->
+    <script src="../js/additional.js" type="text/javascript"></script>
+    <script src="../js/cookieConfig.js" type="text/javascript"></script>
+    <script src="../js/endpointConfig.js" type="text/javascript"></script>
+    <script src="../js/handlebarConfig.js" type="text/javascript"></script>
+    <!-- PRICE BY TIME JAVASCRIPTS -->
+    <script src="../account-statement/account_statement.js" type="text/javascript"></script>
+    <!-- Templates -->
+    <script id="product-template" type="text/x-handlebars-template">
+        {{#each orderItems}}
+        <tr data-order-id={{order_id}} data-order-item-id={{order_item_id}} data-shop-sku={{shop_sku}} data-paid-price={{item_price}} data-purchase-price={{purchase_price}}/>
+        <td class="text-center"><img src={{product_main_image}} width="70px" /> </td>
+        <td class="text-left">{{name}}</td>
+        <td class="text-left">{{shop_sku}}</td>
+        <td class="text-left">{{formatCurrency earned}}</td>
+        <td class="text-left">{{formatCurrency item_price}}</td>
+        <th>
+            <input type="text" min="0" class="form-control input-sm input-money" style="background-color: #ffe6e6;" value={{formatCurrency purchase_price}} />
+        </th>
+    </tr>
+    {{/each}}
+</script>
+<script id="exception-content-template" type="text/x-handlebars-template">
+    {{#each exceptions}}
+    <tr data-order_number="{{order_number}}" data-reason={{reason}}>
+        <td class="text-center">{{order_number}}</td>
+        <td class="text-center">{{reason}} </td>
+    </tr>
+    {{/each}}
+</script>
+<script id="datetime-template" type="text/x-handlebars-template">
+    {{#each data}}
+    <option data-income={{income}} data-sales-revenue={{sales_revenue}} value="{{id}}">{{start_date}} - {{end_date}}</option>
+    {{/each}}
+</script>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
         Metronic.init(); // init metronic core components
         Layout.init(); // init current layout
         Demo.init(); // init demo features

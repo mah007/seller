@@ -66,28 +66,14 @@
   float: left;
 }
 
-.text-align-right {
-  text-align: right;
-}
-.text-align-left {
-  text-align: left;
-}
-.ul-left, .ul-right {
-  list-style: none;
-  float: left;
-}
-.ul-left li, .ul-right li {
-  padding: 10px 0px;
-}
-.ul-left {
-
-}
-.ul-right {
-
-}
-
 .account-statement-order-item {
   margin: 0px 15px;
+}
+
+.account-statement-info {
+  border: 1px solid #ccc;
+  padding:15px 0px;
+  display: -webkit-box;
 }
 
 
