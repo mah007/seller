@@ -6,21 +6,14 @@ var $income = $("#income");
 var $salesRevenue = $("#sales_revenue");
 
 jQuery(document).ready(function() {
-
     // Validate Token
     if (!cookie.validateLocalToken()) {
         window.location.href = "../login";
     }
-
-    // Fill user name
-    if (cookie.getUsername() === undefined) {
-        $('#username-on-header').html("User info");
-    } else {
-        $('#username-on-header').html(cookie.getUsername());
-    }
-
+    // Load header
+    $("#header_content").load("../header.html");
     // Load menu left
-    $("#menuContent").load("../menuleft.html");
+    $("#menu_content").load("../menuleft.html");
 
     // Fill Account statement data
     getAndFillOutAllAccountStatement();
