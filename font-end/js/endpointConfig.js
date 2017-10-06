@@ -195,8 +195,8 @@ var EndpointConfig = function() {
       return endpointUrl + '/account-statement/get-info?token=' + $.cookie('token');
   }
 
-  EndpointConfig.prototype.generateUpdateProductOriginPrice = function() {
-      return endpointUrl + '/account-statement/update-product-orginal-prices?token=' + $.cookie('token');
+  EndpointConfig.prototype.getUpdateOriginPriceUrl = function() {
+      return endpointUrl + '/account-statement/update-original-prices?token=' + $.cookie('token');
   }
 
 }

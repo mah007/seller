@@ -110,12 +110,12 @@
                                     <th style="vertical-align:top;" class="text-left">Image</th>
                                     <th style="vertical-align:top;" class="text-left">Name</th>
                                     <th style="vertical-align:top;" class="text-left">Sku</th>
-                                    <th style="vertical-align:top;width: 100px;" class="text-left">Tiền lời</th>
-                                    <th style="vertical-align:top; width: 100px" class="text-left">Giá bán</th>
-                                    <th style="vertical-align:top; width: 100px;" class="text-left">Giá nhập</th>
+                                    <th style="vertical-align:top;width: 120px;" class="text-left">Tiền lời</th>
+                                    <th style="vertical-align:top; width: 120px" class="text-left">Giá bán</th>
+                                    <th style="vertical-align:top; width: 120px;" class="text-left">Giá nhập</th>
                                 </tr>
                             </thead>
-                            <tbody id="tbody_product"> <!-- WILL BE FILL DATA IN HERE --> </tbody>
+                            <tbody id="tbody_order_items"> <!-- WILL BE FILL DATA IN HERE --> </tbody>
                         </table>
                     </div>
                     <br>
@@ -161,33 +161,33 @@
     <!-- Templates -->
     <script id="product-template" type="text/x-handlebars-template">
         {{#each orderItems}}
-        <tr data-order-id={{order_id}} data-order-item-id={{order_item_id}} data-shop-sku={{shop_sku}} data-paid-price={{item_price}} data-purchase-price={{purchase_price}}/>
-        <td class="text-center"><img src={{product_main_image}} width="70px" /> </td>
-        <td class="text-left">{{name}}</td>
-        <td class="text-left">{{shop_sku}}</td>
-        <td class="text-left">{{formatCurrency earned}}</td>
-        <td class="text-left">{{formatCurrency item_price}}</td>
-        <th>
-            <input type="text" min="0" class="form-control input-sm input-money" style="background-color: #ffe6e6;" value={{formatCurrency purchase_price}} />
-        </th>
-    </tr>
-    {{/each}}
-</script>
-<script id="exception-content-template" type="text/x-handlebars-template">
-    {{#each exceptions}}
-    <tr data-order_number="{{order_number}}" data-reason={{reason}}>
-        <td class="text-center">{{order_number}}</td>
-        <td class="text-center">{{reason}} </td>
-    </tr>
-    {{/each}}
-</script>
-<script id="datetime-template" type="text/x-handlebars-template">
-    {{#each data}}
-    <option data-income={{income}} data-sales-revenue={{sales_revenue}} value="{{id}}">{{start_date}} - {{end_date}}</option>
-    {{/each}}
-</script>
-<script type="text/javascript">
-    jQuery(document).ready(function() {
+        <tr data-order-id={{order_id}} data-order-item-id={{order_item_id}} data-shop-sku={{shop_sku}} data-paid-price={{item_price}} data-original-price={{original_price}}>
+            <td class="text-center"><img src={{product_main_image}} width="70px" /> </td>
+            <td class="text-left">{{name}}</td>
+            <td class="text-left">{{shop_sku}}</td>
+            <td class="text-left">{{formatCurrency earned}}</td>
+            <td class="text-left">{{formatCurrency item_price}}</td>
+            <td>
+                <input type="text" min="0" class="form-control input-sm input-money" style="background-color: #ffe6e6;" value={{formatCurrency original_price}} />
+            </td>
+        </tr>
+        {{/each}}
+    </script>
+    <script id="exception-content-template" type="text/x-handlebars-template">
+        {{#each exceptions}}
+        <tr data-order_number="{{order_number}}" data-reason={{reason}}>
+            <td class="text-center">{{order_number}}</td>
+            <td class="text-center">{{reason}} </td>
+        </tr>
+        {{/each}}
+    </script>
+    <script id="datetime-template" type="text/x-handlebars-template">
+        {{#each data}}
+        <option data-income={{income}} data-sales-revenue={{sales_revenue}} value="{{id}}">{{start_date}} - {{end_date}}</option>
+        {{/each}}
+    </script>
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
         Metronic.init(); // init metronic core components
         Layout.init(); // init current layout
         Demo.init(); // init demo features

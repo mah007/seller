@@ -89,21 +89,21 @@ class ProcessAccountStatement(threading.Thread):
       # Calculate OrderItem income:
       # Default value: orderItem['earned'] >> This OrderItem income has been computed
       # If not: calculate by formula: orderItem['paid_price'] - (data['sum_of_fee'] + product['original_price'])
-      incomeOfAnOrderItem = orderItem['earned']
-      if (incomeOfAnOrderItem == 0):
+      orderItemIncome = orderItem['earned']
+      if (orderItemIncome == 0):
         product, getProductException = productDao.getProductByShopSku(user, data['sku'])
         if (exception != None):
           exceptions.append({'order_number': order['order_number'], 'reason': exception})
-          incomeOfAnOrderItem = data['sales_deliver'] - data['sum_of_fee']
+          orderItemIncome = data['sales_deliver'] - data['sum_of_fee']
         else:
-          incomeOfAnOrderItem = data['sales_deliver'] - (data['sum_of_fee'] + product['original_price'])
+          orderItemIncome = data['sales_deliver'] - (data['sum_of_fee'] + product['original_price'])
 
       # Actual income
-      income = income + incomeOfAnOrderItem
+      income = income + orderItemIncome
 
       # Set OrderItem income:
       if (orderItem['earned'] == 0):
-        exception = orderItemDao.setIncome(user, order['order_id'], data['sku'], incomeOfAnOrderItem)
+        exception = orderItemDao.setIncome(user, order['order_id'], data['sku'], orderItemIncome, data['sales_deliver'])
         if (exception != None):
           exceptions.append({'order_number': order['order_number'], 'reason': exception})
       # Mark Order as Computed

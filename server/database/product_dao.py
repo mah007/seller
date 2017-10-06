@@ -238,10 +238,21 @@ class ProductDao(object):
                 '''.format(product['price'], product['id'])
         try:
             DatabaseHelper.execute(query)
-            conn.close()
             return ExceptionUtils.success()
         except Exception as ex:
             return ExceptionUtils.error('''Update product's price got exception: {}'''.format(str(ex)))
+
+    def updateOriginalPriceByShopSku(self, user, shopSku, orginalPrice):
+        query = '''UPDATE product
+                    set original_price = '{}'
+                    WHERE shop_sku = '{}' AND user_id = '{}'
+                '''.format(orginalPrice, shopSku, user['id'])
+        try:
+            result, exception = DatabaseHelper.execute(query)
+            return exception
+        except Exception as ex:
+            return '''Update product's price got exception: {}'''.format(str(ex))
+
 
     # --------------------------------------------------------------------------
     # Check Product exsits

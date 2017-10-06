@@ -76,10 +76,12 @@ function getAccountStatementInfo(accountStatementId) {
             var template = $("#exception-content-template").html();
             var contentHtml = Handlebars.compile(template);
             $("#tbody_exception").html(contentHtml(response.data));
-            // Fill products
+            // Fill order items
             var template = $("#product-template").html();
             var contentHtml = Handlebars.compile(template);
-            $("#tbody_product").html(contentHtml(response.data));
+            $("#tbody_order_items").html(contentHtml(response.data));
+            // Init Money Input
+            additional.initMoneyInput();
         },
         error: function(error) {
             console.log(error);
@@ -88,38 +90,45 @@ function getAccountStatementInfo(accountStatementId) {
 }
 
 //------------------------------------------------------------------------------
-// Update Product purchase price
+// Update OrderItem original price
 //------------------------------------------------------------------------------
 $(".btnUpdate").click(function() {
-    var body = document.getElementById("tbody_account_statement");
+    var body = document.getElementById("tbody_order_items");
     var length = body.rows.length;
+    var orderItems = []
     for (var i = 0; i < length; i += 1) {
         var row = body.rows[i];
 
-        var id = $(row).data("id");
-        var shop_sku = $(row).data("shop_sku");
-        var oriPrice = $(row).data("item_price");
-        var excel_url = $(row).data("excel_url");
-
-        var price = row.cells[5].children[0].value.replace(/\,/g, '');
-
-        if (oriPrice != price) {
-            updateAccountStatement(price, id, shop_sku, excel_url);
+        var shopSku = $(row).data("shop-sku");
+        var curPrice = $(row).data("original-price");
+        var newPrice = $(row).find('input').val();
+        var orderItemId = $(row).data("order-item-id");
+        var orderId = $(row).data("order-id");
+        if (curPrice != newPrice) {
+            orderItems.push({
+                "order_id": orderId,
+                "order_item_id": orderItemId,
+                "original_price": parseInt(newPrice.replace(/\,/g, "")),
+                "shop_sku": shopSku,
+            });
         }
+    }
+
+    if (orderItems.length > 0) {
+        updateOrginalPriceAndReComputeIncome(orderItems);
     }
 });
 
-function updateAccountStatement(price, id, shop_sku, excel_url) {
+function updateOrginalPriceAndReComputeIncome(orderItems) {
+    accountStatementId = $("#account_statement_datetime").find(':selected').val();
     $.ajax({
         method: 'POST',
-        url: endpoint.generateUpdateAccountStatementPrice(),
+        url: endpoint.getUpdateOriginPriceUrl(),
         contentType: "application/json",
         data: JSON.stringify({
-            id: id,
-            price: price,
-            shop_sku: shop_sku,
-            excel_url: excel_url,
-        }),
+            order_items: orderItems,
+            account_statement_id: parseInt(accountStatementId)
+        }, null, 2),
         success: function(data) {
             swal({
                 title: "Update Successfully!",

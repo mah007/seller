@@ -47,12 +47,14 @@ class OrderItemDao(object):
                 invoice_number          VARCHAR(100),
                 user_id                 INTEGER,
                 earned                  DECIMAL(10,2) DEFAULT 0,
-                purchase_price          DECIMAL(10,2) DEFAULT 0
+                original_price          DECIMAL(10,2) DEFAULT 0,
+                actual_paid_price       DECIMAL(10,2) DEFAULT 0
                 );'''
         DatabaseHelper.execute(query)
 
     # --------------------------------------------------------------------------
     # Insert OrderItem
+    # NOTE: Using only for GetOrderCronJob
     # --------------------------------------------------------------------------
     def insert(self, user, orderItem):
         query = '''INSERT INTO order_item(order_item_id, shop_id, order_id, name,
@@ -94,6 +96,7 @@ class OrderItemDao(object):
 
     # --------------------------------------------------------------------------
     # Update OrderItem
+    # NOTE: Using only for GetOrderCronJob
     # --------------------------------------------------------------------------
     def update(self, user, orderItem):
         query = '''UPDATE order_item
@@ -170,16 +173,6 @@ class OrderItemDao(object):
         return self.getOrderItems(user, query)
 
     # --------------------------------------------------------------------------
-    # Get OrderItem by OrderItemId
-    # --------------------------------------------------------------------------
-    def getOrderItemByOrderItemId(self, user, orderItemId):
-        query = '''SELECT *
-                    FROM order_item
-                    WHERE user_id = '{}' AND order_item_id = '{}'
-                '''.format(user['id'], orderItemId)
-        return self.getOrderItems(user, query)
-
-    # --------------------------------------------------------------------------
     # Get OrderItem by OrderId and ShopSku
     # --------------------------------------------------------------------------
     def getOrderItemByShopSku(self, user, orderId, shopSku):
@@ -241,7 +234,8 @@ class OrderItemDao(object):
                     'product_detail_url': row[36],
                     'invoice_number': row[37],
                     'earned': row[39], # row[38] is user_id, don't need it
-                    'purchase_price': row[40]
+                    'original_price': row[40],
+                    'actual_paid_price': row[41]
                 })
             conn.close()
             return orderItems, None
@@ -249,28 +243,78 @@ class OrderItemDao(object):
             return None, '''User: {}-{}, Query: {}, Get-Order-Item-By-Order-Item-Id: {}'''.format(user['username'], user['id'], query, str(ex))
 
     # --------------------------------------------------------------------------
-    # Delete OrderItem by order id
+    # Get OrderItem by order item id
     # --------------------------------------------------------------------------
-    def deleteOrderItemByOrderId(self, user, orderId):
-        query = '''DELETE from order_item WHERE order_id = '{}' and user_id = '{}'
-                '''.format(orderId, user['id'])
+    def getOrderItemByOrderItemId(self, user, orderItemId):
+        query = ''' SELECT *
+                    FROM order_item
+                    WHERE user_id = '{}' AND order_item_id = '{}'
+                '''.format(user['id'], orderItemId,)
         try:
-            result, ex = DatabaseHelper.execute(query)
-            if (ex != None):
-                return False, ex
-            else:
-                return True, None
+            conn = DatabaseHelper.getConnection()
+            cur = conn.cursor()
+            cur.execute(query)
+            if (cur.rowcount <= 0):
+                conn.close()
+                return None, "User: {}-{}, Get-Order-Item-By-Order-Item-Id: {} is not found".format(user['username'], user['id'], orderItemId)
+
+            row = cur.fetchone()
+            orderItem = {
+                'id': row[0],
+                'order_item_id': row[1],
+                'shop_id': row[2],
+                'order_id': row[3],
+                'name': row[4],
+                'seller_sku': row[5],
+                'shop_sku': row[6],
+                'shipping_type': row[7],
+                'item_price': row[8],
+                'paid_price': row[9],
+                'currency': row[10],
+                'wallet_credit': row[11],
+                'tax_amount': row[12],
+                'shipping_amount': row[13],
+                'shipping_service_cost': row[14],
+                'voucher_amount': row[15],
+                'voucher_code': row[16],
+                'status': row[17],
+                'shipment_provider': row[18],
+                'is_digital': row[19],
+                'digital_delivery_info': row[20],
+                'tracking_code': row[21],
+                'tracking_code_pre': row[22],
+                'reason': row[23],
+                'reason_detail': row[24],
+                'purchase_order_id': row[25],
+                'purchase_order_number': row[26],
+                'package_id': row[27],
+                'promised_shipping_time': row[28],
+                'extra_attributes': row[29],
+                'shipping_provider_type': row[30],
+                'created_at': row[31],
+                'updated_at': row[32],
+                'return_status': row[33],
+                'product_main_image': row[34],
+                'variation': row[35],
+                'product_detail_url': row[36],
+                'invoice_number': row[37],
+                'earned': row[39], # row[38] is user_id, don't need it
+                'original_price': row[40],
+                'actual_paid_price': row[41]
+            }
+            conn.close()
+            return orderItem, None
         except Exception as ex:
-            return False, '''User: {}-{}, Delete-Order-Items: {}'''.format(user['username'], user['id'], str(ex))
+            return None, '''User: {}-{}, Query: {}, Get-Order-Item-By-Order-Item-Id: {}'''.format(user['username'], user['id'], query, str(ex))
 
     # --------------------------------------------------------------------------
     # Set Income for an OrderItem
     # --------------------------------------------------------------------------
-    def setIncome(self, user, orderId, shopSku, income):
+    def setIncome(self, user, orderId, shopSku, income, actualPaidPrice):
         query = ''' UPDATE order_item
-                    SET earned = {}
+                    SET earned = {}, actual_paid_price = {}
                     WHERE order_id = {} AND user_id = '{}' AND shop_sku = '{}'
-                '''.format(income, orderId, user['id'], shopSku)
+                '''.format(income, actualPaidPrice, orderId, user['id'], shopSku)
         try:
             result, exception = DatabaseHelper.execute(query)
             return exception # Exception will be null if not have any exception
@@ -278,13 +322,27 @@ class OrderItemDao(object):
             return '''User {}-{}, Set-Order-Item-Income: Order-Item-Id {}, Exception: {} '''.format(user['username'], user['id'], itemItemId, str(ex))
 
     # --------------------------------------------------------------------------
-    # Mark order that is calculated for an Account Statement
+    # Change Original price
+    # --------------------------------------------------------------------------
+    def changeOriginalPrice(self, user, orderItem):
+        query = ''' UPDATE order_item
+                    SET earned = {}, original_price = {}
+                    WHERE order_id = {} AND user_id = '{}' AND shop_sku = '{}'
+                '''.format(orderItem['earned'], orderItem['original_price'],
+                           orderItem['order_id'], user['id'], orderItem['shop_sku'])
+        try:
+            result, exception = DatabaseHelper.execute(query)
+            return exception # Exception will be null if not have any exception
+        except Exception as ex:
+            return '''User {}-{}, Change-Original-Price: {}, Exception: {} '''.format(user['username'], user['id'], str(orderItem), str(ex))
+
+    # --------------------------------------------------------------------------
+    # Mark the order as calculated to an Account Statement
     # --------------------------------------------------------------------------
     def getOrderItemByAccountStatement(self, user, accountStatementId):
-        query = '''SELECT order.order_id, order_item.order_item_id, order.order_number,
+        query = '''SELECT order_item.shop_sku, order.order_id, order_item.order_item_id, order.order_number,
                         order_item.name, order_item.seller_sku, order_item.product_main_image,
-                        order_item.item_price, order_item.purchase_price, order_item.earned,
-                        order_item.shop_sku
+                        order_item.item_price, order_item.original_price, order_item.earned
                     FROM `order`
                     INNER JOIN `order_item` ON order.order_id = order_item.order_id
                     WHERE order.user_id = {} AND order.account_statement_id = {}
@@ -299,21 +357,46 @@ class OrderItemDao(object):
             rows = cur.fetchall()
             for row in rows:
                 orderItems.append({
-                    "order_id": row[0],
-                    "order_item_id": row[1],
-                    "order_number": row[2],
-                    "name": row[3],
-                    "seller_sku": row[4],
-                    "product_main_image": row[5],
-                    "item_price": row[6],
-                    "purchase_price": row[7],
-                    "earned": row[8],
-                    "shop_sku": row[9]
+                    "shop_sku": row[0],
+                    "order_id": row[1],
+                    "order_item_id": row[2],
+                    "order_number": row[3],
+                    "name": row[4],
+                    "seller_sku": row[5],
+                    "product_main_image": row[6],
+                    "item_price": row[7],
+                    "original_price": row[8],
+                    "earned": row[9]
                 })
             conn.close()
             return orderItems, None
         except Exception as ex:
-            return None, '''User: {}-{}, GetOrderItemByAccountStatement: {} '''.format(user['username'], user['id'], str(ex))
+            return None, '''User: {}-{}, Get-Order-Item-By-Account-Statement: {} '''.format(user['username'], user['id'], str(ex))
+
+    # --------------------------------------------------------------------------
+    # Compute total earning of an account statement
+    # Formula: total = SUM(earned)
+    # --------------------------------------------------------------------------
+    def getTotalEarningOfAccountStatement(self, user, accountStatementId):
+        query = '''SELECT SUM(order_item.earned) as total_earning
+                    FROM `order`
+                    INNER JOIN `order_item` ON order.order_id = order_item.order_id
+                    WHERE order.user_id = {} AND order.account_statement_id = {}
+                '''.format(user['id'], accountStatementId)
+        try:
+            conn = DatabaseHelper.getConnection()
+            cur = conn.cursor()
+            cur.execute(query)
+            if (cur.rowcount <= 0):
+                conn.close()
+                return 0, None;
+
+            row = cur.fetchone()
+            totalEarning = row[0]
+            conn.close()
+            return totalEarning, None
+        except Exception as ex:
+            return 0, '''User: {}-{}, Get-Tatol-Earning-Of-Account-Statement: {} '''.format(user['username'], user['id'], str(ex))
 
 
 

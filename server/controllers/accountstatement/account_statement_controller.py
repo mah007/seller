@@ -56,33 +56,43 @@ class AccountStatementController(object):
   #-----------------------------------------------------------------------------
   # Update account statement
   #-----------------------------------------------------------------------------
-  def updateAccountStatement(self, accountStatement, token):
-    user = self.validateToken(token)
-    if 'error' in user:
-      return user
+  def changeOriginPrice(self, token, orderItems, accountStatementId):
+    user, exception = Validation.validateToken(token)
+    if (exception != None):
+      return ResponseUtils.returnError(exception)
 
-    # productDao = ProductDao()
-    # orderItemDao = OrderItemDao()
+    orderItemDao = OrderItemDao()
+    for orderItem in orderItems:
+      # Get current OrderItem
+      curOrderItem, exception = orderItemDao.getOrderItemByOrderItemId(user, orderItem['order_item_id'])
+      if (exception != None):
+        return ResponseUtils.returnError(exception)
 
-    # # Update original price
-    # product, productException = productDao.getProductByShopSku(user, accountStatement['shop_sku'])
-    # if(productException != None):
-    #   print("Product doesn't exists")
-    # else:
-    #   result = productDao.updateProductPrice(accountStatement)
+      # Recompute earned/income and update
+      commission = curOrderItem['actual_paid_price'] - curOrderItem['earned'] - curOrderItem['original_price']
+      orderItem['earned'] = curOrderItem['actual_paid_price'] - (commission + orderItem['original_price'])
+      exception = orderItemDao.changeOriginalPrice(user, orderItem)
+      if (exception != None):
+        return ResponseUtils.returnError(exception)
 
-    # orderItemDao.updateItemPrice(accountStatement)
-    # # Set OrderItem income:
-  #   # NOTE: Not do set if Product is not found => will calculate again next time
-  #   if (orderItem['earned'] == 0 and getProductException == None):
-    #   exception = orderItemDao.setIncome(user, order['order_id'], data['sku'], incomeOfAnOrderItem)
-  #   if(exception != None):
-  #     exceptions.append({'order_number': order['order_number'], 'reason': exception})
-  #   # Mark Order as Computed
-  #   if (order['calculated'] == 0):
-  #     exception = orderDao.markComputed(user, order['order_id'], accountStatement['id'])
-  #   if (exception != None):
-  #     exceptions.append({'order_number': order['order_number'], 'reason': exception})
+      # Update product's orginal price if its value is Zero
+      if (curOrderItem['original_price'] == 0):
+        productDao = ProductDao()
+        exception = productDao.updateOriginalPriceByShopSku(user, orderItem['shop_sku'], orderItem['original_price'])
+        if (exception != None):
+          return ResponseUtils.returnError(exception)
+
+    # Compute an account statement income
+    income, exception = orderItemDao.getTotalEarningOfAccountStatement(user, accountStatementId)
+    if (exception != None):
+      return ResponseUtils.returnError(exception)
+
+    # Recompute account statment income
+    accountStatementDao = AccountStatementDao()
+    updatedDate = TimestampUtils.getCurrentDatetime()
+    exception = accountStatementDao.update(user, accountStatementId, income, updatedDate)
+    if (exception != None):
+      return ResponseUtils.returnError(exception)
 
     return ResponseUtils.generateSuccessResponse(None)
 
