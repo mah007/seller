@@ -15,14 +15,17 @@ accountStatementExceptionDao = AccountStatementExceptionDao()
 class AppController(object):
 
     def initDatabase(self):
+        # Init tables
         constantDao.createTable()
         accountStatementDao.createTable()
         accountStatementExceptionDao.createTable()
+        # Init default values
+        self.initDefaultConstantValue()
 
     #-----------------------------------------------------------------------------
     # Insert default constant for all user
     #-----------------------------------------------------------------------------
-    def initDefaultValue(self, constantDao):
+    def initDefaultConstantValue(self):
         users = userDao.getAll()
         if (users == None):
             return;
