@@ -110,31 +110,15 @@ var EndpointConfig = function() {
   //----------------------------------------------------------------------------
   // Product section
   //----------------------------------------------------------------------------
-  EndpointConfig.prototype.generateGetAllProduct = function() {
-      return endpointUrl + '/product/get?token=' + $.cookie('token');
+  EndpointConfig.prototype.getProductsUrl = function() {
+      return endpointUrl + '/product/get-products?token=' + $.cookie('token');
   }
 
-  EndpointConfig.prototype.generateUpdateProduct = function() {
-      return endpointUrl + '/product/update?token=' + $.cookie('token');
+  EndpointConfig.prototype.getUpdateProductQuantityAndOriginalPriceUrl = function() {
+      return endpointUrl + '/product/update-quantity-and-orginal-price?token=' + $.cookie('token');
   }
 
-  EndpointConfig.prototype.generateUpdateProduct = function() {
-      return endpointUrl + '/product/update?token=' + $.cookie('token');
-  }
-
-  EndpointConfig.prototype.generateUpdateProduct = function() {
-      return endpointUrl + '/product/update?token=' + $.cookie('token');
-  }
-
-  EndpointConfig.prototype.generateUpdateProductQuantity = function() {
-      return endpointUrl + '/product/update-quantity?token=' + $.cookie('token');
-  }
-
-  EndpointConfig.prototype.generateUpdateProductPrice = function() {
-      return endpointUrl + '/product/update-price?token=' + $.cookie('token');
-  }
-
-  EndpointConfig.prototype.generateSearchProduct = function() {
+  EndpointConfig.prototype.getSearchProductUrl = function() {
       return endpointUrl + '/product/search?token=' + $.cookie('token');
   }
 

@@ -1,14 +1,16 @@
 
 class ExceptionUtils:
 
+  # NOTE: deprecated
   @classmethod
   def error(self, errorMessage):
     return {"error": errorMessage}
-
+  # NOTE: deprecated
   @classmethod
   def success(self, message = None):
     return {"sucess": message}
 
+  # TODO: Will move to another class
   @classmethod
   def returnError(self, message, errorResponse):
     if errorResponse == None:

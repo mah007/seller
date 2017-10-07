@@ -2,7 +2,6 @@ from managers.sku_manager import SkuManager
 from managers.user_manager import UserManager
 from managers.order_manager import OrderManager
 from managers.price_by_time_manager import PriceByTimeManager
-from managers.product_manager import ProductManager
 from controllers.app_controller import AppController
 from apis.sku_api import SkuAPI
 from apis.user_api import UserAPI
@@ -36,12 +35,10 @@ if __name__ == "__main__":
   userManager = UserManager()
   orderManager = OrderManager()
   priceByTimeManager = PriceByTimeManager()
-  productManager = ProductManager()
   skuManager.initialize()
   userManager.initialize()
   orderManager.initialize()
   priceByTimeManager.initialize()
-  productManager.initialize()
 
   # Process Account Statement for test
   # userDao = UserDao()

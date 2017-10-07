@@ -7,7 +7,9 @@ Back-end
 4. check logic and flow of update function of product's orignal price
 5. API valid token utils.
 6. Renaming api end-point => get<FunctionName>Url
+7. Refactor database
 Font-end:
+0. Pagination
 1. Loading
 2. Empty result
 3. Show error

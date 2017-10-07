@@ -2,9 +2,6 @@ from database.database_helper import DatabaseHelper
 from utils.string_utils import StringUtils
 from utils.exception_utils import ExceptionUtils
 
-# ------------------------------------------------------------------------------
-GET_PRODUCT_LIMIT = 10
-
 
 class ProductDao(object):
 
@@ -59,6 +56,50 @@ class ProductDao(object):
             conn.rollback()
             conn.close()
             return '''Insert product exception: {}'''.format(str(ex))
+
+    # --------------------------------------------------------------------------
+    # Get All Product
+    # --------------------------------------------------------------------------
+    def getProducts(self, user):
+        query = '''SELECT *
+                    FROM product
+                    WHERE user_id = '{}'
+                    ORDER BY quantity, original_price ASC
+                    LIMIT 10
+                '''.format(user['id'])
+        try:
+            conn = DatabaseHelper.getConnection()
+            cur = conn.cursor()
+            cur.execute(query)
+
+            products = []
+            rows = cur.fetchall()
+            for row in rows:
+                products.append({
+                    "id": row[0],
+                    "name": row[1],
+                    "url": row[2],
+                    "status": row[3],
+                    "quantity": row[4],
+                    "available_quantity": row[5],
+                    "seller_sku": row[6],
+                    "shop_sku": row[7],
+                    "original_price": row[8],
+                    "special_price": row[9],
+                    "image": row[10],
+                    "width": row[11],
+                    "height": row[12],
+                    "weight": row[13],
+                    "brand": row[14],
+                    "model": row[15],
+                    "primary_category": row[16],
+                    "spu_id": row[17]
+                })
+
+            conn.close()
+            return products, None
+        except Exception as ex:
+            return None, '''Get products exception: {}'''.format(str(ex))
 
     # --------------------------------------------------------------------------
     # Get Product by seller SKU
@@ -153,95 +194,22 @@ class ProductDao(object):
             return None, errorMessage
 
     # --------------------------------------------------------------------------
-    # Get All Product
-    # TODO: Need to refactor
-    # --------------------------------------------------------------------------
-    def getProducts(self, user):
-        query = '''SELECT *
-                    from product
-                    WHERE user_id = '{}'
-                    ORDER BY quantity, original_price
-                    ASC LIMIT {}
-                '''.format(user['id'], GET_PRODUCT_LIMIT)
-        try:
-            conn = DatabaseHelper.getConnection()
-            cur = conn.cursor()
-            cur.execute(query)
-
-            products = []
-            rows = cur.fetchall()
-            for row in rows:
-                products.append({
-                    "id": row[0],
-                    "name": row[1],
-                    "url": row[2],
-                    "status": row[3],
-                    "quantity": row[4],
-                    "available_quantity": row[5],
-                    "seller_sku": row[6],
-                    "shop_sku": row[7],
-                    "original_price": row[8],
-                    "special_price": row[9],
-                    "image": row[10],
-                    "width": row[11],
-                    "height": row[12],
-                    "weight": row[13],
-                    "brand": row[14],
-                    "model": row[15],
-                    "primary_category": row[16],
-                    "spu_id": row[17]
-                })
-
-            conn.close()
-            return products
-        except Exception as ex:
-            return ExceptionUtils.error('''Get products exception: {}'''.format(str(ex)))
-
-    # --------------------------------------------------------------------------
     # Update Product (contain quantity and price)
-    # TODO: need to refactor
     # --------------------------------------------------------------------------
-    def updateProduct(self, product):
+    def updateQuantityAndOrginalPrice(self, productId, quantity, orginalPrice):
         query = '''UPDATE product
-                    set quantity = '{}', original_price = '{}'
+                    SET quantity = '{}', original_price = '{}'
                     WHERE id = '{}'
-                '''.format(product['quantity'], product['price'], product['id'])
+                '''.format(quantity, orginalPrice, productId)
         try:
-            DatabaseHelper.execute(query)
-            return ExceptionUtils.success()
+            isSuccess, exception = DatabaseHelper.execute(query)
+            return exception # Exception will be null if success
         except Exception as ex:
-            return ExceptionUtils.error('''Update product got exception: {}'''.format(str(ex)))
+            return '''Update product got exception: {}'''.format(str(ex))
 
     # --------------------------------------------------------------------------
-    # Update Product Quantity
-    # TODO: need to refactor
+    # Update Product's Original Price
     # --------------------------------------------------------------------------
-    def updateProductQuantity(self, product):
-        query = '''UPDATE product
-                    set quantity = '{}'
-                    WHERE id = '{}'
-                '''.format(product['quantity'], product['id'])
-        try:
-            DatabaseHelper.execute(query)
-            return ExceptionUtils.success()
-        except Exception as ex:
-            return ExceptionUtils.error('''Update product's quantity got exception: {}'''.format(str(ex)))
-
-    # --------------------------------------------------------------------------
-    # Update Product Price
-    # TODO: need to refactor
-    # --------------------------------------------------------------------------
-    def updateProductPrice(self, product):
-        query = '''UPDATE product
-                    set original_price = '{}'
-                    WHERE id = '{}'
-                '''.format(product['price'], product['id'])
-        try:
-            DatabaseHelper.execute(query)
-            return ExceptionUtils.success()
-        except Exception as ex:
-            return ExceptionUtils.error('''Update product's price got exception: {}'''.format(str(ex)))
-
     def updateOriginalPriceByShopSku(self, user, shopSku, orginalPrice):
         query = '''UPDATE product
                     set original_price = '{}'
@@ -252,7 +220,6 @@ class ProductDao(object):
             return exception
         except Exception as ex:
             return '''Update product's price got exception: {}'''.format(str(ex))
-
 
     # --------------------------------------------------------------------------
     # Check Product exsits
@@ -312,6 +279,7 @@ class ProductDao(object):
                     WHERE (name LIKE '%{}%' OR seller_sku LIKE '%{}%'
                             OR shop_sku LIKE '%{}%' OR brand LIKE '%{}%'
                             OR model LIKE '%{}%') AND user_id = '{}'
+                    LIMIT 20
                 '''.format(searchKey, searchKey, searchKey, searchKey, searchKey, user['id'])
         try:
             conn = DatabaseHelper.getConnection()
@@ -345,7 +313,7 @@ class ProductDao(object):
             conn.close()
             return (products, None)
         except Exception as ex:
-            return (None, ExceptionUtils.error('''Get products exception: {}'''.format(str(ex))))
+            return (None, '''Search products exception: {}'''.format(str(ex)))
 
 
 

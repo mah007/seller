@@ -3,7 +3,7 @@ import simplejson as json
 from flask_cors import CORS, cross_origin
 from flask import Blueprint, render_template, abort, request, make_response, jsonify
 from managers.sku_manager import SkuManager
-from managers.product_manager import ProductManager
+from controllers.product.product_controller import ProductController
 
 SkuAPI = Blueprint('sku_api', __name__, template_folder='apis')
 
@@ -193,8 +193,8 @@ def searchProduct():
 
   searchKey = request.json['search_key']
   token = request.args.get('token')
-  productManager = ProductManager()
-  result = productManager.searchProduct(token, searchKey)
+  productCtrl = ProductController()
+  result = productCtrl.searchProduct(token, searchKey)
   if 'success' in result:
     return make_response(jsonify(result), 201)
   else:

@@ -3,12 +3,12 @@ var cookie = new CookieConfig();
 var additional = new Additional();
 
 jQuery(document).ready(function() {
-
     // Validate Token
     if (!cookie.validateLocalToken()) {
         window.location.href = "../login";
     }
-
+    // Load menu left
+    $("#menuContent").load("../menuleft.html");
     // Fill user name
     if (cookie.getUsername() === undefined) {
         $('#username-on-header').html("User info");
@@ -16,85 +16,81 @@ jQuery(document).ready(function() {
         $('#username-on-header').html(cookie.getUsername());
     }
 
-    // Load menu left
-    $("#menuContent").load("../menuleft.html");
     // Init data
     getAndFillOutProduct();
-
-    if ($('.btnUpdate').length > 0) {
-        $(".btnUpdate").click(function() {
-            var body = document.getElementById("tbody_product");
-            var length = body.rows.length;
-
-            for (var i = 0; i < length; i += 1) {
-                var row = body.rows[i];
-
-                var id = $(row).data("id");
-                var oriQuantity = $(row).data("quantity");
-                var oriPrice = $(row).data("price");
-
-                var quantity = row.cells[3].children[0].value.replace(/\,/g, '');
-                var price = row.cells[4].children[0].value.replace(/\,/g, '');
-
-                if (oriQuantity != quantity && oriPrice != price) {
-                    updateProduct(quantity, price, id);
-                } else if (oriPrice != price) {
-                    updateProductPrice(price, id);
-                } else if (oriQuantity != quantity) {
-                    updateProductQuantity(quantity, id);
-                }
-            }
-        });
-    }
-
-    $('#search').on('keydown', function(e) {
-        if (e.which == 13) {
-            $('#btnsearch').trigger('click');
-        }
-    });
-
-    //------------------------------------------------------------------------------
-    // Search products and fill out products into product template
-    //------------------------------------------------------------------------------
-    $("#btnsearch").click(function() {
-        clearErrorLog();
-        var searchKey = $('input[name=search_key]').val();
-        if (searchKey == '' || searchKey == null) {
-            return;
-        }
-        var temp = searchKey.replace(/\ /g, "");
-        if (temp == '' || temp == null) {
-            return;
-        }
-
-        $.ajax({
-            method: 'POST',
-            url: endpoint.generateSearchProduct(),
-            async: false,
-            contentType: "application/json",
-            data: JSON.stringify({
-                search_key: searchKey
-            }),
-            success: function(data) {
-                console.log(data.data);
-                $('#tbody_product').empty();
-                var template = $("#product-content-template").html();
-                var contentHtml = Handlebars.compile(template);
-                $("#tbody_product").html(contentHtml(data));
-                $('input[name=search_key]').val("");
-                additional.initMoneyInput();
-            },
-            error: function(error) {
-                console.log(error);
-            }
-        });
-    });
-
 });
 
 function clearErrorLog() {
     $("#errorLog").html("");
 }
+
+
+//------------------------------------------------------------------------------
+// Search products and fill out products into product template
+//------------------------------------------------------------------------------
+$(".btnUpdate").click(function() {
+    var body = document.getElementById("tbody_product");
+    var length = body.rows.length;
+
+    for (var i = 0; i < length; i += 1) {
+        var row = body.rows[i];
+
+        var id = $(row).data("id");
+        var oriQuantity = $(row).data("quantity");
+        var oriPrice = $(row).data("price");
+
+        var quantity = row.cells[3].children[0].value.replace(/\,/g, '');
+        var price = row.cells[4].children[0].value.replace(/\,/g, '');
+
+        if (oriQuantity != quantity && oriPrice != price) {
+            updateProduct(quantity, price, id);
+        } else if (oriPrice != price) {
+            updateProductPrice(price, id);
+        } else if (oriQuantity != quantity) {
+            updateProductQuantity(quantity, id);
+        }
+    }
+});
+
+$('#search').on('keydown', function(e) {
+    if (e.which == 13) {
+        $('#btnsearch').trigger('click');
+    }
+});
+
+$("#btnsearch").click(function() {
+    clearErrorLog();
+    var searchKey = $('input[name=search_key]').val();
+    if (searchKey == '' || searchKey == null) {
+        return;
+    }
+    var temp = searchKey.replace(/\ /g, "");
+    if (temp == '' || temp == null) {
+        return;
+    }
+
+    $.ajax({
+        method: 'POST',
+        url: endpoint.getSearchProductUrl(),
+        async: false,
+        contentType: "application/json",
+        data: JSON.stringify({
+            search_key: searchKey
+        }),
+        success: function(data) {
+            console.log(data.data);
+            $('#tbody_product').empty();
+            var template = $("#product-content-template").html();
+            var contentHtml = Handlebars.compile(template);
+            $("#tbody_product").html(contentHtml(data));
+            $('input[name=search_key]').val("");
+            additional.initMoneyInput();
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+});
 
 //-------------------------------------------------------------------------------------
 // Update product for new quantity and new price
@@ -186,7 +182,7 @@ function updateProductQuantity(quantity, id) {
 function getAndFillOutProduct() {
     $.ajax({
         method: 'GET',
-        url: endpoint.generateGetAllProduct(),
+        url: endpoint.getProductsUrl(),
         contentType: "application/json",
         success: function(data) {
             console.log(data.data);

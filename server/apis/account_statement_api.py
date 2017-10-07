@@ -21,8 +21,8 @@ def getAllAccountStatement():
 	if token == None or token == "":
 		return make_response(jsonify({'error': 'Missing token parameter'}), 404)
 
-	accountStatmentCtr = AccountStatementController()
-	data = accountStatmentCtr.getAllAccountStatement(token)
+	accountStatmentCtrl = AccountStatementController()
+	data = accountStatmentCtrl.getAllAccountStatement(token)
 	if 'error' in data:
 		return make_response(jsonify(data), 404)
 	else:
@@ -45,8 +45,8 @@ def getAccountStatementInfo():
 		return make_response(jsonify({'error': 'Missing json parameter value'}), 404)
 
 	accountStatementId = request.json['account_statement_id']
-	accountStatmentCtr = AccountStatementController()
-	data = accountStatmentCtr.getAccountStatementInfo(token, accountStatementId)
+	accountStatmentCtrl = AccountStatementController()
+	data = accountStatmentCtrl.getAccountStatementInfo(token, accountStatementId)
 	if 'error' in data:
 		return make_response(jsonify(data), 404)
 	else:
@@ -71,8 +71,8 @@ def updateAccountStatement():
 
 	orderItems = request.json['order_items']
 	accountStatementId = request.json['account_statement_id']
-	accountStatmentCtr = AccountStatementController()
-	result = accountStatmentCtr.changeOriginPrice(token, orderItems, accountStatementId)
+	accountStatmentCtrl = AccountStatementController()
+	result = accountStatmentCtrl.changeOriginPrice(token, orderItems, accountStatementId)
 	if 'error' in result:
 		return make_response(jsonify(result), 404)
 	else:
