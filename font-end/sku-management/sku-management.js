@@ -15,8 +15,8 @@ jQuery(document).ready(function() {
         $('#username-on-header').html(cookie.getUsername());
     }
 
-    // Load menu left
-    $("#menuContent").load("../menuleft.html");
+    // Load header
+    $("#header_content").load("../header.html");
 
     // Init data
     getAndFillOutAllSku();

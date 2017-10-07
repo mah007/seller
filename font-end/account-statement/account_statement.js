@@ -12,8 +12,6 @@ jQuery(document).ready(function() {
     }
     // Load header
     $("#header_content").load("../header.html");
-    // Load menu left
-    $("#menu_content").load("../menuleft.html");
 
     // Fill Account statement data
     getAndFillOutAllAccountStatement();

@@ -17,7 +17,8 @@ jQuery(document).ready(function() {
     }
 
     // Load menu left
-    $("#menuContent").load("../menuleft.html");
+    // $("#menuContent").load("../menuleft.html");
+    $("#header_content").load("../header.html");
 
     if ($('.btnrefresh').length > 0) {
         $(".btnrefresh").click(function() {

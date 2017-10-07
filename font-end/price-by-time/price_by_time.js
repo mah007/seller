@@ -17,7 +17,7 @@ jQuery(document).ready(function() {
     }
 
     // Load menu left
-    $("#menuContent").load("../menuleft.html");
+    $("#header_content").load("../header.html");
 
     // Init data
     getAndFillOutAllPriceByTime();

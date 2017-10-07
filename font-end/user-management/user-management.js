@@ -4,33 +4,33 @@ var cookie = new CookieConfig();
 jQuery(document).ready(function() {
 
     // Validate Token
-    if (!cookie.validateLocalToken()) {
-        window.location.href = "../login";
-    }
+    // if (!cookie.validateLocalToken()) {
+    //     window.location.href = "../login";
+    // }
 
-    // Fill user name
-    if (cookie.getUsername() === undefined) {
-        $('#username-on-header').html("User info");
-    } else {
-        $('#username-on-header').html(cookie.getUsername());
-    }
+    // // Fill user name
+    // if (cookie.getUsername() === undefined) {
+    //     $('#username-on-header').html("User info");
+    // } else {
+    //     $('#username-on-header').html(cookie.getUsername());
+    // }
 
-    // Load menu left
-    $("#menuContent").load("../menuleft.html");
+    // Load header
+    $("#header_content").load("../header.html");
 
     // Init data
-    getAndFillOutAllUser();
+    // getAndFillOutAllUser();
 
-    if($('.btnnew').length > 0) {
-        $(".btnnew").click(function() {
-            $('#portlet-user .modal-title').html('Thêm mới');
-            $('#portlet-user').data('type', "insert");
-            $('input[name=txt_id').prop('disabled', true);
-            $('input[name=txt_username]').prop('disabled', false);
-            $('#portlet-user').modal('show');
+    // if($('.btnnew').length > 0) {
+    //     $(".btnnew").click(function() {
+    //         $('#portlet-user .modal-title').html('Thêm mới');
+    //         $('#portlet-user').data('type', "insert");
+    //         $('input[name=txt_id').prop('disabled', true);
+    //         $('input[name=txt_username]').prop('disabled', false);
+    //         $('#portlet-user').modal('show');
 
-        });
-    }
+    //     });
+    // }
 
 });
 function enableSwitchery() {
