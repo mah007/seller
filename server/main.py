@@ -9,6 +9,7 @@ from apis.order_api import OrderAPI
 from apis.price_by_time_api import PriceByTimeAPI
 from apis.product_api import ProductAPI
 from apis.account_statement_api import AccountStatementAPI
+from apis.shop_api import ShopAPI
 from flask import Flask, jsonify, request, make_response
 from flask_cors import CORS, cross_origin
 
@@ -26,6 +27,7 @@ app.register_blueprint(OrderAPI)
 app.register_blueprint(PriceByTimeAPI)
 app.register_blueprint(ProductAPI)
 app.register_blueprint(AccountStatementAPI)
+app.register_blueprint(ShopAPI)
 
 if __name__ == "__main__":
   appController = AppController()
