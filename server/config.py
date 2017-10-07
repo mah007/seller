@@ -63,7 +63,8 @@ class AccountStatementConfig(object):
     SCROLL_PAUSE_TIME = 1.0
 
 
-
+class ShopConfig(object):
+    STATE_PROCESSING = "processing"
 
 
 

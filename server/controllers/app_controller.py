@@ -1,4 +1,5 @@
 from database.user_dao import UserDao
+from database.shop_dao import ShopDao
 from database.product_dao import ProductDao
 from database.constant_dao import ConstantDao
 from database.account_statement_dao import AccountStatementDao
@@ -8,6 +9,7 @@ from utils.lazada_api_helper import LazadaApiHelper
 
 # Database instances
 userDao = UserDao()
+shopDao = ShopDao()
 prroductDao = ProductDao()
 constantDao = ConstantDao()
 accountStatementDao = AccountStatementDao()
@@ -18,6 +20,7 @@ class AppController(object):
 
     def initDatabase(self):
         # Init tables
+        shopDao.createTable()
         prroductDao.createTable()
         constantDao.createTable()
         accountStatementDao.createTable()
