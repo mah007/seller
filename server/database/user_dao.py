@@ -145,26 +145,21 @@ class UserDao(object):
             users = []
             rows = cur.fetchall()
             for row in rows:
-                role = "User"
-                if (row[9] == 1):
-                    role = "Admin"
                 users.append({
-                        "id": row[0],
-                        "username": row[1],
-                        "password": row[2],
-                        "lazada_user_name": row[4],
-                        "lazada_user_id": row[5],
-                        "lazada_api_key": row[6],
-                        "role": role,
-                        "certain_size": row[10]
+                    "id": row[0],
+                    "username": row[1],
+                    "password": row[2],
+                    "lazada_user_name": row[4],
+                    "lazada_user_id": row[5],
+                    "lazada_api_key": row[6],
+                    "role": "Admin" if row[9] == 1 else "User",
+                    "certain_size": row[10]
                 })
 
             conn.close()
             return users
         except Exception as ex:
-            print(ex)
             return None
-
 
     # --------------------------------------------------------------------------
     # Supported user login

@@ -4,7 +4,6 @@ from flask_cors import CORS, cross_origin
 from flask import Blueprint, render_template, abort, request, make_response, jsonify
 from lazada_api.lazada_order_api import LazadaOrderApi
 from managers.order_manager import OrderManager
-from managers.constant_manager import ConstantManager
 
 OrderAPI = Blueprint('order_api', __name__, template_folder='apis')
 
@@ -116,7 +115,6 @@ def updateOrderState():
 	order = {
 		"id": request.json['id'],
 	}
-
 	orderManager = OrderManager()
 	result = orderManager.updateOrderState(order, request.args.get('token'))
 
@@ -124,8 +122,6 @@ def updateOrderState():
 		return make_response(jsonify({"success": "done"}))
 	else:
 		return make_response(jsonify(result))
-
-
 
 # ------------------------------------------------------------------------------
 # Set order status to ready-to-ship
@@ -147,33 +143,12 @@ def setStatusToReadyToShip():
 
 	orderItemIds = request.json['orderItemIds']
 	shippingProvider = request.json['shippingProvider']
-
 	orderManager = OrderManager()
 	result = orderManager.setStatusToReadyToShip(token, orderItemIds, shippingProvider)
 	if 'success' in result:
 		return make_response(jsonify(result), 201)
 	else:
 		return make_response(jsonify(result), 404)
-
-@OrderAPI.route('/order/refresh-failed-orders', methods=['GET'])
-@cross_origin()
-def refreshFailedOrderWithAllUser():
-	if not request.args:
-		return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
-	if not request.json:
-		return make_response(jsonify({'error': 'Missing json parameters value'}), 404)
-
-	orderManager = OrderManager()
-	userManager = UserManager()
-	constantManager = ConstantManager()
-
-	users = userManager.getAllUser(request.args.get('token'))
-	for user in users:
-		constant = constantManager.getConstantWithUserId(user['user_id'])
-		orderManager.insertOrderFromLazadaWithOneUser(user, constant)
-
-	result = orderManager.getAllFailedOrders()
-	return make_response(jsonify(result))
 
 
 

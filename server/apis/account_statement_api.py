@@ -2,7 +2,7 @@ import time
 import simplejson as json
 from flask_cors import CORS, cross_origin
 from flask import Blueprint, render_template, abort, request, make_response, jsonify
-from controllers.accountstatement.account_statement_controller import AccountStatementController
+from controllers.finance.account_statement_controller import AccountStatementController
 
 
 AccountStatementAPI = Blueprint('account_statement_api', __name__, template_folder='apis')
