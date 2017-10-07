@@ -122,6 +122,10 @@ var EndpointConfig = function() {
       return endpointUrl + '/product/search?token=' + $.cookie('token');
   }
 
+  EndpointConfig.prototype.getTopSellingProductUrl = function() {
+      return endpointUrl + '/product/top-selling-products?token=' + $.cookie('token');
+  }
+
   //----------------------------------------------------------------------------
   // Price by time section
   //----------------------------------------------------------------------------

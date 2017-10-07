@@ -83,6 +83,27 @@ def searchProduct():
   else:
     return make_response(jsonify(result), 404)
 
+# ------------------------------------------------------------------------------
+# Search Product by name, seller sku, shop sku, brand and model
+# ------------------------------------------------------------------------------
+@ProductAPI.route('/product/top-selling-products', methods=['GET'])
+@cross_origin()
+def getTopSellingProducts():
+  if not request.args:
+  	return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
+  if not 'token' in request.args:
+  	return make_response(jsonify({'error': 'Missing token parameter value'}), 404)
+  token = request.args.get('token')
+  if (StringUtils.isEmpty(token)):
+  	return make_response(jsonify({'error': 'Missing token parameter'}), 404)
+
+  productCtrl = ProductController()
+  result = productCtrl.getTopSellingProducts(token)
+  if 'success' in result:
+    return make_response(jsonify(result), 201)
+  else:
+    return make_response(jsonify(result), 404)
+
 
 
 

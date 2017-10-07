@@ -315,6 +315,59 @@ class ProductDao(object):
         except Exception as ex:
             return (None, '''Search products exception: {}'''.format(str(ex)))
 
+    # --------------------------------------------------------------------------
+    # Get top selling products
+    # --------------------------------------------------------------------------
+    def getTopSellingProducts(self, user):
+        query = '''SELECT * FROM product INNER JOIN
+                        (SELECT shop_sku, COUNT(shop_sku) AS soluong FROM order_item
+                        GROUP BY shop_sku) top_order
+                    ON product.shop_sku = top_order.shop_sku
+                    WHERE product.user_id = {}
+                    ORDER BY top_order.soluong DESC
+                    LIMIT 100
+                '''.format(user['id'])
+        try:
+            conn = DatabaseHelper.getConnection()
+            cur = conn.cursor()
+            cur.execute(query)
+
+            products = []
+            rows = cur.fetchall()
+            for row in rows:
+                products.append({
+                    "id": row[0],
+                    "name": row[1],
+                    "url": row[2],
+                    "status": row[3],
+                    "quantity": row[4],
+                    "available_quantity": row[5],
+                    "seller_sku": row[6],
+                    "shop_sku": row[7],
+                    "original_price": row[8],
+                    "special_price": row[9],
+                    "image": row[10],
+                    "width": row[11],
+                    "height": row[12],
+                    "weight": row[13],
+                    "brand": row[14],
+                    "model": row[15],
+                    "primary_category": row[16],
+                    "spu_id": row[17]
+                })
+
+            conn.close()
+            return (products, None)
+        except Exception as ex:
+            return (None, '''Search products exception: {}'''.format(str(ex)))
+
+
+
+
+
+
+
+
 
 
 

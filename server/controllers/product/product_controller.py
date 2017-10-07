@@ -53,6 +53,21 @@ class ProductController(object):
         else:
             return ResponseUtils.returnSuccess(result)
 
+    #---------------------------------------------------------------------------
+    # Get top selling products
+    #---------------------------------------------------------------------------
+    def getTopSellingProducts(self, token):
+        user, exception = Validation.validateToken(token)
+        if (exception != None):
+            return ResponseUtils.returnError(exception)
+
+        productDao = ProductDao()
+        result, exception = productDao.getTopSellingProducts(user)
+        if exception != None:
+            return ResponseUtils.returnError(exception)
+        else:
+            return ResponseUtils.returnSuccess(result)
+
 
 
 

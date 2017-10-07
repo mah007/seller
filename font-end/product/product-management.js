@@ -24,9 +24,29 @@ function clearErrorLog() {
     $("#errorLog").html("");
 }
 
+//------------------------------------------------------------------------------
+// Get top selling products
+//------------------------------------------------------------------------------
+$("#btnGetTopSellingProducts").click(function() {
+    $.ajax({
+        method: 'GET',
+        url: endpoint.getTopSellingProductUrl(),
+        contentType: "application/json",
+        success: function(data) {
+            $('#tbody_product').empty();
+            var template = $("#product-content-template").html();
+            var contentHtml = Handlebars.compile(template);
+            $("#tbody_product").html(contentHtml(data));
+            additional.initMoneyInput();
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+})
 
 //------------------------------------------------------------------------------
-// Search products and fill out products into product template
+// Update product quantity and original price
 //------------------------------------------------------------------------------
 $(".btnUpdate").click(function() {
     var body = document.getElementById("tbody_product");
@@ -52,6 +72,9 @@ $(".btnUpdate").click(function() {
     }
 });
 
+//------------------------------------------------------------------------------
+// Search products and fill out products into product template
+//------------------------------------------------------------------------------
 $('#search').on('keydown', function(e) {
     if (e.which == 13) {
         $('#btnsearch').trigger('click');
@@ -200,6 +223,22 @@ function getAndFillOutProduct() {
 function focusSearchInput() {
     $('input[name=search_key]').focus();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
