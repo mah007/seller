@@ -30,17 +30,17 @@ app.register_blueprint(AccountStatementAPI)
 app.register_blueprint(ShopAPI)
 
 if __name__ == "__main__":
-  # appController = AppController()
-  # appController.initDatabase()
+  appController = AppController()
+  appController.initDatabase()
 
-  # skuManager = SkuManager()
-  # userManager = UserManager()
-  # orderManager = OrderManager()
-  # priceByTimeManager = PriceByTimeManager()
-  # skuManager.initialize()
-  # userManager.initialize()
-  # orderManager.initialize()
-  # priceByTimeManager.initialize()
+  skuManager = SkuManager()
+  userManager = UserManager()
+  orderManager = OrderManager()
+  priceByTimeManager = PriceByTimeManager()
+  skuManager.initialize()
+  userManager.initialize()
+  orderManager.initialize()
+  priceByTimeManager.initialize()
 
   # Process Account Statement for test
   # userDao = UserDao()
