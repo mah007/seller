@@ -22,7 +22,6 @@
 .topnav {
   overflow: hidden;
   background-color: #e1e1ea;
-  /*margin: 0px 20px 0px 20px;*/
 }
 
 .topnav a {
@@ -31,9 +30,9 @@
   color: #f2f2f2;
   text-align: center;
   padding: 15px;
-  width: 14.25%;
+  width: 14.28%;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 10pt;
   text-decoration-color: black;
 }
 
