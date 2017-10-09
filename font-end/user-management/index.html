@@ -48,7 +48,7 @@
     <div id="header_content">
     </div>
     <div class="clearfix top-space"></div>
-    <div class="page-container" style="margin:120px 10% 0 10%; width: 80%;">
+    <div class="page-container">
         <div class="page-content-wrapper" style="padding-top: 20px;">
             <!-- BEGIN MODAL FORM: Update or Insert user -->
             <div class="modal fade" id="portlet-user" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -232,6 +232,7 @@
     <!-- END JAVASCRIPTS -->
     <script src="../js/additional.js" type="text/javascript"></script>
     <script src="../user-management/user-management.js" type="text/javascript"></script>
+    <!-- Templates -->
     <script id="user-content-template" type="text/x-handlebars-template">
         {{#each data}}
         <tr data-id="{{id}}" data-user_name={{username}} data-password={{password}} data-lazada_user_name={{lazada_user_name}} data-lazada_user_id={{lazada_user_id}} data-lazada_api_key={{lazada_api_key}} data-role={{role}}, data-certain_size={{certain_size}}>

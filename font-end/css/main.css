@@ -1,15 +1,33 @@
+.header-container {
+  width: 100%;
+  position: relative;
+}
+.header-container .page-header {
+  position: relative;
+}
+.page-header-inner {
+  position: relative;
+  align-content: center;
+  text-align: center;
+  line-height: 5;
+  margin: 0px 25px;
+}
+
+/******************************************************************************/
+/* General */
+/******************************************************************************/
 .float-left {
   float: left;
 }
 .margin-left-15px {
-
+  margin-left: 15px;
 }
 .margin-right-15px {
   margin-right: 15px;
 }
 
 /******************************************************************************/
-// Font
+/* Font */
 /******************************************************************************/
 .font-medium {
   font-size: 1.5rem;
@@ -19,41 +37,47 @@
   font-weight: bold;
 }
 
+/******************************************************************************/
+/* Top navigation */
+/******************************************************************************/
 .topnav {
   overflow: hidden;
-  background-color: #e1e1ea;
+  background-color: #ffffff;
 }
-
+.top-navigation-content {
+  width: 80%;
+  margin: auto;
+}
 .topnav a {
   float: left;
   display: block;
-  color: #f2f2f2;
+  color: #ffffff;
   text-align: center;
-  padding: 15px;
-  width: 14.28%;
+  padding: 10px;
+  width: 150px;
   text-decoration: none;
-  font-size: 10pt;
+  font-size: 9pt;
   text-decoration-color: black;
 }
-
 .topnav span {
   color: black;
 }
-
 .topnav a:hover {
   background-color: #ddd;
   color: black;
 }
-
 .topnav a.active {
-    background-color: #4CAF50;
+    background-color: #89C4F4;
     color: white;
+}
+.topnav a.active span {
+  color: white;
 }
 
 /******************************************************************************/
-// Alignment
+/* Alignment */
 /******************************************************************************/
-// .text-align-right {
+/* // .text-align-right {
 //   text-align: right;
 // }
 // .text-align-left {
@@ -65,4 +89,4 @@
 // }
 // .ul-left li, .ul-right li {
 //   padding: 10px 0px;
-// }
+// } */

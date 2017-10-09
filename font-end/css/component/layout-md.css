@@ -74,8 +74,6 @@ Page Header
     .page-header.navbar .page-logo > a {
       display: block;
       float: left; }
-    .page-header.navbar .page-logo .logo-default {
-      margin: 29px 10px 0 10px; }
     .page-header.navbar .page-logo .logo-mini {
       display: none;
       margin-left: 5px; }
@@ -150,7 +148,6 @@ Page Header
     padding: 0; }
     .page-header.navbar .top-menu .navbar-nav {
       padding: 0;
-      margin-right: 20px;
       display: block;
       /* Extended Dropdowns */
       /* Notification */
@@ -618,8 +615,9 @@ Pace - Page Progress
 Page container
 ***/
 .page-container {
-  margin: 0px;
-  padding: 20px 20px 0 20px;
+  width: 80%;
+  margin: auto;
+  padding: 20px 0px 0 0px;
   position: relative;
   /* Fixed header */
   /* Fixed footer for mobile */ }

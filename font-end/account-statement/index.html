@@ -36,85 +36,87 @@
 </head>
 
 <body>
-    <div id="header_content">
-
-    </div>
-    <div class="clearfix top-space"></div>
+    <div class="header-container" id="header_content"></div>
     <!-- BEGIN CONTAINER -->
-    <div class="page-container" style="margin:100px 10% 0 10%; width: 80%;">
+    <div class="page-container">
         <!-- BEGIN CONTENT -->
         <div class="page-content-wrapper" style="padding-top: 30px;">
-                <!-- BEGIN CONTENT -->
-                <div class="row">
-                    <div class="col-md-4 div-title-content">
-                        <h3 class="h3-title">Sao kê tài khoản</h3> </div>
-                    <div class="col-md-12">
-                        <div class="account-statement-info">
-                            <div class="col-md-3 font-medium">
-                                <span>Ngày tháng: </span>
-                                <select id="account_statement_datetime">
-                                    <!-- Fill datetime into here -->
-                                </select>
-                            </div>
-                            <div class="col-md-3 font-medium">
-                                <span>Doanh thu: </span> <span class="font-medium-bold" id="sales_revenue">24,2424.00 VND</span>
-                            </div>
-                            <div class="col-md-3 font-medium">
-                                <span>Lợi nhuận: </span> <span class="font-medium-bold" id="income">24,2424.00 VND</span>
-                            </div>
-                            <div class="col-md-3 font-medium">
-                                <span class="float-left margin-right-15px">Ẩn đơn hàng lỗi: </span>
-                                <input class="float-left" id="checkbox_statement_errors" type="checkbox">
-                            </div>
+            <!-- BEGIN CONTENT -->
+            <div class="row">
+                <div class="col-md-4 div-title-content">
+                    <h3 class="h3-title">Sao kê tài khoản</h3>
+                </div>
+                <div class="col-md-12">
+                    <div class="account-statement-info">
+                        <div class="col-md-3 font-medium">
+                            <span>Ngày tháng: </span>
+                            <select id="account_statement_datetime">
+                                <!-- Fill datetime into here -->
+                            </select>
+                        </div>
+                        <div class="col-md-3 font-medium">
+                            <span>Doanh thu: </span>
+                            <span class="font-medium-bold" id="sales_revenue">24,2424.00 VND</span>
+                        </div>
+                        <div class="col-md-3 font-medium">
+                            <span>Lợi nhuận: </span>
+                            <span class="font-medium-bold" id="income">24,2424.00 VND</span>
+                        </div>
+                        <div class="col-md-3 font-medium">
+                            <span class="float-left margin-right-15px">Ẩn đơn hàng lỗi: </span>
+                            <input class="float-left" id="checkbox_statement_errors" type="checkbox">
                         </div>
                     </div>
                 </div>
-                <div class="row" id="account_statement_error">
-                    <div class="col-md-4 div-title-content">
-                        <h3 class="h3-title">Đơn hàng bị lỗi</h3> </div>
-                    <div class="col-md-12">
-                        <div class="table-scrollable">
-                            <table id="table_exception" class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th style="text-align: center; width: 25%;">Order number</th>
-                                        <th style="text-align: center; width: 75%;">Exception</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tbody_exception">
-                                    <!-- WILL BE LILL DATA IN HERE -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+            </div>
+            <div class="row" id="account_statement_error">
+                <div class="col-md-4 div-title-content">
+                    <h3 class="h3-title">Đơn hàng bị lỗi</h3>
                 </div>
-                <br>
-                <div class="row">
-                    <div class="col-md-4">
-                        <h3 class="h3-title default-margin">Sản phẩm bán được</h3> </div>
-                    <div class="col-md-8" style="text-align: right">
-                        <button class="btn green btnUpdate">Update</button>
-                    </div>
-                    <div class="account-statement-order-item">
-                        <table id="table_account_statement" class="table table-hover table-default">
+                <div class="col-md-12">
+                    <div class="table-scrollable">
+                        <table id="table_exception" class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th style="vertical-align:top;" class="text-left">Image</th>
-                                    <th style="vertical-align:top;" class="text-left">Name</th>
-                                    <th style="vertical-align:top;" class="text-left">Sku</th>
-                                    <th style="vertical-align:top;width: 120px;" class="text-left">Tiền lời</th>
-                                    <th style="vertical-align:top; width: 120px" class="text-left">Giá bán</th>
-                                    <th style="vertical-align:top; width: 120px;" class="text-left">Giá nhập</th>
+                                    <th style="text-align: center; width: 25%;">Order number</th>
+                                    <th style="text-align: center; width: 75%;">Exception</th>
                                 </tr>
                             </thead>
-                            <tbody id="tbody_order_items">
-                                <!-- WILL BE FILL DATA IN HERE -->
+                            <tbody id="tbody_exception">
+                                <!-- WILL BE LILL DATA IN HERE -->
                             </tbody>
                         </table>
                     </div>
-                    <br>
                 </div>
-                <!-- END ADD NEW -->
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-4">
+                    <h3 class="h3-title default-margin">Sản phẩm bán được</h3>
+                </div>
+                <div class="col-md-8" style="text-align: right">
+                    <button class="btn green btnUpdate">Update</button>
+                </div>
+                <div class="account-statement-order-item">
+                    <table id="table_account_statement" class="table table-hover table-default">
+                        <thead>
+                            <tr>
+                                <th style="vertical-align:top;" class="text-left">Image</th>
+                                <th style="vertical-align:top;" class="text-left">Name</th>
+                                <th style="vertical-align:top;" class="text-left">Sku</th>
+                                <th style="vertical-align:top;width: 120px;" class="text-left">Tiền lời</th>
+                                <th style="vertical-align:top; width: 120px" class="text-left">Giá bán</th>
+                                <th style="vertical-align:top; width: 120px;" class="text-left">Giá nhập</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody_order_items">
+                            <!-- WILL BE FILL DATA IN HERE -->
+                        </tbody>
+                    </table>
+                </div>
+                <br>
+            </div>
+            <!-- END ADD NEW -->
             <!-- END CONTENT -->
         </div>
     </div>
@@ -152,38 +154,41 @@
     <script src="../js/endpointConfig.js" type="text/javascript"></script>
     <script src="../js/handlebarConfig.js" type="text/javascript"></script>
     <!-- PRICE BY TIME JAVASCRIPTS -->
-    <script src="../account-
-statement/account_statement.js" type="text/javascript"></script>
+    <script src="../account-statement/account_statement.js" type="text/javascript"></script>
     <!-- Templates -->
-    <script id="product-template" type="text/x-handlebars-
-template"> {{#each orderItems}}
-        <tr data-order-id={{order_id}} data-order-item-id={{order_item_id}} data-shop-sku={{shop_sku}} data-paid- price={{item_price}} data-original-price={{original_price}}>
+    <script id="product-template" type="text/x-handlebars-template">
+        {{#each orderItems}}
+        <tr data-order-id={{order_id}} data-order-item-id={{order_item_id}} data-shop-sku={{shop_sku}} data-paid-price={{item_price}} data-original-price={{original_price}}>
             <td class="text-center"><img src={{product_main_image}} width="70px" /> </td>
             <td class="text-left">{{name}}</td>
-            <td class="text-
-left">{{shop_sku}}</td>
-            <td class="text-left">{{formatCurrency earned}}
-            </td>
-            <td class="text-left">{{formatCurrency item_price}}
-            </td>
+            <td class="text-left">{{shop_sku}}</td>
+            <td class="text-left">{{formatCurrency earned}}</td>
+            <td class="text-left">{{formatCurrency item_price}}</td>
             <td>
-                <input type="text" min="0" class="form-control input-sm input-money" style="background-color: #ffe6e6;" value={{formatCurrency original_price}} /> </td>
+                <input type="text" min="0" class="form-control input-sm input-money" style="background-color: #ffe6e6;" value={{formatCurrency original_price}} />
+            </td>
         </tr>
-        {{/each}} </script>
-    <script id="exception-content-template" type="text/x-handlebars-template"> {{#each exceptions}}
+        {{/each}}
+    </script>
+    <script id="exception-content-template" type="text/x-handlebars-template">
+        {{#each exceptions}}
         <tr data-order_number="{{order_number}}" data-reason={{reason}}>
             <td class="text-center">{{order_number}}</td>
-            <td class="text-
-center">{{reason}} </td>
-        </tr> {{/each}} </script>
+            <td class="text-center">{{reason}} </td>
+        </tr>
+        {{/each}}
+    </script>
     <script id="datetime-template" type="text/x-handlebars-template">
         {{#each data}}
-        <option data-income={{income}} data-sales- revenue={{sales_revenue}} value="{{id}}">{{start_date}} - {{end_date}}
-        </option> {{/each}} </script>
+        <option data-income={{income}} data-sales-revenue={{sales_revenue}} value="{{id}}">{{start_date}} - {{end_date}}</option>
+        {{/each}}
+    </script>
     <script type="text/javascript">
-    jQuery(document).ready(function() {
-                Metronic.init(); // init metronic core components         Layout.init(); //
-                init current layout Demo.init(); // init demo features     });
+        jQuery(document).ready(function () {
+            Metronic.init(); // init metronic core components
+            Layout.init(); // init current layout
+            Demo.init(); // init demo features
+        });
     </script>
 </body>
 
