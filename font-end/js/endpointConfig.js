@@ -1,4 +1,4 @@
-var endpointUrl = "http://localhost:5000";
+var endpointUrl = "http://localhost:5555";
 
 var EndpointConfig = function() {
 
