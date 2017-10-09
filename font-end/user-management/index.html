@@ -33,6 +33,7 @@
     <link href="../css/component/layout-md.css" rel="stylesheet" type="text/css" />
     <link href="../css/component/custom-md.css" rel="stylesheet" type="text/css" />
     <link href="../css/theme/light.css" rel="stylesheet" type="text/css" />
+    <link href="../css/main.css" rel="stylesheet" type="text/css" />
     <link href="../sku-management/sku-management.css" rel="stylesheet" type="text/css" />
     <!-- END THEME STYLES -->
     <link rel="shortcut icon" href="favicon.ico" />
@@ -42,206 +43,160 @@
 
 <body class="page-md page-header-fixed page-sidebar-closed-hide-logo">
     <!-- BEGIN HEADER -->
-    <div class="page-header md-shadow-z-1-i navbar navbar-fixed-top">
-        <!-- BEGIN HEADER INNER -->
-        <div class="page-header-inner">
-            <!-- BEGIN LOGO -->
-            <div class="page-logo">
-                <a href="/">
-                    <img src="../img/logo-light.png" alt="logo" class="logo-default" width="210px" />
-                </a>
-                <div class="menu-toggler sidebar-toggler"></div>
-            </div>
-            <!-- END LOGO -->
-            <!-- BEGIN RESPONSIVE MENU TOGGLER -->
-            <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
-            </a>
-            <!-- END RESPONSIVE MENU TOGGLER -->
-            <!-- BEGIN PAGE TOP -->
-            <div class="page-top">
-                <!-- BEGIN TOP NAVIGATION MENU -->
-                <div class="top-menu">
-                    <ul class="nav navbar-nav pull-right">
-                        <!-- BEGIN USER LOGIN DROPDOWN -->
-                        <li class="dropdown dropdown-user dropdown-dark">
-                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                <span id="username-on-header" class="username username-hide-on-mobile"></span>
-                                <img alt="" class="img-circle hide" src="assets/admin/layout4/img/avatar9.jpg"/>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-default">
-                                <li>
-                                    <a id="logoutButton" href="#"><i class="icon-key"></i> Log Out </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <!-- END USER LOGIN DROPDOWN -->
-                    </ul>
-                </div>
-                <!-- END TOP NAVIGATION MENU -->
-            </div>
-            <!-- END PAGE TOP -->
-        </div>
-        <!-- END HEADER INNER -->
-    </div>
     <!-- END HEADER -->
-    <div class="clearfix"></div>
-    <!-- BEGIN CONTAINER -->
+    <!-- BEGIN CONTENT -->
+    <div id="header_content">
+    </div>
+    <div class="clearfix top-space"></div>
     <div class="page-container">
-        <!-- BEGIN SIDEBAR -->
-        <div id="menuContent"></div>
-        <!-- BEGIN CONTENT -->
-        <div class="page-content-wrapper">
-            <div class="page-content">
-                <!-- BEGIN MODAL FORM: Update or Insert user -->
-                <div class="modal fade" id="portlet-user" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                <h4 class="modal-title">Tạo mới</h4>
-                            </div>
-                            <div class="modal-body">
-                                <form class="form-horizontal form-bordered">
-                                    <div class="form-group">
-                                        <label class="control-label col-md-4"><b style="color:#FF0000">*</b> ID</label>
-                                        <div class="col-md-8">
-                                            <input type="text" class="form-control" name="txt_id" placeholder="">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-md-4"><b style="color:#FF0000">*</b> Username</label>
-                                        <div class="col-md-8">
-                                            <input type="text" class="form-control" name="txt_username" placeholder="lakami">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-md-4"><b style="color:#FF0000">*</b> Password</label>
-                                        <div class="col-md-8">
-                                            <input type="password" class="form-control" name="txt_password" placeholder="">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-md-4"><b style="color:#FF0000">*</b> Retype Password</label>
-                                        <div class="col-md-8">
-                                            <input type="password" class="form-control" name="txt_repassword" placeholder="">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-md-4"><b style="color:#FF0000">*</b> Lazada Username</label>
-                                        <div class="col-md-8">
-                                            <input type="text" class="form-control" name="txt_lazada_username" placeholder="lazada lakami">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-md-4"><b style="color:#FF0000">*</b> Lazada User ID</label>
-                                        <div class="col-md-8">
-                                            <input type="text" class="form-control" name="txt_lazada_userid" placeholder="lazadalakami@gmail.com">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-md-4"><b style="color:#FF0000">*</b> Lazada API Key</label>
-                                        <div class="col-md-8">
-                                            <input type="text" class="form-control" name="txt_lazada_apikey" placeholder="lazada2017">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-md-4"><b style="color:#FF0000">*</b> Certain Size</label>
-                                        <div class="col-md-8">
-                                            <input type="text" class="form-control" name="txt_certain_size" placeholder="5">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-md-4">Quyền hạn</label>
-                                        <div class="col-md-8">
-                                            <select name="txt_role" class="form-control">
-                                                <option value="active" selected="selected">Admin</option>
-                                                <option value="deactive">User</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <p class="error hidden"></p>
-                                <button type="button" class="btn blue btnmodalsubmit"><i class="fa fa-check"></i> Lưu</button>
-                                <button type="button" class="btn default" data-dismiss="modal">Huỷ</button>
-                            </div>
+        <div class="page-content-wrapper" style="padding-top: 20px;">
+            <!-- BEGIN MODAL FORM: Update or Insert user -->
+            <div class="modal fade" id="portlet-user" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                            <h4 class="modal-title">Tạo mới</h4>
                         </div>
-                        <!-- /.modal-content -->
+                        <div class="modal-body">
+                            <form class="form-horizontal form-bordered">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4"><b style="color:#FF0000">*</b> ID</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" name="txt_id" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4"><b style="color:#FF0000">*</b> Username</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" name="txt_username" placeholder="lakami">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4"><b style="color:#FF0000">*</b> Password</label>
+                                    <div class="col-md-8">
+                                        <input type="password" class="form-control" name="txt_password" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4"><b style="color:#FF0000">*</b> Retype Password</label>
+                                    <div class="col-md-8">
+                                        <input type="password" class="form-control" name="txt_repassword" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4"><b style="color:#FF0000">*</b> Lazada Username</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" name="txt_lazada_username" placeholder="lazada lakami">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4"><b style="color:#FF0000">*</b> Lazada User ID</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" name="txt_lazada_userid" placeholder="lazadalakami@gmail.com">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4"><b style="color:#FF0000">*</b> Lazada API Key</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" name="txt_lazada_apikey" placeholder="lazada2017">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4"><b style="color:#FF0000">*</b> Certain Size</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" name="txt_certain_size" placeholder="5">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">Quyền hạn</label>
+                                    <div class="col-md-8">
+                                        <select name="txt_role" class="form-control">
+                                            <option value="active" selected="selected">Admin</option>
+                                            <option value="deactive">User</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <p class="error hidden"></p>
+                            <button type="button" class="btn blue btnmodalsubmit"><i class="fa fa-check"></i> Lưu</button>
+                            <button type="button" class="btn default" data-dismiss="modal">Huỷ</button>
+                        </div>
                     </div>
-                    <!-- /.modal-dialog -->
+                    <!-- /.modal-content -->
                 </div>
-
-                <!-- BEGIN PAGE HEADER-->
-                <div class="page-head">
-                    <div class="page-title">
-                        <h1>Quản lý User <small></small></h1>
-                    </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- BEGIN PAGE HEADER-->
+            <div class="page-head">
+                <div class="page-title">
+                    <h1>Quản lý User <small></small></h1>
                 </div>
-
-                <!-- BEGIN PAGE CONTENT-->
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="tabbable-custom tabbable-noborder blue">
-                            <div class="tab-content">
-                                <!-- SKU MANAGEMENT TAB -->
-                                <div class="tab-pane active" id="tab_1_1">
-                                    <div class="table-toolbar">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <form method="GET">
-                                                    <div class="input-group" style="text-align:left">
-                                                        <input type="text" class="form-control" name="q" id="q_txt" value="" />
-                                                        <input type="hidden" name="s" value="0" />
-                                                        <input type="hidden" name="p2" value="1" />
-                                                        <span class="input-group-btn"><a href="javascript:;" class="btn blue btntab1submit" id="q_sub"><i class="fa fa-search"></i></a></span>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="btn-group pull-right btnnew" style="margin-right: 20px;">
-                                                    <button id="sample_editable_1_new" class="btn green"><span class="md-click-circle md-click-animate" style="height: 104px; width: 104px; top: -28px; left: 0px;"></span> Thêm mới <i class="fa fa-plus"></i>
-                                                    </button>
+            </div>
+            <!-- BEGIN PAGE CONTENT-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="tabbable-custom tabbable-noborder blue">
+                        <div class="tab-content">
+                            <!-- SKU MANAGEMENT TAB -->
+                            <div class="tab-pane active" id="tab_1_1">
+                                <div class="table-toolbar">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <form method="GET">
+                                                <div class="input-group" style="text-align:left">
+                                                    <input type="text" class="form-control" name="q" id="q_txt" value="" />
+                                                    <input type="hidden" name="s" value="0" />
+                                                    <input type="hidden" name="p2" value="1" />
+                                                    <span class="input-group-btn"><a href="javascript:;" class="btn blue btntab1submit" id="q_sub"><i class="fa fa-search"></i></a></span>
                                                 </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="btn-group pull-right btnnew" style="margin-right: 20px;">
+                                                <button id="sample_editable_1_new" class="btn green"><span class="md-click-circle md-click-animate" style="height: 104px; width: 104px; top: -28px; left: 0px;"></span> Thêm mới <i class="fa fa-plus"></i>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="table-scrollable">
-                                        <table id="table_sku" class="table table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-left">ID</th>
-                                                    <th class="text-left">Username</th>
-                                                    <th style="display:none" class="text-left">Password</th>
-                                                    <th class="text-left">Lazada Username
+                                </div>
+                                <div class="table-scrollable">
+                                    <table id="table_sku" class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-left">ID</th>
+                                                <th class="text-left">Username</th>
+                                                <th style="display:none" class="text-left">Password</th>
+                                                <th class="text-left">Lazada Username
                                                     <th class="text-left">Lazada User ID</th>
                                                     <th style="display:none" class="text-left">Lazada API Key</th>
                                                     <th class="text-left">Certain Size</th>
                                                     <th class="text-left">Role</th>
                                                     <th class="text-left">Quản trị</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="tbody_sku">
-                                                <!-- WILL BE FILL DATA IN HERE -->
-                                            </tbody>
-                                        </table>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbody_sku">
+                                            <!-- WILL BE FILL DATA IN HERE -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
                                     </div>
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                        </div>
-                                        <div class="col-sm-6 ">
-                                            <ul class="pagination pull-right">
-                                                <li class="active"><a href="javascript:;">1</a></li>
-                                            </ul>
-                                        </div>
+                                    <div class="col-sm-6 ">
+                                        <ul class="pagination pull-right">
+                                            <li class="active"><a href="javascript:;">1</a></li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- END PAGE CONTENT-->
             </div>
+            <!-- END PAGE CONTENT-->
         </div>
         <!-- END CONTENT -->
     </div>
@@ -277,6 +232,7 @@
     <!-- END JAVASCRIPTS -->
     <script src="../js/additional.js" type="text/javascript"></script>
     <script src="../user-management/user-management.js" type="text/javascript"></script>
+    <!-- Templates -->
     <script id="user-content-template" type="text/x-handlebars-template">
         {{#each data}}
         <tr data-id="{{id}}" data-user_name={{username}} data-password={{password}} data-lazada_user_name={{lazada_user_name}} data-lazada_user_id={{lazada_user_id}} data-lazada_api_key={{lazada_api_key}} data-role={{role}}, data-certain_size={{certain_size}}>

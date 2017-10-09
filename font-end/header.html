@@ -1,54 +1,87 @@
-div.
 <div class="page-header md-shadow-z-1-i navbar navbar-fixed-top">
-  <div class="page-header-inner">
-    <div class="page-logo">
-      <a href="/">
-        <img src="../img/logo-light.png" alt="logo" class="logo-default" width="210px" />
-      </a>
-      <div class="menu-toggler sidebar-toggler"></div>
-    </div>
-    <div class="col-md-6" style="margin-top: 20px; margin-left: 100px;">
-      <div class="input-group" style="text-align:left">
-        <input type="text" class="form-control" name="search_key" id="autocomplete" />
-        <span class="input-group-btn"><a href="javascript:;" class="btn blue btnsearch" id="btnsearch"><i class="fa fa-search"></i></a></span>
-      </div>
-    </div>
-    <div class="page-top">
-      <!-- BEGIN TOP NAVIGATION MENU -->
-      <div class="top-menu">
-        <ul class="nav navbar-nav pull-right">
-          <!-- BEGIN USER LOGIN DROPDOWN -->
-          <li class="dropdown dropdown-user dropdown-dark">
-            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-              <span id="username-on-header" class="username username-hide-on-mobile"></span>
+    <div class="page-header-inner">
+        <div class="page-logo">
+            <a href="/">
+                <img src="../img/logo-light.png" alt="logo" class="logo-default" width="210px" />
             </a>
-            <ul class="dropdown-menu dropdown-menu-default">
-              <li>
-                <a id="logoutButton" href="#"><i class="icon-key"></i> Log Out </a>
-              </li>
-              <li>
-                <a id="updatePwButton" href="#"><i class="icon-key"></i> Update Password </a>
-              </li>
-            </ul>
-          </li>
-        </ul> <!-- END USER LOGIN DROPDOWN -->
-      </div> <!-- END TOP NAVIGATION MENU -->
-    </div> <!-- END PAGE TOP -->
-  </div> <!-- END HEADER INNER -->
-</div> <!-- END HEADER -->
-
+        </div>
+        <div class="col-md-6" style="margin-top: 20px; margin-left: 100px;">
+            <div class="input-group" style="text-align:left">
+                <input type="text" class="form-control" name="search_key" id="autocomplete" />
+                <span class="input-group-btn">
+                    <a href="javascript:;" class="btn blue btnsearch" id="btnsearch">
+                        <i class="fa fa-search"></i>
+                    </a>
+                </span>
+            </div>
+        </div>
+        <div class="page-top">
+            <!-- BEGIN TOP NAVIGATION MENU -->
+            <div class="top-menu">
+                <ul class="nav navbar-nav pull-right">
+                    <!-- BEGIN USER LOGIN DROPDOWN -->
+                    <li class="dropdown dropdown-user dropdown-dark">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                            <span id="username-on-header" class="username username-hide-on-mobile"></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-default">
+                            <li>
+                                <a id="logoutButton" href="#">
+                                    <i class="icon-key"></i> Log Out </a>
+                            </li>
+                            <li>
+                                <a id="updatePwButton" href="#">
+                                    <i class="icon-key"></i> Update Password </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul> <!-- END USER LOGIN DROPDOWN -->
+            </div> <!-- END TOP NAVIGATION MENU -->
+        </div> <!-- END PAGE TOP -->
+    </div> <!-- END HEADER INNER -->
+    <div class="clearfix"></div>    
+    <div class="topnav">
+        <div class="top-navigation-content">
+            <a href="/user-management">
+                <span class="title"> Quản lý User </span>
+            </a>
+            <a href="/product">
+                <span class="title"> Quản lý sản phẩm </span>
+            </a>
+            <a href="/scan-barcode">
+                <span class="title"> Scan barcode</span>
+            </a>
+            <a class="active" href="/sku-management">
+                <span class="title"> Multisource</span>
+            </a>
+            <a href="/price-by-time">
+                <span class="title"> Giá theo giờ</span>
+            </a>
+            <a href="/account-statement">
+                <span class="title"> Sao kê tài khoản</span>
+            </a>
+        </div>
+        <!-- <a href="/help"><img src = "../img/help.png" width = "25px"/><span class="title"> Trợ giúp</span></a> -->
+    </div>
+</div>
+<!-- END HEADER -->
 <script type="text/javascript">
-  // Fill user name
-  if (cookie.getUsername() === undefined) {
-    $('#username-on-header').html("User info");
-  } else {
-    $('#username-on-header').html(cookie.getUsername());
-  }
+    //------------------------------------------------------------------------------
+    // Fill user name
+    //------------------------------------------------------------------------------
+    if (cookie.getUsername() === undefined) {
+        $('#username-on-header').html("User info");
+    } else {
+        $('#username-on-header').html(cookie.getUsername());
+    }
+    //------------------------------------------------------------------------------
+    // Logout
+    //------------------------------------------------------------------------------
+    $('#logoutButton').click(function () {
+        cookie.clearToken('token');
+        cookie.clearToken('myUser');
+        cookie.clearToken('username');
+        window.location.href = "../login";
+    });
 </script>
-
-
-
-
-
-
-
+<script src="../js/autocomplete.js" type="text/javascript"></script>

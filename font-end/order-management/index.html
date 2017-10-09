@@ -32,6 +32,7 @@
     <link href="../css/component/layout-md.css" rel="stylesheet" type="text/css" />
     <link href="../css/component/custom-md.css" rel="stylesheet" type="text/css" />
     <link href="../css/theme/light.css" rel="stylesheet" type="text/css" />
+    <link href="../css/main.css" rel="stylesheet" type="text/css" />
     <link href="../order-management/order-management.css" rel="stylesheet" type="text/css" />
     <style>
     .yellow {
@@ -48,59 +49,14 @@
 
 <body class="page-md page-header-fixed page-sidebar-closed-hide-logo" onload="alternate('tbody_order')">
     <!-- BEGIN HEADER -->
-    <div class="page-header md-shadow-z-1-i navbar navbar-fixed-top">
-        <!-- BEGIN HEADER INNER -->
-        <div class="page-header-inner">
-            <!-- BEGIN LOGO -->
-            <div class="page-logo">
-                <a href="/">
-                    <img src="../img/logo-light.png" alt="logo" class="logo-default" width="210px" />
-                </a>
-                <div class="menu-toggler sidebar-toggler"></div>
-            </div>
-            <!-- END LOGO -->
-            <!-- BEGIN RESPONSIVE MENU TOGGLER -->
-            <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
-            </a>
-            <!-- END RESPONSIVE MENU TOGGLER -->
-            <!-- BEGIN PAGE TOP -->
-            <div class="page-top">
-                <!-- BEGIN TOP NAVIGATION MENU -->
-                <div class="top-menu">
-                    <ul class="nav navbar-nav pull-right">
-                        <!-- BEGIN USER LOGIN DROPDOWN -->
-                        <li class="dropdown dropdown-user dropdown-dark">
-                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                <span id="username-on-header" class="username username-hide-on-mobile"></span>
-                                <img alt="" class="img-circle hide" src="assets/admin/layout4/img/avatar9.jpg"/>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-default">
-                                <li>
-                                    <a id="logoutButton" href="#"><i class="icon-key"></i> Log Out </a>
-                                </li>
-                                <li>
-                                    <a id="updatePwButton" href="#"><i class="icon-key"></i> Update Password </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <!-- END USER LOGIN DROPDOWN -->
-                    </ul>
-                </div>
-                <!-- END TOP NAVIGATION MENU -->
-            </div>
-            <!-- END PAGE TOP -->
-        </div>
-        <!-- END HEADER INNER -->
-    </div>
+    <div id="header_content"></div>
     <!-- END HEADER -->
     <div class="clearfix"></div>
     <!-- BEGIN CONTAINER -->
-    <div class="page-container">
+    <div class="page-container" style="margin:120px 10% 0 10%; width: 80%;">
         <!-- BEGIN SIDEBAR -->
-        <div id="menuContent"></div>
         <!-- BEGIN CONTENT -->
-        <div class="page-content-wrapper">
-            <div class="page-content">
+        <div class="page-content-wrapper" style="padding-top: 20px;">
                 <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
                 <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
@@ -229,16 +185,7 @@
                                 <div class="tab-pane active" id="tab_1_1">
                                     <div class="table-toolbar">
                                         <div class="row">
-                                            <div class="col-md-6">
-                                                <form method="GET">
-                                                    <div class="input-group" style="text-align:left">
-                                                        <input type="text" class="form-control" name="q" id="q_txt" value="" />
-                                                        <input type="hidden" name="s" value="0" />
-                                                        <input type="hidden" name="p2" value="1" />
-                                                        <span class="input-group-btn"><a href="javascript:;" class="btn blue btntab1submit" id="q_sub"><i class="fa fa-search"></i></a></span>
-                                                    </div>
-                                                </form>
-                                            </div>
+                                            <div class="col-md-6"></div>
                                             <div class="col-md-6">
                                                 <div class="btn-group pull-right btnrefresh" style="margin-right: 20px;">
                                                     <button id="sample_editable_1_new" class="btn green"><span class="md-click-circle md-click-animate" style="height: 104px; width: 104px; top: -28px; left: 0px;"></span> Refresh Failed Order <i class="fa fa-refresh"></i>
@@ -279,7 +226,6 @@
                     </div>
                 </div>
                 <!-- END PAGE CONTENT-->
-            </div>
         </div>
         <!-- END CONTENT -->
     </div>
