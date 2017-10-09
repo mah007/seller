@@ -1,0 +1,30 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Flask",
+            "type": "python",
+            "request": "launch",
+            "stopOnEntry": true,
+            "pythonPath": "python3",
+            "program": "${workspaceRoot}/server/main.py",
+            "debugOptions": [
+                "WaitOnAbnormalExit",
+                "WaitOnNormalExit",
+                "RedirectOutput"
+            ],
+            "env": {
+                "FLASK_DEBUG": "1"
+            }
+        },
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "Launch",
+            "address": "localhost",
+            "port": 8000,
+            "localRoot": "${workspaceFolder}/font-end/",
+            "remoteRoot": "Absolute path to the remote directory containing the program"
+        }
+    ]
+}
