@@ -35,8 +35,22 @@ class LazadaOrderApi(object):
 		 				parameters["SortBy"],
 		 				parameters["SortDirection"],
 		 				parameters["Signature"])
+		try:
+			resp = requests.get(url)
+			if resp.status_code == 200:
+				response = json.loads(resp.text)
+				# Request API error
+				if ('ErrorResponse' in response):
+					errorMessage = ExceptionUtils.getBodyMessage(response)
+					return None, '''User: {}-{}, Get-Orders: {}'''.format(user['username'], user['id'], errorMessage)
 
-		return self.getOrders(user, url)
+				# Request API Success
+				return response['SuccessResponse']['Body']['Orders'], None
+
+			# Request error
+			return None, '''User: {}-{}, Get-Orders: {}'''.format(user['username'], user['id'], resp.status_code)
+		except Exception as ex:
+			return None, '''User: {}-{}, Get-Orders: {}'''.format(user['username'], user['id'], str(ex))
 
 	#-----------------------------------------------------------------------------
 	# Get order item by order id
