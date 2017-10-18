@@ -71,6 +71,7 @@
                                                     <th class="text-center" style="min-width: 120px; max-width: 120px;">Image</th>
                                                     <th class="text-left" style="width: 45%;">Name</th>
                                                     <th class="text-left" style="width: 25%;">Sku</th>
+                                                    <th class="text-left" style="width: 25%;">Đã bán</th>
                                                     <th class="text-left" style="min-width: 120px; max-width: 120px;">Số lượng</th>
                                                     <th class="text-left" style="min-width: 120px; max-width: 120px;">Giá nhập</th>
                                                 </tr>
@@ -139,6 +140,7 @@
             <td class="text-center"><img src="{{image}}" width="70px"/></td>
             <td class="text-left"><a href="{{url}}" target="_blank">{{name}}</a></td>
             <td class="text-left">{{seller_sku}}</td>
+            <td class="text-left">{{sold}}</td>
             <td>
                 <input type="text" min="0" class="form-control input-sm input-money" style="background-color: #ffe6e6;" value={{formatCurrency quantity}} />
             </td>
