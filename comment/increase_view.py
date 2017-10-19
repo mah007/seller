@@ -39,7 +39,7 @@ class IncreaseView:
         submitButton = driver.find_element_by_xpath("//*[@id='prodinfo']/div[1]/div/div[2]/div[1]/div/div/span[1]")
         submitButton.click()
 
-    s Multiple action to do in page
+    # Multiple action to do in page
     def action_order_complete(self, driver):
         self.add_to_cart(driver)
         self.order_product(driver)

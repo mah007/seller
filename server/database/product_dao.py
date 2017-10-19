@@ -353,7 +353,8 @@ class ProductDao(object):
                     "brand": row[14],
                     "model": row[15],
                     "primary_category": row[16],
-                    "spu_id": row[17]
+                    "spu_id": row[17],
+                    "sold": row[20]     # Sold Quantity
                 })
 
             conn.close()
